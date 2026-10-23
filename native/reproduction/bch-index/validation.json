@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-23",
+  "command": "source tools/native-sdl/activate.sh && make -C native test",
+  "result": "passed",
+  "coverage": {
+    "native_c_suites": 10,
+    "cgfx_index_python_tests": 8,
+    "bch_index_python_tests": 5
+  },
+  "real_asset_inspection": "field165-index.json",
+  "limitations": [
+    "No BCH geometry or GPU-command decoding",
+    "No external texture binding verification",
+    "No running-game comparison"
+  ]
+}

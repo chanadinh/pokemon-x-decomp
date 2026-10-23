@@ -1,0 +1,128 @@
+{
+  "sha256": "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+  "size": 127232,
+  "compatibility": [
+    7,
+    7
+  ],
+  "sections": {
+    "contents": {
+      "offset": 56,
+      "size": 16323
+    },
+    "strings": {
+      "offset": 16379,
+      "size": 1094
+    },
+    "commands": {
+      "offset": 17488,
+      "size": 12992
+    },
+    "raw_data": {
+      "offset": 30592,
+      "size": 91348
+    },
+    "relocation": {
+      "offset": 121940,
+      "size": 5168
+    }
+  },
+  "resources": {
+    "models": [
+      {
+        "index": 0,
+        "name": "t01r0202_00_00",
+        "name_hex": "74303172303230325f30305f3030",
+        "object_offset": 12624
+      }
+    ],
+    "materials": [
+      {
+        "index": 0,
+        "name": "com_chip_mado2@t01r0202_00_00",
+        "name_hex": "636f6d5f636869705f6d61646f324074303172303230325f30305f3030",
+        "object_offset": 632
+      },
+      {
+        "index": 1,
+        "name": "gym06_kage01@t01r0202_00_00",
+        "name_hex": "67796d30365f6b61676530314074303172303230325f30305f3030",
+        "object_offset": 1632
+      },
+      {
+        "index": 2,
+        "name": "t01r01_curt1@t01r0202_00_00",
+        "name_hex": "7430317230315f63757274314074303172303230325f30305f3030",
+        "object_offset": 2632
+      },
+      {
+        "index": 3,
+        "name": "t01r01_win01@t01r0202_00_00",
+        "name_hex": "7430317230315f77696e30314074303172303230325f30305f3030",
+        "object_offset": 3632
+      },
+      {
+        "index": 4,
+        "name": "t01r0202_bed@t01r0202_00_00",
+        "name_hex": "74303172303230325f6265644074303172303230325f30305f3030",
+        "object_offset": 4632
+      },
+      {
+        "index": 5,
+        "name": "t01r0202_desk@t01r0202_00_00",
+        "name_hex": "74303172303230325f6465736b4074303172303230325f30305f3030",
+        "object_offset": 5632
+      },
+      {
+        "index": 6,
+        "name": "t01r02_carpet2@t01r0202_00_00",
+        "name_hex": "7430317230325f636172706574324074303172303230325f30305f3030",
+        "object_offset": 6632
+      },
+      {
+        "index": 7,
+        "name": "t01r02_floor@t01r0202_00_00",
+        "name_hex": "7430317230325f666c6f6f724074303172303230325f30305f3030",
+        "object_offset": 7632
+      },
+      {
+        "index": 8,
+        "name": "t01r02_mirror@t01r0202_00_00",
+        "name_hex": "7430317230325f6d6972726f724074303172303230325f30305f3030",
+        "object_offset": 8632
+      },
+      {
+        "index": 9,
+        "name": "t01r02_stairs@t01r0202_00_00",
+        "name_hex": "7430317230325f7374616972734074303172303230325f30305f3030",
+        "object_offset": 9632
+      },
+      {
+        "index": 10,
+        "name": "t01r02_wall@t01r0202_00_00",
+        "name_hex": "7430317230325f77616c6c4074303172303230325f30305f3030",
+        "object_offset": 10632
+      },
+      {
+        "index": 11,
+        "name": "t01r02_woody@t01r0202_00_00",
+        "name_hex": "7430317230325f776f6f64794074303172303230325f30305f3030",
+        "object_offset": 11632
+      }
+    ],
+    "shaders": [],
+    "textures": [],
+    "lookup_tables": [],
+    "lights": [],
+    "cameras": [],
+    "fogs": [],
+    "skeletal_animations": [],
+    "material_animations": [],
+    "visibility_animations": [],
+    "light_animations": [],
+    "camera_animations": [],
+    "fog_animations": [],
+    "scenes": []
+  },
+  "scope": "resource index only; relocation commands, object bodies and GPU data are not validated"
+}
