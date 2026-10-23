@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-23",
+  "baseline_commit": "8b6dac503bdfe8c826bbc2192c33bc4c7242a29b",
+  "result": "passed",
+  "environment": "Linux binaries under WSL; SDL dummy video; native Windows build untested",
+  "checks": [
+    {
+      "command": "source tools/native-sdl/activate.sh && make -C native -W assets/bch_model.c all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 12,
+      "python_core_tests": {
+        "container": 8,
+        "bch_index_and_gr": 12,
+        "pica_commands": 12,
+        "bch_model": 11
+      },
+      "python_runtime_tests": {
+        "texture_viewer": 7,
+        "bch_texture_viewer": 6,
+        "model_viewer": 10,
+        "bch_model_viewer": 9,
+        "field_viewer": 9
+      },
+      "direct_smokes": [
+        "asset inspect",
+        "asset input",
+        "model wireframe input",
+        "model textured input",
+        "field input"
+      ]
+    },
+    {
+      "command": "BCH model C fixtures compiled with -fsanitize=address,undefined -fno-omit-frame-pointer",
+      "result": "passed; no sanitizer diagnostics"
+    },
+    {
+      "command": "native/reproduction/bch-native/verify_geometry.py with explicit local inputs",
+      "result": "passed",
+      "meshes": 12,
+      "vertices": 2356,
+      "indices": 4992,
+      "comparison": "Every position/UV component exactly matches after explicit reference rounding to binary32; every global index matches the rebased reference; all material names/configurations/texture names match prior metadata.",
+      "runtime": "Original archive/GR path: three-frame wireframe capture and orbit/zoom/reset/exit self-test passed.",
+      "report": "reference-comparison.json"
+    },
+    {
+      "command": "SHA-256 comparison against reconstructed/*/SHA256SUMS",
+      "result": "all 539 checkpoint files unchanged"
+    },
+    {
+      "command": "Replay each exported listing byte against pinned code.bin at address minus 0x00100000; verify concatenated per-function hashes",
+      "result": "1348 instructions / 5392 bytes / 13 functions matched",
+      "report": "original-area-consumer-evidence.json"
+    }
+  ],
+  "review": "Separate review found no ownership/bounds blocker; caller verifies triangle divisibility and observed mode bits at draw, never trailing primitive state.",
+  "scope": [
+    "Owned native static BCH geometry",
+    "Explicit triangle-list wireframe preview and bounded AD/GR loading",
+    "Original area selection and section-consumer dataflow"
+  ],
+  "limitations": [
+    "Original primitive state still not connected to selected field draw",
+    "All meshes displayed regardless of stored visibility",
+    "No BCH material/shader/projected-texture execution or downstream binding proof",
+    "No field/player/gameplay integration or running-game render equivalence",
+    "Native Windows build not verified"
+  ],
+  "logs_sha256": "55135527e3c8230584b02d27377826083959c70c8f30426f1c09be4040de3886"
+}

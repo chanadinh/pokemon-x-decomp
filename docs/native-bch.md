@@ -1,8 +1,9 @@
 # Static BCH field model inspection
 
-The selected field's BCH now has a bounded geometry decoder and an optional OBJ
-export. This is a Python inspection tool; the SDL field viewer still displays
-terrain and collision. No game assets are included in the repository.
+The selected field's BCH now has bounded Python and native C geometry decoders.
+The native model viewer displays an explicit triangle-list wireframe; the Python
+tool also offers an optional OBJ export. The separate SDL field viewer still
+displays terrain and collision. No game assets are included in the repository.
 
 ```sh
 python3 native/tools/inspect_bch_model.py --file selected.gr --gr-section 1
@@ -137,6 +138,37 @@ depend on the unresolved primitive mode.
 
 The C reader validates the texture-only BCH subset, all three unit command
 streams, expected relocation kinds and complete payload extents. It shares the
-existing texture codec. Native environment geometry, projected coordinates and
-material execution remain pending. See [the viewer instructions](../native/README.md#view-bch-area-textures)
+existing texture codec. Projected coordinates and native BCH material execution
+remain pending. See [the viewer instructions](../native/README.md#view-bch-area-textures)
 and [new validation](../native/reproduction/bch-textures/README.txt).
+
+## Native geometry preview
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list
+```
+
+`--triangle-list` is mandatory for BCH, including `--inspect`. It explicitly
+groups each submesh's indices into triples, yielding 1,664 interpreted faces
+for the selected sample. Counts must be divisible by three, and any known mode
+bits at the draw must not contradict that interpretation. A primitive-register
+write after a draw cannot change the recorded state at that draw. The reader
+rejects multiple draws, non-indexed draws, and post-draw index address/count changes.
+The decoder itself preserves raw indices without requiring triangle divisibility.
+
+The native reader checks the same static-model subset and budgets described
+above. Its output owns all geometry and names independently of the input. Each
+mesh's indices are rebased into the complete vertex array. Position and UV
+arithmetic uses binary64 intermediates and rounds once to binary32 for the
+renderer. The independent reference compares every component after that explicit
+rounding, plus every rebased index; all twelve meshes agree exactly.
+
+The viewer reuses orbit/zoom controls, software rendering, input checks and
+exclusive frame capture. `--section` validates the complete AD/GR offset table;
+member and optional outer/inner decompression buffers share a 64 MiB input budget.
+All meshes are drawn, including those marked hidden. Visibility, priority, layers,
+material names and texture associations are reported as metadata. BCH `--textured`
+is rejected: projected coordinates, combiners, lighting and original render state
+are not replaced with guessed material behavior. Existing CGFX modes retain their
+own contracts. See the [native reproduction record](../native/reproduction/bch-native/README.txt).

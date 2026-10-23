@@ -22,7 +22,7 @@ in the [source overview](../reconstructed/README.md) and
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
-| Renderer and game asset loading | BCLIM/CGFX textures and a static model display; a verified zone/matrix/region chain loads into a terrain and collision inspector; BCH field graphics and complete game rendering remain missing |
+| Renderer and game asset loading | BCLIM/CGFX/BCH textures, CGFX material preview and an explicit BCH triangle-list wireframe; verified terrain/collision loading; BCH materials and complete game rendering remain missing |
 | Player controls, movement, and collision | A restricted inspection marker follows exact standard cells; actual player entry, movement and collision rules are not implemented |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
@@ -121,10 +121,12 @@ The [field inspector](native-field.md) now follows zone 5 → matrix 12 → regi
 165 and displays 1,600 raw terrain cells plus optional collision triangle edges.
 Original-code evidence corroborates resource selection. Keyboard movement uses
 an explicit exact-cell inspection policy; it does not reconstruct player rules
-or spawn. The selected field's graphics use BCH and are not yet rendered by the
-native app. The [BCH model inspector](native-bch.md) now decodes twelve meshes'
-positions, UV0 and indices and checks their external texture names. Primitive
-GPU state, materials and projected effects still need to be connected and verified.
+or spawn. The selected field's BCH geometry now displays in the native model viewer
+as a wireframe requiring an explicit triangle-list interpretation. The
+[BCH decoders](native-bch.md) read twelve meshes' positions, UV0 and indices and
+preserve their external texture names. Original area selection and the texture
+container consumer are corroborated by executable evidence. Primitive GPU state,
+later material bindings and projected effects still need to be connected and verified.
 
 These are bounded asset-preview paths. The applications do not yet call
 the eight reconstructed game-logic modules. Palette extensions, full material rendering,

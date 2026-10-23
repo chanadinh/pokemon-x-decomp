@@ -1,5 +1,7 @@
 #include "assets/cgfx_model.h"
+#include "assets/bch_model.h"
 #include "assets/cgfx.h"
+#include "assets/field.h"
 #include "assets/garc.h"
 #include "assets/lz.h"
 #include "render/raster.h"
@@ -14,13 +16,15 @@
 
 struct options {
     const char *romfs, *archive, *capture;
-    uint32_t entry, subentry, model, frames;
+    uint32_t entry, subentry, model, frames, section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
+    int have_section, triangle_list;
 };
 struct camera { double yaw, pitch, zoom; int running; };
 struct model_asset {
     struct px_cgfx_model wire;
     struct px_cgfx_scene scene;
+    struct px_bch_model bch;
     struct px_texture_image *textures;
     uint32_t *draw_order;
     uint32_t texture_count;
@@ -34,6 +38,7 @@ static void asset_free(struct model_asset *asset)
     free(asset->draw_order);
     px_cgfx_scene_free(&asset->scene);
     px_cgfx_model_free(&asset->wire);
+    px_bch_model_free(&asset->bch);
     memset(asset, 0, sizeof *asset);
 }
 
@@ -65,7 +70,9 @@ static void usage(FILE *stream, const char *program)
     fprintf(stream,
         "Usage: %s (--demo | --romfs PATH --archive RELATIVE/PATH --entry N) [options]\n"
         "  --subentry N       GARC bitmap subentry 0..31 (default 0)\n"
-        "  --model N          CGFX model index (default 0)\n"
+        "  --model N          CGFX/BCH model index (default 0)\n"
+        "  --section N        Select an AD/GR minipack section, 0..255\n"
+        "  --triangle-list    Explicit BCH wireframe index-triple interpretation\n"
         "  --textured         Preview supported material texture and vertex colors\n"
         "  --inspect          Print decoded mesh metadata without a window\n"
         "  --capture-frame F  Save first viewport to a new BMP file\n"
@@ -112,9 +119,10 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--software")) { o->software = 1; continue; }
         if (!strcmp(arg, "--self-test-input")) { o->self_test = 1; continue; }
         if (!strcmp(arg, "--textured")) { o->textured = 1; continue; }
+        if (!strcmp(arg, "--triangle-list")) { o->triangle_list = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
             strcmp(arg, "--subentry") && strcmp(arg, "--model") && strcmp(arg, "--frames") &&
-            strcmp(arg, "--capture-frame")) return 0;
+            strcmp(arg, "--capture-frame") && strcmp(arg, "--section")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -126,11 +134,13 @@ static int parse(int argc, char **argv, struct options *o)
             if (!strcmp(arg, "--entry")) { o->entry = n; o->have_entry = 1; }
             else if (!strcmp(arg, "--subentry")) { if (n > 31) return 0; o->subentry = n; o->have_subentry = 1; }
             else if (!strcmp(arg, "--model")) { o->model = n; o->have_model = 1; }
+            else if (!strcmp(arg, "--section")) { if (n > 255) return 0; o->section = n; o->have_section = 1; }
             else { if (!n) return 0; o->frames = n; }
         }
     }
     if (o->demo) {
-        if (o->romfs || o->archive || o->have_entry || o->have_subentry || o->have_model) return 0;
+        if (o->romfs || o->archive || o->have_entry || o->have_subentry || o->have_model ||
+            o->have_section || o->triangle_list) return 0;
     } else if (!o->romfs || !o->archive || !o->have_entry || !relative_path(o->archive)) return 0;
     if (o->inspect && (o->capture || o->frames || o->self_test)) return 0;
     if (o->self_test && !o->frames) o->frames = 3;
@@ -199,6 +209,56 @@ static int demo_texture(struct model_asset *asset)
     return 1;
 }
 
+static int decode_model(const struct options *o, const uint8_t *data, size_t size,
+                        struct model_asset *asset)
+{
+    if (size >= 4 && !memcmp(data, "BCH\0", 4)) {
+        if (!o->triangle_list || o->textured) {
+            fprintf(stderr, "[model-viewer] BCH requires --triangle-list for an explicit wireframe interpretation; "
+                    "BCH --textured materials are not supported.\n");
+            return 0;
+        }
+        struct px_bch_model *bch = &asset->bch;
+        enum px_bch_model_result status = px_bch_model_decode(data, size, o->model, bch);
+        if (status != PX_BCH_MODEL_OK) {
+            fprintf(stderr, "[model-viewer] BCH model: %s\n", px_bch_model_result_string(status));
+            return 0;
+        }
+        for (uint32_t i = 0; i < bch->submesh_count; ++i) {
+            const struct px_bch_submesh *sub = &bch->submeshes[i];
+            if (sub->index_count % 3 || sub->draw_count > 1 ||
+                (sub->draw_primitive_value & sub->draw_primitive_known_mask & UINT32_C(0x300))) {
+                fprintf(stderr, "[model-viewer] BCH submesh cannot use the restricted triangle-list interpretation.\n");
+                return 0;
+            }
+        }
+        /* Transfer the arrays to the existing wireframe renderer. BCH metadata
+         * and UVs remain owned by bch; neither object borrows the archive. */
+        struct px_cgfx_model *mesh = &asset->wire;
+        mesh->positions = bch->positions; bch->positions = NULL;
+        mesh->indices = bch->indices; bch->indices = NULL;
+        mesh->vertex_count = bch->vertex_count;
+        mesh->index_count = bch->index_count;
+        mesh->shape_count = bch->mesh_count;
+        memcpy(mesh->bounds_min, bch->bounds_min, sizeof mesh->bounds_min);
+        memcpy(mesh->bounds_max, bch->bounds_max, sizeof mesh->bounds_max);
+        memcpy(mesh->name, bch->name.bytes, bch->name.size + 1);
+        return 1;
+    }
+    if (o->triangle_list) {
+        fprintf(stderr, "[model-viewer] --triangle-list requires BCH input.\n");
+        return 0;
+    }
+    enum px_cgfx_model_result result = o->textured ?
+        px_cgfx_model_decode_textured(data, size, o->model, &asset->scene) :
+        px_cgfx_model_decode(data, size, o->model, &asset->wire);
+    if (result != PX_CGFX_MODEL_OK) {
+        fprintf(stderr, "[model-viewer] CGFX model: %s\n", px_cgfx_model_result_string(result));
+        return 0;
+    }
+    return !o->textured || load_images(data, size, asset);
+}
+
 static int load(const struct options *o, struct model_asset *asset)
 {
     struct px_cgfx_model *mesh = o->textured ? &asset->scene.mesh : &asset->wire;
@@ -222,33 +282,64 @@ static int load(const struct options *o, struct model_asset *asset)
     int ok = px_garc_open(path, &archive, error, sizeof error);
     free(path);
     if (!ok) { fprintf(stderr, "[model-viewer] Archive: %s\n", error); return 0; }
-    uint8_t *member = NULL, *decoded = NULL; size_t size = 0, decoded_size = 0;
+    uint8_t *member = NULL, *decoded = NULL, *section_decoded = NULL;
+    size_t size = 0, decoded_size = 0, section_decoded_size = 0;
     ok = px_garc_read(archive, o->entry, o->subentry, 64 * 1024 * 1024,
                       &member, &size, error, sizeof error);
     px_garc_close(archive);
     if (!ok) { fprintf(stderr, "[model-viewer] Member: %s\n", error); return 0; }
     const uint8_t *data = member;
     const char *compression = "none";
+    const char *section_compression = "none";
     if (size && (member[0] == 0x10 || member[0] == 0x11)) {
         compression = member[0] == 0x10 ? "LZ10" : "LZ11";
-        if (!px_lz_decode(member, size, 64 * 1024 * 1024, &decoded, &decoded_size, error, sizeof error)) {
-            fprintf(stderr, "[model-viewer] Compression: %s\n", error); free(member); return 0;
+        const size_t limit = o->have_section ? 64 * 1024 * 1024 - size : 64 * 1024 * 1024;
+        if (!limit || !px_lz_decode(member, size, limit, &decoded, &decoded_size, error, sizeof error)) {
+            if (!limit) snprintf(error, sizeof error, "aggregate model input budget exceeded");
+            goto failed;
         }
         data = decoded;
     }
     size_t input_size = decoded ? decoded_size : size;
-    enum px_cgfx_model_result result = o->textured ?
-        px_cgfx_model_decode_textured(data, input_size, o->model, &asset->scene) :
-        px_cgfx_model_decode(data, input_size, o->model, mesh);
-    if (result == PX_CGFX_MODEL_OK && o->textured) ok = load_images(data, input_size, asset);
-    free(decoded); free(member);
-    if (result != PX_CGFX_MODEL_OK) {
-        fprintf(stderr, "[model-viewer] CGFX model: %s\n", px_cgfx_model_result_string(result)); return 0;
+    if (o->have_section) {
+        if (input_size < 2 || (memcmp(data, "AD", 2) && memcmp(data, "GR", 2))) {
+            snprintf(error, sizeof error, "--section requires an AD or GR minipack");
+            goto failed;
+        }
+        struct px_field_span selected;
+        enum px_field_result status = px_field_section(data, input_size, (const char *)data,
+                                                       (uint16_t)o->section, &selected);
+        if (status != PX_FIELD_OK) {
+            snprintf(error, sizeof error, "minipack section: %s", px_field_result_string(status));
+            goto failed;
+        }
+        data = selected.data;
+        input_size = selected.size;
+        if (input_size && (data[0] == 0x10 || data[0] == 0x11)) {
+            section_compression = data[0] == 0x10 ? "LZ10" : "LZ11";
+            const size_t used = size + decoded_size;
+            if (used >= 64 * 1024 * 1024 ||
+                !px_lz_decode(data, input_size, 64 * 1024 * 1024 - used,
+                              &section_decoded, &section_decoded_size, error, sizeof error)) {
+                if (used >= 64 * 1024 * 1024) snprintf(error, sizeof error, "aggregate model input budget exceeded");
+                goto failed;
+            }
+            data = section_decoded;
+            input_size = section_decoded_size;
+        }
     }
+    ok = decode_model(o, data, input_size, asset);
+    free(section_decoded); free(decoded); free(member);
     if (!ok) return 0;
-    printf("archive=%s entry=%" PRIu32 " subentry=%" PRIu32 " model=%" PRIu32 " compression=%s\n",
+    printf("archive=%s entry=%" PRIu32 " subentry=%" PRIu32 " model=%" PRIu32 " compression=%s",
            o->archive, o->entry, o->subentry, o->model, compression);
+    if (o->have_section) printf(" section=%" PRIu32 " section_compression=%s", o->section, section_compression);
+    putchar('\n');
     return 1;
+failed:
+    fprintf(stderr, "[model-viewer] %s\n", error);
+    free(section_decoded); free(decoded); free(member);
+    return 0;
 }
 
 static void reset(struct camera *c) { c->yaw = 0.55; c->pitch = -0.35; c->zoom = 1; c->running = 1; }
@@ -496,6 +587,50 @@ done:
     return ok;
 }
 
+static void print_bch_name(const struct px_bch_name *name)
+{
+    if (!name->present) { printf("null"); return; }
+    putchar('"');
+    for (uint32_t i = 0; i < name->size; ++i) {
+        const unsigned char byte = (unsigned char)name->bytes[i];
+        if (byte >= 32 && byte <= 126 && byte != '"' && byte != '\\') putchar(byte);
+        else printf("\\x%02x", byte);
+    }
+    putchar('"');
+}
+
+static void print_bch_metadata(const struct px_bch_model *bch)
+{
+    printf("container=BCH topology=assumed-triangle-list mode=wireframe visibility=all-meshes "
+           "materials=metadata-only meshes=%" PRIu32 " submeshes=%" PRIu32 " material_count=%" PRIu32 "\n",
+           bch->mesh_count, bch->submesh_count, bch->material_count);
+    for (uint32_t i = 0; i < bch->mesh_count; ++i) {
+        const struct px_bch_mesh *mesh = &bch->meshes[i];
+        printf("mesh=%" PRIu32 " name=", i); print_bch_name(&mesh->name);
+        printf(" first_vertex=%" PRIu32 " vertices=%" PRIu32 " first_index=%" PRIu32
+               " indices=%" PRIu32 " material=%" PRIu32 " visible=%" PRIu32 " layer=%" PRIu32 " priority=%" PRIu32 "\n",
+               mesh->first_vertex, mesh->vertex_count, mesh->first_index, mesh->index_count,
+               mesh->material_index, mesh->visible, mesh->layer, mesh->priority);
+    }
+    for (uint32_t i = 0; i < bch->submesh_count; ++i) {
+        const struct px_bch_submesh *sub = &bch->submeshes[i];
+        printf("submesh=%" PRIu32 " first_index=%" PRIu32 " indices=%" PRIu32
+               " index_width=%" PRIu32 " draw_count=%" PRIu32
+               " primitive_at_draw=0x%08" PRIx32 " primitive_known_mask=0x%08" PRIx32 "\n",
+               i, sub->first_index, sub->index_count, sub->index_width, sub->draw_count,
+               sub->draw_primitive_value, sub->draw_primitive_known_mask);
+    }
+    for (uint32_t i = 0; i < bch->material_count; ++i) {
+        const struct px_bch_material *material = &bch->materials[i];
+        printf("material=%" PRIu32 " name=", i); print_bch_name(&material->name);
+        printf(" texture_unit_config=0x%08" PRIx32, material->texture_unit_config);
+        for (unsigned unit = 0; unit < 3; ++unit) {
+            printf(" texture%u=", unit); print_bch_name(&material->texture_names[unit]);
+        }
+        putchar('\n');
+    }
+}
+
 int main(int argc, char **argv)
 {
     struct options o = {0}; int parsed = parse(argc, argv, &o);
@@ -514,6 +649,7 @@ int main(int argc, char **argv)
            mesh.vertex_count, mesh.index_count / 3, mesh.shape_count,
            mesh.bounds_min[0], mesh.bounds_min[1], mesh.bounds_min[2],
            mesh.bounds_max[0], mesh.bounds_max[1], mesh.bounds_max[2]);
+    if (asset.bch.mesh_count) print_bch_metadata(&asset.bch);
     if (o.textured) {
         uint32_t decoded = 0;
         for (uint32_t i = 0; i < asset.texture_count; ++i) decoded += asset.textures[i].rgba != NULL;

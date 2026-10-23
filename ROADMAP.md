@@ -98,7 +98,7 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    Embedded CGFX textures and a restricted static textured model preview now work.
    Zone/matrix/region selection and a bounded terrain/collision inspector now
    work; see [field evidence](docs/native-field.md). Palette extensions, complete
-   material shaders, animation, BCH field graphics and player scene bindings
+   material shaders, animation, faithful BCH field rendering and player scene bindings
    remain unsupported.
    The [CGFX inspector](docs/native-containers.md) now identifies bounded model
    and texture records; [geometry evidence](docs/native-geometry.md) records the
@@ -106,12 +106,14 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    binds checked UVs/textures and selected sampler/depth/blend states.
    The [BCH model inspector](docs/native-bch.md) now decodes the selected field's
    positions, UV0 and indices, with an independent numeric comparison and exact
-   external texture-name matches through area 75. Native BCH rendering remains
-   pending for geometry/materials. Area 75's nineteen BCH textures now decode in
-   the native asset viewer, with every RGBA pixel checked independently.
-   Next establish the original primitive state and area texture consumer,
-   implement the required materials/projected textures, and connect the environment
-   to the renderer. Establish actual player entry and terrain collision consumers.
+   external texture-name matches through area 75. Native BCH wireframe rendering
+   now works with a mandatory explicit triangle-list interpretation and exact
+   per-component geometry checks. Area 75's nineteen textures decode in the native
+   asset viewer, with every RGBA pixel checked independently. Original code now
+   corroborates area selection and the AD section-11 BCH resource consumer.
+   Next establish the original primitive state and downstream material bindings,
+   implement the required materials/projected textures, and integrate the field
+   scene. Establish actual player entry and terrain collision consumers.
    Capture the corresponding reference scenario.
 5. Connect explicit game-state/platform interfaces to the native application,
    then implement movement/collision, interaction, battle, return to the field,

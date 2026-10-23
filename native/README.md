@@ -301,6 +301,30 @@ The optional OBJ is an explicit triangle-list interpretation (1,664 triples in
 this sample), with UV0 and all accepted meshes. Export refuses existing files
 and symlinks. The recorded primitive writes do not establish the required GPU
 state, so this is not proof of the game's draw topology or appearance. Material
-shaders, projected texture coordinates, lighting, visibility execution and native
-BCH rendering remain pending. See [the geometry contract](../docs/native-bch.md)
+shaders, projected texture coordinates, lighting and visibility execution remain
+pending. See [the geometry contract](../docs/native-bch.md)
 and [reproducible checks](reproduction/bch-model/README.txt).
+
+## View BCH geometry in the native application
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --inspect
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list
+```
+
+This loads the selected field directly from GARC through optional LZ decoding
+and GR section 1 into the native C geometry reader. It displays all twelve meshes
+as a wireframe with orbit/zoom/reset controls. `--capture-frame new.bmp` creates
+an exclusive viewport capture; `--software --frames 3 --self-test-input` provides
+a bounded runtime check. `--inspect` opens no window and reports mesh/material
+associations and observed primitive state. For a standalone BCH archive member,
+omit `--section`.
+
+The mandatory `--triangle-list` flag makes the index interpretation explicit.
+It is rejected for CGFX and demo input. Original primitive mode is still unknown
+for this sample. All meshes are displayed regardless of stored visibility;
+material rendering, projected textures and lighting remain unimplemented, and
+BCH `--textured` is rejected. Native Windows has not been tested; validation uses
+Linux under WSL and SDL's dummy video backend. See the [reproduction record](reproduction/bch-native/README.txt).

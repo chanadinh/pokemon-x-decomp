@@ -122,10 +122,10 @@ at height zero. Duplicate stored triangles are counted, not deduplicated.
 
 ## Remaining first-playable work
 
-The selected field uses BCH graphics, so the existing CGFX textured preview
-does not render its environment. Next decode this field's BCH models/textures
-and checked area/prop associations, then establish the actual player entry and
-movement/collision contract. A captured reference scenario is still needed.
+The selected field's BCH now has a separate native wireframe preview and decoded
+area textures. Next establish its primitive state, downstream material/prop
+associations and projected effects, then connect the scene and establish actual
+player entry and movement/collision behavior. A captured reference scenario is still needed.
 Interaction, interactive battle, return to field, and save/load remain required
 by the [first-playable acceptance criteria](PLAYABLE_SLICE.md).
 
@@ -141,7 +141,9 @@ Its bounds and synthetic checks are recorded separately in
 The subsequent [BCH model inspector](native-bch.md) now decodes positions, UV0
 and indices for all twelve meshes, with an independent numeric comparison.
 Every nonnull texture-unit name resolves in area 75's world-texture BCH.
-The native field viewer still shows terrain/collision only. Native BCH rendering,
-projected texture/shader behavior, the original area consumer and actual player
-entry remain the next work; an optional OBJ uses an explicitly stated triangle-list
-interpretation because primitive GPU state is not fully determined here.
+The native field viewer still shows terrain/collision only. The native model
+viewer now displays the BCH wireframe with an explicit triangle-list flag; the
+original area consumer is corroborated by executable evidence. Projected textures,
+material execution, scene integration and actual player entry remain the next work.
+Both the wireframe and optional OBJ use explicitly stated triangle-list
+interpretations because primitive GPU state is not fully determined here.
