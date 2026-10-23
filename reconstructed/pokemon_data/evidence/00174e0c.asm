@@ -1,0 +1,24 @@
+00174e0c  0020a0e1  cpy r2,r0
+00174e10  010051e3  cmp r1,#0x1
+00174e14  0000a0e3  mov r0,#0x0
+00174e18  04402de5  str r4,[sp,#-0x4]!
+00174e1c  1000009a  bls 0x00174e64
+00174e20  013fa0e1  mov r3,r1, lsl #0x1e
+00174e24  022042e2  sub r2,r2,#0x2
+00174e28  000053e3  cmp r3,#0x0
+00174e2c  b200f2b1  ldrhlt r0,[r2,#0x2]!
+00174e30  2111b0e1  movs r1,r1, lsr #0x2
+00174e34  0030a0e3  mov r3,#0x0
+00174e38  0700000a  beq 0x00174e5c
+00174e3c  b2c0d2e1  ldrh r12,[r2,#0x2]
+00174e40  b440f2e1  ldrh r4,[r2,#0x4]!
+00174e44  011051e2  subs r1,r1,#0x1
+00174e48  0c0080e0  add r0,r0,r12
+00174e4c  043083e0  add r3,r3,r4
+00174e50  7000ffe6  uxth r0,r0
+00174e54  7330ffe6  uxth r3,r3
+00174e58  f7ffff1a  bne 0x00174e3c
+00174e5c  030080e0  add r0,r0,r3
+00174e60  7000ffe6  uxth r0,r0
+00174e64  04409de4  ldr r4,[sp],#0x4
+00174e68  1eff2fe1  bx lr
