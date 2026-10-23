@@ -28,7 +28,7 @@ nature adjustment, growth-to-level resolution, and a final script-state write.
 Wider setup, real personal/growth resource loading, learnset access, move
 insertion, name construction, and maximum-PP services still use stand-ins.
 The native asset viewer now opens a window, handles pan/zoom input, and displays
-selected original textures through bounded GARC/LZ/BCLIM loading. Game-runtime
+selected original raw, ETC1, and ETC1A4 textures through bounded GARC/LZ/BCLIM loading. Game-runtime
 integration, map/model rendering, player movement/collision, the interactive
 battle loop, and playable save/load are still missing.
 Per-milestone validation records document the actual tests;
@@ -83,10 +83,14 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
 3. Replace the remaining stand-ins with checked implementations as their
    dependencies become understood. Add reference execution comparisons;
    the current tests alone do not prove equivalence to the running game.
-4. Extend the [native viewer](native/README.md) beyond its verified raw and
-   LZ11-compressed standalone textures. Identify and decode the minimal map,
+4. Extend the [native viewer](native/README.md) beyond its verified raw,
+   ETC1, and ETC1A4 standalone textures, including LZ11-compressed samples.
+   Identify and decode the minimal map,
    model, texture, animation, UI, and audio paths for the playable slice.
-   ETC textures, palette extensions, and model containers remain unsupported.
+   Palette extensions, model rendering, and map scene bindings remain unsupported.
+   The [CGFX inspector](docs/native-containers.md) now identifies bounded model
+   and texture records; use those checked inputs to investigate geometry and
+   materials before building scene loading.
    Capture the corresponding reference scenario.
 5. Connect explicit game-state/platform interfaces to the native application,
    then implement movement/collision, interaction, battle, return to the field,

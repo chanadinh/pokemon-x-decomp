@@ -11,7 +11,8 @@ and synthetic tests that run without game files.
 
 **Current status: eight tested game-logic milestones and a native asset viewer.
 There is no playable PC port or interactive battle yet.** The viewer loads
-selected original textures through GARC/LZ/BCLIM decoding. The long-term goal is a native PC game;
+selected original textures, including ETC1 and ETC1A4, through GARC/LZ/BCLIM
+decoding. The long-term goal is a native PC game;
 [the roadmap](ROADMAP.md) explains the work and evidence still needed. The
 [first playable slice](docs/PLAYABLE_SLICE.md) has concrete acceptance criteria
 and an inventory of the original assets already available locally.

@@ -22,7 +22,7 @@ in the [source overview](../reconstructed/README.md) and
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
-| Renderer and game asset loading | Selected GARC → optional LZ10/LZ11 → raw BCLIM → RGBA textures display; map/model/game renderer still missing |
+| Renderer and game asset loading | Selected GARC → optional LZ10/LZ11 → raw/ETC1/ETC1A4 BCLIM → RGBA textures display; map/model/game renderer still missing |
 | Player controls, movement, and collision | Viewer keyboard controls work; player movement and collision are not implemented |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
@@ -88,19 +88,26 @@ The [native viewer](../native/README.md) reads archive indices without loading
 whole archives, selects a bounded member, decompresses supported streams, and
 decodes supported standalone textures. Local checks display a raw RGBA8 texture
 at `a/1/1/8`, entry 1, and an LZ11-compressed RGBA4 texture at `a/1/6/0`, entry 0.
-The latter is a 40×40 pink pastry icon. These observed appearances do not
+The latter is a 40×40 pink pastry icon. ETC1 at `a/0/0/5`, entry 35, now
+decodes a 320×240 gray geometric background; ETC1A4 at `a/1/5/9`, entry 0,
+exercises LZ11 decompression and transparency in a 40×40 image.
+These observed appearances do not
 identify their in-game ownership or scene bindings.
 
 The application provides a native window, keyboard pan/zoom/reset/exit, resizing,
 monotonic timing, software-renderer fallback, original-pixel export, and rendered
 frame capture. It refuses to overwrite existing output files. Synthetic and
 local real-asset checks are recorded in
-[the validation record](../native/reproduction/validation.json).
+[the foundation validation record](../native/reproduction/validation.json) and
+[the ETC milestone](../native/reproduction/texture-formats/README.txt).
 
 This completes a bounded asset-preview path. The application does not yet call
-the eight reconstructed game-logic modules. ETC1/ETC1A4, palette extensions,
+the eight reconstructed game-logic modules. Palette extensions,
 embedded textures, model/map formats, and rendering scene bindings remain
-unimplemented. A repeatable running-game capture is still required to select
+unimplemented in the viewer. A separate [CGFX inspector](native-containers.md)
+now indexes selected model and texture records, including their names, counts,
+and bounded texture extents; it does not render models or identify map roles.
+A repeatable running-game capture is still required to select
 and compare the first map-to-battle scenario.
 
 ## Acceptance criteria for the first playable
@@ -136,7 +143,7 @@ services, and persistence work together.
 | --- | --- | --- |
 | Reference capture | Fix the base revision/update/language target and capture one candidate map, interaction, encounter, battle action, and return using a repeatable starting save and input sequence | Input/save identifiers, screenshots or video, recorded inputs, and selected observable state before/after; memory observations where available |
 | Native application | Extend the working texture viewer with explicit game-address/platform interfaces and bounded game-state initialization | Reconstructed logic can run from checked real resources inside the application with documented lifecycle and reference comparisons |
-| Asset decoding | Extend the bounded GARC/LZ/BCLIM path to required ETC/palette/model formats; identify candidate map/player/UI resources through loaders and reference observations | Documented paths/indices and supported formats, checksums for selected samples, and a visible comparison to the reference |
+| Asset decoding | Extend the bounded GARC/LZ/BCLIM path to required palette/model formats and scene bindings; identify candidate map/player/UI resources through loaders and reference observations | Documented paths/indices and supported formats, checksums for selected samples, and a visible comparison to the reference |
 | Game reconstruction | Replace personal/growth resources, learnset access, move insertion, name construction, maximum-PP, and wider encounter/setup dependencies needed by the selected scenario | Reviewed instruction bytes, independent tests, explicit remaining services, and comparisons to captured reference values |
 | Slice integration | Connect movement/collision, interaction, battle, return, and save/load after their contracts are understood | One automated or recorded end-to-end scenario satisfying the acceptance criteria above |
 

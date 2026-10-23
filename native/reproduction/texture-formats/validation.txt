@@ -1,0 +1,44 @@
+ETC texture and CGFX inspection validation — 2026-10-23
+
+Baseline: ee0a6b4d615e99b3bb8911572dabf60e9ba28adc, 23 commits before this work.
+All eight reconstruction checkpoints and their 539 manifest entries preserved.
+The native foundation's 20-file manifest was checked against the pinned Git
+commit. Its original reproduction files remain unchanged in this worktree.
+
+Portable checks (compiler/Make/Python 3; SDL2 for viewer commands):
+  make -C reconstructed test
+  python3 -m unittest discover -s tests -v
+  make -C native all test test-runtime
+
+Results:
+  Eight reconstructed C suites passed.
+  Analysis Python suite: 38 tests, two optional extraction-dependency skips.
+  Four C asset suites passed, including ETC fixed vectors and BCLIM cropping.
+  Seven Python CGFX tests passed without SDL or game data.
+  Five viewer tests passed, including raw/LZ11 ETC1/A4 pixel and alpha exports.
+  Changed C decoders and the full viewer pipeline passed ASan/UBSan; leak
+  detection was disabled in this WSL run. Original GARC/LZ tests also passed.
+  Independent reference comparisons: 48,448 matches and 192 invalid-endpoint
+  rejections, detailed in reference-comparison.json.
+
+Original local selections:
+  ETC1: a/0/0/5 entry 35; ETC1A4 with LZ11: a/1/5/9 entry 0.
+  Both rendered with SDL x11/software, exercised pan/zoom/reset/resize/Escape,
+  and exported original-size RGBA BMPs plus 960x640 rendered frames. Decoded
+  pixel hashes exactly match the independently assembled reference images.
+  Three earlier raw/LZ11 samples still decode through the viewer.
+  Four CGFX selections passed the inspector; see container-samples.json.
+  The Windows launcher successfully invoked the WSL application for three
+  frames. This does not validate a native Windows ABI build.
+
+Commands, environments, outputs, and expected/actual status are in
+validation.json. The ignored local runner is outputs/native-textures/validate.py;
+activate existing local dependencies with source tools/native-sdl/activate.sh.
+New sample copies, reference sources, binaries, previews, and source ZIP stay
+outside Git. The native/SHA256SUMS manifest covers current tracked native files.
+
+This milestone supplies texture rendering and container metadata inspection.
+It does not decode/render model geometry, load a map, connect gameplay, or
+establish a first playable or visual equivalence with the running original.
+Next: bounded CGFX texture adapter, CMDL geometry/material investigation, then
+verified map placement/collision and game-state integration for the slice.
