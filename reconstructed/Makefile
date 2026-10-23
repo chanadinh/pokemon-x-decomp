@@ -7,3 +7,4 @@ all test clean:
 	$(MAKE) -C pokemon_constructor $@
 	$(MAKE) -C pokemon_data $@
 	$(MAKE) -C pokemon_state $@
+	$(MAKE) -C pokemon_stats $@
