@@ -50,6 +50,12 @@ addresses. The original-code review and reproducible exporter are preserved in
 This evidence supports resource selection. It does not yet reconstruct player
 entry, transitions, physics, terrain flag consumers, or the script VM.
 
+The [BCH continuation](native-bch.md#external-textures-and-next-work) also follows
+the original zone-area accessor through the archive-13 member request and the
+AD section-11 resource consumer. Its thirteen reviewed functions have 1,348
+instructions checked against the original bytes. This corroborates the selected
+area-75 texture-container path; later field-material binding remains unverified.
+
 Format and placement facts were also checked against the original
 [CTRMap source at 4b780a7](https://github.com/Rynbo/CTRMap/tree/4b780a7bc32a75a7f31c162829b086355caf32f2),
 especially `Workspace.java`, `AbstractGamefreakContainer.java`, `MapMatrix.java`,

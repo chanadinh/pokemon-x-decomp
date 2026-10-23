@@ -1,0 +1,259 @@
+{
+  "date": "2026-10-23",
+  "scope": "Original executable area selection and AD section-consumer dataflow; metadata only, no original instruction listing or asset payload.",
+  "input": {
+    "path": "inputs/pokemon-x-0f6d3e1d66cb/code.bin",
+    "size": 5156864,
+    "sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a"
+  },
+  "address_mapping": "virtual_address = code.bin file offset + 0x00100000",
+  "export": {
+    "project": "cro_20261023T150920079989Z",
+    "program": "main_text.bin",
+    "flags": [
+      "-noanalysis",
+      "-readOnly"
+    ],
+    "exporter": "../field-scene/ExportFieldEvidence.java",
+    "exporter_sha256": "7f420774516bee39c3c19f0c7d79d6e5bb5cad7adbafa6a7cb922b0e0f4f410d",
+    "local_output": "outputs/native-bch-native/area-evidence",
+    "reused_transition_export": "outputs/native-field-scene/ghidra-session/003b843c.asm",
+    "function_requests": [
+      "004a36cc",
+      "003b843c",
+      "003e0774",
+      "003e1680",
+      "003e1dd4",
+      "003e0530",
+      "001173dc",
+      "0035b75c",
+      "00355fb8",
+      "0011c3cc",
+      "00127ccc",
+      "0035bba4",
+      "0030ab1c"
+    ],
+    "project_saved": false
+  },
+  "functions": [
+    {
+      "address": "0x004a36cc",
+      "source_file_offset": "0x3a36cc",
+      "instructions": 5,
+      "instruction_bytes": 20,
+      "last_instruction_address": "0x4a36dc",
+      "sha256_of_instruction_bytes_in_address_order": "70873348c3cec08489e2c2008b5df37de12e3f6250f6359997e79987990dc8c2",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003b843c",
+      "source_file_offset": "0x2b843c",
+      "instructions": 243,
+      "instruction_bytes": 972,
+      "last_instruction_address": "0x3b8804",
+      "sha256_of_instruction_bytes_in_address_order": "81bb34cb5420e2ab4483573fdebc976cb7af1ac85a8e83c4a3d9f0371f362fc3",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003e0774",
+      "source_file_offset": "0x2e0774",
+      "instructions": 39,
+      "instruction_bytes": 156,
+      "last_instruction_address": "0x3e080c",
+      "sha256_of_instruction_bytes_in_address_order": "8677ff25e363b7ec49d3c1aa2bbbf1f3aa44c4690de71e3db21eb4770942af4e",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003e1680",
+      "source_file_offset": "0x2e1680",
+      "instructions": 303,
+      "instruction_bytes": 1212,
+      "last_instruction_address": "0x3e1b38",
+      "sha256_of_instruction_bytes_in_address_order": "e162fba529e54abb37bdd1d1f341f140ab118abed648ef6ac014a5d295a2862c",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003e1dd4",
+      "source_file_offset": "0x2e1dd4",
+      "instructions": 214,
+      "instruction_bytes": 856,
+      "last_instruction_address": "0x3e2128",
+      "sha256_of_instruction_bytes_in_address_order": "3fe996d3e1054372a9d56be94a13282f195019dbba2e4ab2c2c2b7bba6f9af6c",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003e0530",
+      "source_file_offset": "0x2e0530",
+      "instructions": 145,
+      "instruction_bytes": 580,
+      "last_instruction_address": "0x3e0770",
+      "sha256_of_instruction_bytes_in_address_order": "685290837bc43a28d51906dd8aee8212d907cbb000f5c250a35d63421bac1c77",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x001173dc",
+      "source_file_offset": "0x173dc",
+      "instructions": 11,
+      "instruction_bytes": 44,
+      "last_instruction_address": "0x117404",
+      "sha256_of_instruction_bytes_in_address_order": "f05884202de9dbf5ea56c7620cce2a1e4172f9f7ca4470336a268483cc7fd9c1",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x0035b75c",
+      "source_file_offset": "0x25b75c",
+      "instructions": 7,
+      "instruction_bytes": 28,
+      "last_instruction_address": "0x35b774",
+      "sha256_of_instruction_bytes_in_address_order": "a8244066fa1fb884e51b9b2f83cd2d05fcc9e4f417848ccd1ff1b9640f4ce897",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x00355fb8",
+      "source_file_offset": "0x255fb8",
+      "instructions": 25,
+      "instruction_bytes": 100,
+      "last_instruction_address": "0x356018",
+      "sha256_of_instruction_bytes_in_address_order": "7d2c22550c5118ebd587cbcaa7741b894a3a3ebec2e06bfb597aa3eab65f69d1",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x0011c3cc",
+      "source_file_offset": "0x1c3cc",
+      "instructions": 7,
+      "instruction_bytes": 28,
+      "last_instruction_address": "0x11c3e4",
+      "sha256_of_instruction_bytes_in_address_order": "dc31b38473efd999fdc26c426b275f3f1cd96c58cd73bbe35db4d91b65581716",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x00127ccc",
+      "source_file_offset": "0x27ccc",
+      "instructions": 120,
+      "instruction_bytes": 480,
+      "last_instruction_address": "0x127ea8",
+      "sha256_of_instruction_bytes_in_address_order": "09c123337d0ade7ea1cce9ca7763952412e07f73641ed9eaa2a88ce66a9c0ca4",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x0035bba4",
+      "source_file_offset": "0x25bba4",
+      "instructions": 185,
+      "instruction_bytes": 740,
+      "last_instruction_address": "0x35be84",
+      "sha256_of_instruction_bytes_in_address_order": "9c52ac115c151c32896ad7664452b9909b5e8ab6dc863ca3f887a154cbb47ff5",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x0030ab1c",
+      "source_file_offset": "0x20ab1c",
+      "instructions": 44,
+      "instruction_bytes": 176,
+      "last_instruction_address": "0x30abc8",
+      "sha256_of_instruction_bytes_in_address_order": "2938374c02f5e2e173e7119a0d9750560e1969569f607253f97b31d4c962ea0e",
+      "matches_original_bytes": true
+    }
+  ],
+  "reviewed_findings": [
+    {
+      "claim": "The zone accessor obtains section 0 and returns its unsigned 16-bit field at +2.",
+      "function": "0x004a36cc",
+      "instructions": [
+        "0x004a36cc..0x004a36dc"
+      ],
+      "boundary": "Selected local zone 5 contains value 75 here; this is not a claim that the full u16 range survives every consumer."
+    },
+    {
+      "claim": "The transition compares the accessor value with area-state byte +0x28; on the changed-area path it narrows the accessor result to 8 bits and passes it to 0x003e0774.",
+      "function": "0x003b843c",
+      "instructions": [
+        "0x003b8728..0x003b8770"
+      ]
+    },
+    {
+      "claim": "After submitting its separate area-configuration request, 0x003e0774 stores its selected area argument as the byte at state +0x28.",
+      "function": "0x003e0774",
+      "instructions": [
+        "0x003e0784",
+        "0x003e07fc"
+      ],
+      "boundary": "The separate 0xaa request in this function is not the AD texture archive request."
+    },
+    {
+      "claim": "Setup obtains the area-state pointer from root+0x1c then +0x2c, stores it at context+0x54, constructs archive index13 through 0x0011c3e8, and stores the handle at area-state+0x2c.",
+      "function": "0x003e1680",
+      "instructions": [
+        "0x003e1abc..0x003e1b08"
+      ],
+      "archive_path": "a/0/1/3",
+      "archive_binding_evidence": "../field-scene/original-code-evidence.json"
+    },
+    {
+      "claim": "The asynchronous continuation loads area-state byte+0x28 and archive handle+0x2c, queries member metadata and submits that byte as the selected member to 0x00355fb8; its next phase calls 0x003e0530 with the same area-state object.",
+      "function": "0x003e1dd4",
+      "instructions": [
+        "0x003e1f2c..0x003e1fd4",
+        "0x003e2000..0x003e2014"
+      ],
+      "callee_chain": [
+        "0x0011c3cc -> 0x00127ccc",
+        "0x00355fb8 -> 0x00127ccc"
+      ],
+      "boundary": "Only the selected archive/member dataflow is established; complete asynchronous scheduling/error behavior is not reconstructed."
+    },
+    {
+      "claim": "The minipack helper bounds the section index with the u16 count at base+2, then returns base + u32(base+4+4*index).",
+      "function": "0x001173dc",
+      "instructions": [
+        "0x001173dc..0x00117404"
+      ]
+    },
+    {
+      "claim": "After the pending read, 0x003e0530 decompresses the member into an allocated buffer and installs the minipack base at state+0x3c. Its next state passes sections11 and1 to separate resource holders at state+0x4c and+0x48 respectively.",
+      "function": "0x003e0530",
+      "instructions": [
+        "0x003e0588..0x003e05d4",
+        "0x003e0628..0x003e0648",
+        "0x003e06c0..0x003e06e0"
+      ],
+      "boundary": "The decompression call is 0x00352488; the selected member independently has an LZ11 header. This record does not reconstruct the complete compression dispatcher."
+    },
+    {
+      "claim": "The resource attachment helper stores the supplied section pointer at holder+0x34 only when that field is null.",
+      "function": "0x0035b75c",
+      "instructions": [
+        "0x0035b75c..0x0035b774"
+      ]
+    },
+    {
+      "claim": "The subsequent resource setup resolves base-relative offsets at header+8,+0xc,+0x10,+0x14,+0x18, gated by lengths at +0x1c,+0x20,+0x24,+0x28,+0x2c, then invokes 0x0030ab1c. These fields match the selected BCH section layout.",
+      "function": "0x0035bba4",
+      "instructions": [
+        "0x0035bc24..0x0035bca4",
+        "0x0035bdd8..0x0035bdec"
+      ],
+      "boundary": "Only these header/dataflow operations are reviewed. Relocation execution, texture-name binding to field models, material shader state and GPU equivalence remain outside this proof."
+    }
+  ],
+  "selected_chain": {
+    "zone": 5,
+    "zone_area_value": 75,
+    "stored_area_byte": 75,
+    "archive_index": 13,
+    "archive_path": "a/0/1/3",
+    "archive_member": 75,
+    "section_index": 11,
+    "independent_data_evidence": "../bch-model/area75-texture-association.json"
+  },
+  "limits": [
+    "No original pre-draw primitive state has been connected to the selected field mesh.",
+    "The texture resource container reaches the original resource setup, but downstream exact texture-name binding to field materials remains open.",
+    "No player movement, spawn, collision behavior or rendered equivalence follows from this dataflow evidence."
+  ],
+  "totals": {
+    "functions": 13,
+    "instruction_bytes": 5392,
+    "instructions": 1348,
+    "all_instruction_bytes_match_original": true
+  }
+}

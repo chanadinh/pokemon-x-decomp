@@ -1,0 +1,1220 @@
+{
+  "scope": "Selected metadata only; sampler, projection and ordinary-coordinate observations do not establish executed shading or a fallback texture-unit policy.",
+  "field_bch_sha256": "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+  "previous_reference": "../bch-model/area75-texture-association.json",
+  "material_count": 12,
+  "materials": [
+    {
+      "index": 0,
+      "name": "com_chip_mado2",
+      "record_offset": 12932,
+      "parameter_offset": 632,
+      "texture_names": [
+        "com_chip_mado1",
+        null,
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 644,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 668,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 23664
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 23672
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 23676
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11001",
+          "byte_mask": 15,
+          "source_offset": 23680
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 23704
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 23752
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 23800
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "name": "gym06_kage01",
+      "record_offset": 13020,
+      "parameter_offset": 1632,
+      "texture_names": [
+        "gym06_kage01",
+        null,
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 1644,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 1668,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 1692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 23840
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 23848
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 23852
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11001",
+          "byte_mask": 15,
+          "source_offset": 23856
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 23880
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 23928
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 23976
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "t01r01_curt1",
+      "record_offset": 13108,
+      "parameter_offset": 2632,
+      "texture_names": [
+        "t01r01_curt1",
+        null,
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 2644,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 2668,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 2692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24016
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24024
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24028
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11001",
+          "byte_mask": 15,
+          "source_offset": 24032
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24056
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24104
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24152
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "t01r01_win01",
+      "record_offset": 13196,
+      "parameter_offset": 3632,
+      "texture_names": [
+        "t01r01_win01",
+        null,
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 3644,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 3668,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 3692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24192
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24200
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24204
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11001",
+          "byte_mask": 15,
+          "source_offset": 24208
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24232
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24280
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24328
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "name": "t01r0202_bed",
+      "record_offset": 13284,
+      "parameter_offset": 4632,
+      "texture_names": [
+        "t01r0202_bed",
+        null,
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 4644,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 4668,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 4692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24368
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24376
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24380
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11001",
+          "byte_mask": 15,
+          "source_offset": 24384
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24408
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24456
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24504
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "t01r0202_desk",
+      "record_offset": 13372,
+      "parameter_offset": 5632,
+      "texture_names": [
+        "t01r0202_desk",
+        null,
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 5644,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 5668,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 5692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24544
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24552
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24556
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11001",
+          "byte_mask": 15,
+          "source_offset": 24560
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24584
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24632
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24680
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "name": "t01r02_carpet2",
+      "record_offset": 13460,
+      "parameter_offset": 6632,
+      "texture_names": [
+        "projection_dummy",
+        "t01r02_carpet2",
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 6644,
+          "packed_projection_and_camera": "0x30001",
+          "mapping_mode_byte": 3,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 6668,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 6692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24720
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24728
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24732
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11003",
+          "byte_mask": 15,
+          "source_offset": 24736
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x30002220",
+          "byte_mask": 15,
+          "source_offset": 24760
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24808
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24856
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "name": "t01r02_floor",
+      "record_offset": 13548,
+      "parameter_offset": 7632,
+      "texture_names": [
+        "projection_dummy",
+        "t01r02_floor",
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 7644,
+          "packed_projection_and_camera": "0x30001",
+          "mapping_mode_byte": 3,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 7668,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 7692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24896
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24904
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 24908
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11003",
+          "byte_mask": 15,
+          "source_offset": 24912
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x30002220",
+          "byte_mask": 15,
+          "source_offset": 24936
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 24984
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25032
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "name": "t01r02_mirror",
+      "record_offset": 13636,
+      "parameter_offset": 8632,
+      "texture_names": [
+        "t01r02_mirror",
+        null,
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 8644,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 8668,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 8692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25072
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25080
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25084
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11001",
+          "byte_mask": 15,
+          "source_offset": 25088
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25112
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25160
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25208
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "name": "t01r02_stairs",
+      "record_offset": 13724,
+      "parameter_offset": 9632,
+      "texture_names": [
+        "t01r02_stairs",
+        null,
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 9644,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 9668,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 9692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25248
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25256
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25260
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11001",
+          "byte_mask": 15,
+          "source_offset": 25264
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25288
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25336
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25384
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "name": "t01r02_wall",
+      "record_offset": 13812,
+      "parameter_offset": 10632,
+      "texture_names": [
+        "projection_dummy",
+        "t01r02_wall",
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 10644,
+          "packed_projection_and_camera": "0x30001",
+          "mapping_mode_byte": 3,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 10668,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 10692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25424
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25432
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25436
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11003",
+          "byte_mask": 15,
+          "source_offset": 25440
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x30002220",
+          "byte_mask": 15,
+          "source_offset": 25464
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25512
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25560
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "name": "t01r02_woody",
+      "record_offset": 13900,
+      "parameter_offset": 11632,
+      "texture_names": [
+        "projection_dummy",
+        "t01r02_woody",
+        null
+      ],
+      "coordinators": [
+        {
+          "unit": 0,
+          "file_offset": 11644,
+          "packed_projection_and_camera": "0x30001",
+          "mapping_mode_byte": 3,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 1,
+          "file_offset": 11668,
+          "packed_projection_and_camera": "0xff000001",
+          "mapping_mode_byte": 0,
+          "camera_byte": 255,
+          "scale_rotation_translation": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "unit": 2,
+          "file_offset": 11692,
+          "packed_projection_and_camera": "0x1",
+          "mapping_mode_byte": 0,
+          "camera_byte": 0,
+          "scale_rotation_translation": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "selected_command_writes": [
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25600
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25608
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x0",
+          "byte_mask": 0,
+          "source_offset": 25612
+        },
+        {
+          "register": "0x80",
+          "parameter": "0x11003",
+          "byte_mask": 15,
+          "source_offset": 25616
+        },
+        {
+          "register": "0x83",
+          "parameter": "0x30002220",
+          "byte_mask": 15,
+          "source_offset": 25640
+        },
+        {
+          "register": "0x93",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25688
+        },
+        {
+          "register": "0x9b",
+          "parameter": "0x2220",
+          "byte_mask": 15,
+          "source_offset": 25736
+        }
+      ]
+    }
+  ],
+  "layout_reference": {
+    "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/h3d/texturing/H3DMaterial.java",
+    "sha256": "97e6c7d681db2ff4484cb21579e9cdabd49efe62d5700e05ee0984788e4ee91d",
+    "claim": "Each coordinator starts at parameter + 12 + unit * 24. Mapping mode is packed bits 16..23; camera is the upper byte; five following floats are scale U/V, rotation, translation U/V. These field interpretations come from the pinned implementation, not original executable analysis."
+  },
+  "findings": {
+    "ordinary_mapping_modes": [
+      0
+    ],
+    "projection_material_indices": [
+      6,
+      7,
+      10,
+      11
+    ],
+    "ordinary_coordinator_transform": [
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "unit_selection_policy": "No fallback selection is established. Preserve all three resource names and coordinator records; do not silently discard projected unit 0."
+  }
+}

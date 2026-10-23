@@ -1,0 +1,86 @@
+BCH primitive, area-consumer and material continuation
+Recorded 2026-10-23. Metadata and analysis only; original payloads and
+instruction listings remain in ignored local output storage.
+
+Primitive boundary
+
+The existing ../bch-textures/primitive-state-evidence.json remains the applicable
+primitive evidence. All 24 selected register 0x25e writes use byte mask 8 and
+follow a draw command; this does not establish primitive mode bits 8-9 before
+the draw. The pinned Citro3D implementation identifies the same trailing pair
+as post-vertex-cache clearing. Two original command-writer helpers at 0x0036b8e8 and 0x001e4228
+explicitly emit header 0x0002025e (register 0x25e, byte mask2); their verified
+operations, instruction hashes and caller leads are in primitive-code-leads.json.
+No original executable pre-draw state has yet been connected to field165. The native wireframe must therefore retain its
+explicit triangle-list interpretation and cannot claim original draw topology.
+
+Material coordinator observations
+
+material-coordinate-evidence.json records every coordinator and the original
+byte masks/source offsets for the texture-unit and sampler command writes.
+All offsets are relative to the field BCH with SHA-256
+cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd.
+Material parameter coordinators begin at parameter + 12 + 24 * unit. Their
+mapping byte and camera byte interpretation comes from the pinned CTRMap
+H3DMaterial source cited and hashed in that JSON, not executable reconstruction.
+
+Eight materials have ordinary mapping on unit 0; four (indices 6, 7, 10, 11)
+have projection mapping 3/camera 0 on unit 0 and ordinary mapping on unit 1.
+Their names are t01r02_carpet2, t01r02_floor, t01r02_wall and t01r02_woody.
+The ordinary-coordinate scale/rotation/translation tuples are [1,1,0,0,0].
+All four projected unit-0 names are projection_dummy, and their unit-1 names
+match their ordinary images in the independently verified area texture pack.
+These observations do not establish a fallback-unit policy: no texture unit
+is silently discarded, and no projected-coordinate, combiner, alpha, lighting
+or original draw-order fidelity is claimed by the wireframe preview.
+
+Original area consumer continuation
+
+original-area-consumer-evidence.json records a newly reviewed call chain. All
+1,348 exported instructions (5,392 bytes across 13 functions) were checked
+against the pinned code.bin before hashes were recorded. Main addresses are
+virtual addresses, equal to file offset + 0x00100000. Ghidra pseudocode was used
+to find leads; the stated register/dataflow operations were checked in the
+original-byte-matching instruction listings. Source bytes are not tracked here.
+
+The zone accessor 0x004a36cc returns unsigned16 at section0+2. Transition
+0x003b843c compares that value with area-state byte+0x28, and on a changed-area
+path explicitly narrows it to 8 bits before calling 0x003e0774. The latter
+stores the selected byte at area-state+0x28. Thus the observed value 75 survives;
+this proof does not claim that all possible unsigned16 area IDs survive.
+
+Context setup 0x003e1680 constructs archive index13 and stores the archive
+handle at area-state+0x2c. The archive table binding to a/0/1/3 was independently
+verified in ../field-scene/original-code-evidence.json. Continuation 0x003e1dd4
+loads the stored area byte and archive handle, obtains member metadata via
+0x0011c3cc -> 0x00127ccc, and submits the same area byte as member selection to
+0x00355fb8. The following phase invokes 0x003e0530 on the same area-state object.
+
+Consumer 0x003e0530 decompresses the pending member through 0x00352488, installs
+the resulting minipack base at state+0x3c, and then obtains section11 and section1
+using 0x001173dc. That helper returns base + u32(base+4+4*section) after checking
+the index against the u16 section count. Each result goes through 0x0035b75c,
+which attaches it at resource-holder+0x34; section11 uses the holder at
+area-state+0x4c and section1 uses area-state+0x48. Subsequent setup 0x0035bba4
+resolves the expected BCH base-relative section offsets/lengths and invokes
+0x0030ab1c. The selected independent input identifies section11 as the texture
+BCH. This now corroborates original zone-to-area selection and the area
+section11 resource consumer, beyond the earlier reference-only association.
+
+This is bounded dataflow evidence. It does not reconstruct asynchronous I/O,
+all compression variants, BCH relocation execution, the later exact texture-
+name bindings to each field material, material rendering, or player behavior.
+The separate area-configuration request in 0x003e0774 uses member 0xaa and must
+not be confused with the AD texture member request in 0x003e1dd4.
+
+Reproduction
+
+The JSON lists the exact function requests. Use the existing
+../field-scene/ExportFieldEvidence.java with requests.txt containing those
+hexadecimal addresses, the saved main_text.bin project, -noanalysis -readOnly,
+and the exporter's once mode. The local export was written to
+outputs/native-bch-native/area-evidence; transition 0x003b843c reused its earlier
+original-byte-matching export. Compare every listing address/byte sequence
+with code.bin at address-0x00100000, concatenate instruction bytes in listing
+order, and hash that concatenation. The JSON records counts and all resulting
+SHA-256 values. These metadata assertions are scoped to the pinned input hash.

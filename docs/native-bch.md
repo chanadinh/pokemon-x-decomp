@@ -105,11 +105,20 @@ decoder, but projected coordinates, samplers, combiners, lights and draw orderin
 still require implementation. `--texture-bch` verifies dictionary name matches
 only, not texture pixels or the correctness of a chosen area's runtime binding.
 
-The original-code archive table corroborates `a/0/1/3`; area selection and AD
-section 11 semantics are currently supported by pinned CTRMap source and local
-data. Trace the original consumer and primitive state, then connect checked BCH
-geometry and textures to the native renderer. Player entry, movement, interaction,
-battle, return to field and save/load remain first-playable requirements.
+The original-code continuation now corroborates the area selection and section
+consumer. Zone accessor `0x004a36cc` reads section 0's unsigned 16-bit area ID at
+offset 2. Transition `0x003b843c` narrows it to a byte, which is stored in the area
+state. Setup `0x003e1680` creates archive index 13 (`a/0/1/3`), and continuation
+`0x003e1dd4` requests the member selected by that area byte. Consumer `0x003e0530`
+decompresses it and passes AD sections 11 and 1 into separate BCH resource holders.
+The selected value 75 survives the narrowing; this is not a claim about all u16 IDs.
+
+All 1,348 exported instructions across thirteen functions were checked against
+the pinned executable bytes. The [area-consumer evidence](../native/reproduction/bch-native/primitive-area-notes.txt)
+records addresses, hashes, dataflow and reproduction instructions. Later exact
+texture-name binding to field materials, primitive setup and material execution
+remain open. Player entry, movement, interaction, battle, return to field and
+save/load remain first-playable requirements.
 
 Format references are the reviewed
 [SPICA revision bd29a78](https://github.com/gdkchan/SPICA/tree/bd29a7828595d7839cda2ac61c76bb63f9071250)

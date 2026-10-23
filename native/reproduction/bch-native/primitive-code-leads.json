@@ -1,0 +1,35 @@
+{
+  "scope": "Verified command-writer helpers, not a demonstrated selected-field render chain.",
+  "code_sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a",
+  "helpers": [
+    {
+      "function": "0x0036b8e8",
+      "reviewed_operation": "Writes parameter 0x300 followed by header 0x0002025e into the output buffer.",
+      "instructions": 52,
+      "instruction_bytes": 208,
+      "instruction_sha256": "a3daf0101a4616ac5c0a88bc6bcee6a78fe5eb00086539bb99789f07407bc6e2",
+      "literal_address": "0x36b9b8",
+      "literal_value": "0x2025e",
+      "callers_from_read_only_cross_references": [
+        "0x0037eee0"
+      ],
+      "matches_original_bytes": true
+    },
+    {
+      "function": "0x001e4228",
+      "reviewed_operation": "Writes parameter 0x300 when argument1 is nonzero, otherwise argument2 shifted left by8, followed by header 0x0002025e.",
+      "instructions": 54,
+      "instruction_bytes": 216,
+      "instruction_sha256": "1ea156f8d9991dbf1403cc39f26eca8715672443be044f36d3cc45274e565966",
+      "literal_address": "0x1e4300",
+      "literal_value": "0x2025e",
+      "callers_from_read_only_cross_references": [
+        "0x00477474",
+        "0x004779f8"
+      ],
+      "matches_original_bytes": true
+    }
+  ],
+  "finding": "Original command writers explicitly emit a mask2 primitive-register header; their presence is compatible with the reference finding that post-draw mask8 writes do not establish primitive mode.",
+  "boundary": "These helpers have not been connected to the selected field165 draw invocation or inherited geometry-stage state. Triangle-list remains an explicit preview interpretation."
+}
