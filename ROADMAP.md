@@ -13,21 +13,30 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Seven connected host-source milestones now exist: the `CallWildBattle`
+Eight connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
-and base/extra/derived/refresh state orchestration.
+base/extra/derived/refresh state orchestration, and HP/stat calculation.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
 creation-parameter preparation, weighted optional-value selection, random
 parameter resolution, allocation/manager setup, 26 data-field setters,
 checksum/XOR storage transforms, block selection, 13 state-field accessors,
-move initialization, auxiliary clearing, HP/PP refresh, and a final script-state write.
-Wider setup, real resource loading, HP/stat calculation, and move/name services still use
-stand-ins. There is no playable game
-or renderer yet. Per-milestone validation records document the actual tests;
+move initialization, auxiliary clearing, HP/PP refresh, HP and five stat updates,
+nature adjustment, growth-to-level resolution, and a final script-state write.
+Wider setup, real personal/growth resource loading, learnset access, move
+insertion, name construction, and maximum-PP services still use stand-ins.
+There is no native game application, renderer, map/control/collision system,
+interactive battle loop, or playable save/load path yet.
+Per-milestone validation records document the actual tests;
 these are synthetic-memory checks rather than a running-game comparison.
+
+The [first playable slice](docs/PLAYABLE_SLICE.md) defines an end-to-end
+acceptance scenario and records the local asset audit. The original container
+and extracted RomFS are already available locally; further uploads are not
+needed to begin resource decoding. Their presence does not establish decoded
+asset roles or complete asset integrity.
 
 ## Milestones and completion criteria
 
@@ -48,12 +57,13 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
 
 ## Immediate sequence for this workspace
 
-1. Reconstruct the HP/stat services `0x0013aa84`, `0x0014fb00`, `0x0014fbd4`,
-   `0x0014fda4`, `0x0014fe78`, and `0x0014fa2c`, plus their required callees.
-   Level resolution `0x00168b3c`, learnset access and move insertion, name
-   construction/copy, and maximum-PP resource service `0x00150220` remain explicit
-   boundaries. Replace species/growth-resource stand-ins with checked resource
-   access as those dependencies are reviewed. State orchestration at
+1. Reconstruct learnset access and move insertion, name construction/copy,
+   and maximum-PP resource service `0x00150220`. Replace personal/growth-resource
+   stand-ins with checked resource access as those dependencies are reviewed.
+   HP/stat services `0x0013aa84`, `0x0014fb00`, `0x0014fbd4`, `0x0014fda4`,
+   `0x0014fe78`, and `0x0014fa2c` now have host implementations, along with
+   scalar formulas, nature adjustment, object-level/max-HP helpers, and level
+   resolution `0x00168b3c`. State orchestration at
    `0x0013a8d8`, `0x0012b744`, `0x0012b808`, and `0x0013a7bc` now has host
    implementations, with 13 associated state-field accessors. Population `0x0014f6b8`, its 26
    setters, checksum `0x00174e0c`, manager codec `0x001685f0`/`0x00168660`,
@@ -61,20 +71,23 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    base initializer `0x0039daf4`, allocation path `0x0039a8a4`, parameter
    normalizer `0x0014f324`, and XOR primitive `0x00167fb4` now have host
    implementations through explicit service boundaries. Copy-before-cleanup
-   behavior is traced. The seven-module fixture produces and checks the encrypted
-   payload and auxiliary state using synthetic resources and stat services;
-   a complete game-valid object and behavior
-   against a running reference remain unverified.
+   behavior is traced. The eight-module fixture produces and checks the encrypted
+   payload and auxiliary state using reconstructed HP/stat/level routines and
+   synthetic resources. A complete game-valid object and behavior against a
+   running reference remain unverified.
 2. Reconstruct setup function `0x15c75434` and its required callees, keeping
    field names provisional until callers, consumers, or runtime behavior
    support them. Establish the table's actual record count and field meanings.
 3. Replace the remaining stand-ins with checked implementations as their
    dependencies become understood. Add reference execution comparisons;
    the current tests alone do not prove equivalence to the running game.
-4. In parallel, document RomFS assets and identify the minimal map, model,
-   texture, animation, UI, and audio loading paths for the playable slice.
-5. Establish the native app and platform interfaces, then connect the
-   smallest complete field-to-battle-to-field path.
+4. In parallel, use the existing RomFS inventory to identify and decode the
+   minimal map, model, texture, animation, UI, and audio loading paths for
+   the playable slice. Capture the corresponding reference scenario.
+5. Establish the native application and platform interfaces alongside resource
+   work, then connect movement/collision, interaction, battle, return to the
+   field, and save/load according to the
+   [slice acceptance criteria](docs/PLAYABLE_SLICE.md#acceptance-criteria-for-the-first-playable).
 
 These addresses identify the current analysis baseline. CRO addresses are
 synthetic and must not be treated as observed runtime addresses.
@@ -100,11 +113,10 @@ work; it still requires accurate runtime and platform replacements.
 
 ## Effort and planning
 
-Plan for a substantial, likely multi-year effort for a small experienced
-team, with uncertainty about full feature coverage. A defensible schedule
-requires the first playable slice and measurements of actual dependency
-and compatibility work. There is no evidence yet for a near-term complete
-port or a reliable completion percentage.
+This remains substantial work with uncertainty about dependency scope and
+feature coverage. A defensible schedule requires the first playable slice and
+measurements of actual dependency and compatibility work. The current evidence
+does not support a delivery date or a reliable completion percentage.
 
 Useful parallel workstreams are ARM/game reverse engineering, graphics and
 platform integration, tools/assets, and reference-based testing. Progress

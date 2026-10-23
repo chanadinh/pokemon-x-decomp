@@ -6,12 +6,14 @@
 [![Roadmap](https://img.shields.io/badge/project-roadmap-blue)](ROADMAP.md)
 
 An early-stage reverse-engineering project for Pokémon X on Nintendo 3DS.
-Explore seven connected C reconstruction milestones, reviewed assembly evidence,
+Explore eight connected C reconstruction milestones, reviewed assembly evidence,
 and synthetic tests that run without game files.
 
 **Current status: research and host-side tests. There is no playable PC port,
 renderer, or runnable battle yet.** The long-term goal is a native PC game;
-[the roadmap](ROADMAP.md) explains the work and evidence still needed.
+[the roadmap](ROADMAP.md) explains the work and evidence still needed. The
+[first playable slice](docs/PLAYABLE_SLICE.md) has concrete acceptance criteria
+and an inventory of the original assets already available locally.
 
 ## Try the reconstructed logic
 
@@ -40,10 +42,13 @@ PowerShell and 3dstool dependencies are unavailable.
 | [Pokémon constructor](reconstructed/pokemon_constructor/README.md) | Parameter normalization, allocation, manager setup, XOR transform |
 | [Pokémon data](reconstructed/pokemon_data/README.md) | Population, 26 field setters, checksum, storage codec, block selection |
 | [Pokémon state](reconstructed/pokemon_state/README.md) | Base/extra initialization, derived-state sequencing, HP/PP refresh, 13 field accessors |
+| [Pokémon stats](reconstructed/pokemon_stats/README.md) | HP and five stat updates, nature adjustment, growth-to-level lookup, and supporting field accessors |
 
-A seven-module integration fixture connects these paths using synthetic species,
-growth, learnset, name, PP, and stat services. Wider game setup, real resource
-loading, and deeper stat calculations still use stand-ins. These are analyst-authored reconstructions, not
+An eight-module integration fixture connects these paths with reconstructed
+HP/stat calculations and level resolution. Personal/growth resources, learnset
+access, move insertion, name construction, and maximum-PP services still use
+synthetic data or callbacks, as do wider game setup and platform dependencies.
+These are analyst-authored reconstructions, not
 recovered original source or builds that match the original machine code.
 
 The analysis baseline covers 133 CRO modules, with 44,279 candidate functions
@@ -59,10 +64,10 @@ documentation, and reference-based testing. Start with
 
 Current priorities:
 
-- Reconstruct the remaining HP/stat calculations, level lookup, and move/name services.
-- Replace species and growth-resource stand-ins with checked resource access.
+- Reconstruct learnset access, move insertion, name construction, and maximum-PP services.
+- Replace personal and growth-resource stand-ins with checked resource access.
 - Compare reconstructed behavior against a running reference.
-- Document the asset-loading paths needed for a first playable slice.
+- Build the native application and decode the map/player assets needed for the first playable slice.
 
 [Report a reproducible bug](https://github.com/chanadinh/pokemon-x-decomp/issues/new?template=bug_report.yml)
 or [propose a research task](https://github.com/chanadinh/pokemon-x-decomp/issues/new?template=research_task.yml).
@@ -73,6 +78,7 @@ others discover it. Use **Watch → Custom → Releases** for release notificati
 
 - [Source milestone overview](reconstructed/README.md)
 - [Roadmap and completion criteria](ROADMAP.md)
+- [First playable slice and local asset inventory](docs/PLAYABLE_SLICE.md)
 - [Local analysis history and reproduction workflow](docs/ANALYSIS_WORKSPACE.md)
 - [Recorded tool versions](tools/versions.json)
 
