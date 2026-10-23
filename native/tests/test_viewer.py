@@ -18,6 +18,22 @@ def texture():
     return bytes(pixels) + footer
 
 
+def etc_texture(alpha):
+    # Four fixed ETC1 blocks in one 8x8 PICA tile, cropped to 6x5.
+    # Equal 4-bit endpoints, table 0, selector 0: each channel is base+2.
+    pixels = bytearray()
+    for color in (0x8844220000000000, 0x2288440000000000,
+                  0x4422880000000000, 0x4466880000000000):
+        if alpha:
+            # Column-major alpha nibble indices: (0,0)=0, (1,0)=4, (0,1)=1.
+            pixels.extend(bytes.fromhex('1032547698badcfe'))
+        pixels.extend(color.to_bytes(8, 'little'))
+    footer = b'CLIM' + struct.pack('<HHIIHH', 0xfeff, 20, 0x02020000,
+                                  len(pixels) + 40, 1, 0)
+    footer += b'imag' + struct.pack('<IHHII', 16, 6, 5, 11 if alpha else 10, len(pixels))
+    return bytes(pixels) + footer
+
+
 def literals(data):
     # Deliberately simple independent LZ11 fixture: literal groups only.
     output = bytearray(b'\x11' + len(data).to_bytes(3, 'little'))
@@ -36,7 +52,7 @@ def archive(member):
     return header + fato + fatb + fimb + member + bytes(padded - len(member))
 
 
-def bmp_pixel(data, x, y):
+def bmp_pixel(data, x, y, with_alpha=False):
     assert data[:2] == b'BM'
     offset = struct.unpack_from('<I', data, 10)[0]
     width, height = struct.unpack_from('<ii', data, 18)
@@ -47,6 +63,9 @@ def bmp_pixel(data, x, y):
     position = offset + row * stride + x * (bits // 8)
     # SDL_SaveBMP's BMP byte order is B,G,R,(A).
     b, g, r = data[position:position + 3]
+    if with_alpha:
+        assert bits == 32
+        return (r, g, b, data[position + 3])
     return (r, g, b)
 
 
@@ -78,6 +97,31 @@ class ViewerTests(unittest.TestCase):
                 self.assertEqual(bmp_pixel(data, 0, 1), (0, 0, 255))
                 self.assertEqual(bmp_pixel(data, 7, 7), (0, 0, 255))
                 image.unlink()
+
+    def test_etc_archive_pipeline_crop_and_exported_alpha(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for alpha in (False, True):
+                for compressed in (False, True):
+                    with self.subTest(alpha=alpha, compressed=compressed):
+                        member = etc_texture(alpha)
+                        (root / 'fixture.garc').write_bytes(archive(literals(member) if compressed else member))
+                        image = root / 'result.bmp'
+                        result = self.run_viewer('--romfs', root, '--archive', 'fixture.garc',
+                                                 '--entry', 0, '--inspect', '--screenshot', image)
+                        self.assertIn('width=6 height=5 format=' + ('11' if alpha else '10'), result.stdout)
+                        self.assertIn('compression=' + ('LZ11' if compressed else 'none'), result.stdout)
+                        data = image.read_bytes()
+                        self.assertEqual(struct.unpack_from('<ii', data, 18), (6, 5))
+                        for x, y, rgb, a in [(0, 0, (138, 70, 36), 0),
+                                              (1, 0, (138, 70, 36), 68),
+                                              (0, 1, (138, 70, 36), 17),
+                                              (4, 0, (36, 138, 70), 0),
+                                              (0, 4, (70, 36, 138), 0),
+                                              (5, 4, (70, 104, 138), 68)]:
+                            self.assertEqual(bmp_pixel(data, x, y, with_alpha=True),
+                                             (*rgb, a if alpha else 255))
+                        image.unlink()
 
     def test_export_does_not_overwrite_existing_files_or_input(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -118,7 +162,7 @@ class ViewerTests(unittest.TestCase):
             (root / 'fixture.garc').write_bytes(archive(texture())[:-1])
             self.run_viewer(*selection, success=False)
             unsupported = bytearray(texture())
-            struct.pack_into('<I', unsupported, len(unsupported) - 8, 10)
+            struct.pack_into('<I', unsupported, len(unsupported) - 8, 14)
             (root / 'fixture.garc').write_bytes(archive(unsupported))
             result = self.run_viewer(*selection, success=False)
             self.assertIn('unsupported', result.stderr.lower())

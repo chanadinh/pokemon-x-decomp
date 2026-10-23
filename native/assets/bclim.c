@@ -1,4 +1,5 @@
 #include "bclim.h"
+#include "etc1.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -105,6 +106,34 @@ static void raw_pixel(const uint8_t *data, size_t index, uint32_t format,
     }
 }
 
+static int compressed_pixels(const uint8_t *data, uint32_t stored_width,
+                              uint32_t stored_height, uint32_t width,
+                              uint32_t height, int alpha, uint8_t *rgba)
+{
+    const size_t block_size = alpha ? 16 : 8;
+    size_t offset = 0;
+    for (uint32_t tile_y = 0; tile_y < stored_height; tile_y += 8) {
+        for (uint32_t tile_x = 0; tile_x < stored_width; tile_x += 8) {
+            for (unsigned block = 0; block < 4; ++block) {
+                uint8_t pixels[64];
+                /* Validate padding blocks as well as visible blocks. Exact
+                 * payload validation above bounds every block read. */
+                if (px_etc1_decode_block(data + offset, block_size, alpha,
+                                         pixels, sizeof pixels) != PX_ETC1_OK)
+                    return 0;
+                offset += block_size;
+                const uint32_t origin_x = tile_x + (block % 2) * 4;
+                const uint32_t origin_y = tile_y + (block / 2) * 4;
+                for (unsigned y = 0; y < 4 && origin_y + y < height; ++y)
+                    for (unsigned x = 0; x < 4 && origin_x + x < width; ++x)
+                        memcpy(rgba + ((size_t)(origin_y + y) * width + origin_x + x) * 4,
+                               pixels + (y * 4 + x) * 4, 4);
+            }
+        }
+    }
+    return 1;
+}
+
 enum px_bclim_result px_bclim_decode(const uint8_t *data, size_t size,
                                     struct px_bclim_image *out)
 {
@@ -128,8 +157,8 @@ enum px_bclim_result px_bclim_decode(const uint8_t *data, size_t size,
     if (width > 4096 || height > 4096) return PX_BCLIM_LIMIT_EXCEEDED;
     if (payload > size - 40) return PX_BCLIM_TRUNCATED;
     if (payload != size - 40) return PX_BCLIM_INVALID_HEADER;
-    if (format > 13 || format == 10 || format == 11) return PX_BCLIM_UNSUPPORTED;
-    static const uint8_t bits[14] = {8,8,8,16,16,16,24,16,16,32,0,0,4,4};
+    if (format > 13) return PX_BCLIM_UNSUPPORTED;
+    static const uint8_t bits[14] = {8,8,8,16,16,16,24,16,16,32,4,8,4,4};
 
     uint32_t stored_width = bound_dimension(width);
     uint32_t stored_height = bound_dimension(height);
@@ -149,10 +178,18 @@ enum px_bclim_result px_bclim_decode(const uint8_t *data, size_t size,
     const size_t output_size = (size_t)width * height * 4;
     uint8_t *rgba = malloc(output_size);
     if (rgba == NULL) return PX_BCLIM_NO_MEMORY;
-    for (uint32_t y = 0; y < height; ++y)
-        for (uint32_t x = 0; x < width; ++x)
-            raw_pixel(data, tiled_pixel(x, y, stored_width), format,
-                       rgba + ((size_t)y * width + x) * 4);
+    if (format == 10 || format == 11) {
+        if (!compressed_pixels(data, stored_width, stored_height, width, height,
+                               format == 11, rgba)) {
+            free(rgba);
+            return PX_BCLIM_UNSUPPORTED;
+        }
+    } else {
+        for (uint32_t y = 0; y < height; ++y)
+            for (uint32_t x = 0; x < width; ++x)
+                raw_pixel(data, tiled_pixel(x, y, stored_width), format,
+                           rgba + ((size_t)y * width + x) * 4);
+    }
     out->width = width;
     out->height = height;
     out->format = format;

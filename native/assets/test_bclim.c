@@ -157,6 +157,73 @@ static void error(const uint8_t *data, size_t size, enum px_bclim_result expecte
     CHECK(px_bclim_decode(data, size, &image) == expected);
     CHECK(image.rgba == NULL && image.width == 0 && image.height == 0 && image.format == 0);
 }
+static void test_etc_tiles_and_crop(void)
+{
+    /* Fixed block-number oracle: 8x8 tiles run across the image; their four
+     * 4x4 blocks are TL, TR, BL, BR. This does not reuse the decoder's index. */
+    static const uint8_t blocks[4][4] = {
+        {0,1,4,5}, {2,3,6,7}, {8,9,12,13}, {10,11,14,15}
+    };
+    static const uint8_t alphas[4][4] = {
+        {0,68,136,204}, {17,85,153,221},
+        {34,102,170,238}, {51,119,187,255}
+    };
+    uint8_t data[256 + 40];
+    struct px_bclim_image image = {0};
+    for (unsigned alpha = 0; alpha < 2; ++alpha) {
+        const unsigned stride = alpha ? 16 : 8;
+        const unsigned payload = 16 * stride;
+        memset(data, 0, sizeof data);
+        for (unsigned block = 0; block < 16; ++block) {
+            uint8_t *encoded = data + stride * block;
+            if (alpha) {
+                /* Low-to-high alpha nibbles 0..15, in column order. */
+                for (unsigned byte = 0; byte < 8; ++byte)
+                    encoded[byte] = (uint8_t)(0x10 + 0x22 * byte);
+                encoded += 8;
+            }
+            const uint32_t base = block * 17;
+            put32(encoded + 4, base * UINT32_C(0x01010100));
+        }
+        for (unsigned crop = 0; crop < 2; ++crop) {
+            const unsigned width = crop ? 9 : 16;
+            const unsigned height = crop ? 11 : 16;
+            CHECK(px_bclim_decode(data, footer(data, payload, (uint16_t)width,
+                                   (uint16_t)height, 10 + alpha), &image) == PX_BCLIM_OK);
+            CHECK(image.width == width && image.height == height && image.format == 10 + alpha);
+            for (unsigned y = 0; y < height; ++y)
+                for (unsigned x = 0; x < width; ++x) {
+                    const unsigned base = 17 * blocks[y / 4][x / 4];
+                    const uint8_t value = (uint8_t)(base == 255 ? 255 : base + 2);
+                    const uint8_t rgba[4] = {value,value,value,
+                        alpha ? alphas[y % 4][x % 4] : 255};
+                    pixel(&image, x, y, rgba);
+                }
+            px_bclim_free(&image);
+        }
+        /* Small crop still requires and validates all four stored blocks. */
+        CHECK(px_bclim_decode(data, footer(data, 4 * stride, 5, 3, 10 + alpha),
+                               &image) == PX_BCLIM_OK);
+        for (unsigned y = 0; y < 3; ++y)
+            for (unsigned x = 0; x < 5; ++x) {
+                const uint8_t value = x < 4 ? 2 : 19;
+                const uint8_t rgba[4] = {value,value,value,
+                    alpha ? alphas[y][x % 4] : 255};
+                pixel(&image, x, y, rgba);
+            }
+        px_bclim_free(&image);
+        error(data, footer(data, 4 * stride - 1, 8, 8, 10 + alpha), PX_BCLIM_TRUNCATED);
+        error(data, footer(data, 4 * stride + 1, 8, 8, 10 + alpha), PX_BCLIM_UNSUPPORTED);
+        /* The invalid red differential endpoint is in a completely cropped
+         * padding block; accepting only visible blocks would miss it. */
+        memset(data, 0, sizeof data);
+        put32(data + 3 * stride + (alpha ? 8 : 0) + 4, UINT32_C(0x07000002));
+        error(data, footer(data, 4 * stride, 1, 1, 10 + alpha), PX_BCLIM_UNSUPPORTED);
+        memset(data, 0, sizeof data);
+        put32(data + (alpha ? 8 : 0) + 4, UINT32_C(0xf9000002));
+        error(data, footer(data, 4 * stride, 8, 8, 10 + alpha), PX_BCLIM_UNSUPPORTED);
+    }
+}
 static void test_errors(void)
 {
     uint8_t data[256 + 40] = {0};
@@ -206,7 +273,8 @@ int main(void)
 {
     test_colors();
     test_tiles_and_crop();
+    test_etc_tiles_and_crop();
     test_errors();
-    puts("PASS: BCLIM raw formats, fixed Morton/orientation/color vectors, crop/stride variants, bounded malformed-input handling");
+    puts("PASS: BCLIM raw/ETC1/ETC1A4 formats, fixed tile/orientation/color/alpha vectors, crop/stride variants, bounded malformed-input handling");
     return 0;
 }
