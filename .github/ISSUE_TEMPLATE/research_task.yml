@@ -1,0 +1,25 @@
+name: Research or contribution task
+description: Propose a bounded reconstruction, tooling, or documentation task.
+title: "[Research] "
+body:
+  - type: textarea
+    id: scope
+    attributes:
+      label: Target and scope
+      description: Name the subsystem, baseline addresses if relevant, and roadmap connection.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and unknowns
+      description: Describe reviewed evidence, assumptions, dependencies, and remaining questions. Do not upload game files.
+    validations:
+      required: true
+  - type: textarea
+    id: completion
+    attributes:
+      label: Completion criteria
+      description: What observable result and validation would complete this task?
+    validations:
+      required: true
