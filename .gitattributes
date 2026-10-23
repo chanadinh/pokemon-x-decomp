@@ -1,0 +1,5 @@
+# Keep tracked source and checksum-covered evidence consistent on Windows.
+* text=auto eol=lf
+
+# Preserve Ghidra's exported formatting in the reviewed evidence snapshots.
+reconstructed/*/evidence/*.c -whitespace

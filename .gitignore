@@ -1,0 +1,15 @@
+# Local inputs, generated analysis, and installed tools.
+inputs/*
+!inputs/.gitkeep
+outputs/*
+!outputs/.gitkeep
+projects/*
+!projects/.gitkeep
+tools/*
+!tools/versions.json
+
+# Download bundles and build/cache artifacts.
+/*.zip
+build/
+__pycache__/
+*.pyc
