@@ -1,0 +1,195 @@
+{
+  "archive": "a/1/0/2",
+  "entry": 0,
+  "subentry": 0,
+  "model_index": 0,
+  "member_size": 442880,
+  "member_sha256": "1f46ec657dc01dcd4f5ab69580a76a71031049de8d869a379cc35abbb0389fb9",
+  "name": "collision02",
+  "vertices": 767,
+  "indices": 2808,
+  "triangles": 936,
+  "shapes": 6,
+  "bounds_min": [
+    -499.45001220703125,
+    -3.051759995287284e-05,
+    -496.7139892578125
+  ],
+  "bounds_max": [
+    499.45001220703125,
+    1637.3699951171875,
+    496.7139892578125
+  ],
+  "positions_sha256": "0c1134ac7989655511dbc74abda8f016d8b04e54714df8f6a6a1ebdbaabd9156",
+  "indices_sha256": "e6bc7936546b0e8f71d0d56c52e6fbc9a3ad171138d184f5b43b802502826146",
+  "archive_size": 29057724,
+  "archive_index_sha256": "0597ebaddadbe0b035faac977dedf2044df4cf47f69851c217b740d724627f64",
+  "member_offset": 3284,
+  "verification": "Sample-specific independent Python struct unpack matched every C position and rebased index byte; positions hash is little-endian float32 XYZ, indices hash is little-endian uint32.",
+  "shape_layouts": [
+    {
+      "shape_offset": 20760,
+      "stream_offset": 21000,
+      "vertex_data_offset": 42820,
+      "vertex_count": 91,
+      "vertex_stride": 36,
+      "index_descriptor_offset": 20956,
+      "index_data_offset": 42368,
+      "index_count": 450,
+      "index_bytes": 1,
+      "min_index": 0,
+      "max_index": 90,
+      "position_bounds_min": [
+        -499.45001220703125,
+        -3.051759995287284e-05,
+        -496.7139892578125
+      ],
+      "position_bounds_max": [
+        499.45001220703125,
+        95.72599792480469,
+        496.7139892578125
+      ]
+    },
+    {
+      "shape_offset": 21292,
+      "stream_offset": 21532,
+      "vertex_data_offset": 46456,
+      "vertex_count": 108,
+      "vertex_stride": 36,
+      "index_descriptor_offset": 21488,
+      "index_data_offset": 46096,
+      "index_count": 360,
+      "index_bytes": 1,
+      "min_index": 0,
+      "max_index": 107,
+      "position_bounds_min": [
+        -443.57598876953125,
+        9.839420318603516,
+        -441.14599609375
+      ],
+      "position_bounds_max": [
+        443.57501220703125,
+        1633.8599853515625,
+        441.14599609375
+      ]
+    },
+    {
+      "shape_offset": 21824,
+      "stream_offset": 22068,
+      "vertex_data_offset": 50364,
+      "vertex_count": 8,
+      "vertex_stride": 32,
+      "index_descriptor_offset": 22024,
+      "index_data_offset": 50344,
+      "index_count": 18,
+      "index_bytes": 1,
+      "min_index": 0,
+      "max_index": 7,
+      "position_bounds_min": [
+        48.23659896850586,
+        171.7010040283203,
+        -458.94000244140625
+      ],
+      "position_bounds_max": [
+        308.7829895019531,
+        458.62298583984375,
+        -342.93798828125
+      ]
+    },
+    {
+      "shape_offset": 22352,
+      "stream_offset": 22592,
+      "vertex_data_offset": 52420,
+      "vertex_count": 310,
+      "vertex_stride": 36,
+      "index_descriptor_offset": 22548,
+      "index_data_offset": 50620,
+      "index_count": 900,
+      "index_bytes": 2,
+      "min_index": 0,
+      "max_index": 309,
+      "position_bounds_min": [
+        -452.06298828125,
+        194.26699829101562,
+        -453.36199951171875
+      ],
+      "position_bounds_max": [
+        452.06298828125,
+        1347.699951171875,
+        453.3609924316406
+      ]
+    },
+    {
+      "shape_offset": 22884,
+      "stream_offset": 23124,
+      "vertex_data_offset": 63760,
+      "vertex_count": 64,
+      "vertex_stride": 36,
+      "index_descriptor_offset": 23080,
+      "index_data_offset": 63580,
+      "index_count": 180,
+      "index_bytes": 1,
+      "min_index": 0,
+      "max_index": 63,
+      "position_bounds_min": [
+        -446.52899169921875,
+        1.9019800424575806,
+        -444.0830078125
+      ],
+      "position_bounds_max": [
+        446.52801513671875,
+        331.343994140625,
+        444.0820007324219
+      ]
+    },
+    {
+      "shape_offset": 23416,
+      "stream_offset": 23656,
+      "vertex_data_offset": 66964,
+      "vertex_count": 186,
+      "vertex_stride": 36,
+      "index_descriptor_offset": 23612,
+      "index_data_offset": 66064,
+      "index_count": 900,
+      "index_bytes": 1,
+      "min_index": 0,
+      "max_index": 185,
+      "position_bounds_min": [
+        -467.9309997558594,
+        2.7760300636291504,
+        -465.3680114746094
+      ],
+      "position_bounds_max": [
+        467.9309997558594,
+        1637.3699951171875,
+        465.36700439453125
+      ]
+    }
+  ],
+  "archive_sha256": "04ec43990d9bd266ce98455ac480e7ad9caa0595588e69becbda4a72aafb6c36",
+  "primary_references": [
+    {
+      "repository": "gdkchan/Ohana3DS-Rebirth",
+      "commit": "c50635e82763fad9d1bcc30a905523a1b92d7d1f",
+      "path": "Ohana3DS Rebirth/Ohana/Models/CGFX.cs"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "paths": [
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxShape.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxVertexBuffer.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxVertexBufferInterleaved.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxVertexBufferFixed.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxAttribute.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxSubMesh.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxFace.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxFaceDescriptor.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxBlendShape.cs",
+        "SPICA/Formats/CtrGfx/Model/Mesh/GfxMesh.cs",
+        "SPICA/PICA/Commands/PICAPrimitiveMode.cs"
+      ]
+    }
+  ],
+  "scope": "Static positions-only geometry preview. Stored model name is an asset label; no map, collision, or gameplay role is inferred. Identity model transforms; unskinned shapes; all shapes included regardless of visibility; no material/animation/render-state reproduction."
+}

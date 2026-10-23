@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-23",
+  "description": "Original-size texture BMP pixels match the independent reference through the complete native archive/container path. SDL x11 software viewport captures were converted losslessly to PNG and inspected. These do not establish original-game visual equivalence. Images remain local and ignored.",
+  "textures": [
+    {
+      "archive": "a/0/3/7",
+      "entry": 0,
+      "subentry": 0,
+      "texture": 0,
+      "name": "k_heart_o",
+      "width": 64,
+      "height": 64,
+      "rgba_sha256": "9152b410d3baeda0e53aa9cef010626cc538a1a33a080eb22fc20071018bb49f",
+      "bmp_sha256": "249d1347d2c7ec8c3cef99d796d7afa5eeedff24c3c81dbacffef506cb74f167",
+      "reference_match": true
+    },
+    {
+      "archive": "a/1/0/2",
+      "entry": 0,
+      "subentry": 0,
+      "texture": 1,
+      "name": "collision02_kumo01",
+      "width": 512,
+      "height": 256,
+      "rgba_sha256": "774d82d25fb488fffb3599d6250506b49010f193e35e4b7907c9b9ed1180b3d5",
+      "bmp_sha256": "ebed987a544c6db9fa8a4e58fdca2649f30738ecc8a88009ada433372e97b4c4",
+      "reference_match": true
+    }
+  ],
+  "frames": [
+    {
+      "local_png": "outputs/native-cgfx/heart-frame.png",
+      "width": 960,
+      "height": 640,
+      "bmp_sha256": "c69db69e271cae8f6316686c602798736556d3f71b9970bc1937ed8e220141be",
+      "png_sha256": "c31997d1702da496971029a27d5ad18cf485d77150722d6000c4325d5f0ededc"
+    },
+    {
+      "local_png": "outputs/native-cgfx/embedded-etc-frame.png",
+      "width": 960,
+      "height": 640,
+      "bmp_sha256": "fcc9d29a10579e7f7c7e9a0f6c56bc66f05e869840e8cf910c119b935ac3abcb",
+      "png_sha256": "93065ba96a3762fc4d9615b94e91fd72187a3a2c13b287b50d02ea88a968c969"
+    },
+    {
+      "local_png": "outputs/native-cgfx/model-frame.png",
+      "width": 960,
+      "height": 640,
+      "bmp_sha256": "46db6d56b568273f91520c074dc9eaac52ff46ae97018c5f36efd03adbc0243f",
+      "png_sha256": "3c23fd4caaa93038eeafb9b84bec5026632386792be778bc65b873c47fb4e702"
+    }
+  ]
+}

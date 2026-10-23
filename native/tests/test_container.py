@@ -40,6 +40,7 @@ def fixture():
     put32(data, 512, 0x20000011)
     data[516:520] = b"TXOB"
     put32(data, 524, 784 - 524)
+    put32(data, 512 + 0x38, 4)
     for offset, value in [(0x18, 5), (0x1c, 6), (0x28, 1), (0x34, 12),
                           (0x3c, 8), (0x40, 8), (0x44, 32),
                           (0x48, 1032 - (512 + 0x48)), (0x50, 4)]:
@@ -72,7 +73,21 @@ class ContainerTests(unittest.TestCase):
             "status": "indexed", "name": "image", "name_hex": "696d616765", "name_offset": 784,
             "height": 5, "width": 6, "mipmap_levels": 1, "format": 12, "format_name": "ETC1",
             "stored_height": 8, "stored_width": 8, "data_offset": 1032, "data_size": 32,
-            "bits_per_pixel": 4})
+            "bits_per_pixel": 4, "image_offset": 572})
+
+    def test_relocated_image_descriptor_and_missing_pointer(self):
+        data = fixture()
+        data[400:432] = data[572:604]
+        data[572:604] = b'\xff' * 32
+        put32(data, 512 + 0x38, 400 - (512 + 0x38))
+        put32(data, 412, 1032 - 412)
+        image = inspect_cgfx(bytes(data))["categories"][1]["records"][0]["texture"]
+        self.assertEqual((image["image_offset"], image["data_offset"], image["stored_width"]),
+                         (400, 1032, 8))
+        for value in (0, 0x7fffffff, 1010 - (512 + 0x38)):
+            put32(data, 512 + 0x38, value)
+            with self.subTest(value=value), self.assertRaises(FormatError):
+                inspect_cgfx(bytes(data))
 
     def test_truncated_prefixes_rejected(self):
         data = fixture()

@@ -100,23 +100,25 @@ def texture_metadata(reader, record, image_blocks):
     # Reference/cube/dynamic variants remain explicitly unparsed.
     if record["object_flags"] != 0x20000011:
         return {"status": "unsupported TXOB variant"}
-    reader.span(offset, 0x5c, in_data=True)
-    size = reader.u32(offset + 0x44)
-    target = reader.relative(offset + 0x48, size, in_data=False)
+    reader.span(offset, 0x3c, in_data=True)
+    descriptor = reader.relative(offset + 0x38, 32)
+    size = reader.u32(descriptor + 8)
+    target = reader.relative(descriptor + 12, size, in_data=False)
     if not size or not any(start <= target and size <= end - target
                            for start, end in image_blocks if target <= end):
         raise FormatError(f"texture payload outside IMAG at 0x{target:x}")
     fmt = reader.u32(offset + 0x34)
     return {
         "status": "indexed", **reader.name(offset + 12),
+        "image_offset": descriptor,
         "height": reader.u32(offset + 0x18), "width": reader.u32(offset + 0x1c),
         "mipmap_levels": reader.u32(offset + 0x28),
         "format": fmt,
         "format_name": TEXTURE_FORMATS[fmt] if fmt < len(TEXTURE_FORMATS) else "unknown",
-        "stored_height": reader.u32(offset + 0x3c),
-        "stored_width": reader.u32(offset + 0x40),
+        "stored_height": reader.u32(descriptor),
+        "stored_width": reader.u32(descriptor + 4),
         "data_offset": target, "data_size": size,
-        "bits_per_pixel": reader.u32(offset + 0x50),
+        "bits_per_pixel": reader.u32(descriptor + 20),
     }
 
 

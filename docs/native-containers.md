@@ -3,7 +3,7 @@
 `native/tools/inspect_container.py` indexes the resources in a little-endian
 CGFX file, either standalone or selected from a GARC v4 archive. It reports
 stored names, member-relative offsets, resource categories, basic CMDL counts,
-and inline TXOB texture metadata. It does not render models or establish which
+and image TXOB texture metadata. It does not render models or establish which
 resources form a playable map. See [the native playable-slice plan](PLAYABLE_SLICE.md)
 for the larger reconstruction sequence.
 
@@ -39,7 +39,15 @@ all of its broader format support has been reproduced.
 | DICT entry | Name pointer at `+8`, object pointer at `+12`; both relative to their own pointer field |
 | CMDL object | Flags, magic at `+4`, name pointer at `+12`; object/material/shape/object-node counts at `+0xb4/+0xbc/+0xc4/+0xcc` |
 | Inline TXOB object | Type flags `0x20000011`, magic at `+4`, name pointer at `+12`; height/width at `+0x18/+0x1c`, mip levels at `+0x28`, format at `+0x34` |
-| Inline TXOB image | Stored height/width at `+0x3c/+0x40`, byte count at `+0x44`, relative data pointer at `+0x48`, bits per pixel at `+0x50` |
+| TXOB image descriptor pointer | Relative pointer at TXOB `+0x38`; the 32-byte descriptor may be elsewhere in DATA |
+| Image descriptor | Stored height/width at `+0/+4`, byte count at `+8`, relative data pointer at `+12`, bits per pixel at `+20` |
+
+The initial inspector assumed the descriptor immediately followed the pointer,
+which holds for its four recorded samples. The active reader now follows the
+pointer, as documented by
+[EveryFileExplorer's ImageTextureCtr](https://github.com/Gericom/EveryFileExplorer/blob/f9f00d193c9608d71c9a23d9f3ab7e752f4ada2a/3DS/NintendoWare/GFX/TXOB.cs).
+A relocated, backwards descriptor fixture exercises this correction. Earlier
+sample/evidence records remain unchanged.
 
 Relative offsets use signed 32-bit displacements, including valid backwards
 pointers. The dictionary root and radix-tree links are not traversed: entries
@@ -53,7 +61,10 @@ RGBA4, `12` means ETC1, and `13` means ETC1A4. A CGFX TXOB is not a standalone
 BCLIM image. Passing its payload to the BCLIM footer parser is not a supported
 way to display it. Width, height, format, and mip count are reported as declared
 metadata; this tool does not validate their pixel-storage arithmetic or decode
-the texture. Other TXOB type flags are reported as unsupported variants without
+the texture. The native C adapter now separately validates a bounded single-mip
+subset and decodes its payload directly; see
+[the implementation contract](../native/reproduction/cgfx-textures/README.txt).
+Other TXOB type flags are reported as unsupported variants without
 following their image fields.
 
 ## Limits and validation
@@ -62,12 +73,12 @@ Input or selected member size is capped at 64 MiB; the reused GARC reader caps
 its allocation index at 8 MiB. Resource count is capped at 65,536 and each name
 at 1,024 bytes. Section extents must account for the exact selected input.
 Dictionary extents, counts, names, and object headers must fit inside DATA.
-Parsed inline image spans must fit wholly inside IMAG. Truncation, null required
+Parsed image payload spans must fit wholly inside IMAG. Truncation, null required
 pointers, invalid relative offsets, count/length disagreement, unsupported block
 layouts, and invalid archive selections produce errors without tracebacks.
 
 The synthetic tests construct an independent fixed layout with a backwards
-name pointer, CMDL counts, an inline ETC1 TXOB, and GARC selection. They exercise
+name pointer, CMDL counts, an ETC1 image TXOB, and GARC selection. They exercise
 field values, exact offsets, malformed sizes/counts/pointers/magic, truncated
 input, unterminated names, explicit unknown texture variants, and clean CLI
 failures. They require Python only, with no game data or SDL.
@@ -98,11 +109,11 @@ This is a separate texture-decoder sample, not a CGFX resource. See
 
 ## Next evidence boundary
 
-A useful next step is to expose indexed inline TXOB images through a deliberate
-CGFX-to-decoder adapter that accounts for format numbering, storage dimensions,
-and mip levels. A model rendering milestone then needs one verified CMDL's
-material references, shapes, vertex attributes, index buffers, and PICA state,
-with a known camera and transform convention. Map selection and traversal need
+The native texture viewer now exposes selected image TXOB images using their
+hardware format numbers and validated storage dimensions. A separate
+[wireframe model viewer](native-geometry.md) decodes a restricted static mesh
+subset. The next rendering boundary is material/texture bindings, UVs, PICA
+state, and scene transforms with a known camera convention. Map selection and traversal need
 additional evidence connecting those resources to scene placement, collision,
 spawn, and transition data. Current resource names and archive numbering do not
 establish those connections. All earlier reconstruction checkpoints remain

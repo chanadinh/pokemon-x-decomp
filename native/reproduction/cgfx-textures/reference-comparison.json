@@ -1,0 +1,330 @@
+{
+  "samples": [
+    {
+      "archive": "a/0/0/3",
+      "entry": 134,
+      "subentry": 0,
+      "member_sha256": "dc58ca0478fc80440c643bbd252b8dc6561f9283bd384554da9e7c0b85c4e8e7",
+      "member_size": 53248,
+      "textures": [
+        {
+          "index": 0,
+          "name": "ball_2l",
+          "object_offset": 29988,
+          "descriptor_offset": 30048,
+          "width": 64,
+          "height": 64,
+          "format": 4,
+          "mip_levels": 1,
+          "stored_width": 64,
+          "stored_height": 64,
+          "data_offset": 43008,
+          "data_size": 8192,
+          "bits_per_pixel": 16,
+          "payload_sha256": "07e70c5b4c8b126af7a2e3fb66f6d927fb801f88b7ed2b19c85216129f2d506e",
+          "reference_rgba_sha256": "c24e32e411754f15a82292cea3630ffeba5ef9106cc822c4e14413dafa2e1b86",
+          "reference_rgba_bytes": 16384,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        },
+        {
+          "index": 1,
+          "name": "ball_1",
+          "object_offset": 30080,
+          "descriptor_offset": 30140,
+          "width": 32,
+          "height": 32,
+          "format": 4,
+          "mip_levels": 1,
+          "stored_width": 32,
+          "stored_height": 32,
+          "data_offset": 51200,
+          "data_size": 2048,
+          "bits_per_pixel": 16,
+          "payload_sha256": "1b4544d79cbcd5cbb066cac5a12d0592e3ff8247eaa80f02db7e6521a9730320",
+          "reference_rgba_sha256": "2a651b7f1ff29a15abe8024797368d91965bfe65cf3dcbbbef68df20b3ae6dd0",
+          "reference_rgba_bytes": 4096,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        }
+      ]
+    },
+    {
+      "archive": "a/0/3/7",
+      "entry": 0,
+      "subentry": 0,
+      "member_sha256": "372c85841b64ebd4353535c407b3f5105043dc013f4beca1479c493ec7262150",
+      "member_size": 41216,
+      "textures": [
+        {
+          "index": 0,
+          "name": "k_heart_o",
+          "object_offset": 11616,
+          "descriptor_offset": 11676,
+          "width": 64,
+          "height": 64,
+          "format": 0,
+          "mip_levels": 1,
+          "stored_width": 64,
+          "stored_height": 64,
+          "data_offset": 16640,
+          "data_size": 16384,
+          "bits_per_pixel": 32,
+          "payload_sha256": "521b7b2af9cc4c01714f3a7514a8ea55621563050366db18bfdff29ab50759b5",
+          "reference_rgba_sha256": "9152b410d3baeda0e53aa9cef010626cc538a1a33a080eb22fc20071018bb49f",
+          "reference_rgba_bytes": 16384,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        },
+        {
+          "index": 1,
+          "name": "pop",
+          "object_offset": 11708,
+          "descriptor_offset": 11768,
+          "width": 64,
+          "height": 64,
+          "format": 4,
+          "mip_levels": 1,
+          "stored_width": 64,
+          "stored_height": 64,
+          "data_offset": 33024,
+          "data_size": 8192,
+          "bits_per_pixel": 16,
+          "payload_sha256": "b442aeda553454cdd207a08f88a95ba540ff668ba1918b12630383396334d03e",
+          "reference_rgba_sha256": "f7fd17633682eee55f40dcf370a3f850f49c03b237334046033faac97d31a9f9",
+          "reference_rgba_bytes": 16384,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        }
+      ]
+    },
+    {
+      "archive": "a/1/1/6",
+      "entry": 1,
+      "subentry": 0,
+      "member_sha256": "945af8e497e4f795c6a0bc2ce5e02f112c7af3d69c59b9c9c980792b461da432",
+      "member_size": 381824,
+      "textures": [
+        {
+          "index": 0,
+          "name": "tile_test",
+          "object_offset": 66004,
+          "descriptor_offset": 66064,
+          "width": 512,
+          "height": 256,
+          "format": 3,
+          "mip_levels": 1,
+          "stored_width": 512,
+          "stored_height": 256,
+          "data_offset": 119680,
+          "data_size": 262144,
+          "bits_per_pixel": 16,
+          "payload_sha256": "e42ca7a60d96f7bf1e278f3406f0b403d5915d50a10dc40c1167956e3225140a",
+          "reference_rgba_sha256": "53a62a3e34d478dd66c3cb2a4e32bca44c81b4f570c048c18c6069746ef8898a",
+          "reference_rgba_bytes": 524288,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        }
+      ]
+    },
+    {
+      "archive": "a/1/0/2",
+      "entry": 0,
+      "subentry": 0,
+      "member_sha256": "1f46ec657dc01dcd4f5ab69580a76a71031049de8d869a379cc35abbb0389fb9",
+      "member_size": 442880,
+      "textures": [
+        {
+          "index": 0,
+          "name": "collision02_floor",
+          "object_offset": 23956,
+          "descriptor_offset": 24016,
+          "width": 128,
+          "height": 128,
+          "format": 12,
+          "mip_levels": 1,
+          "stored_width": 128,
+          "stored_height": 128,
+          "data_offset": 73728,
+          "data_size": 8192,
+          "bits_per_pixel": 4,
+          "payload_sha256": "2dc9e3e3e3b624831ffabaf830badce3080300f09beaaeeee8c170633e1a87e0",
+          "reference_rgba_sha256": "469af8db33117d2ba47a1546f1e83e2d53fa98a0da654cc0e46a8758a8f48e4b",
+          "reference_rgba_bytes": 65536,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        },
+        {
+          "index": 1,
+          "name": "collision02_kumo01",
+          "object_offset": 24048,
+          "descriptor_offset": 24108,
+          "width": 512,
+          "height": 256,
+          "format": 13,
+          "mip_levels": 1,
+          "stored_width": 512,
+          "stored_height": 256,
+          "data_offset": 81920,
+          "data_size": 131072,
+          "bits_per_pixel": 8,
+          "payload_sha256": "fc2a582a1e6768abfdfb59109e1496c151b4edc6870b849cdbe0bd49136b60d2",
+          "reference_rgba_sha256": "774d82d25fb488fffb3599d6250506b49010f193e35e4b7907c9b9ed1180b3d5",
+          "reference_rgba_bytes": 524288,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        },
+        {
+          "index": 2,
+          "name": "collision02_kumo00",
+          "object_offset": 24140,
+          "descriptor_offset": 24200,
+          "width": 512,
+          "height": 256,
+          "format": 13,
+          "mip_levels": 1,
+          "stored_width": 512,
+          "stored_height": 256,
+          "data_offset": 212992,
+          "data_size": 131072,
+          "bits_per_pixel": 8,
+          "payload_sha256": "59b59b1beb736edc3601a3f246429b252b0092b85f3d70cc7e4838885f3eb7fb",
+          "reference_rgba_sha256": "e721200277d7c99490146007f734c1212f16aa695e37bfed0bebec32fa484a15",
+          "reference_rgba_bytes": 524288,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        },
+        {
+          "index": 3,
+          "name": "collision02_rainbow",
+          "object_offset": 24232,
+          "descriptor_offset": 24292,
+          "width": 256,
+          "height": 128,
+          "format": 13,
+          "mip_levels": 1,
+          "stored_width": 256,
+          "stored_height": 128,
+          "data_offset": 344064,
+          "data_size": 32768,
+          "bits_per_pixel": 8,
+          "payload_sha256": "bf7fc263eb6a26829a88d8ca533f1d72a1b5f977b9daa26ed1f0ebfe5d4c91d0",
+          "reference_rgba_sha256": "6ef979a77dd5e3810802c8c7f9cc48467676e9d7d4218e42658db70e734e7a60",
+          "reference_rgba_bytes": 131072,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        },
+        {
+          "index": 4,
+          "name": "collision02_shabon",
+          "object_offset": 24324,
+          "descriptor_offset": 24384,
+          "width": 256,
+          "height": 256,
+          "format": 13,
+          "mip_levels": 1,
+          "stored_width": 256,
+          "stored_height": 256,
+          "data_offset": 376832,
+          "data_size": 65536,
+          "bits_per_pixel": 8,
+          "payload_sha256": "d86158a2aabac7f961f386f18b823dd20223723b96dde633e60fbf06ed27a4f7",
+          "reference_rgba_sha256": "019da2c1c53a09bf5ee66fcbd4ef0aa813aa1197495ee8659bcc1bda3e1a6f77",
+          "reference_rgba_bytes": 262144,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        },
+        {
+          "index": 5,
+          "name": "collision02_wall",
+          "object_offset": 24416,
+          "descriptor_offset": 24476,
+          "width": 32,
+          "height": 32,
+          "format": 12,
+          "mip_levels": 1,
+          "stored_width": 32,
+          "stored_height": 32,
+          "data_offset": 442368,
+          "data_size": 512,
+          "bits_per_pixel": 4,
+          "payload_sha256": "882f31a0a8edeb83524d65f31f6a413703025786f428fb88348b1e0e9895b33f",
+          "reference_rgba_sha256": "ef3787ce6540ab24ae6a6bf2b8c117621b2faeb134aee56352dcb9a891552b81",
+          "reference_rgba_bytes": 4096,
+          "native_metadata_equal": true,
+          "native_rgba_equal": true
+        }
+      ]
+    }
+  ],
+  "texture_count": 11,
+  "compared_rgba_bytes": 2088960,
+  "mismatches": 0,
+  "source_buffers_unchanged": true,
+  "method": "Independent direct CGFX pointer parsing; fixed Morton matrix and channel formulas for RGBA8/RGBA4/RGB565; pinned AOSP RGB blocks plus independent PICA alpha/tile placement for ETC1/A4.",
+  "schema_version": 1,
+  "result": "pass",
+  "primary_references": [
+    {
+      "project": "EveryFileExplorer",
+      "commit": "f9f00d193c9608d71c9a23d9f3ab7e752f4ada2a",
+      "url": "https://github.com/Gericom/EveryFileExplorer/blob/f9f00d193c9608d71c9a23d9f3ab7e752f4ada2a/3DS/NintendoWare/GFX/TXOB.cs",
+      "sha256": "6fed4ca803cb4234d3093baa074f9408c7853d3f779edc5288c6b1a7aecf4561"
+    },
+    {
+      "project": "EveryFileExplorer",
+      "commit": "f9f00d193c9608d71c9a23d9f3ab7e752f4ada2a",
+      "url": "https://github.com/Gericom/EveryFileExplorer/blob/f9f00d193c9608d71c9a23d9f3ab7e752f4ada2a/3DS/NintendoWare/GFX/DICT.cs",
+      "sha256": "845f66a9169b8b52b8b6212c80a61ebf21398601b94862cf7120c38f5e9f2e25"
+    },
+    {
+      "project": "EveryFileExplorer",
+      "commit": "f9f00d193c9608d71c9a23d9f3ab7e752f4ada2a",
+      "url": "https://github.com/Gericom/EveryFileExplorer/blob/f9f00d193c9608d71c9a23d9f3ab7e752f4ada2a/3DS/GPU/Textures.cs",
+      "sha256": "8f4f044a6c6034a56ef7f470f1b5dd3bace853317ebd0a8cabb6d586ad9b3960"
+    }
+  ],
+  "rgb_block_reference": {
+    "commit": "29e239203d427d977b298be7b68b75b6a4b29b51",
+    "source_url": "https://android.googlesource.com/platform/frameworks/base/+/29e239203d427d977b298be7b68b75b6a4b29b51/opengl/libs/ETC1/etc1.cpp",
+    "source_sha256": "ebe9f90b5e19b6355ee80e676799aab9c948017bd209d40a0f9396402522e5d8",
+    "header_sha256": "f5de21e1e5888b56d82126b695e3d582499dd251ac7048c92856371d913be033",
+    "khronos_spec_sha256": "113eabf43f24c99ab2dd821113f04b25ea77ee2159bbc3776c93728348458284"
+  },
+  "compared_etc_blocks": 23616,
+  "algorithm": [
+    "Parse header, slot1 DICT and each texture directly in a separate Python reader. Resolve every relative pointer from its own field as signed32; read TXOB +0x38 as the pointer to the 32-byte image descriptor. Compare counts, names, dimensions, format, bpp, mip count, payload offset and size with the C API.",
+    "For raw samples use a fixed literal 8x8 Morton-position matrix. Source pixel index = ((y//8)*(stored_width//8)+x//8)*64+matrix[y%8][x%8]. RGBA8 reverses the four source bytes. RGBA4 reads a little-endian word and expands its high-to-low nibbles by17. RGB565 expands r5/g6/b5 by bit replication, with alpha255.",
+    "For ETC1/ETC1A4 decode each stored color block with the pinned unmodified AOSP reference, reversing its8 bytes to the standard MSB-first stream. Independently assemble source block=(tile*4)+[[0,1],[2,3]][(y%8)//4][(x%8)//4]. The RGB pixel index within that block is ((y%4)*4+x%4). Alpha nibble index is4*(x%4)+y%4 in the8-byte prefix, low nibble first, multiplied by17. ETC1 uses alpha255.",
+    "Compare complete tightly packed top-down RGBA byte arrays, not just hashes. Record SHA256 after equality. Verify source buffers are unchanged after closing all borrowed CGFX indexes."
+  ],
+  "commands": [
+    "tools/native-build/bin/cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic -shared -fPIC native/assets/etc1.c native/assets/texture.c native/assets/cgfx.c -o outputs/native-cgfx/libpx_cgfx.so",
+    "AOSP reference setup and hashes: native/reproduction/texture-formats/reference-comparison.json; local shared library outputs/native-textures/reference/libaosp_etc1.so.",
+    "python3 outputs/native-cgfx/compare-cgfx.py"
+  ],
+  "local_reproducer": {
+    "path": "outputs/native-cgfx/compare-cgfx.py",
+    "sha256": "dbb774e93e7889fd8acb3829f7c4464507b31ed393e077bd1633654b3d8b568d",
+    "tracked": false
+  },
+  "tested_source_sha256": {
+    "native/assets/cgfx.c": "e71c15fe126daf60459ae1f52ea1704ba0910e33acab8bb36132c7987f169c49",
+    "native/assets/texture.c": "1a903e86b8ad188beae75db11d32c97895e4977b62ff930a614320efe7a8deb3",
+    "native/assets/bclim.c": "435481a0e980787cc4b51e4759c08fc400f623714ba3708dbafac7f7887726eb",
+    "native/assets/etc1.c": "deef12e77d38c580fc4ff68d98756fd64a86c45ffcb90f148db7103b04e9d616",
+    "native/assets/test_cgfx.c": "0787e185ca21ba7e2854e75f4e40bcc5f0ea32e9edff0fc288da0650c955b314",
+    "native/assets/test_texture.c": "0bb04105c2119ee8ac700d9c4aa5932eba804c93b376a86398f7961e4736a147"
+  },
+  "fixed_fixture_tests": [
+    "All14 CGFX/PICA numeric formats with independent literal expected RGBA bytes and bpp values.",
+    "Backward object/name/descriptor relative pointers, distinct object and DICT names, arbitrary name bytes, exactly1024 versus1025-byte names, texture selection and borrowed ownership.",
+    "Explicit24x16 shared texture storage cropped to17x9; CGFX requires power-of-two storage. XY palette marker remains BCLIM-only.",
+    "Every input truncation; malformed headers, section extents, DICT/count/name/object/image/payload pointers; unsupported metadata remains listable; cleanup and invalid cropped ETC padding."
+  ],
+  "limitations": [
+    "No running-game rendering/reference capture comparison. Stored labels do not establish gameplay roles.",
+    "The raw oracle is independently written from primary format facts. AOSP provides independent ETC RGB decoding; A4/tile order use separate format-based oracles.",
+    "Original member/payload bytes and downloaded reference implementations remain ignored and are not redistributed."
+  ]
+}
