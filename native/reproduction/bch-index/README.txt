@@ -26,6 +26,7 @@ No BCH rendering, texture binding or running-game equivalence is claimed.
 The zero embedded texture count makes external area texture selection the next
 investigation, not a proven association. Prior reproduction records untouched.
 
-Current coverage: twelve synthetic index/GR tests, including reusable GR section
-extraction, CLI error reporting, and exact 1024-byte name boundaries. The initial
-five-test validation record above is preserved as historical evidence.
+The subsequent bch-model continuation expands this suite to twelve tests,
+covering GR extraction, CLI errors and exact name-length boundaries. The original
+validation.json remains the initial five-test record. Current combined validation
+and external texture-name evidence are recorded in ../bch-model/.

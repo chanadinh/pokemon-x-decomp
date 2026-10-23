@@ -122,3 +122,20 @@ and checked area/prop associations, then establish the actual player entry and
 movement/collision contract. A captured reference scenario is still needed.
 Interaction, interactive battle, return to field, and save/load remain required
 by the [first-playable acceptance criteria](PLAYABLE_SLICE.md).
+
+### BCH index continuation
+
+The new [BCH index tool](../native/tools/inspect_bch.py) reads region 165's GR
+section 1: compatibility 7/7, one model named `t01r0202_00_00`, twelve material
+records, and no embedded textures. The index itself does not establish
+material-to-texture bindings or render geometry.
+Its bounds and synthetic checks are recorded separately in
+[the new evidence directory](../native/reproduction/bch-index/README.txt).
+
+The subsequent [BCH model inspector](native-bch.md) now decodes positions, UV0
+and indices for all twelve meshes, with an independent numeric comparison.
+Every nonnull texture-unit name resolves in area 75's world-texture BCH.
+The native field viewer still shows terrain/collision only. Native BCH rendering,
+projected texture/shader behavior, the original area consumer and actual player
+entry remain the next work; an optional OBJ uses an explicitly stated triangle-list
+interpretation because primitive GPU state is not fully determined here.

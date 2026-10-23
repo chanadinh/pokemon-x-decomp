@@ -1,0 +1,1310 @@
+{
+  "sha256": "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+  "size": 127232,
+  "model_index": 0,
+  "name": "t01r0202_00_00",
+  "name_hex": "74303172303230325f30305f3030",
+  "object_offset": 12624,
+  "mesh_count": 12,
+  "vertex_count": 2356,
+  "index_count": 4992,
+  "triangle_list_count": 1664,
+  "materials": [
+    {
+      "name": "com_chip_mado2",
+      "name_hex": "636f6d5f636869705f6d61646f32",
+      "index": 0,
+      "object_offset": 12932,
+      "parameters_offset": 632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "com_chip_mado1",
+            "name_hex": "636f6d5f636869705f6d61646f31"
+          },
+          "external_index": 0,
+          "external_object_offset": 720
+        },
+        {
+          "unit": 1,
+          "enabled": false,
+          "texture": null
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69633
+    },
+    {
+      "name": "gym06_kage01",
+      "name_hex": "67796d30365f6b6167653031",
+      "index": 1,
+      "object_offset": 13020,
+      "parameters_offset": 1632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "gym06_kage01",
+            "name_hex": "67796d30365f6b6167653031"
+          },
+          "external_index": 3,
+          "external_object_offset": 816
+        },
+        {
+          "unit": 1,
+          "enabled": false,
+          "texture": null
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69633
+    },
+    {
+      "name": "t01r01_curt1",
+      "name_hex": "7430317230315f6375727431",
+      "index": 2,
+      "object_offset": 13108,
+      "parameters_offset": 2632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "t01r01_curt1",
+            "name_hex": "7430317230315f6375727431"
+          },
+          "external_index": 6,
+          "external_object_offset": 912
+        },
+        {
+          "unit": 1,
+          "enabled": false,
+          "texture": null
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69633
+    },
+    {
+      "name": "t01r01_win01",
+      "name_hex": "7430317230315f77696e3031",
+      "index": 3,
+      "object_offset": 13196,
+      "parameters_offset": 3632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "t01r01_win01",
+            "name_hex": "7430317230315f77696e3031"
+          },
+          "external_index": 8,
+          "external_object_offset": 976
+        },
+        {
+          "unit": 1,
+          "enabled": false,
+          "texture": null
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69633
+    },
+    {
+      "name": "t01r0202_bed",
+      "name_hex": "74303172303230325f626564",
+      "index": 4,
+      "object_offset": 13284,
+      "parameters_offset": 4632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "t01r0202_bed",
+            "name_hex": "74303172303230325f626564"
+          },
+          "external_index": 9,
+          "external_object_offset": 1008
+        },
+        {
+          "unit": 1,
+          "enabled": false,
+          "texture": null
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69633
+    },
+    {
+      "name": "t01r0202_desk",
+      "name_hex": "74303172303230325f6465736b",
+      "index": 5,
+      "object_offset": 13372,
+      "parameters_offset": 5632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "t01r0202_desk",
+            "name_hex": "74303172303230325f6465736b"
+          },
+          "external_index": 10,
+          "external_object_offset": 1040
+        },
+        {
+          "unit": 1,
+          "enabled": false,
+          "texture": null
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69633
+    },
+    {
+      "name": "t01r02_carpet2",
+      "name_hex": "7430317230325f63617270657432",
+      "index": 6,
+      "object_offset": 13460,
+      "parameters_offset": 6632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "projection_dummy",
+            "name_hex": "70726f6a656374696f6e5f64756d6d79"
+          },
+          "external_index": 4,
+          "external_object_offset": 848
+        },
+        {
+          "unit": 1,
+          "enabled": true,
+          "texture": {
+            "name": "t01r02_carpet2",
+            "name_hex": "7430317230325f63617270657432"
+          },
+          "external_index": 12,
+          "external_object_offset": 1104
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69635
+    },
+    {
+      "name": "t01r02_floor",
+      "name_hex": "7430317230325f666c6f6f72",
+      "index": 7,
+      "object_offset": 13548,
+      "parameters_offset": 7632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "projection_dummy",
+            "name_hex": "70726f6a656374696f6e5f64756d6d79"
+          },
+          "external_index": 4,
+          "external_object_offset": 848
+        },
+        {
+          "unit": 1,
+          "enabled": true,
+          "texture": {
+            "name": "t01r02_floor",
+            "name_hex": "7430317230325f666c6f6f72"
+          },
+          "external_index": 13,
+          "external_object_offset": 1136
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69635
+    },
+    {
+      "name": "t01r02_mirror",
+      "name_hex": "7430317230325f6d6972726f72",
+      "index": 8,
+      "object_offset": 13636,
+      "parameters_offset": 8632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "t01r02_mirror",
+            "name_hex": "7430317230325f6d6972726f72"
+          },
+          "external_index": 15,
+          "external_object_offset": 1200
+        },
+        {
+          "unit": 1,
+          "enabled": false,
+          "texture": null
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69633
+    },
+    {
+      "name": "t01r02_stairs",
+      "name_hex": "7430317230325f737461697273",
+      "index": 9,
+      "object_offset": 13724,
+      "parameters_offset": 9632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "t01r02_stairs",
+            "name_hex": "7430317230325f737461697273"
+          },
+          "external_index": 16,
+          "external_object_offset": 1232
+        },
+        {
+          "unit": 1,
+          "enabled": false,
+          "texture": null
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69633
+    },
+    {
+      "name": "t01r02_wall",
+      "name_hex": "7430317230325f77616c6c",
+      "index": 10,
+      "object_offset": 13812,
+      "parameters_offset": 10632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "projection_dummy",
+            "name_hex": "70726f6a656374696f6e5f64756d6d79"
+          },
+          "external_index": 4,
+          "external_object_offset": 848
+        },
+        {
+          "unit": 1,
+          "enabled": true,
+          "texture": {
+            "name": "t01r02_wall",
+            "name_hex": "7430317230325f77616c6c"
+          },
+          "external_index": 17,
+          "external_object_offset": 1264
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69635
+    },
+    {
+      "name": "t01r02_woody",
+      "name_hex": "7430317230325f776f6f6479",
+      "index": 11,
+      "object_offset": 13900,
+      "parameters_offset": 11632,
+      "textures": [
+        {
+          "unit": 0,
+          "enabled": true,
+          "texture": {
+            "name": "projection_dummy",
+            "name_hex": "70726f6a656374696f6e5f64756d6d79"
+          },
+          "external_index": 4,
+          "external_object_offset": 848
+        },
+        {
+          "unit": 1,
+          "enabled": true,
+          "texture": {
+            "name": "t01r02_woody",
+            "name_hex": "7430317230325f776f6f6479"
+          },
+          "external_index": 18,
+          "external_object_offset": 1296
+        },
+        {
+          "unit": 2,
+          "enabled": false,
+          "texture": null
+        }
+      ],
+      "texture_unit_config": 69635
+    }
+  ],
+  "meshes": [
+    {
+      "name": "_meshIndex0",
+      "name_hex": "5f6d657368496e64657830",
+      "material_index": 11,
+      "node_index": 0,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 30592,
+      "vertex_count": 175,
+      "vertex_stride": 36,
+      "index_count": 318,
+      "triangle_list_count": 106,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "normal",
+          "slot": 1,
+          "format": "f32",
+          "elements": 3,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 2,
+          "format": "f32",
+          "elements": 2,
+          "offset": 24,
+          "scale": 1.0
+        },
+        {
+          "semantic": "color",
+          "slot": 3,
+          "format": "u8",
+          "elements": 4,
+          "offset": 32,
+          "scale": 0.003921568859368563
+        }
+      ],
+      "fixed_attribute_mask": 0,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -364.1390075683594,
+          -9.0,
+          -309.9784851074219
+        ],
+        "max": [
+          -126.13899993896484,
+          71.97059631347656,
+          -50.70949935913086
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 318,
+          "index_offset": 36892,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "fbe58032b3533c9bc81f3fc00c46c633ae4e90c634cbb1524528c118adef87cb",
+      "uv0_sha256": "25fa091636a88b6273354befdc7ebf3e105ce63f4b8727f59355dfa93a64adff",
+      "indices_sha256": "761c41f4cee70bc5a0644ca40b582562614b741a762719ec0d31597f6f3277fd"
+    },
+    {
+      "name": "_meshIndex1",
+      "name_hex": "5f6d657368496e64657831",
+      "material_index": 10,
+      "node_index": 1,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 37212,
+      "vertex_count": 70,
+      "vertex_stride": 36,
+      "index_count": 174,
+      "triangle_list_count": 58,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "normal",
+          "slot": 1,
+          "format": "f32",
+          "elements": 3,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 2,
+          "format": "f32",
+          "elements": 2,
+          "offset": 24,
+          "scale": 1.0
+        },
+        {
+          "semantic": "color",
+          "slot": 3,
+          "format": "u8",
+          "elements": 4,
+          "offset": 32,
+          "scale": 0.003921568859368563
+        }
+      ],
+      "fixed_attribute_mask": 0,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -346.4930114746094,
+          0.0,
+          -305.089599609375
+        ],
+        "max": [
+          -144.13900756835938,
+          69.97061920166016,
+          -56.70899963378906
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 174,
+          "index_offset": 39732,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "0c29a4770b4ebb809501a587d1109528ceeb317c40da7e4e1460b820c7dea846",
+      "uv0_sha256": "1fd7564e6e1db370edf1c4e3882e23be2485c93c47b8b1675c267187e93a8f19",
+      "indices_sha256": "eee85677df07160c8ef52a89cb0d8b9abe5564ede5bffa66fe59b629788f0567"
+    },
+    {
+      "name": "_meshIndex2",
+      "name_hex": "5f6d657368496e64657832",
+      "material_index": 4,
+      "node_index": 2,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 39908,
+      "vertex_count": 504,
+      "vertex_stride": 36,
+      "index_count": 1224,
+      "triangle_list_count": 408,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "normal",
+          "slot": 1,
+          "format": "f32",
+          "elements": 3,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 2,
+          "format": "f32",
+          "elements": 2,
+          "offset": 24,
+          "scale": 1.0
+        },
+        {
+          "semantic": "color",
+          "slot": 3,
+          "format": "i8",
+          "elements": 4,
+          "offset": 32,
+          "scale": 0.007875584065914154
+        }
+      ],
+      "fixed_attribute_mask": 0,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -341.8500061035156,
+          0.0,
+          -236.8842010498047
+        ],
+        "max": [
+          -264.0,
+          45.0,
+          -126.0
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 1224,
+          "index_offset": 58052,
+          "index_width": 2,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "e1b7179aed2de5335d5a294092af35c4b1093c318aca02da6d2c3aa911363f26",
+      "uv0_sha256": "e0428354670f165cd1ad914806f86987c97f9511dc7efbf789a1ecabba5a2636",
+      "indices_sha256": "72b2a00dd9b96e42842fcd0df7ed7582ad0c4b1d85553775d05c9fcb05236c47"
+    },
+    {
+      "name": "_meshIndex4",
+      "name_hex": "5f6d657368496e64657834",
+      "material_index": 6,
+      "node_index": 4,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 60588,
+      "vertex_count": 18,
+      "vertex_stride": 24,
+      "index_count": 48,
+      "triangle_list_count": 16,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 1,
+          "format": "f32",
+          "elements": 2,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "color",
+          "slot": 2,
+          "format": "u8",
+          "elements": 4,
+          "offset": 20,
+          "scale": 0.003921568859368563
+        }
+      ],
+      "fixed_attribute_mask": 8,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -263.03680419921875,
+          0.5,
+          -283.78350830078125
+        ],
+        "max": [
+          -186.9626007080078,
+          0.5,
+          -78.96248626708984
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 48,
+          "index_offset": 61020,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "4afc8f2e394615defbf19a87b505ddf977cf0a8c17299f3b419add87220a76e3",
+      "uv0_sha256": "19e97ce819311aaec3374b80ac8d707ece6c0a235c18cfac911ebe6a242c452d",
+      "indices_sha256": "ebb83bd10826651e8319c1572383b407ccede9118b7ac547a325e050e9af7438"
+    },
+    {
+      "name": "_meshIndex5",
+      "name_hex": "5f6d657368496e64657835",
+      "material_index": 9,
+      "node_index": 5,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 61068,
+      "vertex_count": 504,
+      "vertex_stride": 36,
+      "index_count": 720,
+      "triangle_list_count": 240,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "normal",
+          "slot": 1,
+          "format": "f32",
+          "elements": 3,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 2,
+          "format": "f32",
+          "elements": 2,
+          "offset": 24,
+          "scale": 1.0
+        },
+        {
+          "semantic": "color",
+          "slot": 3,
+          "format": "i8",
+          "elements": 4,
+          "offset": 32,
+          "scale": 0.007874803617596626
+        }
+      ],
+      "fixed_attribute_mask": 0,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -343.2130126953125,
+          -36.0,
+          -307.44268798828125
+        ],
+        "max": [
+          -289.212890625,
+          25.616199493408203,
+          -54.356990814208984
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 720,
+          "index_offset": 79212,
+          "index_width": 2,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "d428ea053401a150d77f6c3a5cb1619c05d014a495fb1494243ed99cfda6b275",
+      "uv0_sha256": "2e246ea6ccfad536a5f5c51a80edba13cb047c7f42a2dd2fa21d49fce2ff6f42",
+      "indices_sha256": "a65fecff6ed36b3b9e1b38e768f80bc07621dc2f046cf109353a6b28bf5d5a07"
+    },
+    {
+      "name": "_meshIndex7",
+      "name_hex": "5f6d657368496e64657837",
+      "material_index": 5,
+      "node_index": 7,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 82612,
+      "vertex_count": 778,
+      "vertex_stride": 36,
+      "index_count": 1824,
+      "triangle_list_count": 608,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "normal",
+          "slot": 1,
+          "format": "f32",
+          "elements": 3,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 2,
+          "format": "f32",
+          "elements": 2,
+          "offset": 24,
+          "scale": 1.0
+        },
+        {
+          "semantic": "color",
+          "slot": 3,
+          "format": "i8",
+          "elements": 4,
+          "offset": 32,
+          "scale": 0.007875584065914154
+        }
+      ],
+      "fixed_attribute_mask": 0,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -344.4690856933594,
+          1.9706000089645386,
+          -166.68409729003906
+        ],
+        "max": [
+          -143.4676971435547,
+          43.0,
+          -68.90043640136719
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 1824,
+          "index_offset": 110620,
+          "index_width": 2,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "f7f810c0fb6e1e427d50053e468859844dc725c3ebb22c15c4260033d3e95fea",
+      "uv0_sha256": "f3852fda165e7aca136b85a2114fd1ec75d92fd23e3fa0769d8f24570392cfb0",
+      "indices_sha256": "bfdda67cdec5e9a5ab05fcbb28275fbdd78f3df6ef369aef5950ecf95d8f06dc"
+    },
+    {
+      "name": "_meshIndex8",
+      "name_hex": "5f6d657368496e64657838",
+      "material_index": 2,
+      "node_index": 8,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 114268,
+      "vertex_count": 52,
+      "vertex_stride": 32,
+      "index_count": 198,
+      "triangle_list_count": 66,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "normal",
+          "slot": 1,
+          "format": "f32",
+          "elements": 3,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 2,
+          "format": "f32",
+          "elements": 2,
+          "offset": 24,
+          "scale": 1.0
+        }
+      ],
+      "fixed_attribute_mask": 8,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -344.54180908203125,
+          14.416170120239258,
+          -166.49960327148438
+        ],
+        "max": [
+          -340.8664855957031,
+          49.45246887207031,
+          -119.29900360107422
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 198,
+          "index_offset": 115932,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "69e91fbbdd0188ef6c46fe5f0d6890e0db64fbdbb26db43b8a061783deeb8fef",
+      "uv0_sha256": "7f18a8f3a4eca852ec1808edcf3ec3889b453213ca5d3953d998a600ae4ebd5e",
+      "indices_sha256": "07e2cf2cd5f8784b282f9da85b0be7de207ee3ad0cab2daf3712225ba8e72c69"
+    },
+    {
+      "name": "_meshIndex9",
+      "name_hex": "5f6d657368496e64657839",
+      "material_index": 3,
+      "node_index": 9,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 116132,
+      "vertex_count": 136,
+      "vertex_stride": 36,
+      "index_count": 222,
+      "triangle_list_count": 74,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "normal",
+          "slot": 1,
+          "format": "f32",
+          "elements": 3,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 2,
+          "format": "f32",
+          "elements": 2,
+          "offset": 24,
+          "scale": 1.0
+        },
+        {
+          "semantic": "color",
+          "slot": 3,
+          "format": "i8",
+          "elements": 4,
+          "offset": 32,
+          "scale": 0.007875590585172176
+        }
+      ],
+      "fixed_attribute_mask": 0,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -347.2799987792969,
+          24.49995994567871,
+          -168.0
+        ],
+        "max": [
+          -342.21929931640625,
+          51.422401428222656,
+          -117.0
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 222,
+          "index_offset": 121028,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "b486593df0e093955e82037a5a6ec117439844ba161801156d665506c430223f",
+      "uv0_sha256": "054ebb09bd34263444a3bb857ca22bd8364e8a64aa54e7cde13f6ee4dbe82ab2",
+      "indices_sha256": "674c3cb0c508561d5b89b4dbf403abf706f0fe069114d31b6cb3013ed928ba45"
+    },
+    {
+      "name": "_meshIndex10",
+      "name_hex": "5f6d657368496e6465783130",
+      "material_index": 0,
+      "node_index": 10,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 121252,
+      "vertex_count": 4,
+      "vertex_stride": 20,
+      "index_count": 6,
+      "triangle_list_count": 2,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 1,
+          "format": "f32",
+          "elements": 2,
+          "offset": 12,
+          "scale": 1.0
+        }
+      ],
+      "fixed_attribute_mask": 12,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -344.28009033203125,
+          26.885929107666016,
+          -158.26220703125
+        ],
+        "max": [
+          -344.2799072265625,
+          48.08512878417969,
+          -127.85459899902344
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 6,
+          "index_offset": 121332,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "f85329a38c1b509355d7377d3cef67426a355c838a7e2454f16a3b4a1c6230bc",
+      "uv0_sha256": "e035f86efa96c2dfb05fd30b02af1b64b55cea047779091e44f6d370ff2fd74e",
+      "indices_sha256": "f63a327627cd7df2bdc0d3bdc5032fda9c11072bd975610fbf3a3ca96880a4db"
+    },
+    {
+      "name": "_meshIndex11",
+      "name_hex": "5f6d657368496e6465783131",
+      "material_index": 7,
+      "node_index": 11,
+      "visible": true,
+      "layer": 0,
+      "priority": 0,
+      "vertex_offset": 121340,
+      "vertex_count": 22,
+      "vertex_stride": 24,
+      "index_count": 72,
+      "triangle_list_count": 24,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 1,
+          "format": "f32",
+          "elements": 2,
+          "offset": 12,
+          "scale": 1.0
+        },
+        {
+          "semantic": "color",
+          "slot": 2,
+          "format": "u8",
+          "elements": 4,
+          "offset": 20,
+          "scale": 0.003921568859368563
+        }
+      ],
+      "fixed_attribute_mask": 8,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -337.1393127441406,
+          0.0,
+          -298.0896911621094
+        ],
+        "max": [
+          -152.66729736328125,
+          0.0,
+          -63.70949935913086
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 72,
+          "index_offset": 121868,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "88db6124b7950e1412913c01274ddb49e597e7298b961057a8e4170f4421e7ef",
+      "uv0_sha256": "a6ad2a994edccd35b360a630f0ad612265d2e9e786665e25e89db72f5f9988c4",
+      "indices_sha256": "6c26cafdaf7289dcb6061140bb13073b9f5bfc158c0d811b3211536219c6c377"
+    },
+    {
+      "name": "_meshIndex3",
+      "name_hex": "5f6d657368496e64657833",
+      "material_index": 8,
+      "node_index": 3,
+      "visible": true,
+      "layer": 1,
+      "priority": 0,
+      "vertex_offset": 60500,
+      "vertex_count": 4,
+      "vertex_stride": 20,
+      "index_count": 6,
+      "triangle_list_count": 2,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 1,
+          "format": "f32",
+          "elements": 2,
+          "offset": 12,
+          "scale": 1.0
+        }
+      ],
+      "fixed_attribute_mask": 12,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -292.0,
+          2.0,
+          -180.0
+        ],
+        "max": [
+          -266.0,
+          43.0,
+          -180.0
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 6,
+          "index_offset": 60580,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "66ec217255fc89da90cc0aae1189412007ce4fb64a91a73462672a5a14f35dbc",
+      "uv0_sha256": "c58ba6e5d12f39ac789f420e7d07cf0566da24cf7918b7e5008a22c6260a2c44",
+      "indices_sha256": "f63a327627cd7df2bdc0d3bdc5032fda9c11072bd975610fbf3a3ca96880a4db"
+    },
+    {
+      "name": "_meshIndex6",
+      "name_hex": "5f6d657368496e64657836",
+      "material_index": 1,
+      "node_index": 6,
+      "visible": true,
+      "layer": 1,
+      "priority": 0,
+      "vertex_offset": 80652,
+      "vertex_count": 89,
+      "vertex_stride": 20,
+      "index_count": 180,
+      "triangle_list_count": 60,
+      "attributes": [
+        {
+          "semantic": "position",
+          "slot": 0,
+          "format": "f32",
+          "elements": 3,
+          "offset": 0,
+          "scale": 1.0
+        },
+        {
+          "semantic": "uv0",
+          "slot": 1,
+          "format": "f32",
+          "elements": 2,
+          "offset": 12,
+          "scale": 1.0
+        }
+      ],
+      "fixed_attribute_mask": 12,
+      "position_offset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bounds": {
+        "min": [
+          -342.6671142578125,
+          0.9999598860740662,
+          -242.3842010498047
+        ],
+        "max": [
+          -135.468505859375,
+          2.000040054321289,
+          -66.79908752441406
+        ]
+      },
+      "submeshes": [
+        {
+          "index_count": 180,
+          "index_offset": 82432,
+          "index_width": 1,
+          "encoded_primitive_mode": 0,
+          "primitive_write_masks": [
+            8,
+            8
+          ]
+        }
+      ],
+      "positions_sha256": "6670bb71270d6ec8fe52871c6c1478404b0fa3eeafedc1bc6fb9c33affb5e68f",
+      "uv0_sha256": "5197ab6e5e95a4cd8f1023f21a06ee7f1fa36e0c1f21c6a3b63c44f13d7aed7e",
+      "indices_sha256": "1034ac4eedb0c96ccc72794b490de6099d7fe575dc3bbd2f4009f5472726767e"
+    }
+  ],
+  "external_texture_index_sha256": "13cbbc5477fba7c1f79f6c0c3ecc73acb11fe67bdc3131ae0014a60d004104fb",
+  "scope": "static positions/UV0/indices; triangle-list interpretation, not GPU execution; external matches are names only"
+}

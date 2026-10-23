@@ -74,6 +74,7 @@ test test-core: $(CORE_TESTS)
 	python3 -m unittest discover -s tests -p test_container.py -v
 	python3 -m unittest discover -s tests -p test_bch.py -v
 	python3 -m unittest discover -s tests -p test_pica_commands.py -v
+	python3 -m unittest discover -s tests -p test_bch_model.py -v
 
 test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer
 	./build/pokemon_asset_viewer --demo --inspect

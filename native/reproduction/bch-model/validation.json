@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-23",
+  "baseline_commit": "a90853b",
+  "baseline_note": "BCH index work already existed uncommitted at continuation start; original inputs and earlier reconstruction records preserved.",
+  "checks": [
+    {
+      "command": "source tools/native-sdl/activate.sh && make -C native test",
+      "result": "passed",
+      "native_c_suites": 10,
+      "python_tests": {
+        "container": 8,
+        "bch_index_and_gr": 12,
+        "pica_commands": 12,
+        "bch_model": 11
+      }
+    },
+    {
+      "command": "source tools/native-sdl/activate.sh && make -C native test-runtime",
+      "result": "passed",
+      "python_tests": {
+        "texture_viewer": 7,
+        "model_viewer": 10,
+        "field_viewer": 9
+      },
+      "backend": "SDL dummy video"
+    },
+    {
+      "command": "source tools/native-sdl/activate.sh && make -C reconstructed test",
+      "result": "passed",
+      "modules": 8
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "result": "passed with optional dependency skips",
+      "reported_tests": 38,
+      "skipped": 2,
+      "skip_reason": "PowerShell and 3dstool unavailable"
+    },
+    {
+      "command": "verify_area_textures.py --romfs <local RomFS> --lz-library <built native LZ library> --output <new report> --extract-dir <new directory>",
+      "result": "recorded metadata matched; extracted BCH hashes matched"
+    },
+    {
+      "command": "verify_geometry_reference.py --file <field165.bch> --output <new report>; compare per-mesh metadata with inspect_bch_model.py",
+      "result": "12/12 exact position, UV0 and index hash matches, with matching counts/strides/bounds"
+    },
+    {
+      "command": "inspect_bch_model.py --file <field165.gr> --gr-section 1 --texture-bch <area75-world-textures.bch> --triangle-list-obj <new.obj>",
+      "result": "passed; source hashes unchanged; local OBJ contains2356 vertices,2356 UVs,1664 explicitly interpreted faces"
+    }
+  ],
+  "scope": [
+    "bounded static BCH geometry inspection",
+    "external texture dictionary name matching",
+    "explicit triangle-list OBJ inspection export"
+  ],
+  "limitations": [
+    "Primitive GPU mode is not established by masked post-draw writes",
+    "No native BCH rendering or material/shader execution",
+    "Four materials require projected texture behavior",
+    "Area section consumer still requires original-code review",
+    "No running-game comparison or playable game"
+  ],
+  "logs_sha256": "aab0d87f51ec19d36c76ae679d516ba96042bca39db824ec32dc7a8f47fb03a8"
+}

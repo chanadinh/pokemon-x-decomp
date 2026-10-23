@@ -235,3 +235,43 @@ are recorded in [`reproduction/field-scene/`](reproduction/field-scene/README.tx
 Static format references, synthetic tests, and local rendering do not establish
 visual equivalence with a running original game. Reference captures and a
 concrete map/interaction/battle scenario remain the next integration gate.
+
+## Inspect the selected field BCH index
+
+```sh
+python3 native/tools/inspect_bch.py --file selected.gr --gr-section 1
+# A standalone BCH can be inspected without --gr-section.
+```
+
+This read-only Python tool accepts compatibility 7/7 and reports section bounds,
+resource names and section-relative object addresses as file offsets. It checks
+all fifteen dictionary extents, child indices, name termination and aggregate
+resource budgets. It does not validate relocation commands, object bodies,
+GPU commands, texture bindings or geometry. It does not render BCH.
+The checked region 165 contains model `t01r0202_00_00`, twelve materials and
+zero embedded textures. The model continuation below checks external names
+against area 75; resource names do not establish a location or player spawn.
+See [BCH index evidence](reproduction/bch-index/README.txt).
+
+## Decode the selected BCH model
+
+```sh
+python3 native/tools/inspect_bch_model.py --file selected.gr --gr-section 1
+python3 native/tools/inspect_bch_model.py --file selected.gr --gr-section 1 \
+  --texture-bch area75-world-textures.bch --triangle-list-obj new-model.obj
+```
+
+This Python tool decodes a restricted static model's positions, UV0 and indices,
+reports per-mesh bounds/hashes and material texture names, and optionally checks
+those names against an external BCH resource index. The checked field has 12
+meshes, 2,356 stored vertices and 4,992 indices. All sixteen nonnull material
+texture references match area 75's nineteen textures. Four materials also
+reference a projected texture; their effects remain unimplemented.
+
+The optional OBJ is an explicit triangle-list interpretation (1,664 triples in
+this sample), with UV0 and all accepted meshes. Export refuses existing files
+and symlinks. The recorded primitive writes do not establish the required GPU
+state, so this is not proof of the game's draw topology or appearance. Material
+shaders, projected texture coordinates, lighting, visibility execution and native
+BCH rendering remain pending. See [the geometry contract](../docs/native-bch.md)
+and [reproducible checks](reproduction/bch-model/README.txt).

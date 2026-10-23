@@ -121,7 +121,10 @@ The [field inspector](native-field.md) now follows zone 5 → matrix 12 → regi
 165 and displays 1,600 raw terrain cells plus optional collision triangle edges.
 Original-code evidence corroborates resource selection. Keyboard movement uses
 an explicit exact-cell inspection policy; it does not reconstruct player rules
-or spawn. The selected field's graphics use BCH and are not yet rendered.
+or spawn. The selected field's graphics use BCH and are not yet rendered by the
+native app. The [BCH model inspector](native-bch.md) now decodes twelve meshes'
+positions, UV0 and indices and checks their external texture names. Primitive
+GPU state, materials and projected effects still need to be connected and verified.
 
 These are bounded asset-preview paths. The applications do not yet call
 the eight reconstructed game-logic modules. Palette extensions, full material rendering,

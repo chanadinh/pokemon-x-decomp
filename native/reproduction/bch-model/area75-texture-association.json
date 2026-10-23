@@ -1,0 +1,1364 @@
+{
+  "scope": "Exact selected-file metadata and name links; no claim of runtime texture binding, projected-texture behavior, or rendering equivalence.",
+  "chain": {
+    "zone": 5,
+    "zone_archive": "a/0/1/2",
+    "zone_header_area_u16_offset": 2,
+    "area": 75,
+    "matrix": 12,
+    "region": 165,
+    "area_archive": "a/0/1/3",
+    "area_archive_index_sha256": "426ef20f86e6d9d096fd6cd399a77f7200bb58a02092f8a269995c130321c6b8",
+    "area_archive_entries": 171,
+    "area_member": {
+      "entry": 75,
+      "subentry": 0,
+      "offset": 31934884,
+      "size": 100191,
+      "sha256": "bd5d667d9e29780f6b154835acad5e396168791436a9c632e72b7a4506cafd66",
+      "compression": "LZ11"
+    },
+    "ad_sha256": "400aa50ac18b4f23e205b76fa6bbc8a0d0cb450a1bfc07845c291c8deb8a50e3",
+    "ad_size": 291072,
+    "ad_section_offsets": [
+      128,
+      2176,
+      206976,
+      207616,
+      207744,
+      217472,
+      217472,
+      221568,
+      221568,
+      221568,
+      221568,
+      221568,
+      291072
+    ],
+    "world_texture_section": 11,
+    "world_texture_compression": "none",
+    "area_archive_bytes": 51031968,
+    "selection_strength": {
+      "original_code": "Existing original-code-evidence.json verifies archive index13 maps to a/0/1/3 at table cell0x005af214. This continuation did not prove the runtime area selector or section11 consumer in original code.",
+      "external_reference": "CTRMap pinned source reads area ID from zone header u16+2, opens AREA_DATA entry by this ID, and takes world textures from AD section11.",
+      "selected_payloads": "Zone5 u16+2 is75; area75 section11 contains19 named textures; all16 nonnull texture-unit references across12 region165 material records exactly match names in that selected texture dictionary."
+    }
+  },
+  "world_bch": {
+    "sha256": "13cbbc5477fba7c1f79f6c0c3ecc73acb11fe67bdc3131ae0014a60d004104fb",
+    "size": 69504,
+    "sections": {
+      "contents": {
+        "offset": 56,
+        "size": 1272
+      },
+      "strings": {
+        "offset": 1328,
+        "size": 259
+      },
+      "commands": {
+        "offset": 1600,
+        "size": 1824
+      },
+      "raw_data": {
+        "offset": 3456,
+        "size": 65152
+      },
+      "relocation": {
+        "offset": 68608,
+        "size": 804
+      }
+    },
+    "textures": [
+      {
+        "index": 0,
+        "name": "com_chip_mado1",
+        "name_hex": "636f6d5f636869705f6d61646f31",
+        "object_offset": 720,
+        "width": 32,
+        "height": 64,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 0,
+        "payload_offset": 3456,
+        "payload_size": 1024,
+        "payload_sha256": "d9c67a54d78513f5feea7c55325f2c299b35b3182bac3ae8f9ade030a63d8b7f",
+        "unit0_command_offset": 1600,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 1,
+        "name": "com_ent_light01",
+        "name_hex": "636f6d5f656e745f6c696768743031",
+        "object_offset": 752,
+        "width": 64,
+        "height": 64,
+        "format": "ETC1A4",
+        "format_code": 13,
+        "raw_data_relative_offset": 1024,
+        "payload_offset": 4480,
+        "payload_size": 4096,
+        "payload_sha256": "a9fa164705f7499f7e36f57d9ae1796194087b58d79907df52b9cbd4f2542081",
+        "unit0_command_offset": 1696,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 269
+      },
+      {
+        "index": 2,
+        "name": "general_blue.tga",
+        "name_hex": "67656e6572616c5f626c75652e746761",
+        "object_offset": 784,
+        "width": 32,
+        "height": 32,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 5120,
+        "payload_offset": 8576,
+        "payload_size": 512,
+        "payload_sha256": "648c12b2668642797074d01464db106bbad6b8dc0faf16b8d14f3f72f6a165cf",
+        "unit0_command_offset": 1792,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 3,
+        "name": "gym06_kage01",
+        "name_hex": "67796d30365f6b6167653031",
+        "object_offset": 816,
+        "width": 32,
+        "height": 32,
+        "format": "ETC1A4",
+        "format_code": 13,
+        "raw_data_relative_offset": 5632,
+        "payload_offset": 9088,
+        "payload_size": 1024,
+        "payload_sha256": "67b9010f65c3c764bc0808c00f1d77f0aa2485f09db38ecc0254ea923aa3a1e9",
+        "unit0_command_offset": 1888,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 269
+      },
+      {
+        "index": 4,
+        "name": "projection_dummy",
+        "name_hex": "70726f6a656374696f6e5f64756d6d79",
+        "object_offset": 848,
+        "width": 64,
+        "height": 64,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 6656,
+        "payload_offset": 10112,
+        "payload_size": 2048,
+        "payload_sha256": "00b017d1a32f193d8f11cddcd97c05ca43b31bd1214a773eefff449dd6a994b2",
+        "unit0_command_offset": 1984,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 5,
+        "name": "room",
+        "name_hex": "726f6f6d",
+        "object_offset": 880,
+        "width": 64,
+        "height": 64,
+        "format": "ETC1A4",
+        "format_code": 13,
+        "raw_data_relative_offset": 8704,
+        "payload_offset": 12160,
+        "payload_size": 4096,
+        "payload_sha256": "b7fb31d825400eb06cfba638946b4f747b05b4c9d30faf2e4802c85efff1fee2",
+        "unit0_command_offset": 2080,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 269
+      },
+      {
+        "index": 6,
+        "name": "t01r01_curt1",
+        "name_hex": "7430317230315f6375727431",
+        "object_offset": 912,
+        "width": 128,
+        "height": 128,
+        "format": "ETC1A4",
+        "format_code": 13,
+        "raw_data_relative_offset": 12800,
+        "payload_offset": 16256,
+        "payload_size": 16384,
+        "payload_sha256": "4e639152e6c7a124461bcdc838ebed9ee96941aa15046e829dfc6d6e9ac64239",
+        "unit0_command_offset": 2176,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 269
+      },
+      {
+        "index": 7,
+        "name": "t01r01_ly1",
+        "name_hex": "7430317230315f6c7931",
+        "object_offset": 944,
+        "width": 32,
+        "height": 64,
+        "format": "ETC1A4",
+        "format_code": 13,
+        "raw_data_relative_offset": 29184,
+        "payload_offset": 32640,
+        "payload_size": 2048,
+        "payload_sha256": "f5b66741b4b0cfdaf58be27b162251f92419ae24bb86cac0a3979383a21af303",
+        "unit0_command_offset": 2272,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 269
+      },
+      {
+        "index": 8,
+        "name": "t01r01_win01",
+        "name_hex": "7430317230315f77696e3031",
+        "object_offset": 976,
+        "width": 16,
+        "height": 16,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 31232,
+        "payload_offset": 34688,
+        "payload_size": 128,
+        "payload_sha256": "65defabc7e6814ab39ffc781442b0d360bf4584d4e01e8fa935786861acc85c3",
+        "unit0_command_offset": 2368,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 9,
+        "name": "t01r0202_bed",
+        "name_hex": "74303172303230325f626564",
+        "object_offset": 1008,
+        "width": 128,
+        "height": 128,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 31360,
+        "payload_offset": 34816,
+        "payload_size": 8192,
+        "payload_sha256": "9fe9cad4ec02ea59be69399bb926af45c61e97ab69152dbb99f7769a3318eb4e",
+        "unit0_command_offset": 2464,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 10,
+        "name": "t01r0202_desk",
+        "name_hex": "74303172303230325f6465736b",
+        "object_offset": 1040,
+        "width": 128,
+        "height": 128,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 39552,
+        "payload_offset": 43008,
+        "payload_size": 8192,
+        "payload_sha256": "5b0c61665bf75c72d0dbbf50312694dacf022f499da990f8ab7588d2e5507510",
+        "unit0_command_offset": 2560,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 11,
+        "name": "t01r02_carpet",
+        "name_hex": "7430317230325f636172706574",
+        "object_offset": 1072,
+        "width": 64,
+        "height": 64,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 47744,
+        "payload_offset": 51200,
+        "payload_size": 2048,
+        "payload_sha256": "3f59bbd5b4977bebf836c76b65de0a107d900fb52774d4e7e6f77ba5f6ef33ff",
+        "unit0_command_offset": 2656,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 12,
+        "name": "t01r02_carpet2",
+        "name_hex": "7430317230325f63617270657432",
+        "object_offset": 1104,
+        "width": 64,
+        "height": 64,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 49792,
+        "payload_offset": 53248,
+        "payload_size": 2048,
+        "payload_sha256": "ebeefc5e0c9b7440d53f0f9b32973ded5a53d453ef94f1e08e4bc64f5f7de519",
+        "unit0_command_offset": 2752,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 13,
+        "name": "t01r02_floor",
+        "name_hex": "7430317230325f666c6f6f72",
+        "object_offset": 1136,
+        "width": 64,
+        "height": 64,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 51840,
+        "payload_offset": 55296,
+        "payload_size": 2048,
+        "payload_sha256": "95e5232b2ea9f3704779c9301cfcbe5ab3995b6e2665986c3f6212bb8b38b199",
+        "unit0_command_offset": 2848,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 14,
+        "name": "t01r02_floortile",
+        "name_hex": "7430317230325f666c6f6f7274696c65",
+        "object_offset": 1168,
+        "width": 64,
+        "height": 64,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 53888,
+        "payload_offset": 57344,
+        "payload_size": 2048,
+        "payload_sha256": "022c5bee61daef452d9f004f86ca03491dfa57b175f779382f21b62e0ffb69d3",
+        "unit0_command_offset": 2944,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 15,
+        "name": "t01r02_mirror",
+        "name_hex": "7430317230325f6d6972726f72",
+        "object_offset": 1200,
+        "width": 64,
+        "height": 32,
+        "format": "ETC1A4",
+        "format_code": 13,
+        "raw_data_relative_offset": 55936,
+        "payload_offset": 59392,
+        "payload_size": 2048,
+        "payload_sha256": "2fcf977dd55d3e388bbd549dde9a8351d8999c802af78fcc681ef40efb3a1d5e",
+        "unit0_command_offset": 3040,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 269
+      },
+      {
+        "index": 16,
+        "name": "t01r02_stairs",
+        "name_hex": "7430317230325f737461697273",
+        "object_offset": 1232,
+        "width": 64,
+        "height": 64,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 57984,
+        "payload_offset": 61440,
+        "payload_size": 2048,
+        "payload_sha256": "a83631597894bc31f746eccff45c4a7edbc9355b7eb715a9a6d6602a61b4b31c",
+        "unit0_command_offset": 3136,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 17,
+        "name": "t01r02_wall",
+        "name_hex": "7430317230325f77616c6c",
+        "object_offset": 1264,
+        "width": 32,
+        "height": 256,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 60032,
+        "payload_offset": 63488,
+        "payload_size": 4096,
+        "payload_sha256": "c28a94c80ca5732bdc279e429f8e722fb79c338c426b9b6d0ead481b8755669b",
+        "unit0_command_offset": 3232,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      },
+      {
+        "index": 18,
+        "name": "t01r02_woody",
+        "name_hex": "7430317230325f776f6f6479",
+        "object_offset": 1296,
+        "width": 64,
+        "height": 32,
+        "format": "ETC1",
+        "format_code": 12,
+        "raw_data_relative_offset": 64128,
+        "payload_offset": 67584,
+        "payload_size": 1024,
+        "payload_sha256": "8c349fe59205128669592db4be52a5d516bb90d56d47b49db5ca47652ce035c8",
+        "unit0_command_offset": 3328,
+        "unit0_command_words": 8,
+        "format_mipmap_flags": 268
+      }
+    ],
+    "relocation_flags": {
+      "0x00": {
+        "count": 49,
+        "meaning": "contents-word-index source to contents-relative target"
+      },
+      "0x01": {
+        "count": 38,
+        "meaning": "contents-byte-offset source to strings-relative target"
+      },
+      "0x02": {
+        "count": 57,
+        "meaning": "contents-word-index source to commands-relative target"
+      },
+      "0x24": {
+        "count": 57,
+        "meaning": "commands-word-index source to raw-data-relative texture target; v7 relocation"
+      }
+    },
+    "texture_record_layout": {
+      "size": 32,
+      "fields": {
+        "0x00": "unit0 command offset",
+        "0x04": "unit0 command word count",
+        "0x08": "unit1 command offset",
+        "0x0c": "unit1 command word count",
+        "0x10": "unit2 command offset",
+        "0x14": "unit2 command word count",
+        "0x18": "observed word0x10c or0x10d; low byte agrees with GPU format; upper byte1 not independently interpreted",
+        "0x1c": "string-relative name offset with relocation flag1"
+      },
+      "observed_command_words_per_unit": 8,
+      "registers": {
+        "0x82": "unit0 dimensions: width bits16..31, height bits0..15",
+        "0x85": "unit0 raw-data-relative payload offset (before relocation)",
+        "0x8e": "unit0 format12 ETC1 or13 ETC1A4",
+        "0x23d": "command buffer end marker1"
+      }
+    },
+    "payload_coverage": {
+      "base_level_sum": 65152,
+      "raw_data_size": 65152,
+      "note": "The19 observed base levels cover the raw section exactly with no gaps or overlap; this is not a general mipmap interpretation."
+    }
+  },
+  "field_bch": {
+    "sha256": "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+    "size": 127232,
+    "model": {
+      "index": 0,
+      "name": "t01r0202_00_00",
+      "name_hex": "74303172303230325f30305f3030",
+      "object_offset": 12624
+    },
+    "material_record_table": 12932,
+    "material_record_stride": 88,
+    "materials": [
+      {
+        "index": 0,
+        "record_offset": 12932,
+        "parameter_offset": 632,
+        "name": "com_chip_mado2",
+        "texture_units": [
+          "com_chip_mado1",
+          null,
+          null
+        ],
+        "texture_indices": [
+          0,
+          null,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11001",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x2220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 1,
+        "record_offset": 13020,
+        "parameter_offset": 1632,
+        "name": "gym06_kage01",
+        "texture_units": [
+          "gym06_kage01",
+          null,
+          null
+        ],
+        "texture_indices": [
+          3,
+          null,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11001",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x2220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "record_offset": 13108,
+        "parameter_offset": 2632,
+        "name": "t01r01_curt1",
+        "texture_units": [
+          "t01r01_curt1",
+          null,
+          null
+        ],
+        "texture_indices": [
+          6,
+          null,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11001",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x2220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "record_offset": 13196,
+        "parameter_offset": 3632,
+        "name": "t01r01_win01",
+        "texture_units": [
+          "t01r01_win01",
+          null,
+          null
+        ],
+        "texture_indices": [
+          8,
+          null,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11001",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x2220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "record_offset": 13284,
+        "parameter_offset": 4632,
+        "name": "t01r0202_bed",
+        "texture_units": [
+          "t01r0202_bed",
+          null,
+          null
+        ],
+        "texture_indices": [
+          9,
+          null,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11001",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x2220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 5,
+        "record_offset": 13372,
+        "parameter_offset": 5632,
+        "name": "t01r0202_desk",
+        "texture_units": [
+          "t01r0202_desk",
+          null,
+          null
+        ],
+        "texture_indices": [
+          10,
+          null,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11001",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x2220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 6,
+        "record_offset": 13460,
+        "parameter_offset": 6632,
+        "name": "t01r02_carpet2",
+        "texture_units": [
+          "projection_dummy",
+          "t01r02_carpet2",
+          null
+        ],
+        "texture_indices": [
+          4,
+          12,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11003",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x30002220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 196609,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 7,
+        "record_offset": 13548,
+        "parameter_offset": 7632,
+        "name": "t01r02_floor",
+        "texture_units": [
+          "projection_dummy",
+          "t01r02_floor",
+          null
+        ],
+        "texture_indices": [
+          4,
+          13,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11003",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x30002220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 196609,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 8,
+        "record_offset": 13636,
+        "parameter_offset": 8632,
+        "name": "t01r02_mirror",
+        "texture_units": [
+          "t01r02_mirror",
+          null,
+          null
+        ],
+        "texture_indices": [
+          15,
+          null,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11001",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x2220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 9,
+        "record_offset": 13724,
+        "parameter_offset": 9632,
+        "name": "t01r02_stairs",
+        "texture_units": [
+          "t01r02_stairs",
+          null,
+          null
+        ],
+        "texture_indices": [
+          16,
+          null,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11001",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x2220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 10,
+        "record_offset": 13812,
+        "parameter_offset": 10632,
+        "name": "t01r02_wall",
+        "texture_units": [
+          "projection_dummy",
+          "t01r02_wall",
+          null
+        ],
+        "texture_indices": [
+          4,
+          17,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11003",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x30002220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 196609,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "index": 11,
+        "record_offset": 13900,
+        "parameter_offset": 11632,
+        "name": "t01r02_woody",
+        "texture_units": [
+          "projection_dummy",
+          "t01r02_woody",
+          null
+        ],
+        "texture_indices": [
+          4,
+          18,
+          null
+        ],
+        "texture_command_registers": {
+          "0x80": "0x11003",
+          "0x81": "0x0",
+          "0x82": "0x0",
+          "0x83": "0x30002220",
+          "0x84": "0x0",
+          "0x85": "0x0",
+          "0x8e": "0xc",
+          "0x91": "0x0",
+          "0x92": "0x0",
+          "0x93": "0x2220",
+          "0x94": "0x0",
+          "0x95": "0x0",
+          "0x96": "0xc",
+          "0x99": "0x0",
+          "0x9a": "0x0",
+          "0x9b": "0x2220",
+          "0x9c": "0x0",
+          "0x9d": "0x0",
+          "0x9e": "0xc",
+          "0x23d": "0x1"
+        },
+        "coordinators": [
+          {
+            "packed_projection_and_camera": 196609,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 4278190081,
+            "scale_rotation_translation": [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "packed_projection_and_camera": 1,
+            "scale_rotation_translation": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "reference": {
+    "project": "CTRMap",
+    "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+    "files": [
+      {
+        "path": "src/ctrmap/Workspace.java",
+        "sha256": "127646a40bcf58a86e734353f954163ece74521ed5dc98dc50d9f273b66f051c",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/Workspace.java"
+      },
+      {
+        "path": "src/ctrmap/formats/containers/AD.java",
+        "sha256": "b9786985e8e9270bf7d4069b130bd785643af25cca838726004e79481b9d882d",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/containers/AD.java"
+      },
+      {
+        "path": "src/ctrmap/formats/containers/AbstractGamefreakContainer.java",
+        "sha256": "6092d692dd463ee87b153245c5bb7acbc3420749db685535f0cb13ec3d00d19b",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/containers/AbstractGamefreakContainer.java"
+      },
+      {
+        "path": "src/ctrmap/formats/zone/ZoneHeader.java",
+        "sha256": "2666736cf3b4e53b596f3787ce31e4356d12331c73369061009fc2afaa01c4aa",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/zone/ZoneHeader.java"
+      },
+      {
+        "path": "src/ctrmap/formats/h3d/BCHFile.java",
+        "sha256": "8219fc99ce4ad0f3121a917fc53a4741e22f356e19195eb54f7806d16a0c0817",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/h3d/BCHFile.java"
+      },
+      {
+        "path": "src/ctrmap/formats/h3d/texturing/H3DMaterial.java",
+        "sha256": "97e6c7d681db2ff4484cb21579e9cdabd49efe62d5700e05ee0984788e4ee91d",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/h3d/texturing/H3DMaterial.java"
+      },
+      {
+        "path": "src/ctrmap/formats/h3d/texturing/H3DTexture.java",
+        "sha256": "e1fa0dbb37e58073af67564667333122038e68ba287ad88e88973b1070279f91",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/h3d/texturing/H3DTexture.java"
+      },
+      {
+        "path": "src/ctrmap/formats/h3d/model/H3DModel.java",
+        "sha256": "e5ad6700b90c50827ae2703ea66e113a3a33770969b06c86c6aa8dbc4d8681b1",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/h3d/model/H3DModel.java"
+      },
+      {
+        "path": "src/ctrmap/formats/h3d/PICACommand.java",
+        "sha256": "dfc81cbfe77b07bf1a823e9df79af969be3274873001eda1932015610c090ea6",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/h3d/PICACommand.java"
+      },
+      {
+        "path": "src/ctrmap/humaninterface/TileMapPanel.java",
+        "sha256": "118d54b1a0061f35214ef5fef8be42fcaff57ae7f78dca00a1cad81adca72678",
+        "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/humaninterface/TileMapPanel.java"
+      }
+    ],
+    "base_url": "https://github.com/Rynbo/CTRMap/tree/4b780a7bc32a75a7f31c162829b086355caf32f2"
+  },
+  "cautions": [
+    "Zero string pointer fields must be distinguished using relocations: a zero relocated pointer is a valid first string, while a zero unrelocated field is null.",
+    "Four materials use projection_dummy in texture unit0 and the ordinary named image in unit1. Their full shader/TEV behavior remains to be reconstructed.",
+    "Raw payload sizes here describe the single base level implied by observed texture objects and exact raw-section coverage."
+  ],
+  "local_reproduction": {
+    "script": "native/reproduction/bch-model/verify_area_textures.py",
+    "script_sha256": "4535cab08d0b95f8ed4f82fcf49ba656178033d5ae8ea2b99d5df3a6fed9eeea",
+    "arguments": "--romfs /path/to/local/romfs --lz-library /path/to/local/liblz.so --output /path/to/new-report.json [--extract-dir /path/to/new-local-directory]",
+    "payload_policy": "Source inputs and extracted BCH remain local under ignored outputs; this report contains only names, hashes, offsets and numeric metadata.",
+    "verification": "Selected-baseline assertions recompute game-data observations and compare them with this report. Descriptive provenance and the pinned source manifest are preserved, not independently revalidated during replay."
+  }
+}

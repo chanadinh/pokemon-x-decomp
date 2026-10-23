@@ -59,7 +59,9 @@ remain incomplete; this is not original-game rendering equivalence.
 `native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5` loads the
 checked field layout. Arrows/WASD move an inspection marker on exact standard
 cells; `C` shows collision edges. See the [field evidence and limits](docs/native-field.md).
-The environment's BCH graphics and actual player movement are still pending.
+The environment's native BCH rendering and actual player movement are still pending.
+A [BCH inspection tool](docs/native-bch.md) now decodes the selected field's
+positions, UV0 and indices and checks its external texture names.
 
 ## What works today
 

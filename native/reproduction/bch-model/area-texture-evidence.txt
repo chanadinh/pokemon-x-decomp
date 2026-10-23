@@ -1,0 +1,126 @@
+Area 75 external texture association continuation, 2026-10-23
+
+This report records independently read metadata, names and hashes. No game
+payload or external implementation is included. The tracked verification script is
+verify_area_textures.py; it has no private input-path default.
+The adjacent area75-texture-association.json records its hash and observations.
+
+Selection and evidence strength
+
+The selected chain is zone 5 -> area 75, matrix 12 -> region 165. The zone header
+stores the area ID as little-endian u16 at section 0 + 2. XY AREA_DATA is a/0/1/3.
+Original-code evidence previously preserved in
+../field-scene/original-code-evidence.json confirms archive index 13 maps to
+this path: archive table 0x005af1e0, cell 0x005af214, string 0x005a14a6 (UTF-16).
+This does not prove original-code area selection or the AD section 11 consumer.
+Those associations are supported by the pinned CTRMap source and local data.
+
+CTRMap commit 4b780a7bc32a75a7f31c162829b086355caf32f2:
+https://github.com/Rynbo/CTRMap/tree/4b780a7bc32a75a7f31c162829b086355caf32f2
+
+Workspace.java selects a/0/1/3 for XY AREA_DATA. ZoneHeader.java reads the area
+ID and fetchArchives() opens that entry; it takes world textures from AD
+section 11, decompressing that section if it is LZ11. AD.java documents the
+12-section layout: prop textures are section 1, world textures section 11.
+TileMapPanel loads worldTextures into the field models. H3DModel.java binds
+material texture units by exact names, deliberately excluding projection_dummy
+from units 0/1. These are reference implementation behaviors, not runtime proof.
+The JSON records pinned URLs and file SHA-256 for the directly reviewed sources.
+
+Selected container facts
+
+GARC entry 75/subentry 0 is 100191 bytes at archive byte 31934884, LZ11-compressed.
+It decodes to a 291072-byte AD minipack. AD starts with ASCII AD, u16 count 12,
+and 13 little-endian u32 section offsets at +4. The first section starts at 128;
+all observed section boundaries are 128-byte aligned. Section 11 spans
+[221568, 291072), containing an uncompressed 69504-byte BCH compatibility 7/7.
+This BCH has 19 textures, no models, and 65152 raw texture bytes. Its relocation
+section ends at 69412, leaving 92 section-alignment bytes uninterpreted.
+
+The selected field's BCH model material table is at 0x3284, count 12,
+stride 0x58. The model's table/count fields are at model + 0x34/+0x38.
+Material texture-name offsets are at record + 0x48/+0x4c/+0x50; material name
+at +0x54. The material-parameter pointer at +0x00 agrees with each corresponding
+object in the top-level material index. A zero relocated string pointer is a
+valid first string; a zero field with no string relocation is null. Treating
+all zero values as string offsets would invent texture name PrivateMod here.
+
+Exact material -> texture-unit names (all unit 2 references are null):
+com_chip_mado2  -> unit 0 com_chip_mado1
+gym06_kage01    -> unit 0 gym06_kage01
+t01r01_curt1    -> unit 0 t01r01_curt1
+t01r01_win01    -> unit 0 t01r01_win01
+t01r0202_bed    -> unit 0 t01r0202_bed
+t01r0202_desk   -> unit 0 t01r0202_desk
+t01r02_carpet2  -> unit 0 projection_dummy; unit 1 t01r02_carpet2
+t01r02_floor    -> unit 0 projection_dummy; unit 1 t01r02_floor
+t01r02_mirror   -> unit 0 t01r02_mirror
+t01r02_stairs   -> unit 0 t01r02_stairs
+t01r02_wall     -> unit 0 projection_dummy; unit 1 t01r02_wall
+t01r02_woody    -> unit 0 projection_dummy; unit 1 t01r02_woody
+
+All 16 nonnull unit references match the 19-texture dictionary exactly. Names
+include com_chip_mado1 as dictionary index 0/string offset 0. The report records
+all 19 names, dimensions, format codes, object/command/payload offsets, payload
+sizes and hashes; it preserves unused texture records as well as matched ones.
+
+Texture record and relocation facts
+
+Each texture object is 32 bytes. Its first 24 bytes are three command-offset/
+word-count pairs. All observed units have 8 command words. Word +0x18 is 0x10c
+or 0x10d; its low byte agrees with GPU format 12/13. The upper byte 1 is retained
+without claiming an independent mip-count interpretation. Word +0x1c names it.
+
+For BCH 7/7, relocation tag 1 sources use a byte offset in contents and target
+strings; tag 2 sources use a word index in contents and target commands;
+tag 0x24 sources use a word index in commands and target raw_data. Texture
+addresses in this serialized BCH are raw-section byte offsets, not hardware
+addresses to multiply by 8. There are 57 tag 2 and 57 tag 0x24 entries (three per
+texture), 38 tag 1 entries (dictionary/object names), and 49 tag 0 entries. The
+area contains no other relocation types. The report keeps counts explicit.
+
+Unit 0 command registers: 0x82 packs width in upper 16 and height in lower 16;
+0x85 is raw-data-relative payload offset; 0x8e is 12 ETC1 or 13 ETC1A4; 0x23d ends
+the command buffer. The 19 base-level payloads, sized width*height/2 for ETC1
+and width*height for ETC1A4, exactly cover raw_data without gaps or overlaps.
+The existing native/assets/texture.c decoder supports both formats. No new
+texture codec is needed for this selected texture pack.
+
+Four materials enable units 0/1 (GPU register 0x80 = 0x11003), use unit 0
+parameter 0x30002220 and coordinator projection 3/camera 0; their ordinary
+image is unit 1. Other materials have 0x80 = 0x11001 and ordinary UV mapping.
+Faithful projected texture, sampler, combiner, alpha, light and draw-order
+behavior remains to be reconstructed. Name association alone does not
+establish rendered equivalence.
+
+Local reproduction (read-only input)
+
+cc -shared -fPIC -O2 native/assets/lz.c -o /tmp/pokemon-x-lz-analysis.so
+python3 native/reproduction/bch-model/verify_area_textures.py \
+  --romfs /path/to/local/romfs --lz-library /tmp/pokemon-x-lz-analysis.so \
+  --output outputs/native-bch-model/new-area-verification.json \
+  --extract-dir outputs/native-bch-model/new-selected-payloads
+
+The script uses existing bounded GARC indexing, native bounded LZ decode,
+and the read-only BCH resource inspector. Assertions verify selected headers,
+relocation classes, material-parameter links, nonnull names, texture extents
+and exact raw-section coverage. Measured fields are compared with this recorded
+baseline; descriptive provenance and pinned source references are retained.
+This is a selected-baseline assertion script, not a general-purpose parser.
+Run without Python -O. The required --output path must be new, and its file is
+created exclusively. Optional --extract-dir must name a new directory; it is
+created with exist_ok=False and holds field165.bch and area75-world-textures.bch.
+Omit --extract-dir for metadata only. These original payloads must stay in local
+ignored storage, outside tracked reproduction files. Existing files/directories
+are never overwritten. The parent output directory must already exist.
+
+Next implementation
+
+Retain relocation-aware nullable string pointers while decoding model material
+records. Match all nonnull raw texture names against the supplied external BCH
+index without material-name guesses. Decode selected payloads with the shared
+texture decoder after validating dimensions, format, command and raw extents.
+Preserve all three texture units and projection metadata. Any unlit ordinary-
+texture preview must state that projected effects and game shading remain
+unimplemented. Verify the runtime area selector and texture consumer separately
+before claiming the archive chain is reconstructed from original code.

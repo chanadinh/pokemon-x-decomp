@@ -104,8 +104,12 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    and texture records; [geometry evidence](docs/native-geometry.md) records the
    supported mesh subset. The [material preview](docs/native-materials.md)
    binds checked UVs/textures and selected sampler/depth/blend states.
-   Next decode the selected field's BCH environment and area/prop associations,
-   and establish actual player entry and terrain collision consumers.
+   The [BCH model inspector](docs/native-bch.md) now decodes the selected field's
+   positions, UV0 and indices, with an independent numeric comparison and exact
+   external texture-name matches through area 75. Native BCH rendering remains
+   pending. Next establish the original primitive state and area texture consumer,
+   implement the required materials/projected textures, and connect the environment
+   to the renderer. Establish actual player entry and terrain collision consumers.
    Capture the corresponding reference scenario.
 5. Connect explicit game-state/platform interfaces to the native application,
    then implement movement/collision, interaction, battle, return to the field,
