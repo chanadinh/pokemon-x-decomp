@@ -4,13 +4,13 @@ CFLAGS = -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror
 SDL_CFLAGS ?= $(shell $(PKG_CONFIG) --cflags sdl2 2>/dev/null)
 SDL_LIBS ?= $(shell $(PKG_CONFIG) --libs sdl2 2>/dev/null)
 
-ASSET_SOURCES = assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/texture.c assets/cgfx.c
-ASSET_HEADERS = assets/garc.h assets/lz.h assets/bclim.h assets/etc1.h assets/texture.h assets/cgfx.h
+ASSET_SOURCES = assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/texture.c assets/cgfx.c assets/bch_texture.c assets/field.c
+ASSET_HEADERS = assets/garc.h assets/lz.h assets/bclim.h assets/etc1.h assets/texture.h assets/cgfx.h assets/bch_texture.h assets/field.h
 MODEL_SOURCES = assets/cgfx_model.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c
 MODEL_HEADERS = assets/cgfx_model.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h
 FIELD_SOURCES = assets/field.c assets/garc.c assets/lz.c
 FIELD_HEADERS = assets/field.h assets/garc.h assets/lz.h
-CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field
+CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture
 
 .PHONY: all test test-core test-runtime clean check-sdl
 all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer
@@ -19,7 +19,7 @@ check-sdl:
 	@test -n "$(SDL_LIBS)" || { echo 'SDL2 not configured: install SDL2 development files or set SDL_CFLAGS and SDL_LIBS.' >&2; exit 1; }
 
 build/pokemon_asset_viewer: app.c $(ASSET_SOURCES) $(ASSET_HEADERS) | build check-sdl
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) app.c $(ASSET_SOURCES) $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) app.c $(ASSET_SOURCES) $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -lm -o $@
 
 build/pokemon_model_viewer: model_app.c $(MODEL_SOURCES) $(MODEL_HEADERS) | build check-sdl
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) model_app.c $(MODEL_SOURCES) $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -lm -o $@
@@ -48,6 +48,9 @@ build/test_texture: assets/texture.c assets/texture.h assets/etc1.c assets/etc1.
 build/test_cgfx: assets/cgfx.c assets/cgfx.h assets/texture.c assets/texture.h assets/etc1.c assets/etc1.h assets/test_cgfx.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/cgfx.c assets/texture.c assets/etc1.c assets/test_cgfx.c $(LDFLAGS) $(LDLIBS) -o $@
 
+build/test_bch_texture: assets/bch_texture.c assets/bch_texture.h assets/texture.c assets/texture.h assets/etc1.c assets/etc1.h assets/test_bch_texture.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) assets/bch_texture.c assets/texture.c assets/etc1.c assets/test_bch_texture.c $(LDFLAGS) $(LDLIBS) -o $@
+
 build/test_cgfx_model: assets/cgfx_model.c assets/cgfx_model.h assets/test_cgfx_model.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/cgfx_model.c assets/test_cgfx_model.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
@@ -71,6 +74,7 @@ test test-core: $(CORE_TESTS)
 	./build/test_cgfx_scene
 	./build/test_raster
 	./build/test_field
+	./build/test_bch_texture
 	python3 -m unittest discover -s tests -p test_container.py -v
 	python3 -m unittest discover -s tests -p test_bch.py -v
 	python3 -m unittest discover -s tests -p test_pica_commands.py -v
@@ -80,6 +84,7 @@ test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemo
 	./build/pokemon_asset_viewer --demo --inspect
 	SDL_VIDEODRIVER=dummy ./build/pokemon_asset_viewer --demo --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_viewer.py -v
+	python3 -m unittest discover -s tests -p test_bch_viewer.py -v
 	SDL_VIDEODRIVER=dummy ./build/pokemon_model_viewer --demo --software --frames 3 --self-test-input
 	SDL_VIDEODRIVER=dummy ./build/pokemon_model_viewer --demo --textured --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_model_viewer.py -v

@@ -1,0 +1,199 @@
+Native BCH textures validation, 2026-10-23
+Linux/WSL; local SDL2 environment activated; runtime uses SDL dummy video.
+
+Core decoder/inspector suites
+$ source tools/native-sdl/activate.sh && make -C native test
+make: Entering directory '<workspace>/native'
+./build/test_garc
+PASS: GARC v4 sparse subentries, bounded selected reads, ownership, malformed tables, all truncations
+./build/test_lz
+PASS: LZ10/LZ11 fixed vectors, overlap, all token lengths, extended size, budgets, malformed input
+./build/test_bclim
+PASS: BCLIM raw/ETC1/ETC1A4 formats, fixed tile/orientation/color/alpha vectors, crop/stride variants, bounded malformed-input handling
+./build/test_etc1
+PASS: ETC1 fixed individual/differential vectors, all modifier/selector bits, PICA alpha order, bounds and ETC2 rejection
+./build/test_texture
+PASS: shared PICA payload format widths, explicit non-power-of-two stride, crop, palette separation and bounded cleanup
+./build/test_cgfx
+PASS: CGFX 14 PICA formats, borrowed names, backward pointers, selection, crop, layout rejection and bounded malformed cleanup
+./build/test_cgfx_model
+CGFX static geometry: fixed vectors, shape rebasing, finite/bounds/format rejection passed
+./build/test_cgfx_scene
+CGFX textured scene: UV/color vectors, named material binding, command masks/state, visibility and rejection passed
+./build/test_raster
+raster fixed-pixel tests passed
+./build/test_field
+field parser tests passed
+./build/test_bch_texture
+PASS: BCH texture relocation, section and command bounds; ETC1/A4 pixels; unsupported descriptors; immutable input and owned output
+python3 -m unittest discover -s tests -p test_container.py -v
+test_bad_sizes_counts_offsets_and_payloads_rejected (test_container.ContainerTests.test_bad_sizes_counts_offsets_and_payloads_rejected) ... ok
+test_fixed_index_offsets_names_model_and_texture_metadata (test_container.ContainerTests.test_fixed_index_offsets_names_model_and_texture_metadata) ... ok
+test_magic_and_endian_rejections (test_container.ContainerTests.test_magic_and_endian_rejections) ... ok
+test_names_must_terminate_inside_data (test_container.ContainerTests.test_names_must_terminate_inside_data) ... ok
+test_relocated_image_descriptor_and_missing_pointer (test_container.ContainerTests.test_relocated_image_descriptor_and_missing_pointer) ... ok
+test_selected_garc_member_and_cli_errors (test_container.ContainerTests.test_selected_garc_member_and_cli_errors) ... ok
+test_truncated_prefixes_rejected (test_container.ContainerTests.test_truncated_prefixes_rejected) ... ok
+test_unknown_texture_variant_stays_explicit_and_unparsed (test_container.ContainerTests.test_unknown_texture_variant_stays_explicit_and_unparsed) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.647s
+
+OK
+python3 -m unittest discover -s tests -p test_bch.py -v
+test_all_truncated_headers (test_bch.BCHTests.test_all_truncated_headers) ... ok
+test_invalid_extents_and_indices (test_bch.BCHTests.test_invalid_extents_and_indices) ... ok
+test_name_length_boundary (test_bch.BCHTests.test_name_length_boundary) ... ok
+test_names_and_section_relative_offsets (test_bch.BCHTests.test_names_and_section_relative_offsets) ... ok
+test_tree_child_and_termination (test_bch.BCHTests.test_tree_child_and_termination) ... ok
+test_version_and_read_only (test_bch.BCHTests.test_version_and_read_only) ... ok
+test_cli_invalid_inputs_report_errors (test_bch.GRTests.test_cli_invalid_inputs_report_errors) ... ok
+test_cli_standalone_and_gr_identity (test_bch.GRTests.test_cli_standalone_and_gr_identity) ... ok
+test_headers_counts_and_selections (test_bch.GRTests.test_headers_counts_and_selections) ... ok
+test_input_budget (test_bch.GRTests.test_input_budget) ... ok
+test_padded_sections_empty_section_and_read_only (test_bch.GRTests.test_padded_sections_empty_section_and_read_only) ... ok
+test_truncated_table_and_invalid_extents (test_bch.GRTests.test_truncated_table_and_invalid_extents) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.737s
+
+OK
+python3 -m unittest discover -s tests -p test_pica_commands.py -v
+test_all_truncated_byte_extents_and_exact_extent (test_pica_commands.PICACommandTests.test_all_truncated_byte_extents_and_exact_extent) ... ok
+test_asymmetric_byte_masks_and_provenance (test_pica_commands.PICACommandTests.test_asymmetric_byte_masks_and_provenance) ... ok
+test_budgets_alignment_types_and_empty_stream (test_pica_commands.PICACommandTests.test_budgets_alignment_types_and_empty_stream) ... ok
+test_f32_order_auto_increment_and_consecutive_index (test_pica_commands.PICACommandTests.test_f32_order_auto_increment_and_consecutive_index) ... ok
+test_incomplete_or_overwritten_uniform_is_not_reported (test_pica_commands.PICACommandTests.test_incomplete_or_overwritten_uniform_is_not_reported) ... ok
+test_input_is_unchanged (test_pica_commands.PICACommandTests.test_input_is_unchanged) ... ok
+test_padding_is_required_but_its_value_is_uninterpreted (test_pica_commands.PICACommandTests.test_padding_is_required_but_its_value_is_uninterpreted) ... ok
+test_register_ids_and_consecutive_overflow (test_pica_commands.PICACommandTests.test_register_ids_and_consecutive_overflow) ... ok
+test_repeated_consecutive_writes_and_absolute_sources (test_pica_commands.PICACommandTests.test_repeated_consecutive_writes_and_absolute_sources) ... ok
+test_uniform_data_can_span_packets (test_pica_commands.PICACommandTests.test_uniform_data_can_span_packets) ... ok
+test_unknown_bytes_do_not_become_known_zeroes (test_pica_commands.PICACommandTests.test_unknown_bytes_do_not_become_known_zeroes) ... ok
+test_unsupported_or_uninitialized_uniforms (test_pica_commands.PICACommandTests.test_unsupported_or_uninitialized_uniforms) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.003s
+
+OK
+python3 -m unittest discover -s tests -p test_bch_model.py -v
+test_asymmetric_positions_uvs_scales_and_both_index_widths (test_bch_model.BCHModelTests.test_asymmetric_positions_uvs_scales_and_both_index_widths) ... ok
+test_cli_summary_gr_selection_and_failed_export (test_bch_model.BCHModelTests.test_cli_summary_gr_selection_and_failed_export) ... ok
+test_external_names_and_nullable_units (test_bch_model.BCHModelTests.test_external_names_and_nullable_units) ... ok
+test_invalid_relocation_tags_duplicates_overlaps_and_extents (test_bch_model.BCHModelTests.test_invalid_relocation_tags_duplicates_overlaps_and_extents) ... ok
+test_model_flags_transform_skinning_and_counts (test_bch_model.BCHModelTests.test_model_flags_transform_skinning_and_counts) ... ok
+test_nonfinite_positions_scales_and_over_budget_counts (test_bch_model.BCHModelTests.test_nonfinite_positions_scales_and_over_budget_counts) ... ok
+test_obj_geometry_and_exclusive_creation (test_bch_model.BCHModelTests.test_obj_geometry_and_exclusive_creation) ... ok
+test_required_pointer_relocations_and_zero_relative_address (test_bch_model.BCHModelTests.test_required_pointer_relocations_and_zero_relative_address) ... ok
+test_signed_integer_attributes_preserve_sign_and_scale (test_bch_model.BCHModelTests.test_signed_integer_attributes_preserve_sign_and_scale) ... ok
+test_truncated_input_and_model_selection (test_bch_model.BCHModelTests.test_truncated_input_and_model_selection) ... ok
+test_unproven_pointer_bytes_bad_topology_and_extra_vertex_buffers (test_bch_model.BCHModelTests.test_unproven_pointer_bytes_bad_topology_and_extra_vertex_buffers) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.769s
+
+OK
+make: Leaving directory '<workspace>/native'
+
+Final build and full viewer regression suites
+$ source tools/native-sdl/activate.sh && make -C native -W app.c all test-runtime
+make: Entering directory '<workspace>/native'
+cc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror -I<workspace>/tools/native-sdl/sysroot/usr/include/SDL2 -I<workspace>/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT app.c assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/texture.c assets/cgfx.c assets/bch_texture.c assets/field.c  -L<workspace>/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,<workspace>/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,<workspace>/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2  -lm -o build/pokemon_asset_viewer
+./build/pokemon_asset_viewer --demo --inspect
+source=synthetic-demo width=256 height=192 pixels=RGBA8
+SDL_VIDEODRIVER=dummy ./build/pokemon_asset_viewer --demo --software --frames 3 --self-test-input
+[asset-viewer] Video=dummy renderer=software image=256x192. This viewer does not run gameplay.
+[asset-viewer] Input self-test passed: pan, zoom, reset, resize, Escape.
+[asset-viewer] Exit after 3 rendered frames, 0.035 seconds.
+source=synthetic-demo width=256 height=192 pixels=RGBA8
+python3 -m unittest discover -s tests -p test_viewer.py -v
+test_cgfx_bad_descriptor_and_unsupported_mips (test_viewer.ViewerTests.test_cgfx_bad_descriptor_and_unsupported_mips) ... ok
+test_cgfx_selection_listing_and_exported_pixels (test_viewer.ViewerTests.test_cgfx_selection_listing_and_exported_pixels) ... ok
+test_etc_archive_pipeline_crop_and_exported_alpha (test_viewer.ViewerTests.test_etc_archive_pipeline_crop_and_exported_alpha) ... ok
+test_export_does_not_overwrite_existing_files_or_input (test_viewer.ViewerTests.test_export_does_not_overwrite_existing_files_or_input) ... ok
+test_invalid_selection_and_options (test_viewer.ViewerTests.test_invalid_selection_and_options) ... ok
+test_missing_member_truncated_archive_and_unsupported_texture (test_viewer.ViewerTests.test_missing_member_truncated_archive_and_unsupported_texture) ... ok
+test_raw_and_compressed_pipeline_and_exported_pixels (test_viewer.ViewerTests.test_raw_and_compressed_pipeline_and_exported_pixels) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 13.677s
+
+OK
+python3 -m unittest discover -s tests -p test_bch_viewer.py -v
+test_bad_bch_and_unsupported_descriptor (test_bch_viewer.BCHViewerTests.test_bad_bch_and_unsupported_descriptor) ... ok
+test_invalid_selection_and_whole_minipack_table (test_bch_viewer.BCHViewerTests.test_invalid_selection_and_whole_minipack_table) ... ok
+test_minipack_outer_and_inner_compression (test_bch_viewer.BCHViewerTests.test_minipack_outer_and_inner_compression) ... ok
+test_raw_section_pixels_are_not_mistaken_for_lz_headers (test_bch_viewer.BCHViewerTests.test_raw_section_pixels_are_not_mistaken_for_lz_headers) ... ok
+test_runtime_input_capture_and_exclusive_outputs (test_bch_viewer.BCHViewerTests.test_runtime_input_capture_and_exclusive_outputs) ... ok
+test_standalone_listing_selection_and_pixels (test_bch_viewer.BCHViewerTests.test_standalone_listing_selection_and_pixels) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 17.264s
+
+OK
+SDL_VIDEODRIVER=dummy ./build/pokemon_model_viewer --demo --software --frames 3 --self-test-input
+[model-viewer] Input self-test passed: orbit, zoom, reset, Escape.
+[model-viewer] Video=dummy renderer=software; orthographic wireframe.
+[model-viewer] Exit after 3 frames.
+name="synthetic tetrahedron" vertices=4 triangles=4 shapes=1 bounds_min=(-1,-1,-1) bounds_max=(1,1,1)
+SDL_VIDEODRIVER=dummy ./build/pokemon_model_viewer --demo --textured --software --frames 3 --self-test-input
+[model-viewer] Input self-test passed: orbit, zoom, reset, Escape.
+[model-viewer] Video=dummy renderer=software; orthographic unlit textured software preview; translucency/priority/resource draw order.
+[model-viewer] Exit after 3 frames.
+name="synthetic tetrahedron" vertices=4 triangles=4 shapes=1 bounds_min=(-1,-1,-1) bounds_max=(1,1,1)
+mode=textured shading=unlit-texture-times-vertex-color draws=1 materials=1 textures=1 draw_order=translucency-priority-resource
+draw=0 shape=0 material=0 texture=0 indices=12 visible=1 priority=0 depth_write=1 cull=3 blend=0
+submission_order=0
+python3 -m unittest discover -s tests -p test_model_viewer.py -v
+test_archive_and_compression_errors_create_no_capture (test_model_viewer.ModelViewerTests.test_archive_and_compression_errors_create_no_capture) ... ok
+test_capture_preserves_existing_file_and_symlink_target (test_model_viewer.ModelViewerTests.test_capture_preserves_existing_file_and_symlink_target) ... ok
+test_demo_frame_capture_and_input (test_model_viewer.ModelViewerTests.test_demo_frame_capture_and_input) ... ok
+test_demo_inspection_and_help (test_model_viewer.ModelViewerTests.test_demo_inspection_and_help) ... ok
+test_invalid_options_are_rejected_before_loading (test_model_viewer.ModelViewerTests.test_invalid_options_are_rejected_before_loading) ... ok
+test_raw_and_lz_model_pipeline (test_model_viewer.ModelViewerTests.test_raw_and_lz_model_pipeline) ... ok
+test_textured_demo_inspection_capture_and_input (test_model_viewer.ModelViewerTests.test_textured_demo_inspection_capture_and_input) ... ok
+test_textured_preview_translucency_order (test_model_viewer.ModelViewerTests.test_textured_preview_translucency_order) ... ok
+test_textured_raw_lz_uv_color_alpha_and_blend (test_model_viewer.ModelViewerTests.test_textured_raw_lz_uv_color_alpha_and_blend) ... ok
+test_textured_unsupported_state_creates_no_capture (test_model_viewer.ModelViewerTests.test_textured_unsupported_state_creates_no_capture) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 24.263s
+
+OK
+SDL_VIDEODRIVER=dummy ./build/pokemon_field_viewer --demo --software --frames 3 --self-test-input
+[field-viewer] Input self-test passed: marker, zoom, focus, overlay, reset, Escape.
+[field-viewer] Video=dummy renderer=software; top-down inspection.
+[field-viewer] Exit after 3 frames.
+zone=0 area=0 matrix=0 matrix_size=1x1 unique_regions=1 decoded_bytes=0
+matrix_cell=(0,0) field=0
+field=0 grid=40x40 standard=209 blocked=1390 other=1 collision_triangles=0
+marker_start=(10,12) marker=(10,12) accepted=0 rejected=0 policy=exact-standard-cell
+marker_world_xz=(189,225) raw_le=00000020 first_triangle_height=none
+python3 -m unittest discover -s tests -p test_field_viewer.py -v
+test_absent_region_or_standard_cells_remain_inspectable (test_field_viewer.FieldViewerTests.test_absent_region_or_standard_cells_remain_inspectable) ... ok
+test_capture_and_no_clobber (test_field_viewer.FieldViewerTests.test_capture_and_no_clobber) ... ok
+test_collision_budget_counts_repeated_region_instances (test_field_viewer.FieldViewerTests.test_collision_budget_counts_repeated_region_instances) ... ok
+test_help_demo_and_input (test_field_viewer.FieldViewerTests.test_help_demo_and_input) ... ok
+test_invalid_cli (test_field_viewer.FieldViewerTests.test_invalid_cli) ... ok
+test_large_collision_edges_are_clipped_before_drawing (test_field_viewer.FieldViewerTests.test_large_collision_edges_are_clipped_before_drawing) ... ok
+test_malformed_chain_limits_and_no_capture (test_field_viewer.FieldViewerTests.test_malformed_chain_limits_and_no_capture) ... ok
+test_multi_region_placement_and_boundary_steps (test_field_viewer.FieldViewerTests.test_multi_region_placement_and_boundary_steps) ... ok
+test_raw_lz_chain_and_exact_word_policy (test_field_viewer.FieldViewerTests.test_raw_lz_chain_and_exact_word_policy) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 9.964s
+
+OK
+make: Leaving directory '<workspace>/native'
+
+BCH C suite with ASan/UBSan
+$ cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer native/assets/bch_texture.c native/assets/texture.c native/assets/etc1.c native/assets/test_bch_texture.c -o /tmp/px-bch-texture-sanitized
+/tmp/px-bch-texture-sanitized
+PASS: BCH texture relocation, section and command bounds; ETC1/A4 pixels; unsupported descriptors; immutable input and owned output
+
+Independent original-image comparison
+$ python3 native/reproduction/bch-textures/verify_pixels.py --romfs <local RomFS> --texture-bch <local area75-world-textures.bch> --viewer native/build/pokemon_asset_viewer --reference-library <local libaosp_etc1.so> --output-dir <new ignored directory>
+PASS: 19 textures / 100608 pixels; dummy-video capture and input self-test
+
+PASS: all 539 reconstruction checkpoint files match their existing SHA-256 manifests.
+Regression found and fixed before this final run: raw BCLIM pixels beginning with 0x10/0x11 must be validated as a complete container before optional LZ decoding, including selected AD/GR sections.

@@ -1,0 +1,242 @@
+{
+  "result": "passed",
+  "texture_bch_sha256": "13cbbc5477fba7c1f79f6c0c3ecc73acb11fe67bdc3131ae0014a60d004104fb",
+  "textures_compared": 19,
+  "pixels_compared": 100608,
+  "mismatches": 0,
+  "archive": "a/0/1/3",
+  "entry": 75,
+  "section": 11,
+  "reference": {
+    "commit": "29e239203d427d977b298be7b68b75b6a4b29b51",
+    "source_url": "https://android.googlesource.com/platform/frameworks/base/+/29e239203d427d977b298be7b68b75b6a4b29b51/opengl/libs/ETC1/etc1.cpp",
+    "source_sha256": "ebe9f90b5e19b6355ee80e676799aab9c948017bd209d40a0f9396402522e5d8",
+    "header_sha256": "f5de21e1e5888b56d82126b695e3d582499dd251ac7048c92856371d913be033",
+    "khronos_spec_sha256": "113eabf43f24c99ab2dd821113f04b25ea77ee2159bbc3776c93728348458284"
+  },
+  "reference_library_sha256": "8872e520e8a22893fb634e1707943089fc142d23a40b5274b15c544a0df3aca2",
+  "verifier_sha256": "42da9a1e812c578dee4f10d35eeea702d7c959ef443715f4e4c6af011c82075c",
+  "method": "AOSP ETC1 RGB block decode; independent alpha-nibble and 8x8 tile reconstruction; compare every viewer BMP RGBA byte.",
+  "runtime": {
+    "backend": "SDL dummy",
+    "frames": 3,
+    "input_self_test": "passed",
+    "capture_sha256": "51351b6df3694ce7e4c186298fd8a8e377751b6758ee8f6a45bad279d0db00a3"
+  },
+  "samples": [
+    {
+      "index": 0,
+      "name": "com_chip_mado1",
+      "width": 32,
+      "height": 64,
+      "format": "ETC1",
+      "rgba_sha256": "24174fa99ee00d699fd6a751d058f3272848ff9cb3d7d0ec7ff42355a65fe528",
+      "payload_sha256": "d9c67a54d78513f5feea7c55325f2c299b35b3182bac3ae8f9ade030a63d8b7f",
+      "pixel_count": 2048,
+      "full_image_equal": true
+    },
+    {
+      "index": 1,
+      "name": "com_ent_light01",
+      "width": 64,
+      "height": 64,
+      "format": "ETC1A4",
+      "rgba_sha256": "c0df2280886d9371a7139c7fc94e1bbdcd90674e29624f22d1a163ad52f4363a",
+      "payload_sha256": "a9fa164705f7499f7e36f57d9ae1796194087b58d79907df52b9cbd4f2542081",
+      "pixel_count": 4096,
+      "full_image_equal": true
+    },
+    {
+      "index": 2,
+      "name": "general_blue.tga",
+      "width": 32,
+      "height": 32,
+      "format": "ETC1",
+      "rgba_sha256": "6988e6aa249736aa16408546e4bc2633e1f53f56a10c5f48d8576b15aad8181a",
+      "payload_sha256": "648c12b2668642797074d01464db106bbad6b8dc0faf16b8d14f3f72f6a165cf",
+      "pixel_count": 1024,
+      "full_image_equal": true
+    },
+    {
+      "index": 3,
+      "name": "gym06_kage01",
+      "width": 32,
+      "height": 32,
+      "format": "ETC1A4",
+      "rgba_sha256": "05858069496bfdeefc0e8d3489415f9278706221f95440d77e5417964f8d98dc",
+      "payload_sha256": "67b9010f65c3c764bc0808c00f1d77f0aa2485f09db38ecc0254ea923aa3a1e9",
+      "pixel_count": 1024,
+      "full_image_equal": true
+    },
+    {
+      "index": 4,
+      "name": "projection_dummy",
+      "width": 64,
+      "height": 64,
+      "format": "ETC1",
+      "rgba_sha256": "0fbba07a833d4dcfc7024eaf313661a0ba8f80a05c6d29b8801c612e10e60dee",
+      "payload_sha256": "00b017d1a32f193d8f11cddcd97c05ca43b31bd1214a773eefff449dd6a994b2",
+      "pixel_count": 4096,
+      "full_image_equal": true
+    },
+    {
+      "index": 5,
+      "name": "room",
+      "width": 64,
+      "height": 64,
+      "format": "ETC1A4",
+      "rgba_sha256": "cc39b34a5f4402e931ba77aa392445a4cdfb81da4603eff7b8788f16cb9d91c3",
+      "payload_sha256": "b7fb31d825400eb06cfba638946b4f747b05b4c9d30faf2e4802c85efff1fee2",
+      "pixel_count": 4096,
+      "full_image_equal": true
+    },
+    {
+      "index": 6,
+      "name": "t01r01_curt1",
+      "width": 128,
+      "height": 128,
+      "format": "ETC1A4",
+      "rgba_sha256": "08ad90d29f19eafa2f31209d141d519a16560b8b9538e70f38c271ff645531de",
+      "payload_sha256": "4e639152e6c7a124461bcdc838ebed9ee96941aa15046e829dfc6d6e9ac64239",
+      "pixel_count": 16384,
+      "full_image_equal": true
+    },
+    {
+      "index": 7,
+      "name": "t01r01_ly1",
+      "width": 32,
+      "height": 64,
+      "format": "ETC1A4",
+      "rgba_sha256": "0dd5a090c97736b95076356f7c153812391ab1c4248aa3fce87e7ed6cf4f4db6",
+      "payload_sha256": "f5b66741b4b0cfdaf58be27b162251f92419ae24bb86cac0a3979383a21af303",
+      "pixel_count": 2048,
+      "full_image_equal": true
+    },
+    {
+      "index": 8,
+      "name": "t01r01_win01",
+      "width": 16,
+      "height": 16,
+      "format": "ETC1",
+      "rgba_sha256": "d436b932b7f711d3df91149f4c3afc13c57ce55eb9ef0126f10221b11dc72f46",
+      "payload_sha256": "65defabc7e6814ab39ffc781442b0d360bf4584d4e01e8fa935786861acc85c3",
+      "pixel_count": 256,
+      "full_image_equal": true
+    },
+    {
+      "index": 9,
+      "name": "t01r0202_bed",
+      "width": 128,
+      "height": 128,
+      "format": "ETC1",
+      "rgba_sha256": "581c3115b8a8cc8073911ed803ed716b7b22d62f848112a5a89be8e49ee9f0fa",
+      "payload_sha256": "9fe9cad4ec02ea59be69399bb926af45c61e97ab69152dbb99f7769a3318eb4e",
+      "pixel_count": 16384,
+      "full_image_equal": true
+    },
+    {
+      "index": 10,
+      "name": "t01r0202_desk",
+      "width": 128,
+      "height": 128,
+      "format": "ETC1",
+      "rgba_sha256": "f87fcd3959eb20fd4314adde48c17492e0b367487cf09aa790151d1965b3f32b",
+      "payload_sha256": "5b0c61665bf75c72d0dbbf50312694dacf022f499da990f8ab7588d2e5507510",
+      "pixel_count": 16384,
+      "full_image_equal": true
+    },
+    {
+      "index": 11,
+      "name": "t01r02_carpet",
+      "width": 64,
+      "height": 64,
+      "format": "ETC1",
+      "rgba_sha256": "1b1df8999c8da4f7b2b6acc56e41e5f236d5f8a4dff40aedaafa913bdb0819f7",
+      "payload_sha256": "3f59bbd5b4977bebf836c76b65de0a107d900fb52774d4e7e6f77ba5f6ef33ff",
+      "pixel_count": 4096,
+      "full_image_equal": true
+    },
+    {
+      "index": 12,
+      "name": "t01r02_carpet2",
+      "width": 64,
+      "height": 64,
+      "format": "ETC1",
+      "rgba_sha256": "9e57ea53fc1a2141b3a88cdefe66de7fa8fec3d76fcf91d886d258f9b2fbb635",
+      "payload_sha256": "ebeefc5e0c9b7440d53f0f9b32973ded5a53d453ef94f1e08e4bc64f5f7de519",
+      "pixel_count": 4096,
+      "full_image_equal": true
+    },
+    {
+      "index": 13,
+      "name": "t01r02_floor",
+      "width": 64,
+      "height": 64,
+      "format": "ETC1",
+      "rgba_sha256": "c965ce1e6c9ad00a811bb37f1256d5bb34594f09cf6de007e301a41813d03097",
+      "payload_sha256": "95e5232b2ea9f3704779c9301cfcbe5ab3995b6e2665986c3f6212bb8b38b199",
+      "pixel_count": 4096,
+      "full_image_equal": true
+    },
+    {
+      "index": 14,
+      "name": "t01r02_floortile",
+      "width": 64,
+      "height": 64,
+      "format": "ETC1",
+      "rgba_sha256": "5afc56e3ebe9580222f74ae06573d5058c54a9afd3eaba9ae12c66c2e76b0ed3",
+      "payload_sha256": "022c5bee61daef452d9f004f86ca03491dfa57b175f779382f21b62e0ffb69d3",
+      "pixel_count": 4096,
+      "full_image_equal": true
+    },
+    {
+      "index": 15,
+      "name": "t01r02_mirror",
+      "width": 64,
+      "height": 32,
+      "format": "ETC1A4",
+      "rgba_sha256": "65ad47bc669e3a7dcb6f670700db5731f401adfc78a297be568d8f64519ddcda",
+      "payload_sha256": "2fcf977dd55d3e388bbd549dde9a8351d8999c802af78fcc681ef40efb3a1d5e",
+      "pixel_count": 2048,
+      "full_image_equal": true
+    },
+    {
+      "index": 16,
+      "name": "t01r02_stairs",
+      "width": 64,
+      "height": 64,
+      "format": "ETC1",
+      "rgba_sha256": "1315a28949498cf0c57ccff289976a8119ea28aab217165270c2f817148f62b6",
+      "payload_sha256": "a83631597894bc31f746eccff45c4a7edbc9355b7eb715a9a6d6602a61b4b31c",
+      "pixel_count": 4096,
+      "full_image_equal": true
+    },
+    {
+      "index": 17,
+      "name": "t01r02_wall",
+      "width": 32,
+      "height": 256,
+      "format": "ETC1",
+      "rgba_sha256": "2fe94db3f6d6ebb08509efbd5413d6a3c1e1c90bcd154e90ae53ddd683ff0a2e",
+      "payload_sha256": "c28a94c80ca5732bdc279e429f8e722fb79c338c426b9b6d0ead481b8755669b",
+      "pixel_count": 8192,
+      "full_image_equal": true
+    },
+    {
+      "index": 18,
+      "name": "t01r02_woody",
+      "width": 64,
+      "height": 32,
+      "format": "ETC1",
+      "rgba_sha256": "8419f6a91d47e81b51cf230aaefe9d4467d09c2eb43b29817580373029b08f4a",
+      "payload_sha256": "8c349fe59205128669592db4be52a5d516bb90d56d47b49db5ca47652ce035c8",
+      "pixel_count": 2048,
+      "full_image_equal": true
+    }
+  ],
+  "limitations": [
+    "No game render or material equivalence",
+    "AOSP RGB reference is external; alpha/tile oracle is independently authored",
+    "Reference library must be built from the pinned source using recorded instructions"
+  ]
+}

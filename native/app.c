@@ -1,5 +1,7 @@
 #include "assets/bclim.h"
+#include "assets/bch_texture.h"
 #include "assets/cgfx.h"
+#include "assets/field.h"
 #include "assets/garc.h"
 #include "assets/lz.h"
 
@@ -15,8 +17,9 @@ enum { MEMBER_LIMIT = 64 * 1024 * 1024 };
 
 struct options {
     const char *romfs, *archive, *screenshot, *capture_frame;
-    uint32_t entry, subentry, frames, texture;
-    int have_entry, have_subentry, have_texture, list_textures, demo, inspect, software, self_test;
+    uint32_t entry, subentry, frames, texture, section;
+    int have_entry, have_subentry, have_texture, have_section;
+    int list_textures, demo, inspect, software, self_test;
 };
 
 struct view {
@@ -30,8 +33,9 @@ static void usage(FILE *stream, const char *program)
     fprintf(stream,
         "Usage: %s (--demo | --romfs PATH --archive RELATIVE/PATH --entry N) [options]\n"
         "  --subentry N          GARC bitmap subentry, 0..31 (default 0)\n"
-        "  --texture N           CGFX embedded texture index (default 0)\n"
-        "  --list-textures       List CGFX texture metadata without decoding pixels\n"
+        "  --section N           Select an AD/GR minipack section, 0..255\n"
+        "  --texture N           CGFX/BCH embedded texture index (default 0)\n"
+        "  --list-textures       List CGFX/BCH metadata without decoding pixels\n"
         "  --inspect             Decode and print metadata without opening a window\n"
         "  --screenshot FILE.bmp Export the decoded image; destination must be new\n"
         "  --capture-frame FILE.bmp Save first window frame; destination must be new\n"
@@ -84,7 +88,7 @@ static int parse_options(int argc, char **argv, struct options *options)
         if (strcmp(argument, "--self-test-input") == 0) { options->self_test = 1; continue; }
         if (strcmp(argument, "--romfs") != 0 && strcmp(argument, "--archive") != 0 &&
             strcmp(argument, "--entry") != 0 && strcmp(argument, "--subentry") != 0 &&
-            strcmp(argument, "--texture") != 0 &&
+            strcmp(argument, "--texture") != 0 && strcmp(argument, "--section") != 0 &&
             strcmp(argument, "--frames") != 0 && strcmp(argument, "--screenshot") != 0 &&
             strcmp(argument, "--capture-frame") != 0) {
             fprintf(stderr, "[asset-viewer] Unknown option: %s\n", argument);
@@ -103,7 +107,8 @@ static int parse_options(int argc, char **argv, struct options *options)
             uint32_t parsed;
             if (!number(value, &parsed) ||
                 (strcmp(argument, "--frames") == 0 && parsed == 0) ||
-                (strcmp(argument, "--subentry") == 0 && parsed > 31)) {
+                (strcmp(argument, "--subentry") == 0 && parsed > 31) ||
+                (strcmp(argument, "--section") == 0 && parsed > 255)) {
                 fprintf(stderr, "[asset-viewer] Invalid value for %s: %s\n", argument, value);
                 return 0;
             }
@@ -113,12 +118,14 @@ static int parse_options(int argc, char **argv, struct options *options)
                 options->subentry = parsed; options->have_subentry = 1;
             } else if (strcmp(argument, "--texture") == 0) {
                 options->texture = parsed; options->have_texture = 1;
+            } else if (strcmp(argument, "--section") == 0) {
+                options->section = parsed; options->have_section = 1;
             } else options->frames = parsed;
         }
     }
     if (options->demo) {
         if (options->romfs || options->archive || options->have_entry || options->have_subentry ||
-            options->have_texture || options->list_textures) {
+            options->have_texture || options->have_section || options->list_textures) {
             fprintf(stderr, "[asset-viewer] --demo cannot be combined with archive selection.\n");
             return 0;
         }
@@ -173,6 +180,44 @@ static void print_name(const char *name, size_t size)
 static int decode_asset(const struct options *options, const uint8_t *data, size_t size,
                          struct px_bclim_image *image, char *error, size_t error_size)
 {
+    if (size >= 4 && memcmp(data, "BCH\0", 4) == 0) {
+        struct px_bch *bch = NULL;
+        enum px_bch_result result = px_bch_open(data, size, &bch);
+        if (result != PX_BCH_OK) {
+            snprintf(error, error_size, "BCH index: %s", px_bch_result_string(result));
+            return 0;
+        }
+        const size_t count = px_bch_texture_count(bch);
+        if (options->list_textures) {
+            printf("container=BCH textures=%zu\n", count);
+            for (size_t i = 0; i < count; ++i) {
+                const struct px_bch_texture *item = px_bch_texture(bch, i);
+                printf("texture=%zu name=", i); print_name(item->name, item->name_size);
+                printf(" width=%" PRIu32 " height=%" PRIu32 " format=%" PRIu32
+                       " descriptor_flags=0x%" PRIx32 " status=%s\n",
+                       item->width, item->height, item->format, item->flags,
+                       px_bch_result_string(item->decode_status));
+            }
+            px_bch_close(bch);
+            return 1;
+        }
+        struct px_texture_image texture = {0};
+        result = px_bch_decode_texture(bch, options->texture, &texture);
+        if (result != PX_BCH_OK) {
+            snprintf(error, error_size, "BCH texture %" PRIu32 ": %s", options->texture,
+                     px_bch_result_string(result));
+            px_bch_close(bch);
+            return 0;
+        }
+        const struct px_bch_texture *item = px_bch_texture(bch, options->texture);
+        printf("container=BCH textures=%zu texture=%" PRIu32 " name=", count, options->texture);
+        print_name(item->name, item->name_size);
+        printf(" format_namespace=PICA descriptor_flags=0x%" PRIx32 "\n", item->flags);
+        image->width = texture.width; image->height = texture.height;
+        image->format = texture.format; image->rgba = texture.rgba;
+        px_bch_close(bch);
+        return 1;
+    }
     if (size >= 4 && memcmp(data, "CGFX", 4) == 0) {
         struct px_cgfx *cgfx = NULL;
         enum px_cgfx_result result = px_cgfx_open(data, size, &cgfx);
@@ -211,7 +256,7 @@ static int decode_asset(const struct options *options, const uint8_t *data, size
         return 1;
     }
     if (options->have_texture || options->list_textures) {
-        snprintf(error, error_size, "--texture and --list-textures require CGFX input");
+        snprintf(error, error_size, "--texture and --list-textures require CGFX or BCH input");
         return 0;
     }
     enum px_bclim_result result = px_bclim_decode(data, size, image);
@@ -242,8 +287,8 @@ static int load_image(const struct options *options, struct px_bclim_image *imag
     memcpy(path + root_length + 1, options->archive, archive_length + 1);
 
     struct px_garc *archive = NULL;
-    uint8_t *member = NULL, *decoded = NULL;
-    size_t member_size = 0, decoded_size = 0;
+    uint8_t *member = NULL, *decoded = NULL, *section_decoded = NULL;
+    size_t member_size = 0, decoded_size = 0, section_decoded_size = 0;
     char error[256];
     if (!px_garc_open(path, &archive, error, sizeof error)) {
         fprintf(stderr, "[asset-viewer] Archive %s: %s\n", path, error);
@@ -260,34 +305,77 @@ static int load_image(const struct options *options, struct px_bclim_image *imag
                 options->entry, options->subentry, error);
         return 0;
     }
-    int decoded_ok = decode_asset(options, member, member_size, image, error, sizeof error);
     const char *compression = "none";
+    const char *section_compression = "none";
+    const uint8_t *asset = member;
+    size_t asset_size = member_size;
+    /* Raw BCLIM pixels may start with 0x10/0x11. Prefer a complete valid
+     * container before interpreting a leading pixel byte as compression. */
+    int decoded_ok = !options->have_section &&
+        decode_asset(options, member, member_size, image, error, sizeof error);
     if (!decoded_ok && member_size != 0 && (member[0] == 0x10 || member[0] == 0x11)) {
         compression = member[0] == 0x10 ? "LZ10" : "LZ11";
-        if (!px_lz_decode(member, member_size, MEMBER_LIMIT, &decoded, &decoded_size,
+        const size_t limit = options->have_section ? MEMBER_LIMIT - member_size : MEMBER_LIMIT;
+        if (!limit || !px_lz_decode(member, member_size, limit, &decoded, &decoded_size,
                           error, sizeof error)) {
+            if (!limit) snprintf(error, sizeof error, "aggregate asset budget exceeded");
             fprintf(stderr, "[asset-viewer] %s decode: %s\n", compression, error);
             free(member);
             return 0;
         }
-        decoded_ok = decode_asset(options, decoded, decoded_size, image, error, sizeof error);
+        asset = decoded;
+        asset_size = decoded_size;
     }
-    if (!decoded_ok) {
-        fprintf(stderr, "[asset-viewer] %s\n", error);
-        free(decoded);
-        free(member);
-        return 0;
+    if (options->have_section) {
+        if (asset_size < 2 || (memcmp(asset, "AD", 2) && memcmp(asset, "GR", 2))) {
+            snprintf(error, sizeof error, "--section requires an AD or GR minipack");
+            goto invalid;
+        }
+        struct px_field_span selected;
+        enum px_field_result status = px_field_section(asset, asset_size, (const char *)asset,
+                                                       (uint16_t)options->section, &selected);
+        if (status != PX_FIELD_OK) {
+            snprintf(error, sizeof error, "minipack section: %s", px_field_result_string(status));
+            goto invalid;
+        }
+        asset = selected.data;
+        asset_size = selected.size;
+        decoded_ok = decode_asset(options, asset, asset_size, image, error, sizeof error);
+        if (!decoded_ok && asset_size && (asset[0] == 0x10 || asset[0] == 0x11)) {
+            section_compression = asset[0] == 0x10 ? "LZ10" : "LZ11";
+            /* Limit all owned member/decompression buffers together. */
+            const size_t used = member_size + decoded_size;
+            if (used >= MEMBER_LIMIT ||
+                !px_lz_decode(asset, asset_size, MEMBER_LIMIT - used, &section_decoded,
+                              &section_decoded_size, error, sizeof error)) {
+                if (used >= MEMBER_LIMIT) snprintf(error, sizeof error, "aggregate asset budget exceeded");
+                goto invalid;
+            }
+            asset = section_decoded;
+            asset_size = section_decoded_size;
+        }
     }
+    if (!decoded_ok && !decode_asset(options, asset, asset_size, image, error, sizeof error)) goto invalid;
     printf("archive=%s entry=%" PRIu32 " subentry=%" PRIu32 " members=%zu member_bytes=%zu compression=%s decoded_bytes=%zu",
            options->archive, options->entry, options->subentry, member_count, member_size,
            compression, decoded ? decoded_size : member_size);
+    if (options->have_section)
+        printf(" section=%" PRIu32 " section_compression=%s asset_bytes=%zu",
+               options->section, section_compression, asset_size);
     if (!options->list_textures)
         printf(" width=%" PRIu32 " height=%" PRIu32 " format=%" PRIu32 " pixels=RGBA8",
                image->width, image->height, image->format);
     putchar('\n');
+    free(section_decoded);
     free(decoded);
     free(member);
     return 1;
+invalid:
+    fprintf(stderr, "[asset-viewer] %s\n", error);
+    free(section_decoded);
+    free(decoded);
+    free(member);
+    return 0;
 }
 
 static void reset_view(struct view *view)

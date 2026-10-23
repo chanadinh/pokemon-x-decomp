@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-23",
+  "baseline_commit": "285a6ebb77f98ecc7ac0e25e9d36a8e3846ba8d3",
+  "result": "passed",
+  "environment": "Linux binaries under WSL; SDL dummy video; native Windows build not tested",
+  "checks": [
+    {
+      "command": "source tools/native-sdl/activate.sh && make -C native test",
+      "result": "passed",
+      "native_c_suites": 11,
+      "python_tests": {
+        "container": 8,
+        "bch_index_and_gr": 12,
+        "pica_commands": 12,
+        "bch_model": 11
+      }
+    },
+    {
+      "command": "source tools/native-sdl/activate.sh && make -C native -W app.c all test-runtime",
+      "result": "passed",
+      "python_tests": {
+        "texture_viewer": 7,
+        "bch_texture_viewer": 6,
+        "model_viewer": 10,
+        "field_viewer": 9
+      },
+      "direct_smokes": [
+        "asset inspect",
+        "asset input",
+        "model wireframe input",
+        "model textured input",
+        "field input"
+      ],
+      "backend": "SDL dummy video"
+    },
+    {
+      "command": "BCH C fixture suite compiled with -fsanitize=address,undefined -fno-omit-frame-pointer",
+      "result": "passed; no sanitizer diagnostics"
+    },
+    {
+      "command": "native/reproduction/bch-textures/verify_pixels.py (explicit local inputs; see README.txt)",
+      "result": "passed",
+      "textures_compared": 19,
+      "pixels_compared": 100608,
+      "mismatches": 0,
+      "runtime": "three-frame software capture and input self-test passed",
+      "report": "reference-comparison.json"
+    },
+    {
+      "command": "SHA-256 comparison against every reconstructed/*/SHA256SUMS entry",
+      "result": "all 539 checkpoint files unchanged"
+    }
+  ],
+  "regressions_fixed": [
+    "Prefer a valid complete raw container before LZ decoding when pixel bytes begin with 0x10/0x11, both for archive members and selected minipack sections."
+  ],
+  "scope": [
+    "Bounded texture-only BCH 7/7 indexing and selected ETC1/ETC1A4 decoding",
+    "Native AD/GR section selection with bounded optional outer and inner LZ10/11",
+    "Metadata listing, exclusive BMP export and native texture display",
+    "Primary-source clarification of post-draw primitive-register writes"
+  ],
+  "limitations": [
+    "Native BCH environment geometry/material rendering remains pending",
+    "Original area consumer and primitive setup are not established",
+    "Projected texture/material behavior and player/gameplay integration remain pending",
+    "No running-game render or gameplay equivalence claim",
+    "No native Windows build validation"
+  ],
+  "logs_sha256": "a60cacb1b75476be1bfc0805ac59bdf61c9334d0f26ee8265e551d7a620e0662"
+}

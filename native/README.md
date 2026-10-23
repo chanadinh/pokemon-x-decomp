@@ -72,10 +72,10 @@ Use a fresh output filename for each export. `--inspect` does not initialize
 the video driver and cannot be combined with window/input options.
 
 `--subentry` selects the original GARC bitmap bit, defaulting to zero.
-For CGFX members, `--texture N` selects an embedded image, defaulting to zero.
+For CGFX or supported BCH members, `--texture N` selects an embedded image, defaulting to zero.
 `--list-textures` prints names, dimensions, hardware format IDs, and supported
 decode status without opening a window or decoding pixels. It cannot be combined
-with texture selection, exports, or window options. Both options require CGFX;
+with texture selection, exports, or window options. Both options require CGFX or supported BCH;
 ordinary BCLIM selections retain their existing behavior. For example:
 
 ```sh
@@ -252,6 +252,35 @@ The checked region 165 contains model `t01r0202_00_00`, twelve materials and
 zero embedded textures. The model continuation below checks external names
 against area 75; resource names do not establish a location or player spawn.
 See [BCH index evidence](reproduction/bch-index/README.txt).
+
+## View BCH area textures
+
+```sh
+native/build/pokemon_asset_viewer --romfs /path/to/romfs \
+  --archive a/0/1/3 --entry 75 --section 11 --list-textures
+native/build/pokemon_asset_viewer --romfs /path/to/romfs \
+  --archive a/0/1/3 --entry 75 --section 11 --texture 9
+```
+
+`--section N` selects an AD or GR minipack section after optional archive-member
+decompression. The entire section table is checked, and one additional LZ10/11
+stream may wrap the selected section. All owned input/decompression buffers in
+this path share a 64 MiB budget. Selection is explicit; it does not execute the
+game's area loader. Omit `--section` for a standalone BCH archive member.
+
+The native BCH texture reader accepts a bounded compatibility 7/7 texture-only
+pack with checked resource names, relocations and all three unit command streams.
+The validated images are single-level ETC1/ETC1A4, power-of-two dimensions from
+8 through 4096, with descriptor flags `0x10c`/`0x10d`. Unsupported descriptors
+remain listable; decoding refuses them. Model-bearing BCH files, mip chains,
+cubemaps and other versions are outside this native texture reader's subset.
+
+All nineteen textures from the selected area now decode and export through the
+native application. Their complete RGBA images match an independent ETC1 RGB
+reference plus separately implemented alpha/tile checks. Existing pan/zoom,
+exclusive BMP exports, frame captures and input smoke tests apply. This displays
+individual textures; the environment geometry and projected material effects
+are still not rendered. See [the reproduction record](reproduction/bch-textures/README.txt).
 
 ## Decode the selected BCH model
 

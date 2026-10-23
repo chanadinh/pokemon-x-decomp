@@ -76,6 +76,14 @@ zero and byte mask 8, after their draw command. Those writes do not establish
 bits 8–9, which encode the primitive mode. The inspector reports the encoded
 parameter and masks; it does not supply invented inherited GPU state.
 
+The continuation checked the same trailing sequence against
+[Citro3D's indexed draw implementation](https://github.com/devkitPro/citro3d/blob/9f21cf7b380ce6f9e01a0420f19f0763e5443ca7/source/drawElements.c).
+It identifies the two mask-8 writes as post-vertex-cache clearing. Primitive
+selection is a separate mask-2 write before the draw; indexed triangles can also
+use geometry-primitive mode with geometry-stage configuration. This supports
+keeping topology unknown here, and prevents treating the post-draw zero as
+triangle-mode evidence. The original game's corresponding setup is still needed.
+
 `--triangle-list-obj` explicitly interprets consecutive index triples as faces,
 matching the inspection convention used by the reviewed format implementations.
 The selected sample yields 1,664 triples. This is a useful inspection export,
@@ -108,3 +116,18 @@ Format references are the reviewed
 and [CTRMap revision 4b780a7](https://github.com/Rynbo/CTRMap/tree/4b780a7bc32a75a7f31c162829b086355caf32f2).
 The new tools are independently authored; neither external source nor original
 game payload bytes are included.
+
+## Native area texture continuation
+
+The native asset viewer now loads the selected area directly through
+GARC → LZ11 → AD section 11 → BCH → ETC1/ETC1A4. Use
+`--archive a/0/1/3 --entry 75 --section 11 --list-textures` or select an image with
+`--texture N`. All nineteen images, totaling 100,608 pixels, match the independent
+RGB reference and separate alpha/tile reconstruction. The texture path does not
+depend on the unresolved primitive mode.
+
+The C reader validates the texture-only BCH subset, all three unit command
+streams, expected relocation kinds and complete payload extents. It shares the
+existing texture codec. Native environment geometry, projected coordinates and
+material execution remain pending. See [the viewer instructions](../native/README.md#view-bch-area-textures)
+and [new validation](../native/reproduction/bch-textures/README.txt).

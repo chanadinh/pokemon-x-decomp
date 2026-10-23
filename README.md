@@ -13,8 +13,8 @@ and synthetic tests that run without game files.
 and native model and field terrain inspectors.
 There is no playable PC port or interactive battle yet.** The viewer loads
 selected original textures, including ETC1 and ETC1A4, through GARC/LZ/BCLIM
-decoding, plus embedded CGFX textures. A separate viewer previews a bounded
-subset of unskinned CGFX geometry with checked texture/material bindings and
+decoding, plus embedded CGFX and selected BCH area textures. A separate viewer
+previews a bounded subset of unskinned CGFX geometry with checked texture/material bindings and
 an unlit software renderer. A field inspector follows a checked zone-to-matrix-to-region
 chain and displays terrain cells, collision edges, and a restricted inspection marker.
 The long-term goal is a native PC game;
@@ -62,6 +62,9 @@ cells; `C` shows collision edges. See the [field evidence and limits](docs/nativ
 The environment's native BCH rendering and actual player movement are still pending.
 A [BCH inspection tool](docs/native-bch.md) now decodes the selected field's
 positions, UV0 and indices and checks its external texture names.
+The native texture viewer now opens the area's BCH images with
+`--archive a/0/1/3 --entry 75 --section 11 --texture 9`;
+see [the texture workflow](native/README.md#view-bch-area-textures).
 
 ## What works today
 

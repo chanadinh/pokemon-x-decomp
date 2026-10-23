@@ -1,0 +1,212 @@
+{
+  "date": "2026-10-23",
+  "sources": {
+    "citro3d_draw_elements": {
+      "url": "https://raw.githubusercontent.com/devkitPro/citro3d/9f21cf7b380ce6f9e01a0420f19f0763e5443ca7/source/drawElements.c",
+      "sha256": "dd5cb551ec7dbc88d3ceb7ad88301f0198476225549ec2bb511fb61a24b4bcbe"
+    },
+    "libctru_gpu_enums": {
+      "url": "https://raw.githubusercontent.com/devkitPro/libctru/5290d64375002802f3e5ea8bfc31ea33ec64456d/libctru/include/3ds/gpu/enums.h",
+      "sha256": "59fe3a80b264bf3b9abee4cdc368c69d3e4b921eb8eab18f43e00dce88a6b880"
+    }
+  },
+  "field_bch_sha256": "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+  "observations": [
+    {
+      "mesh": 0,
+      "submesh": 0,
+      "source_offset": 25984,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 0,
+      "submesh": 0,
+      "source_offset": 25992,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 1,
+      "submesh": 0,
+      "source_offset": 26336,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 1,
+      "submesh": 0,
+      "source_offset": 26344,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 2,
+      "submesh": 0,
+      "source_offset": 26688,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 2,
+      "submesh": 0,
+      "source_offset": 26696,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 3,
+      "submesh": 0,
+      "source_offset": 27520,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 3,
+      "submesh": 0,
+      "source_offset": 27528,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 4,
+      "submesh": 0,
+      "source_offset": 27904,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 4,
+      "submesh": 0,
+      "source_offset": 27912,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 5,
+      "submesh": 0,
+      "source_offset": 28704,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 5,
+      "submesh": 0,
+      "source_offset": 28712,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 6,
+      "submesh": 0,
+      "source_offset": 29088,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 6,
+      "submesh": 0,
+      "source_offset": 29096,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 7,
+      "submesh": 0,
+      "source_offset": 29472,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 7,
+      "submesh": 0,
+      "source_offset": 29480,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 8,
+      "submesh": 0,
+      "source_offset": 29872,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 8,
+      "submesh": 0,
+      "source_offset": 29880,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 9,
+      "submesh": 0,
+      "source_offset": 30304,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 9,
+      "submesh": 0,
+      "source_offset": 30312,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 10,
+      "submesh": 0,
+      "source_offset": 27088,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 10,
+      "submesh": 0,
+      "source_offset": 27096,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 11,
+      "submesh": 0,
+      "source_offset": 28304,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    },
+    {
+      "mesh": 11,
+      "submesh": 0,
+      "source_offset": 28312,
+      "mask": 8,
+      "parameter": 0,
+      "after_draw": true
+    }
+  ],
+  "finding": "The selected primitive-register writes only affect byte3 and follow draw. Citro3D emits the same pair for post-vertex-cache clearing; they do not establish primitive bits8-9.",
+  "reference_draw_setup": "Citro3D sets primitive mode before draw with mask2. Its indexed triangle path uses geometry primitive mode and geometry-stage configuration, so raw post-draw parameter0 is not a topology oracle.",
+  "conclusion": "Retain explicit triangle-list interpretation for OBJ inspection; recover original pre-draw primitive/geometry-stage state before claiming original topology.",
+  "limits": "Primary external implementation clarifies command intent but is not original Pokemon executable evidence."
+}
