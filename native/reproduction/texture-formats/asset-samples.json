@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-23",
+  "description": "Metadata only for local user-provided assets. Pixel hashes verified through the complete viewer archive/LZ/BCLIM/BMP path; previews and inputs remain ignored. Scene roles and running-game visual equivalence are not established.",
+  "samples": [
+    {
+      "archive": "a/0/0/5",
+      "entry": 35,
+      "subentry": 0,
+      "absolute_member_offset": 3792672,
+      "archive_size": 4776312,
+      "archive_sha256": "05af1590a8bbc108b4803337fb92610a6e09e743bec9cc2400cc9abd04312e0a",
+      "member_size": 65576,
+      "member_sha256": "016cfbc4994e47a063c2a2b9038540aac6aee8c5a3fcf9dd94926337e0efbae5",
+      "compression": "none",
+      "decoded_size": 65576,
+      "decoded_sha256": "016cfbc4994e47a063c2a2b9038540aac6aee8c5a3fcf9dd94926337e0efbae5",
+      "footer": {
+        "magic": "CLIM",
+        "byte_order_mark": "0xfeff",
+        "header_size": 20,
+        "version": "0x02020000",
+        "declared_file_size": 65576,
+        "block_count": 1,
+        "reserved": 0,
+        "image_magic": "imag",
+        "image_info_size": 16,
+        "width": 320,
+        "height": 240,
+        "format_word": 10,
+        "declared_data_size": 65536
+      },
+      "size_check": true,
+      "rgba_sha256": "bb199ce23dcf5cb8053c81fd648e375bbc42630049a8a36b721c4dee14ec9c0d",
+      "width": 320,
+      "height": 240,
+      "alpha_values": [
+        255
+      ],
+      "pixel_export_sha256": "1e6b2971cde399ff47bc964fbe5e13aa86b2b817ccd08928a30e42357d58c492",
+      "frame_capture": {
+        "width": 960,
+        "height": 640,
+        "bmp_sha256": "5c62da77eeda4bf3d927e33457928b21f6aa8d8df93eb208f4b52748c6549b83",
+        "png_sha256": "c1ddc5c9660728dd83a5f736e5bd683d2529530c8a52f5f9d5e8b5df4328e051"
+      }
+    },
+    {
+      "archive": "a/1/5/9",
+      "entry": 0,
+      "subentry": 0,
+      "absolute_member_offset": 4884,
+      "archive_size": 747936,
+      "archive_sha256": "0ae28864c291655c4a4f4d2d2ef9948c8d5d806bf1d57dde3d334d58095fa201",
+      "member_size": 704,
+      "member_sha256": "838efcd92a4eaec164e0c196536cc99cea773021a40754e93df7aef3aa2bdd14",
+      "compression": "LZ11",
+      "decoded_size": 4136,
+      "decoded_sha256": "7bca771c55aa7bb13811e4aa71cd0ee2ebb395d6eb98f6adb156f9ab69109885",
+      "width": 40,
+      "height": 40,
+      "format": 11,
+      "rgba_sha256": "738607da7cbe2d36c0fc5911b8a07947164662fabd7751286c4d5debf0223565",
+      "alpha_values": [
+        0,
+        187,
+        204,
+        238,
+        255
+      ],
+      "pixel_export_sha256": "a63d801624bd163cbddb1fa6eac6d6e27255a0f2e8b5abb69797e89439fc1f40",
+      "frame_capture": {
+        "width": 960,
+        "height": 640,
+        "bmp_sha256": "9740cd38906c1c9c13707b5a2981ff6c3c790a424091e6005f04015c944793f5",
+        "png_sha256": "ae0ba3f8f7b607017ec36a62c50a45740377abc552086d5bd222db7878f46dd3"
+      }
+    }
+  ]
+}

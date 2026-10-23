@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "result": "pass",
+  "scope": "Independent ETC1 RGB differential comparison and PICA ETC1A4/BCLIM integration checks; no running-game reference comparison.",
+  "reference": {
+    "commit": "29e239203d427d977b298be7b68b75b6a4b29b51",
+    "source_url": "https://android.googlesource.com/platform/frameworks/base/+/29e239203d427d977b298be7b68b75b6a4b29b51/opengl/libs/ETC1/etc1.cpp",
+    "source_sha256": "ebe9f90b5e19b6355ee80e676799aab9c948017bd209d40a0f9396402522e5d8",
+    "header_sha256": "f5de21e1e5888b56d82126b695e3d582499dd251ac7048c92856371d913be033",
+    "khronos_spec_sha256": "113eabf43f24c99ab2dd821113f04b25ea77ee2159bbc3776c93728348458284"
+  },
+  "format_sources": [
+    {
+      "commit": "6af574a14089ccfee87efe230ebcdd8742859813",
+      "url": "https://github.com/KhronosGroup/OpenGL-Registry/blob/6af574a14089ccfee87efe230ebcdd8742859813/extensions/OES/OES_compressed_ETC1_RGB8_texture.txt",
+      "sha256": "113eabf43f24c99ab2dd821113f04b25ea77ee2159bbc3776c93728348458284"
+    },
+    {
+      "commit": "93f8939a10b0f6dd740683d3201c7ff69250580d",
+      "url": "https://github.com/azahar-emu/azahar/blob/93f8939a10b0f6dd740683d3201c7ff69250580d/src/video_core/texture/texture_decode.cpp",
+      "sha256": "0d39eb0000e916958e8c9c83799161604d4595b4784128fc9cdfb26c9de94006"
+    }
+  ],
+  "generated_valid_blocks": {
+    "individual": 10000,
+    "differential": 10000
+  },
+  "generated_decode_comparisons": 40000,
+  "invalid_endpoint_rejections": 192,
+  "real_sample_block_comparisons": 8448,
+  "mismatches": 0,
+  "samples": [
+    {
+      "archive": "a/0/0/5",
+      "entry": 35,
+      "subentry": 0,
+      "source_sha256": "016cfbc4994e47a063c2a2b9038540aac6aee8c5a3fcf9dd94926337e0efbae5",
+      "width": 320,
+      "height": 240,
+      "format": 10,
+      "payload_bytes": 65536,
+      "compared_blocks": 8192,
+      "reference_rgba_sha256": "bb199ce23dcf5cb8053c81fd648e375bbc42630049a8a36b721c4dee14ec9c0d",
+      "full_image_equal": true
+    },
+    {
+      "archive": "a/1/5/9",
+      "entry": 0,
+      "subentry": 0,
+      "source_sha256": "7bca771c55aa7bb13811e4aa71cd0ee2ebb395d6eb98f6adb156f9ab69109885",
+      "width": 40,
+      "height": 40,
+      "format": 11,
+      "payload_bytes": 4096,
+      "compared_blocks": 256,
+      "reference_rgba_sha256": "738607da7cbe2d36c0fc5911b8a07947164662fabd7751286c4d5debf0223565",
+      "full_image_equal": true
+    }
+  ],
+  "algorithm": [
+    "Python random.Random(0x45544331), 10000 individual cases followed by 10000 differential cases. For each case draw getrandbits(32) selectors then getrandbits(8)&~2 control byte. Individual channels each use getrandbits(8). Differential channels draw base=randrange(32), delta=randrange(max(-4,-base),min(3,31-base)+1), then encode (base<<3)|(delta&7) and set differential bit. Channels occupy high-word bits 24,16,8; the control byte occupies bits 0..7.",
+    "Serialize selector and high words with struct.pack(<II). Reverse all eight color bytes for the standard MSB-first AOSP decoder; pass original bytes to the PICA decoder. Compare every RGB byte. Then draw getrandbits(64), serialize little-endian as the eight-byte alpha prefix, and repeat. Expected alpha is ((prefix[(4*x+y)//2]>>(4*((4*x+y)%2)))&15)*17 for row-major output pixel (x,y).",
+    "Independently enumerate every base 0..31 and delta -4..3 that produces an endpoint outside 0..31, in each RGB channel, both flips and both alpha modes: 192 cases. Require unsupported-block status and all 64 sentinel output bytes unchanged. Do not compare these undefined ETC1 inputs to the wrapping AOSP decoder.",
+    "For each local sample, parse the final 40-byte CLIM/imag footer. Compare every stored color block, including padded blocks, to AOSP. Use the separate alpha oracle for format 11. Reassemble visible pixels independently: stored_width=max(8,next_power_of_two(width)); tile=(y//8)*(stored_width//8)+x//8; subblock=[[0,1],[2,3]][(y%8)//4][(x%8)//4]; read block[tile*4+subblock] pixel (x%4,y%4). Compare the entire assembled RGBA image with px_bclim_decode, then hash it."
+  ],
+  "reference_setup": [
+    "Download the pinned AOSP source URL with ?format=TEXT and base64-decode to outputs/native-textures/reference/etc1.cpp. Download opengl/include/ETC1/etc1.h at the same commit with ?format=TEXT and base64-decode to outputs/native-textures/reference/ETC1/etc1.h. Verify the recorded source and header SHA-256 before compiling.",
+    "The original AOSP source is unmodified. It is C-compatible with stdbool.h injected at compilation; no reference code is vendored.",
+    "tools/native-build/bin/cc -std=c11 -O2 -x c -include stdbool.h -shared -fPIC -Ioutputs/native-textures/reference outputs/native-textures/reference/etc1.cpp -o outputs/native-textures/reference/libaosp_etc1.so",
+    "tools/native-build/bin/cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic -shared -fPIC native/assets/etc1.c native/assets/bclim.c -o outputs/native-textures/libpx_etc1.so"
+  ],
+  "local_reproducer": {
+    "path": "outputs/native-textures/differential-etc1.py",
+    "sha256": "d4b1e0ae013528ce242ed63a1e4b55a4a21ae6c04505738f1580643051b5c8b8",
+    "tracked": false
+  },
+  "tested_source_sha256": {
+    "native/assets/etc1.c": "deef12e77d38c580fc4ff68d98756fd64a86c45ffcb90f148db7103b04e9d616",
+    "native/assets/bclim.c": "8064dd4fc97546301b9c2d10f4e2f68694f1f3353c78dcf5948998c6f5742618",
+    "native/assets/test_etc1.c": "c7ba3a95259566f8983780c2fa864fbe34afbf6586530edd1f2deed5c25a571f",
+    "native/assets/test_bclim.c": "bd3759291b5afa0c5359473268aab4dd38fc50e671096a39cf3cbf188c5579e0"
+  },
+  "limitations": [
+    "AOSP is an independent RGB block oracle. PICA alpha and tile placement use separately written oracles grounded in the pinned emulator source and fixed asymmetric tests.",
+    "No original texture bytes, downloaded reference code, or shared libraries are tracked. Sample hashes identify locally held data.",
+    "This validates decoding and documented output orientation; it does not establish an asset game role or match rendering against a running game."
+  ]
+}

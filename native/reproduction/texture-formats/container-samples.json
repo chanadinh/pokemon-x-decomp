@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "description": "Bounded uncompressed CGFX selected-member metadata; no game payloads. Paths are archive selectors relative to a user-supplied RomFS root. Stored labels do not establish gameplay roles.",
+  "primary_reference": "https://github.com/gdkchan/Ohana3DS-Rebirth/blob/c50635e82763fad9d1bcc30a905523a1b92d7d1f/Ohana3DS%20Rebirth/Ohana/Models/CGFX.cs",
+  "samples": [
+    {
+      "report": "container-a_0_0_1-0-0.json",
+      "selection": {
+        "archive": "a/0/0/1",
+        "archive_index_sha256": "5bd8be005b2c7f5b7d9cbe2981eec2579d648c8c93c456762db862ee17dc6581",
+        "entry": 0,
+        "subentry": 0,
+        "offset": 124,
+        "size": 1829,
+        "archive_size": 4152,
+        "archive_sha256": "ba17fee086b63a32fdd29d2c0058fcbb2216d3a79c7570049c923660bc076ba2"
+      },
+      "member_sha256": "a17dbbee80730dadad1dbcffdea5d899d2009d46c46cfeb1179b89e4c2bdc1af",
+      "member_size": 1829,
+      "categories": [
+        {
+          "slot": 6,
+          "category": "lights",
+          "names": [
+            "Light1",
+            "AmbientLight1"
+          ]
+        },
+        {
+          "slot": 8,
+          "category": "scenes",
+          "names": [
+            "SceneEnvironment1"
+          ]
+        }
+      ]
+    },
+    {
+      "report": "container-a_0_0_3-134-0.json",
+      "selection": {
+        "archive": "a/0/0/3",
+        "archive_index_sha256": "ac739415629d5d86bd41379df3463afe9ac4b16c9383e7f58c412a3f4ab582a3",
+        "entry": 134,
+        "subentry": 0,
+        "offset": 330436,
+        "size": 53248,
+        "archive_size": 785548,
+        "archive_sha256": "3c1d188664ed3c99cbca2aa9620cfe6a5cd8421bddb16de61baf2056b99f48fa"
+      },
+      "member_sha256": "dc58ca0478fc80440c643bbd252b8dc6561f9283bd384554da9e7c0b85c4e8e7",
+      "member_size": 53248,
+      "categories": [
+        {
+          "slot": 0,
+          "category": "models",
+          "names": [
+            "ball_in_1"
+          ]
+        },
+        {
+          "slot": 1,
+          "category": "textures",
+          "names": [
+            "ball_2l",
+            "ball_1"
+          ]
+        },
+        {
+          "slot": 15,
+          "category": "slot_15",
+          "names": [
+            "ball_in1_1Emitter",
+            "ball_in1_2Emitter",
+            "ball_in1_3Emitter",
+            "ball_in1_4Emitter"
+          ]
+        }
+      ]
+    },
+    {
+      "report": "container-a_0_3_7-0-0.json",
+      "selection": {
+        "archive": "a/0/3/7",
+        "archive_index_sha256": "a228eeb4c79c213705dd6bdbb751738177be0531c270cf5c2e07283cc8c5046d",
+        "entry": 0,
+        "subentry": 0,
+        "offset": 384,
+        "size": 41216,
+        "archive_size": 363776,
+        "archive_sha256": "c8d5f186fac94cd911de408a1689fbbf815e2b282b54c318699ef2966d4bde52"
+      },
+      "member_sha256": "372c85841b64ebd4353535c407b3f5105043dc013f4beca1479c493ec7262150",
+      "member_size": 41216,
+      "categories": [
+        {
+          "slot": 0,
+          "category": "models",
+          "names": [
+            "asobitai"
+          ]
+        },
+        {
+          "slot": 1,
+          "category": "textures",
+          "names": [
+            "k_heart_o",
+            "pop"
+          ]
+        },
+        {
+          "slot": 15,
+          "category": "slot_15",
+          "names": [
+            "heart_o1Emitter",
+            "heart_in_oEmitter"
+          ]
+        }
+      ]
+    },
+    {
+      "report": "container-a_1_1_6-1-0.json",
+      "selection": {
+        "archive": "a/1/1/6",
+        "archive_index_sha256": "65a88ac0897b4ac2d8516a1820713e55a2950fb7392e7657facc67b5a23852ae",
+        "entry": 1,
+        "subentry": 0,
+        "offset": 35480,
+        "size": 381824,
+        "archive_size": 417304,
+        "archive_sha256": "16353e8c60fce45df4acb7a269b255ebeed519072f344b4d01e88735162d4af5"
+      },
+      "member_sha256": "945af8e497e4f795c6a0bc2ce5e02f112c7af3d69c59b9c9c980792b461da432",
+      "member_size": 381824,
+      "categories": [
+        {
+          "slot": 0,
+          "category": "models",
+          "names": [
+            "encount_panelB_05"
+          ]
+        },
+        {
+          "slot": 1,
+          "category": "textures",
+          "names": [
+            "tile_test"
+          ]
+        }
+      ]
+    }
+  ]
+}
