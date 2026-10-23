@@ -1,0 +1,25 @@
+Validation performed 2026-10-23 on Linux-6.18.55-x86_64-with-glibc2.41
+
+Initial sanitizer execution could not run LeakSanitizer under the container tracing environment. Rerun below disables leak detection only; address and undefined-behavior instrumentation remain enabled. The source/test uses no heap allocation.
+
+$ cc --version
+cc (Debian 14.2.0-19) 14.2.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Exit code: 0
+
+$ make test
+./build/test_call_wild_battle
+PASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return
+Exit code: 0
+
+$ cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer call_wild_battle.c test_call_wild_battle.c -o build/test_call_wild_battle_sanitized
+Exit code: 0
+
+$ ASAN_OPTIONS=detect_leaks=0 ./build/test_call_wild_battle_sanitized
+PASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return
+Exit code: 0
+
+These are host tests against assembly-derived expectations, not a comparison with a running 3DS game.

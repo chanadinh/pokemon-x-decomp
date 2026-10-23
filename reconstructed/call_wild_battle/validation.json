@@ -1,0 +1,51 @@
+[
+  {
+    "command": [
+      "cc",
+      "--version"
+    ],
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": "cc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+  },
+  {
+    "command": [
+      "make",
+      "test"
+    ],
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": "./build/test_call_wild_battle\nPASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return\n"
+  },
+  {
+    "command": [
+      "cc",
+      "-std=c11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "call_wild_battle.c",
+      "test_call_wild_battle.c",
+      "-o",
+      "build/test_call_wild_battle_sanitized"
+    ],
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "./build/test_call_wild_battle_sanitized"
+    ],
+    "environment_overrides": {
+      "ASAN_OPTIONS": "detect_leaks=0"
+    },
+    "exit_code": 0,
+    "output": "PASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return\n"
+  }
+]
