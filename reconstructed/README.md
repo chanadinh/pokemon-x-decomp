@@ -39,6 +39,8 @@ The next targets are the remaining learnset, move/name, maximum-PP, personal,
 and growth-resource services. Details, assembly evidence, and limitations are
 in [the stats milestone](pokemon_stats/README.md),
 [the state milestone](pokemon_state/README.md), and the earlier directories.
-Native application, rendering, controls, map/collision, interactive battle,
-and save/load work is tracked in the
+A separate [native asset viewer](../native/README.md) now provides window/input
+and selected texture decoding/display. It does not yet invoke these game-logic
+modules. Game runtime, map/collision, interactive battle, and save/load work is
+tracked in the
 [first playable slice](../docs/PLAYABLE_SLICE.md).

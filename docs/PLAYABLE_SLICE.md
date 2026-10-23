@@ -3,7 +3,7 @@
 The original files needed to continue are already on this machine. Further
 uploads are unnecessary for the current reconstruction and asset investigation.
 The next obstacle is implementing and connecting the required game and platform
-systems. The current host tests do not provide a playable application.
+systems. The native asset viewer and host tests do not yet provide a playable game.
 
 ## Current position
 
@@ -21,9 +21,9 @@ in the [source overview](../reconstructed/README.md) and
 | Reviewed game logic | Eight connected host-source milestones, including HP/stat updates and level resolution |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
-| Native game application and runtime | Not implemented; the executables are test programs |
-| Renderer and game asset loading | Not implemented |
-| Player controls, movement, and collision | Not implemented |
+| Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
+| Renderer and game asset loading | Selected GARC → optional LZ10/LZ11 → raw BCLIM → RGBA textures display; map/model/game renderer still missing |
+| Player controls, movement, and collision | Viewer keyboard controls work; player movement and collision are not implemented |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
 | Reference execution comparisons | No repeatable running-game capture is part of the current validation |
@@ -82,6 +82,27 @@ file's path and size, summary counts, container metadata, and sampled headers;
 the second records each module comparison. Assets and these generated reports
 remain outside Git.
 
+## Native foundation now available
+
+The [native viewer](../native/README.md) reads archive indices without loading
+whole archives, selects a bounded member, decompresses supported streams, and
+decodes supported standalone textures. Local checks display a raw RGBA8 texture
+at `a/1/1/8`, entry 1, and an LZ11-compressed RGBA4 texture at `a/1/6/0`, entry 0.
+The latter is a 40×40 pink pastry icon. These observed appearances do not
+identify their in-game ownership or scene bindings.
+
+The application provides a native window, keyboard pan/zoom/reset/exit, resizing,
+monotonic timing, software-renderer fallback, original-pixel export, and rendered
+frame capture. It refuses to overwrite existing output files. Synthetic and
+local real-asset checks are recorded in
+[the validation record](../native/reproduction/validation.json).
+
+This completes a bounded asset-preview path. The application does not yet call
+the eight reconstructed game-logic modules. ETC1/ETC1A4, palette extensions,
+embedded textures, model/map formats, and rendering scene bindings remain
+unimplemented. A repeatable running-game capture is still required to select
+and compare the first map-to-battle scenario.
+
 ## Acceptance criteria for the first playable
 
 The first slice is one reproducible field-to-battle-to-field scenario, chosen
@@ -114,12 +135,12 @@ services, and persistence work together.
 | Workstream | Next bounded result | Evidence for advancing |
 | --- | --- | --- |
 | Reference capture | Fix the base revision/update/language target and capture one candidate map, interaction, encounter, battle action, and return using a repeatable starting save and input sequence | Input/save identifiers, screenshots or video, recorded inputs, and selected observable state before/after; memory observations where available |
-| Native application | Establish the executable, window/event loop, timing, logging, local asset-root configuration, and explicit game-address/platform interfaces | A repeatable build starts and exits cleanly, receives controls, and can display a verified asset sample |
-| Asset decoding | Inspect archive structure with bounds checks, identify the candidate map/player/UI resources through loaders and reference observations, and decode the required samples | Documented paths/indices and supported formats, checksums for selected samples, and a visible comparison to the reference |
+| Native application | Extend the working texture viewer with explicit game-address/platform interfaces and bounded game-state initialization | Reconstructed logic can run from checked real resources inside the application with documented lifecycle and reference comparisons |
+| Asset decoding | Extend the bounded GARC/LZ/BCLIM path to required ETC/palette/model formats; identify candidate map/player/UI resources through loaders and reference observations | Documented paths/indices and supported formats, checksums for selected samples, and a visible comparison to the reference |
 | Game reconstruction | Replace personal/growth resources, learnset access, move insertion, name construction, maximum-PP, and wider encounter/setup dependencies needed by the selected scenario | Reviewed instruction bytes, independent tests, explicit remaining services, and comparisons to captured reference values |
 | Slice integration | Connect movement/collision, interaction, battle, return, and save/load after their contracts are understood | One automated or recorded end-to-end scenario satisfying the acceptance criteria above |
 
-Start the first three workstreams alongside bounded code reconstruction.
+Continue the first three workstreams alongside bounded code reconstruction.
 Rendering and reference capture can reveal missing dependencies earlier than
 continuing through source functions alone. Choose the concrete map and battle
 after checking their dependencies; this audit has not established which

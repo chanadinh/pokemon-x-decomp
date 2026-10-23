@@ -9,8 +9,9 @@ An early-stage reverse-engineering project for Pokémon X on Nintendo 3DS.
 Explore eight connected C reconstruction milestones, reviewed assembly evidence,
 and synthetic tests that run without game files.
 
-**Current status: research and host-side tests. There is no playable PC port,
-renderer, or runnable battle yet.** The long-term goal is a native PC game;
+**Current status: eight tested game-logic milestones and a native asset viewer.
+There is no playable PC port or interactive battle yet.** The viewer loads
+selected original textures through GARC/LZ/BCLIM decoding. The long-term goal is a native PC game;
 [the roadmap](ROADMAP.md) explains the work and evidence still needed. The
 [first playable slice](docs/PLAYABLE_SLICE.md) has concrete acceptance criteria
 and an inventory of the original assets already available locally.
@@ -30,6 +31,21 @@ python3 -m unittest discover -s tests -v
 The host C tests use synthetic data and require no ROM, extracted assets, or
 Ghidra installation. Extraction integration tests skip when their optional
 PowerShell and 3dstool dependencies are unavailable.
+
+## Run the native asset viewer
+
+With SDL2 development files and pkg-config installed:
+
+```sh
+make -C native
+native/build/pokemon_asset_viewer --demo
+# Use your locally extracted RomFS for the checked compressed texture sample:
+native/build/pokemon_asset_viewer --romfs /path/to/romfs --archive a/1/6/0 --entry 0
+```
+
+The viewer provides pan/zoom, image exports, and bounded archive/texture loading.
+The demo requires no game files. [Build instructions and supported formats](native/README.md)
+describe the actual limits; maps, models, and gameplay are not implemented yet.
 
 ## What works today
 
@@ -67,7 +83,7 @@ Current priorities:
 - Reconstruct learnset access, move insertion, name construction, and maximum-PP services.
 - Replace personal and growth-resource stand-ins with checked resource access.
 - Compare reconstructed behavior against a running reference.
-- Build the native application and decode the map/player assets needed for the first playable slice.
+- Extend the native viewer with the map/model asset formats and game-state integration needed for the first playable slice.
 
 [Report a reproducible bug](https://github.com/chanadinh/pokemon-x-decomp/issues/new?template=bug_report.yml)
 or [propose a research task](https://github.com/chanadinh/pokemon-x-decomp/issues/new?template=research_task.yml).
@@ -76,6 +92,7 @@ others discover it. Use **Watch → Custom → Releases** for release notificati
 
 ## Project notes
 
+- [Native asset viewer](native/README.md)
 - [Source milestone overview](reconstructed/README.md)
 - [Roadmap and completion criteria](ROADMAP.md)
 - [First playable slice and local asset inventory](docs/PLAYABLE_SLICE.md)

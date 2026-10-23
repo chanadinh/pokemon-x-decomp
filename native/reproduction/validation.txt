@@ -1,0 +1,245 @@
+Native asset foundation validation, 2026-10-23
+
+Command: make -C native all test test-runtime
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+make: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/native'
+cc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT app.c assets/garc.c assets/lz.c assets/bclim.c  -L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2  -o build/pokemon_asset_viewer
+cc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror assets/garc.c assets/test_garc.c   -o build/test_garc
+cc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror assets/lz.c assets/test_lz.c   -o build/test_lz
+cc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror assets/bclim.c assets/test_bclim.c   -o build/test_bclim
+./build/test_garc
+PASS: GARC v4 sparse subentries, bounded selected reads, ownership, malformed tables, all truncations
+./build/test_lz
+PASS: LZ10/LZ11 fixed vectors, overlap, all token lengths, extended size, budgets, malformed input
+./build/test_bclim
+PASS: BCLIM raw formats, fixed Morton/orientation/color vectors, crop/stride variants, bounded malformed-input handling
+./build/pokemon_asset_viewer --demo --inspect
+source=synthetic-demo width=256 height=192 pixels=RGBA8
+SDL_VIDEODRIVER=dummy ./build/pokemon_asset_viewer --demo --software --frames 3 --self-test-input
+[asset-viewer] Video=dummy renderer=software image=256x192. This viewer does not run gameplay.
+[asset-viewer] Input self-test passed: pan, zoom, reset, resize, Escape.
+[asset-viewer] Exit after 3 rendered frames, 0.034 seconds.
+source=synthetic-demo width=256 height=192 pixels=RGBA8
+python3 -m unittest discover -s tests -v
+test_export_does_not_overwrite_existing_files_or_input (test_viewer.ViewerTests.test_export_does_not_overwrite_existing_files_or_input) ... ok
+test_invalid_selection_and_options (test_viewer.ViewerTests.test_invalid_selection_and_options) ... ok
+test_missing_member_truncated_archive_and_unsupported_texture (test_viewer.ViewerTests.test_missing_member_truncated_archive_and_unsupported_texture) ... ok
+test_raw_and_compressed_pipeline_and_exported_pixels (test_viewer.ViewerTests.test_raw_and_compressed_pipeline_and_exported_pixels) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 4.315s
+
+OK
+make: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/native'
+
+Command: native/build/pokemon_asset_viewer --romfs /mnt/d/Downloads/PokemonX-modules-20261023-104349-3eee2a4b/work/romfs --archive a/1/6/0 --entry 0 --software --frames 3 --self-test-input --screenshot /mnt/d/Projects/pokemon-x-decomp-local/outputs/native-foundation/validated-pastry-pixels.bmp --capture-frame /mnt/d/Projects/pokemon-x-decomp-local/outputs/native-foundation/validated-pastry-frame.bmp
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+[asset-viewer] Saved decoded image at original size: /mnt/d/Projects/pokemon-x-decomp-local/outputs/native-foundation/validated-pastry-pixels.bmp
+[asset-viewer] Video=x11 renderer=software image=40x40. This viewer does not run gameplay.
+[asset-viewer] Input self-test passed: pan, zoom, reset, resize, Escape.
+[asset-viewer] Saved rendered frame 960x640: /mnt/d/Projects/pokemon-x-decomp-local/outputs/native-foundation/validated-pastry-frame.bmp
+[asset-viewer] Exit after 3 rendered frames, 0.165 seconds.
+archive=a/1/6/0 entry=0 subentry=0 members=26 member_bytes=987 compression=LZ11 decoded_bytes=8232 width=40 height=40 format=8 pixels=RGBA8
+
+Command: native/build/pokemon_asset_viewer --romfs /mnt/d/Downloads/PokemonX-modules-20261023-104349-3eee2a4b/work/romfs --archive a/1/1/8 --entry 1 --inspect
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+archive=a/1/1/8 entry=1 subentry=0 members=2 member_bytes=8232 compression=none decoded_bytes=8232 width=36 height=30 format=9 pixels=RGBA8
+
+Command: native/build/pokemon_asset_viewer --romfs /mnt/d/Downloads/PokemonX-modules-20261023-104349-3eee2a4b/work/romfs --archive a/1/3/8 --entry 10 --inspect
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+archive=a/1/3/8 entry=10 subentry=0 members=13 member_bytes=131112 compression=none decoded_bytes=131112 width=512 height=128 format=8 pixels=RGBA8
+
+Command: native/build/pokemon_asset_viewer --romfs /mnt/d/Downloads/PokemonX-modules-20261023-104349-3eee2a4b/work/romfs --archive a/0/0/5 --entry 35 --inspect
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 1; expected: 1
+[asset-viewer] BCLIM decode: unsupported BCLIM format or layout
+
+Command: /mnt/c/Windows/System32/cmd.exe /c 'D:\Projects\pokemon-x-decomp-local\outputs\native-foundation\Open-Asset-Viewer.cmd' --frames 3 --software
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+[asset-viewer] Video=x11 renderer=software image=40x40. This viewer does not run gameplay.
+[asset-viewer] Exit after 3 rendered frames, 0.033 seconds.
+archive=a/1/6/0 entry=0 subentry=0 members=26 member_bytes=987 compression=LZ11 decoded_bytes=8232 width=40 height=40 format=8 pixels=RGBA8
+
+Command: make -C reconstructed test
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+make: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed'
+make -C call_wild_battle test
+make[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/call_wild_battle'
+./build/test_call_wild_battle
+PASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return
+make[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/call_wild_battle'
+make -C wild_battle_setup test
+make[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/wild_battle_setup'
+./build/test_wild_battle_setup
+PASS: 65536 flag values; initializer holes; row decoding; optional paths; call order; mutation timing; return propagation; finisher; original wrapper integration
+make[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/wild_battle_setup'
+make -C battle_task test
+make[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/battle_task'
+./build/test_battle_task
+PASS: 65536 selector/category pairs; 65536 key pairs; task factory and registration; optional paths; count boundaries; pointer mutation timing; full submit; all three source milestones integrated
+make[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/battle_task'
+make -C encounter_builder test
+make[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/encounter_builder'
+./build/test_encounter_builder
+PASS: parameter bytes and holes; branch boundaries; callback timing; 768 weighted draws; signed dynamic counts; 512 config cases; four-milestone integration
+make[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/encounter_builder'
+make -C pokemon_constructor test
+make[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_constructor'
+./build/test_pokemon_constructor
+PASS: 66388 parameter normalization cases; 65536 levels; 256 stat counts; 256 ability selectors; 255 explicit forms; sentinel pairs; retries; callback mutation; narrowing and unsigned wrap
+PASS: constructor sequencing; raw zero allocations; preserved parameter holes; XOR vectors/round trip; 256 acquire states and 2304 restore masks; callback mutation; parameter normalization; five-milestone integration
+make[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_constructor'
+make -C pokemon_data test
+make[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_data'
+./build/test_pokemon_data
+PASS: all 26 setters; 8320 mapping/width cases; 12288 packed-byte cases; 520 corrupt fallback cases; 768 block selections; 4 absent-extra guards; 52 encrypted setter round trips
+PASS: 130 population cases; species-zero encoding; 32 block-order rows; 258 ability slots; growth bounds; resource mutation; complete payload comparisons
+PASS: Pokemon data population, field setters, storage codec, and six-module integration
+make[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_data'
+make -C pokemon_state test
+make[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_state'
+./build/test_pokemon_state
+PASS: 1536 slot field cases; 32 block rows; encoded/locked input; narrowing; invalid slot guards
+PASS: direct value widths; name-bit mask; distinct corrupt read/write fallbacks; absent extra
+PASS: extra clear; 512 encoded/lock combinations; null extra; four alignment width/order traces; bounds
+PASS: derived order; 1792 initial/final lock cases; mode width; manager replacement
+PASS: refresh dynamic moves; repeated PP reads; wraparound; unsigned minima; early byte narrowing
+PASS: base clear and callback order; captured species; count reload; unsigned levels; 16-bit learnset index wrap; name scratch
+PASS: Pokemon state orchestration and seven-module integration
+make[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_state'
+make -C pokemon_stats test
+make[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_stats'
+./build/test_pokemon_stats
+PASS: fixed HP/stat/nature arithmetic; reciprocal boundary; overflow; signed table bytes; full-width nature indices
+PASS: growth levels1..100; exact threshold boundaries; unsigned growth; selected resource mutation
+PASS: 768 six-stat field cases;32 block rows; codec states; complete extra buffers; fallback and absent-extra guards
+PASS: all five stat updates; captured inputs and manager replacement; HP rise/fall/faint/mode/overflow cases
+PASS: object cached/fallback level and max HP; repeated no-extra resource computations
+PASS: Pokemon stats reconstruction and eight-module integration
+make[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_stats'
+make: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed'
+
+Command: python3 -m unittest discover -s tests -v
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+test_32_bit_section_overflow_is_rejected (test_inspect_code.IntakeTests.test_32_bit_section_overflow_is_rejected) ... ok
+test_bss_32_bit_overflow_is_rejected (test_inspect_code.IntakeTests.test_bss_32_bit_overflow_is_rejected) ... ok
+test_bss_cannot_overlap_other_sections (test_inspect_code.IntakeTests.test_bss_cannot_overlap_other_sections) ... ok
+test_bss_only_data_address_must_be_page_aligned (test_inspect_code.IntakeTests.test_bss_only_data_address_must_be_page_aligned) ... ok
+test_bss_only_data_is_supported (test_inspect_code.IntakeTests.test_bss_only_data_is_supported) ... ok
+test_bss_starts_after_actual_data_not_its_padding (test_inspect_code.IntakeTests.test_bss_starts_after_actual_data_not_its_padding) ... ok
+test_cli_cannot_overwrite_inputs (test_inspect_code.IntakeTests.test_cli_cannot_overwrite_inputs) ... error: Output must not overwrite either input
+ok
+test_cli_writes_json (test_inspect_code.IntakeTests.test_cli_writes_json) ... ok
+test_compression_flag_requires_explicit_assertion (test_inspect_code.IntakeTests.test_compression_flag_requires_explicit_assertion) ... ok
+test_decompressed_assertion_does_not_bypass_length_check (test_inspect_code.IntakeTests.test_decompressed_assertion_does_not_bypass_length_check) ... ok
+test_full_exheader_is_accepted (test_inspect_code.IntakeTests.test_full_exheader_is_accepted) ... ok
+test_hashes_and_metadata (test_inspect_code.IntakeTests.test_hashes_and_metadata) ... ok
+test_nonzero_size_with_zero_pages_is_rejected (test_inspect_code.IntakeTests.test_nonzero_size_with_zero_pages_is_rejected) ... ok
+test_other_exheader_lengths_are_rejected (test_inspect_code.IntakeTests.test_other_exheader_lengths_are_rejected) ... ok
+test_overlapping_page_allocations_are_rejected (test_inspect_code.IntakeTests.test_overlapping_page_allocations_are_rejected) ... ok
+test_packed_map (test_inspect_code.IntakeTests.test_packed_map) ... ok
+test_padded_map_uses_actual_sizes_and_page_strides (test_inspect_code.IntakeTests.test_padded_map_uses_actual_sizes_and_page_strides) ... ok
+test_size_cannot_exceed_page_count (test_inspect_code.IntakeTests.test_size_cannot_exceed_page_count) ... ok
+test_truncated_extra_and_partially_padded_code_are_rejected (test_inspect_code.IntakeTests.test_truncated_extra_and_partially_padded_code_are_rejected) ... ok
+test_unaligned_section_address_is_rejected (test_inspect_code.IntakeTests.test_unaligned_section_address_is_rejected) ... ok
+test_zero_bss_is_omitted (test_inspect_code.IntakeTests.test_zero_bss_is_omitted) ... ok
+test_crs_external_segments_are_not_treated_as_file_offsets (test_inspect_cro.InspectCroTests.test_crs_external_segments_are_not_treated_as_file_offsets) ... ok
+test_import_ownership_and_terminal_batches (test_inspect_cro.InspectCroTests.test_import_ownership_and_terminal_batches) ... ok
+test_negative_addend_preserves_raw_and_signed_interpretations (test_inspect_cro.InspectCroTests.test_negative_addend_preserves_raw_and_signed_interpretations) ... ok
+test_preserves_outside_target_addend_as_inspection_warning (test_inspect_cro.InspectCroTests.test_preserves_outside_target_addend_as_inspection_warning) ... ok
+test_rejects_large_table_before_iteration (test_inspect_cro.InspectCroTests.test_rejects_large_table_before_iteration) ... ok
+test_rejects_missing_relocation_target_segment (test_inspect_cro.InspectCroTests.test_rejects_missing_relocation_target_segment) ... ok
+test_rejects_module_import_subarray_outside_table (test_inspect_cro.InspectCroTests.test_rejects_module_import_subarray_outside_table) ... ok
+test_rejects_patch_site_outside_segment (test_inspect_cro.InspectCroTests.test_rejects_patch_site_outside_segment) ... ok
+test_rejects_unterminated_import_batch (test_inspect_cro.InspectCroTests.test_rejects_unterminated_import_batch) ... ok
+test_rejects_unterminated_string_at_declared_boundary (test_inspect_cro.InspectCroTests.test_rejects_unterminated_string_at_declared_boundary) ... ok
+test_segment_table_indices_and_thumb_pointer_are_preserved (test_inspect_cro.InspectCroTests.test_segment_table_indices_and_thumb_pointer_are_preserved) ... ok
+test_unknown_patch_type_is_inspected_but_explicitly_warned (test_inspect_cro.InspectCroTests.test_unknown_patch_type_is_inspected_but_explicitly_warned) ... ok
+test_unknown_static_symbol_table_fails_closed (test_inspect_cro.InspectCroTests.test_unknown_static_symbol_table_fails_closed) ... ok
+test_explicit_addend_and_32_bit_negative_addend (test_prepare_cro_analysis.RelocationTests.test_explicit_addend_and_32_bit_negative_addend) ... ok
+test_preparation_links_both_directions_preserves_inputs_and_unknown_bss (test_prepare_cro_analysis.RelocationTests.test_preparation_links_both_directions_preserves_inputs_and_unknown_bss) ... ok
+test_unsupported_operation_is_not_silently_applied (test_prepare_cro_analysis.RelocationTests.test_unsupported_operation_is_not_silently_applied) ... ok
+setUpClass (test_windows_extract.WindowsExtractionTests) ... skipped 'Required local tools/script missing: /mnt/d/Projects/pokemon-x-decomp-local/tools/pwsh/pwsh, /mnt/d/Projects/pokemon-x-decomp-local/tools/3dstool-linux/3dstool'
+test_modules_preserve_paths_exclude_assets_and_preserve_input (test_windows_modules_extract.ModulesExtractionTests.test_modules_preserve_paths_exclude_assets_and_preserve_input) ... skipped 'Required tool/script missing: /mnt/d/Projects/pokemon-x-decomp-local/tools/pwsh/pwsh'
+
+----------------------------------------------------------------------
+Ran 38 tests in 0.052s
+
+OK (skipped=2)
+Validated page-padded code; wrote /tmp/tmpb6g7b29t/out/manifest.json
+
+Command: cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer native/assets/garc.c native/assets/test_garc.c -o native/build/test_garc_sanitized
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+
+Command: native/build/test_garc_sanitized
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+PASS: GARC v4 sparse subentries, bounded selected reads, ownership, malformed tables, all truncations
+
+Command: cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer native/assets/lz.c native/assets/test_lz.c -o native/build/test_lz_sanitized
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+
+Command: native/build/test_lz_sanitized
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+PASS: LZ10/LZ11 fixed vectors, overlap, all token lengths, extended size, budgets, malformed input
+
+Command: cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer native/assets/bclim.c native/assets/test_bclim.c -o native/build/test_bclim_sanitized
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+
+Command: native/build/test_bclim_sanitized
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+PASS: BCLIM raw formats, fixed Morton/orientation/color vectors, crop/stride variants, bounded malformed-input handling
+
+Command: cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT native/app.c native/assets/garc.c native/assets/lz.c native/assets/bclim.c -L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2 -o native/build/pokemon_asset_viewer_sanitized
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "", "UBSAN_OPTIONS": "", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+
+Command: native/build/pokemon_asset_viewer_sanitized --demo --software --frames 3 --self-test-input
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "dummy", "ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"}
+Exit: 0; expected: 0
+[asset-viewer] Video=dummy renderer=software image=256x192. This viewer does not run gameplay.
+[asset-viewer] Input self-test passed: pan, zoom, reset, resize, Escape.
+[asset-viewer] Exit after 3 rendered frames, 0.034 seconds.
+source=synthetic-demo width=256 height=192 pixels=RGBA8
+
+Command: python3 -m unittest discover -s native/tests -v
+Directory: /mnt/d/Projects/pokemon-x-decomp-local
+Environment: {"SDL_CFLAGS": "-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT", "SDL_LIBS": "-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2", "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime", "SDL_VIDEODRIVER": "", "ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1", "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin", "PX_VIEWER": "/mnt/d/Projects/pokemon-x-decomp-local/native/build/pokemon_asset_viewer_sanitized"}
+Exit: 0; expected: 0
+test_export_does_not_overwrite_existing_files_or_input (test_viewer.ViewerTests.test_export_does_not_overwrite_existing_files_or_input) ... ok
+test_invalid_selection_and_options (test_viewer.ViewerTests.test_invalid_selection_and_options) ... ok
+test_missing_member_truncated_archive_and_unsupported_texture (test_viewer.ViewerTests.test_missing_member_truncated_archive_and_unsupported_texture) ... ok
+test_raw_and_compressed_pipeline_and_exported_pixels (test_viewer.ViewerTests.test_raw_and_compressed_pipeline_and_exported_pixels) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 6.633s
+
+OK
