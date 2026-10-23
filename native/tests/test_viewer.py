@@ -1,4 +1,4 @@
-"""Black-box checks of the native GARC -> LZ11 -> BCLIM -> BMP path."""
+"""Black-box checks of GARC -> optional LZ11 -> BCLIM/CGFX -> BMP."""
 import os
 from pathlib import Path
 import struct
@@ -43,6 +43,32 @@ def literals(data):
     return bytes(output)
 
 
+def cgfx_texture():
+    # Independent two-entry CGFX: descriptors deliberately not inline.
+    data = bytearray(1408)
+    data[:20] = b'CGFX' + struct.pack('<HHIII', 0xfeff, 20, 0x05000000, len(data), 2)
+    data[20:28] = b'DATA' + struct.pack('<I', 1004)
+    data[1024:1032] = b'IMAG' + struct.pack('<I', 384)
+    def word(offset, value):
+        struct.pack_into('<I', data, offset, value & 0xffffffff)
+    word(36, 2); word(40, 156 - 40)
+    data[156:168] = b'DICT' + struct.pack('<II', 60, 2)
+    for i, obj, desc, name, payload, fmt, bpp, encoded in [
+            (0, 256, 320, 768, 1032, 0, 32, texture()[:-40]),
+            (1, 512, 448, 800, 1288, 13, 8, etc_texture(True)[:-40])]:
+        record = 184 + 16 * i
+        word(record + 8, name - (record + 8)); word(record + 12, obj - (record + 12))
+        data[name:name + 6] = (b'raw\n"\0' if i == 0 else b'alpha\0')
+        word(obj, 0x20000011); data[obj + 4:obj + 8] = b'TXOB'
+        word(obj + 8, 0x05000000); word(obj + 12, name - (obj + 12))
+        word(obj + 0x18, 8); word(obj + 0x1c, 8); word(obj + 0x28, 1)
+        word(obj + 0x34, fmt); word(obj + 0x38, desc - (obj + 0x38))
+        word(desc, 8); word(desc + 4, 8); word(desc + 8, len(encoded))
+        word(desc + 12, payload - (desc + 12)); word(desc + 20, bpp)
+        data[payload:payload + len(encoded)] = encoded
+    return data
+
+
 def archive(member):
     padded = (len(member) + 3) & ~3
     header = b'CRAG' + struct.pack('<IHHHHIII', 28, 0xfeff, 0x0400, 4, 0, 84, 84 + padded, len(member))
@@ -79,6 +105,53 @@ class ViewerTests(unittest.TestCase):
         else:
             self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
         return result
+
+    def test_cgfx_selection_listing_and_exported_pixels(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for compressed in (False, True):
+                member = cgfx_texture()
+                (root / 'fixture.garc').write_bytes(archive(literals(member) if compressed else member))
+                base = ['--romfs', root, '--archive', 'fixture.garc', '--entry', 0]
+                listing = self.run_viewer(*base, '--list-textures').stdout
+                self.assertIn('container=CGFX textures=2', listing)
+                self.assertIn('name="raw\\x0a\\x22"', listing)
+                self.assertIn('texture=1 name="alpha"', listing)
+                for index in (0, 1):
+                    image = root / 'result.bmp'
+                    result = self.run_viewer(*base, '--inspect', '--texture', index,
+                                             '--screenshot', image)
+                    self.assertIn('format_namespace=PICA', result.stdout)
+                    self.assertIn('compression=' + ('LZ11' if compressed else 'none'), result.stdout)
+                    data = image.read_bytes()
+                    if index == 0:
+                        self.assertEqual(bmp_pixel(data, 0, 0, True), (255, 0, 0, 255))
+                        self.assertEqual(bmp_pixel(data, 1, 0, True), (0, 255, 0, 255))
+                    else:
+                        self.assertEqual(bmp_pixel(data, 1, 0, True), (138, 70, 36, 68))
+                        self.assertEqual(bmp_pixel(data, 5, 4, True), (70, 104, 138, 68))
+                    image.unlink()
+                self.assertIn('texture=0', self.run_viewer(*base, '--inspect').stdout)
+                self.run_viewer(*base, '--inspect', '--texture', 2, success=False)
+
+    def test_cgfx_bad_descriptor_and_unsupported_mips(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            base = ['--romfs', root, '--archive', 'fixture.garc', '--entry', 0]
+            member = cgfx_texture()
+            struct.pack_into('<I', member, 256 + 0x28, 2)
+            (root / 'fixture.garc').write_bytes(archive(member))
+            self.assertIn('unsupported', self.run_viewer(*base, '--list-textures').stdout.lower())
+            self.run_viewer(*base, '--inspect', success=False)
+            struct.pack_into('<I', member, 512 + 0x38, 0)
+            (root / 'fixture.garc').write_bytes(archive(member))
+            destination = root / 'no.bmp'
+            self.run_viewer(*base, '--inspect', '--texture', 1, '--screenshot', destination,
+                            success=False)
+            self.assertFalse(destination.exists())
+            (root / 'fixture.garc').write_bytes(archive(texture()))
+            self.run_viewer(*base, '--inspect', '--texture', 0, success=False)
+            self.run_viewer(*base, '--list-textures', success=False)
 
     def test_raw_and_compressed_pipeline_and_exported_pixels(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -144,6 +217,9 @@ class ViewerTests(unittest.TestCase):
         for arguments in [[], ['--demo', '--frames', '0'], ['--demo', '--frames', '-1'],
                           ['--demo', '--frames', '4294967296'], ['--demo', '--romfs', '/tmp'],
                           ['--demo', '--inspect', '--frames', '1'],
+                          ['--demo', '--texture', '0'], ['--demo', '--list-textures'],
+                          ['--romfs', '/tmp', '--archive', 'a', '--entry', '0', '--texture', '-1'],
+                          ['--romfs', '/tmp', '--archive', 'a', '--entry', '0', '--list-textures', '--frames', '1'],
                           ['--romfs', '/tmp', '--archive', '../escape', '--entry', '0'],
                           ['--romfs', '/tmp', '--archive', '/absolute', '--entry', '0'],
                           ['--romfs', '/tmp', '--archive', 'a//b', '--entry', '0'],

@@ -1,4 +1,5 @@
 #include "assets/bclim.h"
+#include "assets/cgfx.h"
 #include "assets/garc.h"
 #include "assets/lz.h"
 
@@ -14,8 +15,8 @@ enum { MEMBER_LIMIT = 64 * 1024 * 1024 };
 
 struct options {
     const char *romfs, *archive, *screenshot, *capture_frame;
-    uint32_t entry, subentry, frames;
-    int have_entry, have_subentry, demo, inspect, software, self_test;
+    uint32_t entry, subentry, frames, texture;
+    int have_entry, have_subentry, have_texture, list_textures, demo, inspect, software, self_test;
 };
 
 struct view {
@@ -29,6 +30,8 @@ static void usage(FILE *stream, const char *program)
     fprintf(stream,
         "Usage: %s (--demo | --romfs PATH --archive RELATIVE/PATH --entry N) [options]\n"
         "  --subentry N          GARC bitmap subentry, 0..31 (default 0)\n"
+        "  --texture N           CGFX embedded texture index (default 0)\n"
+        "  --list-textures       List CGFX texture metadata without decoding pixels\n"
         "  --inspect             Decode and print metadata without opening a window\n"
         "  --screenshot FILE.bmp Export the decoded image; destination must be new\n"
         "  --capture-frame FILE.bmp Save first window frame; destination must be new\n"
@@ -76,10 +79,12 @@ static int parse_options(int argc, char **argv, struct options *options)
         if (strcmp(argument, "--help") == 0) { usage(stdout, argv[0]); return 2; }
         if (strcmp(argument, "--demo") == 0) { options->demo = 1; continue; }
         if (strcmp(argument, "--inspect") == 0) { options->inspect = 1; continue; }
+        if (strcmp(argument, "--list-textures") == 0) { options->list_textures = 1; continue; }
         if (strcmp(argument, "--software") == 0) { options->software = 1; continue; }
         if (strcmp(argument, "--self-test-input") == 0) { options->self_test = 1; continue; }
         if (strcmp(argument, "--romfs") != 0 && strcmp(argument, "--archive") != 0 &&
             strcmp(argument, "--entry") != 0 && strcmp(argument, "--subentry") != 0 &&
+            strcmp(argument, "--texture") != 0 &&
             strcmp(argument, "--frames") != 0 && strcmp(argument, "--screenshot") != 0 &&
             strcmp(argument, "--capture-frame") != 0) {
             fprintf(stderr, "[asset-viewer] Unknown option: %s\n", argument);
@@ -106,11 +111,14 @@ static int parse_options(int argc, char **argv, struct options *options)
                 options->entry = parsed; options->have_entry = 1;
             } else if (strcmp(argument, "--subentry") == 0) {
                 options->subentry = parsed; options->have_subentry = 1;
+            } else if (strcmp(argument, "--texture") == 0) {
+                options->texture = parsed; options->have_texture = 1;
             } else options->frames = parsed;
         }
     }
     if (options->demo) {
-        if (options->romfs || options->archive || options->have_entry || options->have_subentry) {
+        if (options->romfs || options->archive || options->have_entry || options->have_subentry ||
+            options->have_texture || options->list_textures) {
             fprintf(stderr, "[asset-viewer] --demo cannot be combined with archive selection.\n");
             return 0;
         }
@@ -121,6 +129,11 @@ static int parse_options(int argc, char **argv, struct options *options)
     }
     if (options->inspect && (options->frames || options->self_test || options->capture_frame)) {
         fprintf(stderr, "[asset-viewer] --inspect cannot render/capture frames or test window input.\n");
+        return 0;
+    }
+    if (options->list_textures && (options->have_texture || options->frames || options->self_test ||
+                                   options->screenshot || options->capture_frame)) {
+        fprintf(stderr, "[asset-viewer] --list-textures cannot select/export pixels or render frames.\n");
         return 0;
     }
     if (options->self_test && options->frames == 0) options->frames = 3;
@@ -142,6 +155,69 @@ static int demo_image(struct px_bclim_image *image)
             pixel[2] = ((x / 16 + y / 16) & 1) ? 220 : 48;
             pixel[3] = (x < 16 || y < 16) ? 128 : 255;
         }
+    }
+    return 1;
+}
+
+static void print_name(const char *name, size_t size)
+{
+    putchar('"');
+    for (size_t i = 0; i < size; ++i) {
+        const unsigned char c = (unsigned char)name[i];
+        if (c >= 32 && c <= 126 && c != '"' && c != '\\') putchar(c);
+        else printf("\\x%02x", c);
+    }
+    putchar('"');
+}
+
+static int decode_asset(const struct options *options, const uint8_t *data, size_t size,
+                         struct px_bclim_image *image, char *error, size_t error_size)
+{
+    if (size >= 4 && memcmp(data, "CGFX", 4) == 0) {
+        struct px_cgfx *cgfx = NULL;
+        enum px_cgfx_result result = px_cgfx_open(data, size, &cgfx);
+        if (result != PX_CGFX_OK) {
+            snprintf(error, error_size, "CGFX index: %s", px_cgfx_result_string(result));
+            return 0;
+        }
+        const size_t count = px_cgfx_texture_count(cgfx);
+        if (options->list_textures) {
+            printf("container=CGFX textures=%zu\n", count);
+            for (size_t i = 0; i < count; ++i) {
+                const struct px_cgfx_texture *item = px_cgfx_texture(cgfx, i);
+                printf("texture=%zu name=", i); print_name(item->name, item->name_size);
+                printf(" width=%" PRIu32 " height=%" PRIu32 " format=%" PRIu32
+                       " mipmap_levels=%" PRIu32 " status=%s\n", item->width, item->height,
+                       item->format, item->mipmap_levels, px_cgfx_result_string(item->decode_status));
+            }
+            px_cgfx_close(cgfx);
+            return 1;
+        }
+        struct px_texture_image texture = {0};
+        result = px_cgfx_decode_texture(cgfx, options->texture, &texture);
+        if (result != PX_CGFX_OK) {
+            snprintf(error, error_size, "CGFX texture %" PRIu32 ": %s", options->texture,
+                     px_cgfx_result_string(result));
+            px_cgfx_close(cgfx);
+            return 0;
+        }
+        const struct px_cgfx_texture *item = px_cgfx_texture(cgfx, options->texture);
+        printf("container=CGFX textures=%zu texture=%" PRIu32 " name=", count, options->texture);
+        print_name(item->name, item->name_size);
+        printf(" format_namespace=PICA mipmap_levels=%" PRIu32 "\n", item->mipmap_levels);
+        image->width = texture.width; image->height = texture.height;
+        image->format = texture.format; image->rgba = texture.rgba;
+        px_cgfx_close(cgfx);
+        return 1;
+    }
+    if (options->have_texture || options->list_textures) {
+        snprintf(error, error_size, "--texture and --list-textures require CGFX input");
+        return 0;
+    }
+    enum px_bclim_result result = px_bclim_decode(data, size, image);
+    if (result != PX_BCLIM_OK) {
+        snprintf(error, error_size, "BCLIM decode: %s", px_bclim_result_string(result));
+        return 0;
     }
     return 1;
 }
@@ -184,28 +260,31 @@ static int load_image(const struct options *options, struct px_bclim_image *imag
                 options->entry, options->subentry, error);
         return 0;
     }
-    enum px_bclim_result result = px_bclim_decode(member, member_size, image);
+    int decoded_ok = decode_asset(options, member, member_size, image, error, sizeof error);
     const char *compression = "none";
-    if (result != PX_BCLIM_OK && member_size != 0 && (member[0] == 0x10 || member[0] == 0x11)) {
+    if (!decoded_ok && member_size != 0 && (member[0] == 0x10 || member[0] == 0x11)) {
         compression = member[0] == 0x10 ? "LZ10" : "LZ11";
         if (!px_lz_decode(member, member_size, MEMBER_LIMIT, &decoded, &decoded_size,
                           error, sizeof error)) {
-            fprintf(stderr, "[asset-viewer] Raw BCLIM: %s; %s decode: %s\n",
-                    px_bclim_result_string(result), compression, error);
+            fprintf(stderr, "[asset-viewer] %s decode: %s\n", compression, error);
             free(member);
             return 0;
         }
-        result = px_bclim_decode(decoded, decoded_size, image);
+        decoded_ok = decode_asset(options, decoded, decoded_size, image, error, sizeof error);
     }
-    if (result != PX_BCLIM_OK) {
-        fprintf(stderr, "[asset-viewer] BCLIM decode: %s\n", px_bclim_result_string(result));
+    if (!decoded_ok) {
+        fprintf(stderr, "[asset-viewer] %s\n", error);
         free(decoded);
         free(member);
         return 0;
     }
-    printf("archive=%s entry=%" PRIu32 " subentry=%" PRIu32 " members=%zu member_bytes=%zu compression=%s decoded_bytes=%zu width=%" PRIu32 " height=%" PRIu32 " format=%" PRIu32 " pixels=RGBA8\n",
+    printf("archive=%s entry=%" PRIu32 " subentry=%" PRIu32 " members=%zu member_bytes=%zu compression=%s decoded_bytes=%zu",
            options->archive, options->entry, options->subentry, member_count, member_size,
-           compression, decoded ? decoded_size : member_size, image->width, image->height, image->format);
+           compression, decoded ? decoded_size : member_size);
+    if (!options->list_textures)
+        printf(" width=%" PRIu32 " height=%" PRIu32 " format=%" PRIu32 " pixels=RGBA8",
+               image->width, image->height, image->format);
+    putchar('\n');
     free(decoded);
     free(member);
     return 1;
@@ -418,6 +497,7 @@ int main(int argc, char **argv)
     if (!parsed) { usage(stderr, argv[0]); return EXIT_FAILURE; }
     struct px_bclim_image image = {0};
     if (!load_image(&options, &image)) return EXIT_FAILURE;
+    if (options.list_textures) return EXIT_SUCCESS;
     if (image.width == 0 || image.height == 0 || image.width > 4096 || image.height > 4096) {
         fprintf(stderr, "[asset-viewer] Unsupported decoded image dimensions.\n");
         px_bclim_free(&image);
