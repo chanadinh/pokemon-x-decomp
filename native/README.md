@@ -1,13 +1,14 @@
-# Native texture and model viewers
+# Native texture, model, and field viewers
 
 This native C11/SDL2 application opens selected local Pokémon X archive entries
 and displays supported textures. It establishes an executable, window and event
 loop, monotonic timing, keyboard controls, image decoding, and bounded resource
 access. A separate executable previews a restricted subset of static CGFX mesh
 geometry as a wireframe or an opt-in unlit textured preview. The eight reconstructed game-logic modules are
-not connected to gameplay in this application yet.
+not connected to gameplay in this application yet. A third executable loads
+checked XY zone, matrix and region records for terrain/collision inspection.
 
-A first playable still needs complete rendering and map scene loading, player movement and collision,
+A first playable still needs environment rendering, player entry/movement and collision,
 interactions, an interactive battle, return to the map, and save/load. See the
 [first-playable acceptance criteria](../docs/PLAYABLE_SLICE.md). This directory
 contains independently authored host/platform code, rather than an additional
@@ -185,6 +186,26 @@ tool, not a complete CGFX or PICA renderer. See the
 [material contract and evidence](../docs/native-materials.md) for the accepted
 states and the preview's ordering and coordinate conventions.
 
+## Inspect a field layout
+
+```sh
+native/build/pokemon_field_viewer --demo
+native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5 --inspect
+native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5 --collision
+```
+
+The checked chain is zone 5 → matrix 12 → region 165. The viewer displays raw
+terrain cells and optional collision edges, with a geometric height readout.
+Arrows/WASD move an inspection marker only onto exact standard cells; `F`
+switches focus/full layout, `C` toggles edges, `+`/`-` zoom, `R`/Home resets,
+and Escape exits. Initial marker and camera placement are inspector choices.
+`--steps RDLU` makes inspection movement reproducible. Exclusive captures and
+bounded frame/input checks work as in the other viewers.
+
+This does not implement player movement, transitions or full collision rules.
+The field's environment models use BCH and are not yet decoded. The parser,
+placement evidence, limits and policy are documented in [the field notes](../docs/native-field.md).
+
 ## Tests and evidence
 
 ```sh
@@ -209,6 +230,8 @@ Embedded-texture and wireframe validation is recorded separately in
 [`reproduction/cgfx-textures/`](reproduction/cgfx-textures/README.txt).
 Material, UV, and software-renderer validation is in
 [`reproduction/textured-model/`](reproduction/textured-model/README.txt).
+Field resource selection, terrain/collision decoding and marker-policy validation
+are recorded in [`reproduction/field-scene/`](reproduction/field-scene/README.txt).
 Static format references, synthetic tests, and local rendering do not establish
 visual equivalence with a running original game. Reference captures and a
 concrete map/interaction/battle scenario remain the next integration gate.

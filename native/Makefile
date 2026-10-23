@@ -8,10 +8,12 @@ ASSET_SOURCES = assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/te
 ASSET_HEADERS = assets/garc.h assets/lz.h assets/bclim.h assets/etc1.h assets/texture.h assets/cgfx.h
 MODEL_SOURCES = assets/cgfx_model.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c
 MODEL_HEADERS = assets/cgfx_model.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h
-CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster
+FIELD_SOURCES = assets/field.c assets/garc.c assets/lz.c
+FIELD_HEADERS = assets/field.h assets/garc.h assets/lz.h
+CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field
 
 .PHONY: all test test-core test-runtime clean check-sdl
-all: build/pokemon_asset_viewer build/pokemon_model_viewer
+all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer
 
 check-sdl:
 	@test -n "$(SDL_LIBS)" || { echo 'SDL2 not configured: install SDL2 development files or set SDL_CFLAGS and SDL_LIBS.' >&2; exit 1; }
@@ -21,6 +23,12 @@ build/pokemon_asset_viewer: app.c $(ASSET_SOURCES) $(ASSET_HEADERS) | build chec
 
 build/pokemon_model_viewer: model_app.c $(MODEL_SOURCES) $(MODEL_HEADERS) | build check-sdl
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) model_app.c $(MODEL_SOURCES) $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -lm -o $@
+
+build/pokemon_field_viewer: field_app.c $(FIELD_SOURCES) $(FIELD_HEADERS) | build check-sdl
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) field_app.c $(FIELD_SOURCES) $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -lm -o $@
+
+build/test_field: assets/field.c assets/field.h assets/test_field.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) assets/field.c assets/test_field.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/test_garc: assets/garc.c assets/garc.h assets/test_garc.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/garc.c assets/test_garc.c $(LDFLAGS) $(LDLIBS) -o $@
@@ -62,15 +70,18 @@ test test-core: $(CORE_TESTS)
 	./build/test_cgfx_model
 	./build/test_cgfx_scene
 	./build/test_raster
+	./build/test_field
 	python3 -m unittest discover -s tests -p test_container.py -v
 
-test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer
+test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer
 	./build/pokemon_asset_viewer --demo --inspect
 	SDL_VIDEODRIVER=dummy ./build/pokemon_asset_viewer --demo --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_viewer.py -v
 	SDL_VIDEODRIVER=dummy ./build/pokemon_model_viewer --demo --software --frames 3 --self-test-input
 	SDL_VIDEODRIVER=dummy ./build/pokemon_model_viewer --demo --textured --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_model_viewer.py -v
+	SDL_VIDEODRIVER=dummy ./build/pokemon_field_viewer --demo --software --frames 3 --self-test-input
+	python3 -m unittest discover -s tests -p test_field_viewer.py -v
 
 clean:
-	rm -f build/pokemon_asset_viewer build/pokemon_model_viewer $(CORE_TESTS)
+	rm -f build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer $(CORE_TESTS)

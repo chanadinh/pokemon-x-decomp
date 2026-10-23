@@ -31,7 +31,10 @@ The native asset viewer now opens a window, handles pan/zoom input, and displays
 selected original raw, ETC1, and ETC1A4 textures through bounded GARC/LZ/BCLIM
 and CGFX loading. A separate native model viewer now previews a checked
 unskinned model with orbit/zoom controls, wireframes, and an opt-in unlit
-textured mode. Game-runtime integration, full material/scene rendering,
+textured mode. A field inspector now follows an original-code-backed zone/matrix
+selection and loads region terrain/collision data, with an explicitly restricted
+inspection marker. Field BCH graphics are still unsupported.
+Game-runtime integration, full material/scene rendering,
 player movement/collision, the interactive
 battle loop, and playable save/load are still missing.
 Per-milestone validation records document the actual tests. Game-logic tests
@@ -93,13 +96,16 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    Identify and decode the minimal map,
    model, texture, animation, UI, and audio paths for the playable slice.
    Embedded CGFX textures and a restricted static textured model preview now work.
-   Palette extensions, complete material shaders, animation, and map scene
-   bindings remain unsupported.
+   Zone/matrix/region selection and a bounded terrain/collision inspector now
+   work; see [field evidence](docs/native-field.md). Palette extensions, complete
+   material shaders, animation, BCH field graphics and player scene bindings
+   remain unsupported.
    The [CGFX inspector](docs/native-containers.md) now identifies bounded model
    and texture records; [geometry evidence](docs/native-geometry.md) records the
    supported mesh subset. The [material preview](docs/native-materials.md)
    binds checked UVs/textures and selected sampler/depth/blend states.
-   Next establish full material behavior, transforms, camera, and scene loading.
+   Next decode the selected field's BCH environment and area/prop associations,
+   and establish actual player entry and terrain collision consumers.
    Capture the corresponding reference scenario.
 5. Connect explicit game-state/platform interfaces to the native application,
    then implement movement/collision, interaction, battle, return to the field,

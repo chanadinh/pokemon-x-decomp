@@ -10,12 +10,14 @@ Explore eight connected C reconstruction milestones, reviewed assembly evidence,
 and synthetic tests that run without game files.
 
 **Current status: eight tested game-logic milestones, a native texture viewer,
-and a static model preview with wireframe and textured modes.
+and native model and field terrain inspectors.
 There is no playable PC port or interactive battle yet.** The viewer loads
 selected original textures, including ETC1 and ETC1A4, through GARC/LZ/BCLIM
 decoding, plus embedded CGFX textures. A separate viewer previews a bounded
 subset of unskinned CGFX geometry with checked texture/material bindings and
-an unlit software renderer. The long-term goal is a native PC game;
+an unlit software renderer. A field inspector follows a checked zone-to-matrix-to-region
+chain and displays terrain cells, collision edges, and a restricted inspection marker.
+The long-term goal is a native PC game;
 [the roadmap](ROADMAP.md) explains the work and evidence still needed. The
 [first playable slice](docs/PLAYABLE_SLICE.md) has concrete acceptance criteria
 and an inventory of the original assets already available locally.
@@ -52,7 +54,12 @@ The demo requires no game files. [Build instructions and supported formats](nati
 describe the actual limits. `native/build/pokemon_model_viewer` provides a
 separate preview with orbit/zoom controls. Add `--textured` for supported
 texture, vertex-color, depth, and blend states. Lighting, maps, and gameplay
-remain unimplemented; this is not original-game rendering equivalence.
+remain incomplete; this is not original-game rendering equivalence.
+
+`native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5` loads the
+checked field layout. Arrows/WASD move an inspection marker on exact standard
+cells; `C` shows collision edges. See the [field evidence and limits](docs/native-field.md).
+The environment's BCH graphics and actual player movement are still pending.
 
 ## What works today
 

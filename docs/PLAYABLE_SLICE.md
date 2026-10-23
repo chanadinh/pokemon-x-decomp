@@ -22,8 +22,8 @@ in the [source overview](../reconstructed/README.md) and
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
-| Renderer and game asset loading | Standalone BCLIM and embedded CGFX textures display; a static model has wireframe and unlit textured previews with checked bindings; full materials, map scenes, and game renderer remain missing |
-| Player controls, movement, and collision | Viewer keyboard controls work; player movement and collision are not implemented |
+| Renderer and game asset loading | BCLIM/CGFX textures and a static model display; a verified zone/matrix/region chain loads into a terrain and collision inspector; BCH field graphics and complete game rendering remain missing |
+| Player controls, movement, and collision | A restricted inspection marker follows exact standard cells; actual player entry, movement and collision rules are not implemented |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
 | Reference execution comparisons | No repeatable running-game capture is part of the current validation |
@@ -117,9 +117,15 @@ game's lighting, fog, texture combiners, shaders, or transparent sorting.
 See the [material scope](native-materials.md) and
 [textured-preview evidence](../native/reproduction/textured-model/README.txt).
 
+The [field inspector](native-field.md) now follows zone 5 → matrix 12 → region
+165 and displays 1,600 raw terrain cells plus optional collision triangle edges.
+Original-code evidence corroborates resource selection. Keyboard movement uses
+an explicit exact-cell inspection policy; it does not reconstruct player rules
+or spawn. The selected field's graphics use BCH and are not yet rendered.
+
 These are bounded asset-preview paths. The applications do not yet call
 the eight reconstructed game-logic modules. Palette extensions, full material rendering,
-animation, map formats, and scene bindings remain unimplemented. The separate
+animation, BCH environment graphics and player scene bindings remain unimplemented. The separate
 [CGFX inspector](native-containers.md) provides resource metadata alongside
 the native decoders.
 A repeatable running-game capture is still required to select
@@ -165,8 +171,8 @@ services, and persistence work together.
 Continue the first three workstreams alongside bounded code reconstruction.
 Rendering and reference capture can reveal missing dependencies earlier than
 continuing through source functions alone. Choose the concrete map and battle
-after checking their dependencies; this audit has not established which
-numbered archives provide them.
+after checking their dependencies. The field milestone establishes a small
+numeric resource chain; it does not yet select a reference-backed playable scenario.
 
 The broader scope and completion gates remain in the
 [roadmap](../ROADMAP.md).
