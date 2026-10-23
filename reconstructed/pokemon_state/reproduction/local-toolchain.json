@@ -1,0 +1,96 @@
+{
+  "host": "Ubuntu 24.04 WSL2 x86_64",
+  "compiler": "GCC 13.2.0 (Ubuntu 13.2.0-23ubuntu4)",
+  "make": "GNU Make 4.3",
+  "linker": "GNU ld 2.42 (existing host installation)",
+  "packages": [
+    {
+      "file": "cpp-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb",
+      "package": "cpp-13-x86-64-linux-gnu",
+      "version": "13.2.0-23ubuntu4",
+      "sha256": "b62ca3e8fe6fee933e1e92ab4330a666c09374ae6c49d5c01144142746e409f3",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/cpp-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "file": "gcc-13-base_13.2.0-23ubuntu4_amd64.deb",
+      "package": "gcc-13-base",
+      "version": "13.2.0-23ubuntu4",
+      "sha256": "2613608b046eb9416878fa4e30aa8e34831775bb0cc7ae6efef6d230986dbb5a",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/gcc-13-base_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "file": "gcc-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb",
+      "package": "gcc-13-x86-64-linux-gnu",
+      "version": "13.2.0-23ubuntu4",
+      "sha256": "92f94ad8c5d42472fd032f7820aaeb9df2cc08559ef062a3a277573c03d26a08",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/gcc-13-x86-64-linux-gnu_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "file": "libc6-dev_2.39-0ubuntu8_amd64.deb",
+      "package": "libc6-dev",
+      "version": "2.39-0ubuntu8",
+      "sha256": "1f03b79223d9cf1a6ed3a648f6942619dcb97b2884dba8fd12e262b6771e247a",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6-dev_2.39-0ubuntu8_amd64.deb"
+    },
+    {
+      "file": "libc6_2.39-0ubuntu8_amd64.deb",
+      "package": "libc6",
+      "version": "2.39-0ubuntu8",
+      "sha256": "af36c7ac770770fe3d3c10e85d6bc538e76e57570ba7db7d397fb9f654783ef3",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6_2.39-0ubuntu8_amd64.deb"
+    },
+    {
+      "file": "libgcc-13-dev_13.2.0-23ubuntu4_amd64.deb",
+      "package": "libgcc-13-dev",
+      "version": "13.2.0-23ubuntu4",
+      "sha256": "d36c9acb969dd37fdc0496120715d8bba67a5cc43a0c2569717314e6ad80020c",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/g/gcc-13/libgcc-13-dev_13.2.0-23ubuntu4_amd64.deb"
+    },
+    {
+      "file": "libisl23_0.26-3build1_amd64.deb",
+      "package": "libisl23",
+      "version": "0.26-3build1",
+      "sha256": "24b1aa0e1772080fd23df7bed10aadcbbe16b3181b77d3a013c14dfaf9848541",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/i/isl/libisl23_0.26-3build1_amd64.deb"
+    },
+    {
+      "file": "libmpc3_1.3.1-1build1_amd64.deb",
+      "package": "libmpc3",
+      "version": "1.3.1-1build1",
+      "sha256": "34af1193734f40723c7fc03d855d98c107d8b62bd2fa17dae8b09d2369cdd45e",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/m/mpclib3/libmpc3_1.3.1-1build1_amd64.deb"
+    },
+    {
+      "file": "linux-libc-dev_6.8.0-31.31_amd64.deb",
+      "package": "linux-libc-dev",
+      "version": "6.8.0-31.31",
+      "sha256": "21c631ba4da3d38d92a133e28a8a14278e1e00174ed135a20661d1e532e05ca5",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/l/linux/linux-libc-dev_6.8.0-31.31_amd64.deb"
+    },
+    {
+      "file": "make_4.3-4.1build2_amd64.deb",
+      "package": "make",
+      "version": "4.3-4.1build2",
+      "sha256": "1fe6a815b56c7b6e9ce4086a363f09444bbd0a0d30e230c453d0b78e44b57a99",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/m/make-dfsg/make_4.3-4.1build2_amd64.deb"
+    },
+    {
+      "file": "libasan8_14-20240412-0ubuntu1_amd64.deb",
+      "package": "libasan8",
+      "version": "14-20240412-0ubuntu1",
+      "sha256": "e2f51f175731daf4fd2aacdec3096203d497c53d304ee3da1a7f9b5a26ed5821",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libasan8_14-20240412-0ubuntu1_amd64.deb"
+    },
+    {
+      "file": "libubsan1_14-20240412-0ubuntu1_amd64.deb",
+      "package": "libubsan1",
+      "version": "14-20240412-0ubuntu1",
+      "sha256": "005ac9c19b9c12908c83498eded06e7e1c13994101341e05e8875d88cfca452d",
+      "url": "http://archive.ubuntu.com/ubuntu/pool/main/g/gcc-14/libubsan1_14-20240412-0ubuntu1_amd64.deb"
+    }
+  ],
+  "installation": "Extracted into ignored tools/native-build/sysroot with dpkg-deb; no system packages changed.",
+  "activation": "source tools/native-build/activate.sh",
+  "compiler_wrapper": "#!/bin/sh\nBUILD_ROOT='/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build'\nexport LD_LIBRARY_PATH=\"$BUILD_ROOT/compiler-runtime${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\"\nexec \"$BUILD_ROOT/sysroot/usr/bin/x86_64-linux-gnu-gcc-13\" --sysroot=\"$BUILD_ROOT/sysroot\" \"$@\"\n",
+  "runtime_note": "compiler-runtime links only compiler dependencies and sanitizer runtimes; host libc is not overridden."
+}

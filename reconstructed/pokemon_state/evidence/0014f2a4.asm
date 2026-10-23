@@ -1,0 +1,4 @@
+0014f2a4  0010a0e1  cpy r1,r0
+0014f2a8  04009fe5  ldr r0,[0x14f2b4]
+0014f2ac  240090e5  ldr r0,[r0,#0x24]
+0014f2b0  cc6f00ea  b 0x0016b1e8
