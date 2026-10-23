@@ -6,7 +6,7 @@
 [![Roadmap](https://img.shields.io/badge/project-roadmap-blue)](ROADMAP.md)
 
 An early-stage reverse-engineering project for Pokémon X on Nintendo 3DS.
-Explore six connected C reconstruction milestones, reviewed assembly evidence,
+Explore seven connected C reconstruction milestones, reviewed assembly evidence,
 and synthetic tests that run without game files.
 
 **Current status: research and host-side tests. There is no playable PC port,
@@ -39,10 +39,11 @@ PowerShell and 3dstool dependencies are unavailable.
 | [Encounter builder](reconstructed/encounter_builder/README.md) | Creation parameters, population loop, configuration selection |
 | [Pokémon constructor](reconstructed/pokemon_constructor/README.md) | Parameter normalization, allocation, manager setup, XOR transform |
 | [Pokémon data](reconstructed/pokemon_data/README.md) | Population, 26 field setters, checksum, storage codec, block selection |
+| [Pokémon state](reconstructed/pokemon_state/README.md) | Base/extra initialization, derived-state sequencing, HP/PP refresh, 13 field accessors |
 
-A six-module integration fixture connects these paths using synthetic species
-and growth resources. Wider game setup, real resource loading, and larger state
-services still use stand-ins. These are analyst-authored reconstructions, not
+A seven-module integration fixture connects these paths using synthetic species,
+growth, learnset, name, PP, and stat services. Wider game setup, real resource
+loading, and deeper stat calculations still use stand-ins. These are analyst-authored reconstructions, not
 recovered original source or builds that match the original machine code.
 
 The analysis baseline covers 133 CRO modules, with 44,279 candidate functions
@@ -58,7 +59,7 @@ documentation, and reference-based testing. Start with
 
 Current priorities:
 
-- Reconstruct remaining Pokémon state initialization and update services.
+- Reconstruct the remaining HP/stat calculations, level lookup, and move/name services.
 - Replace species and growth-resource stand-ins with checked resource access.
 - Compare reconstructed behavior against a running reference.
 - Document the asset-loading paths needed for a first playable slice.

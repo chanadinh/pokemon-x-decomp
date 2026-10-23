@@ -13,16 +13,18 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Six connected host-source milestones now exist: the `CallWildBattle`
+Seven connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
-Pokémon constructor/parameter-normalization path, and data population/storage.
+Pokémon constructor/parameter-normalization path, data population/storage,
+and base/extra/derived/refresh state orchestration.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
 creation-parameter preparation, weighted optional-value selection, random
 parameter resolution, allocation/manager setup, 26 data-field setters,
-checksum/XOR storage transforms, block selection, and a final script-state write.
-Wider setup, real resource loading, and larger state services still use
+checksum/XOR storage transforms, block selection, 13 state-field accessors,
+move initialization, auxiliary clearing, HP/PP refresh, and a final script-state write.
+Wider setup, real resource loading, HP/stat calculation, and move/name services still use
 stand-ins. There is no playable game
 or renderer yet. Per-milestone validation records document the actual tests;
 these are synthetic-memory checks rather than a running-game comparison.
@@ -46,16 +48,22 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
 
 ## Immediate sequence for this workspace
 
-1. Reconstruct remaining state services such as `0x0013a8d8`, `0x0012b744`,
-   `0x0012b808`, and `0x0013a7bc`, then replace species/growth-resource
-   stand-ins with checked resource access. Population `0x0014f6b8`, its 26
+1. Reconstruct the HP/stat services `0x0013aa84`, `0x0014fb00`, `0x0014fbd4`,
+   `0x0014fda4`, `0x0014fe78`, and `0x0014fa2c`, plus their required callees.
+   Level resolution `0x00168b3c`, learnset access and move insertion, name
+   construction/copy, and maximum-PP resource service `0x00150220` remain explicit
+   boundaries. Replace species/growth-resource stand-ins with checked resource
+   access as those dependencies are reviewed. State orchestration at
+   `0x0013a8d8`, `0x0012b744`, `0x0012b808`, and `0x0013a7bc` now has host
+   implementations, with 13 associated state-field accessors. Population `0x0014f6b8`, its 26
    setters, checksum `0x00174e0c`, manager codec `0x001685f0`/`0x00168660`,
    and four block selectors now have host implementations. The outer constructor `0x0039a5a8`,
    base initializer `0x0039daf4`, allocation path `0x0039a8a4`, parameter
    normalizer `0x0014f324`, and XOR primitive `0x00167fb4` now have host
    implementations through explicit service boundaries. Copy-before-cleanup
-   behavior is traced. The six-module fixture produces and checks the encrypted
-   payload using synthetic resources; a complete game-valid object and behavior
+   behavior is traced. The seven-module fixture produces and checks the encrypted
+   payload and auxiliary state using synthetic resources and stat services;
+   a complete game-valid object and behavior
    against a running reference remain unverified.
 2. Reconstruct setup function `0x15c75434` and its required callees, keeping
    field names provisional until callers, consumers, or runtime behavior

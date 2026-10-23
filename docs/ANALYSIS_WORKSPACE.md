@@ -4,6 +4,13 @@ These notes preserve the original analysis history. Paths under `inputs/`,
 `outputs/`, and `projects/`, and named ZIP bundles, refer to local artifacts;
 they are not public downloads. Run commands below from the repository root.
 
+The seventh milestone is [Pokémon state](../reconstructed/pokemon_state/README.md):
+base/extra initialization, derived-state sequencing, refresh, and 13 field
+accessors. Its local WSL continuation restored and verified the checkpoint,
+installed the pinned Linux Ghidra/JDK, and exported additional evidence without
+saving project changes. See its reproduction and validation records for current
+local commands; the older notes below retain their original analysis history.
+
 The Git repository tracks the analysis tools, reconstructed host source,
 tests, reviewed evidence, and provenance. References below to `inputs/`,
 `outputs/`, `projects/`, installed tools, and ZIP downloads describe local

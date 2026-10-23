@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-23",
+  "platform": "Ubuntu 24.04 WSL2 x86_64",
+  "compiler": "GCC 13.2.0 (Ubuntu 13.2.0-23ubuntu4)",
+  "make": "GNU Make 4.3",
+  "baseline": {
+    "original_head": "e40197dc3909e46f1945f109e4b0dafe99f8a95a",
+    "original_commit_count": 13,
+    "newer_preserved_head": "17982f45846ec8021695979b9973dd83a3a49050",
+    "previous_milestone_checksums_verified": 321,
+    "checkpoint_files_verified_before_and_after_exports": 433,
+    "checkpoint_bytes": 187640756
+  },
+  "setup_notes": [
+    "Initial make run was unavailable (make/compiler missing). Repository-local verified Ubuntu packages supply the compiler and Make; no system packages were changed.",
+    "Pinned Ghidra/JDK download hashes matched tools/versions.json.",
+    "Initial Ghidra export failed with NotOwnerException; --project-owner agent retained the original project metadata and opened a read-only session.",
+    "Sanitizer leak detection is disabled in the tracing environment. Native Windows and original-game execution were not tested."
+  ],
+  "evidence": {
+    "command": [
+      "python3",
+      "reconstructed/pokemon_state/reproduction/export_state.py",
+      "--project",
+      "projects/cro_20261023T150920079989Z.gpr",
+      "--project-owner",
+      "agent",
+      "--output",
+      "outputs/pokemon-state/reproduced"
+    ],
+    "exit_code": 0,
+    "exported_functions": 44,
+    "instruction_bytes_verified": 5176,
+    "literal_bytes_verified": 64,
+    "repeated_asm_c_files_identical": 86,
+    "previous_orchestrator_and_clear_asm_files_identical": 5
+  },
+  "runs": [
+    {
+      "command": [
+        "make",
+        "-C",
+        "reconstructed",
+        "test"
+      ],
+      "directory": "/mnt/d/Projects/pokemon-x-decomp-local",
+      "environment_overrides": {
+        "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"
+      },
+      "exit_code": 0,
+      "output": "make: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed'\nmake -C call_wild_battle test\nmake[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/call_wild_battle'\n./build/test_call_wild_battle\nPASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return\nmake[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/call_wild_battle'\nmake -C wild_battle_setup test\nmake[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/wild_battle_setup'\n./build/test_wild_battle_setup\nPASS: 65536 flag values; initializer holes; row decoding; optional paths; call order; mutation timing; return propagation; finisher; original wrapper integration\nmake[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/wild_battle_setup'\nmake -C battle_task test\nmake[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/battle_task'\n./build/test_battle_task\nPASS: 65536 selector/category pairs; 65536 key pairs; task factory and registration; optional paths; count boundaries; pointer mutation timing; full submit; all three source milestones integrated\nmake[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/battle_task'\nmake -C encounter_builder test\nmake[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/encounter_builder'\n./build/test_encounter_builder\nPASS: parameter bytes and holes; branch boundaries; callback timing; 768 weighted draws; signed dynamic counts; 512 config cases; four-milestone integration\nmake[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/encounter_builder'\nmake -C pokemon_constructor test\nmake[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_constructor'\n./build/test_pokemon_constructor\nPASS: 66388 parameter normalization cases; 65536 levels; 256 stat counts; 256 ability selectors; 255 explicit forms; sentinel pairs; retries; callback mutation; narrowing and unsigned wrap\nPASS: constructor sequencing; raw zero allocations; preserved parameter holes; XOR vectors/round trip; 256 acquire states and 2304 restore masks; callback mutation; parameter normalization; five-milestone integration\nmake[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_constructor'\nmake -C pokemon_data test\nmake[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_data'\n./build/test_pokemon_data\nPASS: all 26 setters; 8320 mapping/width cases; 12288 packed-byte cases; 520 corrupt fallback cases; 768 block selections; 4 absent-extra guards; 52 encrypted setter round trips\nPASS: 130 population cases; species-zero encoding; 32 block-order rows; 258 ability slots; growth bounds; resource mutation; complete payload comparisons\nPASS: Pokemon data population, field setters, storage codec, and six-module integration\nmake[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_data'\nmake -C pokemon_state test\nmake[1]: Entering directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_state'\nmkdir -p build\ncc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror pokemon_state.c state_fields.c test_pokemon_state.c test_pokemon_state_fields.c test_pokemon_state_chain.c ../pokemon_data/pokemon_data.c ../pokemon_data/pokemon_codec.c ../pokemon_data/pokemon_fields.c ../pokemon_constructor/pokemon_constructor.c ../pokemon_constructor/pokemon_parameters.c ../encounter_builder/encounter_builder.c ../battle_task/battle_task.c ../wild_battle_setup/wild_battle_setup.c ../call_wild_battle/call_wild_battle.c   -o build/test_pokemon_state\n./build/test_pokemon_state\nPASS: 1536 slot field cases; 32 block rows; encoded/locked input; narrowing; invalid slot guards\nPASS: direct value widths; name-bit mask; distinct corrupt read/write fallbacks; absent extra\nPASS: extra clear; 512 encoded/lock combinations; null extra; four alignment width/order traces; bounds\nPASS: derived order; 1792 initial/final lock cases; mode width; manager replacement\nPASS: refresh dynamic moves; repeated PP reads; wraparound; unsigned minima; early byte narrowing\nPASS: base clear and callback order; captured species; count reload; unsigned levels; 16-bit learnset index wrap; name scratch\nPASS: Pokemon state orchestration and seven-module integration\nmake[1]: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_state'\nmake: Leaving directory '/mnt/d/Projects/pokemon-x-decomp-local/reconstructed'\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "directory": "/mnt/d/Projects/pokemon-x-decomp-local",
+      "environment_overrides": {
+        "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"
+      },
+      "exit_code": 0,
+      "output": "test_32_bit_section_overflow_is_rejected (test_inspect_code.IntakeTests.test_32_bit_section_overflow_is_rejected) ... ok\ntest_bss_32_bit_overflow_is_rejected (test_inspect_code.IntakeTests.test_bss_32_bit_overflow_is_rejected) ... ok\ntest_bss_cannot_overlap_other_sections (test_inspect_code.IntakeTests.test_bss_cannot_overlap_other_sections) ... ok\ntest_bss_only_data_address_must_be_page_aligned (test_inspect_code.IntakeTests.test_bss_only_data_address_must_be_page_aligned) ... ok\ntest_bss_only_data_is_supported (test_inspect_code.IntakeTests.test_bss_only_data_is_supported) ... ok\ntest_bss_starts_after_actual_data_not_its_padding (test_inspect_code.IntakeTests.test_bss_starts_after_actual_data_not_its_padding) ... ok\ntest_cli_cannot_overwrite_inputs (test_inspect_code.IntakeTests.test_cli_cannot_overwrite_inputs) ... error: Output must not overwrite either input\nok\ntest_cli_writes_json (test_inspect_code.IntakeTests.test_cli_writes_json) ... ok\ntest_compression_flag_requires_explicit_assertion (test_inspect_code.IntakeTests.test_compression_flag_requires_explicit_assertion) ... ok\ntest_decompressed_assertion_does_not_bypass_length_check (test_inspect_code.IntakeTests.test_decompressed_assertion_does_not_bypass_length_check) ... ok\ntest_full_exheader_is_accepted (test_inspect_code.IntakeTests.test_full_exheader_is_accepted) ... ok\ntest_hashes_and_metadata (test_inspect_code.IntakeTests.test_hashes_and_metadata) ... ok\ntest_nonzero_size_with_zero_pages_is_rejected (test_inspect_code.IntakeTests.test_nonzero_size_with_zero_pages_is_rejected) ... ok\ntest_other_exheader_lengths_are_rejected (test_inspect_code.IntakeTests.test_other_exheader_lengths_are_rejected) ... ok\ntest_overlapping_page_allocations_are_rejected (test_inspect_code.IntakeTests.test_overlapping_page_allocations_are_rejected) ... ok\ntest_packed_map (test_inspect_code.IntakeTests.test_packed_map) ... ok\ntest_padded_map_uses_actual_sizes_and_page_strides (test_inspect_code.IntakeTests.test_padded_map_uses_actual_sizes_and_page_strides) ... ok\ntest_size_cannot_exceed_page_count (test_inspect_code.IntakeTests.test_size_cannot_exceed_page_count) ... ok\ntest_truncated_extra_and_partially_padded_code_are_rejected (test_inspect_code.IntakeTests.test_truncated_extra_and_partially_padded_code_are_rejected) ... ok\ntest_unaligned_section_address_is_rejected (test_inspect_code.IntakeTests.test_unaligned_section_address_is_rejected) ... ok\ntest_zero_bss_is_omitted (test_inspect_code.IntakeTests.test_zero_bss_is_omitted) ... ok\ntest_crs_external_segments_are_not_treated_as_file_offsets (test_inspect_cro.InspectCroTests.test_crs_external_segments_are_not_treated_as_file_offsets) ... ok\ntest_import_ownership_and_terminal_batches (test_inspect_cro.InspectCroTests.test_import_ownership_and_terminal_batches) ... ok\ntest_negative_addend_preserves_raw_and_signed_interpretations (test_inspect_cro.InspectCroTests.test_negative_addend_preserves_raw_and_signed_interpretations) ... ok\ntest_preserves_outside_target_addend_as_inspection_warning (test_inspect_cro.InspectCroTests.test_preserves_outside_target_addend_as_inspection_warning) ... ok\ntest_rejects_large_table_before_iteration (test_inspect_cro.InspectCroTests.test_rejects_large_table_before_iteration) ... ok\ntest_rejects_missing_relocation_target_segment (test_inspect_cro.InspectCroTests.test_rejects_missing_relocation_target_segment) ... ok\ntest_rejects_module_import_subarray_outside_table (test_inspect_cro.InspectCroTests.test_rejects_module_import_subarray_outside_table) ... ok\ntest_rejects_patch_site_outside_segment (test_inspect_cro.InspectCroTests.test_rejects_patch_site_outside_segment) ... ok\ntest_rejects_unterminated_import_batch (test_inspect_cro.InspectCroTests.test_rejects_unterminated_import_batch) ... ok\ntest_rejects_unterminated_string_at_declared_boundary (test_inspect_cro.InspectCroTests.test_rejects_unterminated_string_at_declared_boundary) ... ok\ntest_segment_table_indices_and_thumb_pointer_are_preserved (test_inspect_cro.InspectCroTests.test_segment_table_indices_and_thumb_pointer_are_preserved) ... ok\ntest_unknown_patch_type_is_inspected_but_explicitly_warned (test_inspect_cro.InspectCroTests.test_unknown_patch_type_is_inspected_but_explicitly_warned) ... ok\ntest_unknown_static_symbol_table_fails_closed (test_inspect_cro.InspectCroTests.test_unknown_static_symbol_table_fails_closed) ... ok\ntest_explicit_addend_and_32_bit_negative_addend (test_prepare_cro_analysis.RelocationTests.test_explicit_addend_and_32_bit_negative_addend) ... ok\ntest_preparation_links_both_directions_preserves_inputs_and_unknown_bss (test_prepare_cro_analysis.RelocationTests.test_preparation_links_both_directions_preserves_inputs_and_unknown_bss) ... ok\ntest_unsupported_operation_is_not_silently_applied (test_prepare_cro_analysis.RelocationTests.test_unsupported_operation_is_not_silently_applied) ... ok\nsetUpClass (test_windows_extract.WindowsExtractionTests) ... skipped 'Required local tools/script missing: /mnt/d/Projects/pokemon-x-decomp-local/tools/pwsh/pwsh, /mnt/d/Projects/pokemon-x-decomp-local/tools/3dstool-linux/3dstool'\ntest_modules_preserve_paths_exclude_assets_and_preserve_input (test_windows_modules_extract.ModulesExtractionTests.test_modules_preserve_paths_exclude_assets_and_preserve_input) ... skipped 'Required tool/script missing: /mnt/d/Projects/pokemon-x-decomp-local/tools/pwsh/pwsh'\n\n----------------------------------------------------------------------\nRan 38 tests in 0.065s\n\nOK (skipped=2)\nValidated page-padded code; wrote /tmp/tmpuf5oslpj/out/manifest.json\n"
+    },
+    {
+      "command": [
+        "cc",
+        "-std=c11",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "pokemon_state.c",
+        "state_fields.c",
+        "test_pokemon_state.c",
+        "test_pokemon_state_fields.c",
+        "test_pokemon_state_chain.c",
+        "../pokemon_data/pokemon_data.c",
+        "../pokemon_data/pokemon_codec.c",
+        "../pokemon_data/pokemon_fields.c",
+        "../pokemon_constructor/pokemon_constructor.c",
+        "../pokemon_constructor/pokemon_parameters.c",
+        "../encounter_builder/encounter_builder.c",
+        "../battle_task/battle_task.c",
+        "../wild_battle_setup/wild_battle_setup.c",
+        "../call_wild_battle/call_wild_battle.c",
+        "-o",
+        "build/test_pokemon_state_sanitized"
+      ],
+      "directory": "/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_state",
+      "environment_overrides": {
+        "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"
+      },
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "./build/test_pokemon_state_sanitized"
+      ],
+      "directory": "/mnt/d/Projects/pokemon-x-decomp-local/reconstructed/pokemon_state",
+      "environment_overrides": {
+        "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin",
+        "LD_LIBRARY_PATH": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/compiler-runtime",
+        "ASAN_OPTIONS": "detect_leaks=0",
+        "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+      },
+      "exit_code": 0,
+      "output": "PASS: 1536 slot field cases; 32 block rows; encoded/locked input; narrowing; invalid slot guards\nPASS: direct value widths; name-bit mask; distinct corrupt read/write fallbacks; absent extra\nPASS: extra clear; 512 encoded/lock combinations; null extra; four alignment width/order traces; bounds\nPASS: derived order; 1792 initial/final lock cases; mode width; manager replacement\nPASS: refresh dynamic moves; repeated PP reads; wraparound; unsigned minima; early byte narrowing\nPASS: base clear and callback order; captured species; count reload; unsigned levels; 16-bit learnset index wrap; name scratch\nPASS: Pokemon state orchestration and seven-module integration\n"
+    },
+    {
+      "command": [
+        "python3",
+        "reconstructed/pokemon_state/reproduction/verify_evidence.py",
+        "--code",
+        "inputs/pokemon-x-0f6d3e1d66cb/code.bin",
+        "--evidence",
+        "reconstructed/pokemon_state/evidence"
+      ],
+      "directory": "/mnt/d/Projects/pokemon-x-decomp-local",
+      "environment_overrides": {
+        "PATH_prepend": "/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/bin"
+      },
+      "exit_code": 0,
+      "output": "Verified 44 functions, 5176 instruction bytes, 64 literal bytes against 0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a\n"
+    }
+  ]
+}
