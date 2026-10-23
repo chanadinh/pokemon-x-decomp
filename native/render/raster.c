@@ -87,7 +87,7 @@ static int state_valid(const struct px_raster_state *state)
         compare_valid(state->depth_compare) && compare_valid(state->alpha_compare) &&
         state->cull >= PX_RASTER_CULL_NONE && state->cull <= PX_RASTER_CULL_BOTH &&
         state->front >= PX_RASTER_CW && state->front <= PX_RASTER_CCW &&
-        state->blend >= PX_RASTER_REPLACE && state->blend <= PX_RASTER_SOURCE_ALPHA &&
+        state->blend >= PX_RASTER_REPLACE && state->blend <= PX_RASTER_ADD_SOURCE_ALPHA &&
         state->color_write_mask <= 15;
 }
 
@@ -210,6 +210,11 @@ static void blend(uint8_t *dst, const double src[4], const struct px_raster_stat
     } else if (state->blend == PX_RASTER_SOURCE_ALPHA) {
         for (unsigned c = 0; c < 4; ++c)
             result[c] = src[c] * src[3] + (dst[c] / 255.0) * (1 - src[3]);
+    } else if (state->blend == PX_RASTER_ADD_SOURCE_ALPHA) {
+        for (unsigned c = 0; c < 4; ++c) {
+            result[c] = src[c] * src[3] + dst[c] / 255.0;
+            if (result[c] > 1) result[c] = 1;
+        }
     } else {
         double da = dst[3] / 255.0;
         result[3] = src[3] + da * (1 - src[3]);

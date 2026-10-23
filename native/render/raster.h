@@ -27,7 +27,8 @@ enum px_raster_winding { PX_RASTER_CW = 0, PX_RASTER_CCW };
 enum px_raster_blend {
     PX_RASTER_REPLACE = 0,
     PX_RASTER_SOURCE_OVER, /* Straight RGBA Porter-Duff source-over. */
-    PX_RASTER_SOURCE_ALPHA /* Every channel: src*srcA + dst*(1-srcA). */
+    PX_RASTER_SOURCE_ALPHA, /* Every channel: src*srcA + dst*(1-srcA). */
+    PX_RASTER_ADD_SOURCE_ALPHA /* Every channel: src*srcA + dst, clamped to 1. */
 };
 
 struct px_raster_target {

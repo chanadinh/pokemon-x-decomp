@@ -18,9 +18,37 @@ enum px_bch_model_result {
  * zero is supplied for convenience; size excludes it. Nullable names use
  * present=0, whereas an empty, relocated name has present=1 and size=0. */
 struct px_bch_name { char bytes[1025]; uint32_t size, present; };
+/* One observed PICA register: value bits are meaningful only where the 32-bit
+ * known_mask is set. Observations come from one stream; nothing is inherited. */
+struct px_bch_register { uint32_t value, known_mask; };
+/* Coordinator layout follows the pinned CTRMap H3DMaterial reader: packed
+ * word (mapping bits 16..23, reference camera bits 24..31), scale U/V,
+ * rotation and translation U/V. Interpretations are not executable evidence. */
+struct px_bch_coordinator { uint32_t packed; float scale[2], rotation, translation[2]; };
+/* Register observations from the material's fragment command stream. */
+struct px_bch_fragment_state {
+    struct px_bch_register cull;            /* 0x040 */
+    struct px_bch_register color_operation; /* 0x100 */
+    struct px_bch_register blend;           /* 0x101 */
+    struct px_bch_register alpha_test;      /* 0x104 */
+    struct px_bch_register depth_color;     /* 0x107 */
+    struct px_bch_register tev_buffer;      /* 0x0e0 */
+    /* Stages 0..3 at 0xc0+8n, stages 4..5 at 0xf0/0xf8; each holds the
+     * source, operand, combine, constant and scale registers in order. */
+    struct px_bch_register tev[6][5];
+};
 struct px_bch_material {
     struct px_bch_name name, texture_names[3];
     uint32_t texture_unit_config;
+    /* Texture unit parameter registers 0x83/0x93/0x9b from the material's
+     * texture command stream; zero known_mask when that stream omits one. */
+    struct px_bch_register unit_parameters[3];
+    /* Nonzero only when the relocated parameter object spans 0xd0 bytes and
+     * its +0xc8 field is a command-section relocation (tag 2). Then the three
+     * coordinators at +12+24*unit and the fragment stream are returned. */
+    uint32_t parameters_present;
+    struct px_bch_coordinator coordinators[3];
+    struct px_bch_fragment_state fragment;
 };
 struct px_bch_submesh {
     uint32_t first_index, index_count, index_width;
@@ -65,6 +93,8 @@ struct px_bch_model {
  * 262,144 vertices and relocation entries; 786,432 indices; 65,536 words per
  * command stream and 262,144 total command words; absolute coordinates 1e12.
  * Attribute arithmetic uses double intermediates and rounds once to float.
+ * Material parameter coordinators and fragment register observations are
+ * metadata: this decoder does not execute combiners or select texture units.
  * Output owns every array and name; it outlives the unmodified input. Pass a
  * fresh or freed output. On any failure the output is zeroed. */
 enum px_bch_model_result px_bch_model_decode(const uint8_t *data, size_t size,

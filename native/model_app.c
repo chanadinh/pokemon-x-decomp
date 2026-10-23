@@ -1,5 +1,7 @@
 #include "assets/cgfx_model.h"
 #include "assets/bch_model.h"
+#include "assets/bch_material.h"
+#include "assets/bch_texture.h"
 #include "assets/cgfx.h"
 #include "assets/field.h"
 #include "assets/garc.h"
@@ -15,10 +17,12 @@
 #include <string.h>
 
 struct options {
-    const char *romfs, *archive, *capture;
+    const char *romfs, *archive, *capture, *texture_archive;
     uint32_t entry, subentry, model, frames, section;
+    uint32_t texture_entry, texture_subentry, texture_section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
     int have_section, triangle_list;
+    int have_texture_entry, have_texture_subentry, have_texture_section;
 };
 struct camera { double yaw, pitch, zoom; int running; };
 struct model_asset {
@@ -28,6 +32,11 @@ struct model_asset {
     struct px_texture_image *textures;
     uint32_t *draw_order;
     uint32_t texture_count;
+    /* BCH textured preview: per-material interpretation and the external
+     * texture index (into textures) resolved by exact name bytes. */
+    struct px_bch_preview_material *bch_preview;
+    uint32_t *bch_texture;
+    int bch_textured;
 };
 
 static void asset_free(struct model_asset *asset)
@@ -36,6 +45,8 @@ static void asset_free(struct model_asset *asset)
         for (uint32_t i = 0; i < asset->texture_count; ++i) px_texture_free(&asset->textures[i]);
     free(asset->textures);
     free(asset->draw_order);
+    free(asset->bch_preview);
+    free(asset->bch_texture);
     px_cgfx_scene_free(&asset->scene);
     px_cgfx_model_free(&asset->wire);
     px_bch_model_free(&asset->bch);
@@ -74,6 +85,11 @@ static void usage(FILE *stream, const char *program)
         "  --section N        Select an AD/GR minipack section, 0..255\n"
         "  --triangle-list    Explicit BCH wireframe index-triple interpretation\n"
         "  --textured         Preview supported material texture and vertex colors\n"
+        "                     (BCH: unlit TEV stage 0 only; requires --triangle-list\n"
+        "                     and --texture-archive/--texture-entry)\n"
+        "  --texture-archive RELATIVE/PATH  GARC holding the external BCH textures\n"
+        "  --texture-entry N  Texture GARC entry; --texture-subentry N (default 0)\n"
+        "  --texture-section N  Select an AD/GR minipack section of that entry\n"
         "  --inspect          Print decoded mesh metadata without a window\n"
         "  --capture-frame F  Save first viewport to a new BMP file\n"
         "  --frames N         Exit after a positive number of frames\n"
@@ -122,12 +138,15 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--triangle-list")) { o->triangle_list = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
             strcmp(arg, "--subentry") && strcmp(arg, "--model") && strcmp(arg, "--frames") &&
-            strcmp(arg, "--capture-frame") && strcmp(arg, "--section")) return 0;
+            strcmp(arg, "--capture-frame") && strcmp(arg, "--section") &&
+            strcmp(arg, "--texture-archive") && strcmp(arg, "--texture-entry") &&
+            strcmp(arg, "--texture-subentry") && strcmp(arg, "--texture-section")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
         else if (!strcmp(arg, "--archive")) o->archive = value;
         else if (!strcmp(arg, "--capture-frame")) o->capture = value;
+        else if (!strcmp(arg, "--texture-archive")) o->texture_archive = value;
         else {
             uint32_t n;
             if (!number(value, &n)) return 0;
@@ -135,6 +154,14 @@ static int parse(int argc, char **argv, struct options *o)
             else if (!strcmp(arg, "--subentry")) { if (n > 31) return 0; o->subentry = n; o->have_subentry = 1; }
             else if (!strcmp(arg, "--model")) { o->model = n; o->have_model = 1; }
             else if (!strcmp(arg, "--section")) { if (n > 255) return 0; o->section = n; o->have_section = 1; }
+            else if (!strcmp(arg, "--texture-entry")) { o->texture_entry = n; o->have_texture_entry = 1; }
+            else if (!strcmp(arg, "--texture-subentry")) {
+                if (n > 31) return 0;
+                o->texture_subentry = n; o->have_texture_subentry = 1;
+            } else if (!strcmp(arg, "--texture-section")) {
+                if (n > 255) return 0;
+                o->texture_section = n; o->have_texture_section = 1;
+            }
             else { if (!n) return 0; o->frames = n; }
         }
     }
@@ -142,6 +169,11 @@ static int parse(int argc, char **argv, struct options *o)
         if (o->romfs || o->archive || o->have_entry || o->have_subentry || o->have_model ||
             o->have_section || o->triangle_list) return 0;
     } else if (!o->romfs || !o->archive || !o->have_entry || !relative_path(o->archive)) return 0;
+    const int texture_options = o->texture_archive || o->have_texture_entry ||
+        o->have_texture_subentry || o->have_texture_section;
+    if (texture_options && (o->demo || !o->textured || !o->triangle_list ||
+        !o->texture_archive || !o->have_texture_entry ||
+        !relative_path(o->texture_archive))) return 0;
     if (o->inspect && (o->capture || o->frames || o->self_test)) return 0;
     if (o->self_test && !o->frames) o->frames = 3;
     return 1;
@@ -209,13 +241,193 @@ static int demo_texture(struct model_asset *asset)
     return 1;
 }
 
+/* One GARC member after optional outer LZ, optional AD/GR section selection
+ * and optional inner LZ. Each resource has its own 64 MiB aggregate budget. */
+struct resource {
+    uint8_t *member, *decoded, *section_decoded;
+    const uint8_t *data;
+    size_t size, member_size, decoded_size;
+    const char *compression, *section_compression;
+};
+
+static void resource_free(struct resource *r)
+{
+    free(r->section_decoded); free(r->decoded); free(r->member);
+    memset(r, 0, sizeof *r);
+}
+
+static int read_resource(const char *romfs, const char *archive_path, uint32_t entry,
+                         uint32_t subentry, int have_section, uint32_t section,
+                         const char *label, struct resource *out)
+{
+    memset(out, 0, sizeof *out);
+    out->compression = out->section_compression = "none";
+    size_t a = strlen(romfs), b = strlen(archive_path);
+    if (a > SIZE_MAX - b - 2) return 0;
+    char *path = malloc(a + b + 2);
+    if (!path) return 0;
+    memcpy(path, romfs, a); path[a] = '/'; memcpy(path + a + 1, archive_path, b + 1);
+    char error[256]; struct px_garc *archive = NULL;
+    int ok = px_garc_open(path, &archive, error, sizeof error);
+    free(path);
+    if (!ok) { fprintf(stderr, "[model-viewer] %s archive: %s\n", label, error); return 0; }
+    ok = px_garc_read(archive, entry, subentry, 64 * 1024 * 1024,
+                      &out->member, &out->member_size, error, sizeof error);
+    px_garc_close(archive);
+    if (!ok) { fprintf(stderr, "[model-viewer] %s member: %s\n", label, error); return 0; }
+    const size_t size = out->member_size;
+    out->data = out->member;
+    if (size && (out->member[0] == 0x10 || out->member[0] == 0x11)) {
+        out->compression = out->member[0] == 0x10 ? "LZ10" : "LZ11";
+        const size_t limit = have_section ? 64 * 1024 * 1024 - size : 64 * 1024 * 1024;
+        if (!limit || !px_lz_decode(out->member, size, limit, &out->decoded, &out->decoded_size,
+                                    error, sizeof error)) {
+            if (!limit) snprintf(error, sizeof error, "aggregate model input budget exceeded");
+            goto failed;
+        }
+        out->data = out->decoded;
+    }
+    out->size = out->decoded ? out->decoded_size : size;
+    if (have_section) {
+        if (out->size < 2 || (memcmp(out->data, "AD", 2) && memcmp(out->data, "GR", 2))) {
+            snprintf(error, sizeof error, "--section requires an AD or GR minipack");
+            goto failed;
+        }
+        struct px_field_span selected;
+        enum px_field_result status = px_field_section(out->data, out->size,
+            (const char *)out->data, (uint16_t)section, &selected);
+        if (status != PX_FIELD_OK) {
+            snprintf(error, sizeof error, "minipack section: %s", px_field_result_string(status));
+            goto failed;
+        }
+        out->data = selected.data;
+        out->size = selected.size;
+        if (out->size && (out->data[0] == 0x10 || out->data[0] == 0x11)) {
+            out->section_compression = out->data[0] == 0x10 ? "LZ10" : "LZ11";
+            size_t section_size = 0;
+            const size_t used = size + out->decoded_size;
+            if (used >= 64 * 1024 * 1024 ||
+                !px_lz_decode(out->data, out->size, 64 * 1024 * 1024 - used,
+                              &out->section_decoded, &section_size, error, sizeof error)) {
+                if (used >= 64 * 1024 * 1024) snprintf(error, sizeof error, "aggregate model input budget exceeded");
+                goto failed;
+            }
+            out->data = out->section_decoded;
+            out->size = section_size;
+        }
+    }
+    return 1;
+failed:
+    fprintf(stderr, "[model-viewer] %s %s\n", label, error);
+    resource_free(out);
+    return 0;
+}
+
+static void print_resource(const char *prefix, const char *archive, uint32_t entry,
+                           uint32_t subentry, uint32_t model, int have_section,
+                           uint32_t section, const struct resource *r)
+{
+    printf("%sarchive=%s %sentry=%" PRIu32 " %ssubentry=%" PRIu32, prefix, archive,
+           prefix, entry, prefix, subentry);
+    if (!*prefix) printf(" model=%" PRIu32, model);
+    printf(" %scompression=%s", prefix, r->compression);
+    if (have_section) printf(" %ssection=%" PRIu32 " %ssection_compression=%s",
+                             prefix, section, prefix, r->section_compression);
+    putchar('\n');
+}
+
+static int prepare_bch_materials(struct model_asset *asset)
+{
+    const struct px_bch_model *bch = &asset->bch;
+    asset->bch_preview = calloc(bch->material_count, sizeof *asset->bch_preview);
+    asset->bch_texture = calloc(bch->material_count, sizeof *asset->bch_texture);
+    if (!asset->bch_preview || !asset->bch_texture) return 0;
+    for (uint32_t i = 0; i < bch->material_count; ++i) {
+        const enum px_bch_material_result status =
+            px_bch_material_preview(&bch->materials[i], &asset->bch_preview[i]);
+        if (status != PX_BCH_MATERIAL_OK) {
+            fprintf(stderr, "[model-viewer] BCH material %" PRIu32 ": %s\n", i,
+                    px_bch_material_result_string(status));
+            return 0;
+        }
+        if (asset->bch_preview[i].mag_linear != asset->bch_preview[i].min_linear) {
+            fprintf(stderr, "[model-viewer] BCH material %" PRIu32 ": distinct min/mag filters are unsupported\n", i);
+            return 0;
+        }
+    }
+    /* Preview policy: ascending mesh layer, then priority; equal keys keep
+     * resource order. This is not recovered game draw sorting. */
+    asset->draw_order = malloc((size_t)bch->mesh_count * sizeof *asset->draw_order);
+    if (!asset->draw_order) return 0;
+    for (uint32_t i = 0; i < bch->mesh_count; ++i) {
+        uint32_t j = i;
+        const struct px_bch_mesh *next = &bch->meshes[i];
+        while (j) {
+            const struct px_bch_mesh *previous = &bch->meshes[asset->draw_order[j - 1]];
+            if (previous->layer < next->layer ||
+                (previous->layer == next->layer && previous->priority <= next->priority)) break;
+            asset->draw_order[j] = asset->draw_order[j - 1]; --j;
+        }
+        asset->draw_order[j] = i;
+    }
+    asset->bch_textured = 1;
+    return 1;
+}
+
+/* Resolve each material's stage-0 texture name against the external BCH by
+ * exact bytes. A name occurring more than once there is ambiguous and fails.
+ * Only referenced textures are decoded; their RGBA total is capped at 64 MiB. */
+static int bind_bch_textures(const uint8_t *data, size_t size, struct model_asset *asset)
+{
+    struct px_bch *pack = NULL;
+    enum px_bch_result result = px_bch_open(data, size, &pack);
+    if (result != PX_BCH_OK) goto failed;
+    const size_t count = px_bch_texture_count(pack);
+    if (count > UINT32_MAX) { result = PX_BCH_LIMIT_EXCEEDED; goto failed; }
+    asset->texture_count = (uint32_t)count;
+    asset->textures = calloc(count ? count : 1, sizeof *asset->textures);
+    if (!asset->textures) { result = PX_BCH_NO_MEMORY; goto failed; }
+    uint64_t bytes = 0;
+    const struct px_bch_model *bch = &asset->bch;
+    for (uint32_t i = 0; i < bch->material_count; ++i) {
+        const struct px_bch_name *wanted =
+            &bch->materials[i].texture_names[asset->bch_preview[i].unit];
+        size_t found = SIZE_MAX;
+        for (size_t j = 0; j < count; ++j) {
+            const struct px_bch_texture *t = px_bch_texture(pack, j);
+            if (t->name_size != wanted->size || memcmp(t->name, wanted->bytes, wanted->size)) continue;
+            if (found != SIZE_MAX) {
+                fprintf(stderr, "[model-viewer] ambiguous external texture name for material %" PRIu32 "\n", i);
+                px_bch_close(pack); return 0;
+            }
+            found = j;
+        }
+        if (found == SIZE_MAX) { result = PX_BCH_NOT_FOUND; goto failed; }
+        asset->bch_texture[i] = (uint32_t)found;
+        if (asset->textures[found].rgba) continue;
+        const struct px_bch_texture *t = px_bch_texture(pack, found);
+        result = t->decode_status;
+        if (result != PX_BCH_OK) goto failed;
+        bytes += (uint64_t)t->width * t->height * 4;
+        if (bytes > 64u * 1024u * 1024u) { result = PX_BCH_LIMIT_EXCEEDED; goto failed; }
+        result = px_bch_decode_texture(pack, found, &asset->textures[found]);
+        if (result != PX_BCH_OK) goto failed;
+    }
+    px_bch_close(pack);
+    return 1;
+failed:
+    fprintf(stderr, "[model-viewer] BCH textures: %s\n", px_bch_result_string(result));
+    px_bch_close(pack);
+    return 0;
+}
+
 static int decode_model(const struct options *o, const uint8_t *data, size_t size,
                         struct model_asset *asset)
 {
     if (size >= 4 && !memcmp(data, "BCH\0", 4)) {
-        if (!o->triangle_list || o->textured) {
-            fprintf(stderr, "[model-viewer] BCH requires --triangle-list for an explicit wireframe interpretation; "
-                    "BCH --textured materials are not supported.\n");
+        if (!o->triangle_list || (o->textured && !o->texture_archive)) {
+            fprintf(stderr, "[model-viewer] BCH requires --triangle-list for an explicit index-triple interpretation; "
+                    "BCH --textured also requires --texture-archive and --texture-entry.\n");
             return 0;
         }
         struct px_bch_model *bch = &asset->bch;
@@ -243,7 +455,11 @@ static int decode_model(const struct options *o, const uint8_t *data, size_t siz
         memcpy(mesh->bounds_min, bch->bounds_min, sizeof mesh->bounds_min);
         memcpy(mesh->bounds_max, bch->bounds_max, sizeof mesh->bounds_max);
         memcpy(mesh->name, bch->name.bytes, bch->name.size + 1);
-        return 1;
+        return !o->textured || prepare_bch_materials(asset);
+    }
+    if (o->texture_archive) {
+        fprintf(stderr, "[model-viewer] --texture-archive requires BCH model input.\n");
+        return 0;
     }
     if (o->triangle_list) {
         fprintf(stderr, "[model-viewer] --triangle-list requires BCH input.\n");
@@ -273,73 +489,24 @@ static int load(const struct options *o, struct model_asset *asset)
         for (unsigned i = 0; i < 3; ++i) { mesh->bounds_min[i] = -1; mesh->bounds_max[i] = 1; }
         return !o->textured || demo_texture(asset);
     }
-    size_t a = strlen(o->romfs), b = strlen(o->archive);
-    if (a > SIZE_MAX - b - 2) return 0;
-    char *path = malloc(a + b + 2);
-    if (!path) return 0;
-    memcpy(path, o->romfs, a); path[a] = '/'; memcpy(path + a + 1, o->archive, b + 1);
-    char error[256]; struct px_garc *archive = NULL;
-    int ok = px_garc_open(path, &archive, error, sizeof error);
-    free(path);
-    if (!ok) { fprintf(stderr, "[model-viewer] Archive: %s\n", error); return 0; }
-    uint8_t *member = NULL, *decoded = NULL, *section_decoded = NULL;
-    size_t size = 0, decoded_size = 0, section_decoded_size = 0;
-    ok = px_garc_read(archive, o->entry, o->subentry, 64 * 1024 * 1024,
-                      &member, &size, error, sizeof error);
-    px_garc_close(archive);
-    if (!ok) { fprintf(stderr, "[model-viewer] Member: %s\n", error); return 0; }
-    const uint8_t *data = member;
-    const char *compression = "none";
-    const char *section_compression = "none";
-    if (size && (member[0] == 0x10 || member[0] == 0x11)) {
-        compression = member[0] == 0x10 ? "LZ10" : "LZ11";
-        const size_t limit = o->have_section ? 64 * 1024 * 1024 - size : 64 * 1024 * 1024;
-        if (!limit || !px_lz_decode(member, size, limit, &decoded, &decoded_size, error, sizeof error)) {
-            if (!limit) snprintf(error, sizeof error, "aggregate model input budget exceeded");
-            goto failed;
-        }
-        data = decoded;
+    struct resource model = {0};
+    if (!read_resource(o->romfs, o->archive, o->entry, o->subentry, o->have_section,
+                       o->section, "model", &model)) return 0;
+    int ok = decode_model(o, model.data, model.size, asset);
+    if (ok) print_resource("", o->archive, o->entry, o->subentry, o->model,
+                           o->have_section, o->section, &model);
+    resource_free(&model);
+    if (ok && asset->bch_textured) {
+        struct resource textures = {0};
+        ok = read_resource(o->romfs, o->texture_archive, o->texture_entry, o->texture_subentry,
+                           o->have_texture_section, o->texture_section, "texture", &textures) &&
+             bind_bch_textures(textures.data, textures.size, asset);
+        if (ok) print_resource("texture_", o->texture_archive, o->texture_entry,
+                               o->texture_subentry, 0, o->have_texture_section,
+                               o->texture_section, &textures);
+        resource_free(&textures);
     }
-    size_t input_size = decoded ? decoded_size : size;
-    if (o->have_section) {
-        if (input_size < 2 || (memcmp(data, "AD", 2) && memcmp(data, "GR", 2))) {
-            snprintf(error, sizeof error, "--section requires an AD or GR minipack");
-            goto failed;
-        }
-        struct px_field_span selected;
-        enum px_field_result status = px_field_section(data, input_size, (const char *)data,
-                                                       (uint16_t)o->section, &selected);
-        if (status != PX_FIELD_OK) {
-            snprintf(error, sizeof error, "minipack section: %s", px_field_result_string(status));
-            goto failed;
-        }
-        data = selected.data;
-        input_size = selected.size;
-        if (input_size && (data[0] == 0x10 || data[0] == 0x11)) {
-            section_compression = data[0] == 0x10 ? "LZ10" : "LZ11";
-            const size_t used = size + decoded_size;
-            if (used >= 64 * 1024 * 1024 ||
-                !px_lz_decode(data, input_size, 64 * 1024 * 1024 - used,
-                              &section_decoded, &section_decoded_size, error, sizeof error)) {
-                if (used >= 64 * 1024 * 1024) snprintf(error, sizeof error, "aggregate model input budget exceeded");
-                goto failed;
-            }
-            data = section_decoded;
-            input_size = section_decoded_size;
-        }
-    }
-    ok = decode_model(o, data, input_size, asset);
-    free(section_decoded); free(decoded); free(member);
-    if (!ok) return 0;
-    printf("archive=%s entry=%" PRIu32 " subentry=%" PRIu32 " model=%" PRIu32 " compression=%s",
-           o->archive, o->entry, o->subentry, o->model, compression);
-    if (o->have_section) printf(" section=%" PRIu32 " section_compression=%s", o->section, section_compression);
-    putchar('\n');
-    return 1;
-failed:
-    fprintf(stderr, "[model-viewer] %s\n", error);
-    free(section_decoded); free(decoded); free(member);
-    return 0;
+    return ok;
 }
 
 static void reset(struct camera *c) { c->yaw = 0.55; c->pitch = -0.35; c->zoom = 1; c->running = 1; }
@@ -545,9 +712,115 @@ raster_error:
     SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0;
 }
 
+static int bch_state(const struct px_bch_preview_material *m, struct px_raster_sampler *sampler,
+                     struct px_raster_state *state)
+{
+    static const enum px_raster_compare compare[] = {
+        PX_RASTER_NEVER, PX_RASTER_ALWAYS, PX_RASTER_EQUAL, PX_RASTER_NOTEQUAL,
+        PX_RASTER_LESS, PX_RASTER_LEQUAL, PX_RASTER_GREATER, PX_RASTER_GEQUAL
+    };
+    static const enum px_raster_wrap wrap[] = {
+        PX_RASTER_CLAMP, PX_RASTER_CLAMP, PX_RASTER_REPEAT, PX_RASTER_MIRROR
+    };
+    static const enum px_raster_blend blend[] = {
+        PX_RASTER_REPLACE, PX_RASTER_SOURCE_ALPHA, PX_RASTER_ADD_SOURCE_ALPHA
+    };
+    if (m->wrap_u > 3 || m->wrap_v > 3 || m->alpha_compare > 7 || m->depth_compare > 7 ||
+        (unsigned)m->blend > 2 || m->color_write_mask > 15) return 0;
+    sampler->wrap_u = wrap[m->wrap_u]; sampler->wrap_v = wrap[m->wrap_v];
+    sampler->filter = m->mag_linear ? PX_RASTER_LINEAR : PX_RASTER_NEAREST;
+    *state = px_raster_default_state();
+    /* The material's depth comparison is applied in this preview's own
+     * lower-z-is-nearer convention; PICA depth-map registers are not run. */
+    state->depth_test = (int)m->depth_test;
+    state->depth_compare = m->depth_test ? compare[m->depth_compare] : PX_RASTER_ALWAYS;
+    state->depth_write = (int)m->depth_write;
+    state->alpha_compare = m->alpha_test ? compare[m->alpha_compare] : PX_RASTER_ALWAYS;
+    state->alpha_reference = (uint8_t)m->alpha_reference;
+    state->cull = PX_RASTER_CULL_NONE; /* register 0x40 is reported, not executed */
+    state->front = PX_RASTER_CCW;
+    state->blend = blend[m->blend];
+    state->color_write_mask = (uint8_t)m->color_write_mask;
+    return 1;
+}
+
+static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *asset,
+                             const struct camera *camera, struct px_raster_vertex *points,
+                             struct px_raster_target *target, SDL_Texture **frame,
+                             const char *path)
+{
+    const struct px_cgfx_model *mesh = &asset->wire;
+    const struct px_bch_model *bch = &asset->bch;
+    int w, h;
+    if (SDL_GetRendererOutputSize(renderer, &w, &h) != 0 || w <= 0 || h <= 0) return 0;
+    enum px_raster_result result;
+    if (target->width != (uint32_t)w || target->height != (uint32_t)h) {
+        px_raster_free(target);
+        if (*frame) { SDL_DestroyTexture(*frame); *frame = NULL; }
+        result = px_raster_create((uint32_t)w, (uint32_t)h, target);
+        if (result != PX_RASTER_OK) goto raster_error;
+        *frame = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32,
+                                   SDL_TEXTUREACCESS_STREAMING, w, h);
+        if (!*frame || SDL_SetTextureBlendMode(*frame, SDL_BLENDMODE_NONE)) return 0;
+    }
+    const uint8_t background[4] = {22, 27, 36, 255};
+    result = px_raster_clear(target, background, INFINITY);
+    if (result != PX_RASTER_OK) goto raster_error;
+    double center[3], radius = 0;
+    for (unsigned j = 0; j < 3; ++j) {
+        center[j] = ((double)mesh->bounds_min[j] + mesh->bounds_max[j]) / 2;
+        double half = ((double)mesh->bounds_max[j] - mesh->bounds_min[j]) / 2;
+        radius += half * half;
+    }
+    radius = sqrt(radius); if (radius < 1e-20) radius = 1;
+    double scale = (w < h ? w : h) * 0.42 * camera->zoom;
+    double cy = cos(camera->yaw), sy = sin(camera->yaw);
+    double cp = cos(camera->pitch), sp = sin(camera->pitch);
+    for (uint32_t i = 0; i < mesh->vertex_count; ++i) {
+        double x = (mesh->positions[3 * (size_t)i] - center[0]) / radius;
+        double y = (mesh->positions[3 * (size_t)i + 1] - center[1]) / radius;
+        double z = (mesh->positions[3 * (size_t)i + 2] - center[2]) / radius;
+        double rx = cy * x + sy * z, rz = -sy * x + cy * z;
+        points[i].x = w * 0.5 + rx * scale;
+        points[i].y = h * 0.5 - (cp * y - sp * rz) * scale;
+        points[i].z = -(sp * y + cp * rz);
+        /* Stored BCH UV0 has V up; decoded images are top-down. */
+        points[i].u = bch->uvs[2 * (size_t)i];
+        points[i].v = 1.0 - bch->uvs[2 * (size_t)i + 1];
+        for (unsigned j = 0; j < 4; ++j) points[i].rgba[j] = 1; /* unlit: white */
+    }
+    for (uint32_t i = 0; i < bch->mesh_count; ++i) {
+        const struct px_bch_mesh *m = &bch->meshes[asset->draw_order[i]];
+        const struct px_bch_preview_material *material = &asset->bch_preview[m->material_index];
+        struct px_raster_sampler sampler; struct px_raster_state state;
+        if (!bch_state(material, &sampler, &state)) {
+            SDL_SetError("Material uses unsupported preview state"); return 0;
+        }
+        const struct px_texture_image *image = &asset->textures[asset->bch_texture[m->material_index]];
+        const struct px_raster_image texture = {
+            image->width, image->height, image->rgba, (size_t)image->width * image->height * 4
+        };
+        for (uint32_t j = 0; j < m->index_count; j += 3) {
+            size_t first = (size_t)m->first_index + j;
+            struct px_raster_vertex triangle[3] = {
+                points[mesh->indices[first]], points[mesh->indices[first + 1]], points[mesh->indices[first + 2]]
+            };
+            result = px_raster_draw(target, triangle, &texture, &sampler, &state);
+            if (result != PX_RASTER_OK) goto raster_error;
+        }
+    }
+    if (SDL_UpdateTexture(*frame, NULL, target->rgba, w * 4) ||
+        SDL_RenderClear(renderer) || SDL_RenderCopy(renderer, *frame, NULL, NULL)) return 0;
+    if (path && !capture(renderer, path, w, h)) return 0;
+    SDL_RenderPresent(renderer); return 1;
+raster_error:
+    SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0;
+}
+
 static int window(const struct options *o, const struct model_asset *asset)
 {
-    const struct px_cgfx_model *mesh = o->textured ? &asset->scene.mesh : &asset->wire;
+    const struct px_cgfx_model *mesh = o->textured && !asset->bch_textured ?
+        &asset->scene.mesh : &asset->wire;
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER)) return 0;
     SDL_Window *win = SDL_CreateWindow(o->textured ?
         "Pokemon X unlit textured preview — arrows: orbit | +/-: zoom | R: reset | Esc: exit" :
@@ -568,14 +841,16 @@ static int window(const struct options *o, const struct model_asset *asset)
     SDL_RendererInfo info; if (SDL_GetRendererInfo(renderer, &info)) goto done;
     fprintf(stderr, "[model-viewer] Video=%s renderer=%s; orthographic %s.\n",
             SDL_GetCurrentVideoDriver(), info.name, o->textured ?
+            asset->bch_textured ? "unlit BCH TEV-stage-0 software preview; layer/priority/resource draw order" :
             "unlit textured software preview; translucency/priority/resource draw order" : "wireframe");
     uint32_t frames = 0;
     while (c.running) {
         SDL_Event e; while (SDL_PollEvent(&e)) event(&c, &e);
         if (!c.running) break;
         const char *path = frames == 0 ? o->capture : NULL;
-        if (o->textured ? !draw_textured(renderer, asset, &c, vertices, &target, &frame, path) :
-                         !draw(renderer, mesh, &c, points, path)) goto done;
+        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, vertices, &target, &frame, path) :
+            o->textured ? !draw_textured(renderer, asset, &c, vertices, &target, &frame, path) :
+                          !draw(renderer, mesh, &c, points, path)) goto done;
         if (++frames == o->frames) break;
         SDL_Delay(16);
     }
@@ -599,10 +874,11 @@ static void print_bch_name(const struct px_bch_name *name)
     putchar('"');
 }
 
-static void print_bch_metadata(const struct px_bch_model *bch)
+static void print_bch_metadata(const struct px_bch_model *bch, int textured)
 {
-    printf("container=BCH topology=assumed-triangle-list mode=wireframe visibility=all-meshes "
-           "materials=metadata-only meshes=%" PRIu32 " submeshes=%" PRIu32 " material_count=%" PRIu32 "\n",
+    printf("container=BCH topology=assumed-triangle-list mode=%s visibility=all-meshes "
+           "materials=%s meshes=%" PRIu32 " submeshes=%" PRIu32 " material_count=%" PRIu32 "\n",
+           textured ? "textured" : "wireframe", textured ? "tev-stage0-unlit" : "metadata-only",
            bch->mesh_count, bch->submesh_count, bch->material_count);
     for (uint32_t i = 0; i < bch->mesh_count; ++i) {
         const struct px_bch_mesh *mesh = &bch->meshes[i];
@@ -631,14 +907,44 @@ static void print_bch_metadata(const struct px_bch_model *bch)
     }
 }
 
+static void print_bch_bindings(const struct model_asset *asset)
+{
+    static const char *blend[] = {"replace", "source-alpha", "add-source-alpha"};
+    const struct px_bch_model *bch = &asset->bch;
+    uint32_t decoded = 0;
+    for (uint32_t i = 0; i < asset->texture_count; ++i) decoded += asset->textures[i].rgba != NULL;
+    printf("mode=textured shading=unlit-tev-stage0 primary=white lighting=not-executed "
+           "stages_executed=1 culling=not-executed draw_order=layer-priority-resource "
+           "external_textures=%" PRIu32 " decoded_textures=%" PRIu32 "\n", asset->texture_count, decoded);
+    for (uint32_t i = 0; i < bch->material_count; ++i) {
+        const struct px_bch_preview_material *m = &asset->bch_preview[i];
+        const struct px_texture_image *image = &asset->textures[asset->bch_texture[i]];
+        printf("binding material=%" PRIu32 " unit=%" PRIu32 " texture=", i, m->unit);
+        print_bch_name(&bch->materials[i].texture_names[m->unit]);
+        printf(" external_index=%" PRIu32 " size=%" PRIu32 "x%" PRIu32
+               " wrap=%" PRIu32 ",%" PRIu32 " filter=%s alpha_test=%" PRIu32 " alpha_compare=%" PRIu32
+               " alpha_reference=%" PRIu32 " depth_test=%" PRIu32 " depth_compare=%" PRIu32
+               " depth_write=%" PRIu32 " color_mask=0x%" PRIx32 " blend=%s cull_register=%" PRIu32
+               " unexecuted_units=0x%" PRIx32 "\n",
+               asset->bch_texture[i], image->width, image->height, m->wrap_u, m->wrap_v,
+               m->mag_linear ? "linear" : "nearest", m->alpha_test, m->alpha_compare,
+               m->alpha_reference, m->depth_test, m->depth_compare, m->depth_write,
+               m->color_write_mask, blend[m->blend], m->cull, m->unexecuted_units);
+    }
+    printf("submission_order=");
+    for (uint32_t i = 0; i < bch->mesh_count; ++i)
+        printf("%s%" PRIu32, i ? "," : "", asset->draw_order[i]);
+    putchar('\n');
+}
+
 int main(int argc, char **argv)
 {
     struct options o = {0}; int parsed = parse(argc, argv, &o);
     if (parsed != 1) { usage(parsed == 2 ? stdout : stderr, argv[0]); return parsed == 2 ? 0 : 1; }
     struct model_asset asset = {0};
     if (!load(&o, &asset)) { asset_free(&asset); return 1; }
-    if (o.textured && !prepare_draw_order(&asset)) { asset_free(&asset); return 1; }
-    const struct px_cgfx_model mesh = o.textured ? asset.scene.mesh : asset.wire;
+    if (o.textured && !asset.bch_textured && !prepare_draw_order(&asset)) { asset_free(&asset); return 1; }
+    const struct px_cgfx_model mesh = o.textured && !asset.bch_textured ? asset.scene.mesh : asset.wire;
     printf("name=\"");
     for (const unsigned char *p = (const unsigned char *)mesh.name; *p; ++p) {
         if (*p >= 32 && *p <= 126 && *p != '"' && *p != '\\') putchar(*p);
@@ -649,8 +955,9 @@ int main(int argc, char **argv)
            mesh.vertex_count, mesh.index_count / 3, mesh.shape_count,
            mesh.bounds_min[0], mesh.bounds_min[1], mesh.bounds_min[2],
            mesh.bounds_max[0], mesh.bounds_max[1], mesh.bounds_max[2]);
-    if (asset.bch.mesh_count) print_bch_metadata(&asset.bch);
-    if (o.textured) {
+    if (asset.bch.mesh_count) print_bch_metadata(&asset.bch, asset.bch_textured);
+    if (asset.bch_textured) print_bch_bindings(&asset);
+    else if (o.textured) {
         uint32_t decoded = 0;
         for (uint32_t i = 0; i < asset.texture_count; ++i) decoded += asset.textures[i].rgba != NULL;
         printf("mode=textured shading=unlit-texture-times-vertex-color draws=%" PRIu32

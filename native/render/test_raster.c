@@ -250,6 +250,16 @@ static void winding_and_shared_edges(void)
             pixel(&t,x,y,(const uint8_t[]){128,0,0,191});
         CHECK(t.candidate_pixels==32);
     }
+    /* Additive source alpha: src*srcA + dst per channel, then saturation. */
+    state.blend=PX_RASTER_ADD_SOURCE_ALPHA;
+    OK(px_raster_clear(&t,(const uint8_t[]){0,40,0,100},INFINITY));
+    OK(px_raster_draw(&t,a,NULL,NULL,&state));OK(px_raster_draw(&t,b,NULL,NULL,&state));
+    for(unsigned y=0;y<4;++y)for(unsigned x=0;x<4;++x)
+        pixel(&t,x,y,(const uint8_t[]){128,40,0,164});
+    OK(px_raster_draw(&t,a,NULL,NULL,&state));
+    pixel(&t,0,0,(const uint8_t[]){255,40,0,228});pixel(&t,3,3,(const uint8_t[]){128,40,0,164});
+    { struct px_raster_state bad=state; bad.blend=(enum px_raster_blend)(PX_RASTER_ADD_SOURCE_ALPHA+1);
+      CHECK(px_raster_draw(&t,a,NULL,NULL,&bad)==PX_RASTER_INVALID_ARGUMENT); }
     /* Top horizontal and left vertical edges include exact pixel centers. */
     p[0]=vertex(.5,.5,0,0);p[1]=vertex(3.5,.5,0,0);p[2]=vertex(.5,3.5,0,0);
     state=px_raster_default_state();

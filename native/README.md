@@ -4,7 +4,8 @@ This native C11/SDL2 application opens selected local Pokémon X archive entries
 and displays supported textures. It establishes an executable, window and event
 loop, monotonic timing, keyboard controls, image decoding, and bounded resource
 access. A separate executable previews a restricted subset of static CGFX mesh
-geometry as a wireframe or an opt-in unlit textured preview. The eight reconstructed game-logic modules are
+geometry as a wireframe or an opt-in unlit textured preview, and the selected
+BCH field as a wireframe or a TEV-stage-0 textured preview. The eight reconstructed game-logic modules are
 not connected to gameplay in this application yet. A third executable loads
 checked XY zone, matrix and region records for terrain/collision inspection.
 
@@ -203,7 +204,8 @@ and Escape exits. Initial marker and camera placement are inspector choices.
 bounded frame/input checks work as in the other viewers.
 
 This does not implement player movement, transitions or full collision rules.
-The field's environment models use BCH and are not yet decoded. The parser,
+The field's BCH environment model is previewed separately in the model viewer
+(wireframe or textured, below); it is not yet placed in this inspector. The parser,
 placement evidence, limits and policy are documented in [the field notes](../docs/native-field.md).
 
 ## Tests and evidence
@@ -324,7 +326,33 @@ omit `--section`.
 
 The mandatory `--triangle-list` flag makes the index interpretation explicit.
 It is rejected for CGFX and demo input. Original primitive mode is still unknown
-for this sample. All meshes are displayed regardless of stored visibility;
-material rendering, projected textures and lighting remain unimplemented, and
-BCH `--textured` is rejected. Native Windows has not been tested; validation uses
+for this sample. All meshes are displayed regardless of stored visibility.
+Native Windows has not been tested; validation uses
 Linux under WSL and SDL's dummy video backend. See the [reproduction record](reproduction/bch-native/README.txt).
+
+## Texture the BCH field
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured \
+  --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11
+```
+
+BCH `--textured` needs an explicit external texture source: the
+`--texture-archive`/`--texture-entry` pair, with optional `--texture-subentry`
+and `--texture-section`, loads a BCH texture pack through the same bounded
+GARC/LZ/AD-GR path (its own 64 MiB budget). Each material's texture unit is the
+one its TEV stage 0 names as source; that unit's name is then matched by exact
+bytes, and a missing or duplicated name fails. For field 165 all twelve
+materials resolve; the four projection-mapped materials select their unit-1
+base texture, and their unit-0 `projection_dummy` is reported as unexecuted.
+
+The preview is unlit and runs stage 0 only, with white primary/lighting colors.
+It applies each material's sampler wrap/filter, alpha test, depth test/write,
+color mask and blend (replace, source-alpha or additive source-alpha) from its
+command registers. Culling is reported but not executed; meshes draw by layer,
+priority and resource order. Combiner stages 1–5, the projected texture,
+fragment lighting, fog, vertex colors and the original primitive state remain
+unimplemented, so this is not the game's final appearance. `--inspect` prints
+every binding without a window. See the
+[textured-preview record](reproduction/bch-textured/README.txt).

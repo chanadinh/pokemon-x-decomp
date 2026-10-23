@@ -10,10 +10,12 @@
 enum { CONTENT = 56, STRING = 2104, COMMAND = 2360, RAW = 3384, RELOC = 3640,
        MODEL = 248, MATERIAL = 400, MESH = 488, SUB = 544, PARAMS = 596,
        VISIBILITY = 600, MODEL_TREE = 604, PARAM_TREE = 628,
-       MATERIAL_TREE = 652, NODE_TREE = 676, MODEL_TABLE = 700, PARAM_TABLE = 704 };
+       MATERIAL_TREE = 652, NODE_TREE = 676, MODEL_TABLE = 700, PARAM_TABLE = 704,
+       FULL_PARAMS = 1200 };
 struct fixture {
     uint8_t data[4096];
     size_t size, cursor, enable, face, vertex_relocation, index_relocation;
+    size_t fragment, fragment_relocation, material_commands;
 };
 static void word(uint8_t *p, uint32_t value)
 {
@@ -67,9 +69,12 @@ static void finish(struct fixture *f)
 {
     word(f->data + 44, (uint32_t)(f->size - RELOC));
 }
-static struct fixture fixture(unsigned width)
+/* parameters=1 adds a full 0xd0-byte parameter object: asymmetric texture
+ * coordinators and a relocated fragment command stream at +0xc8. */
+static struct fixture fixture_with(unsigned width, int parameters)
 {
-    struct fixture f = {{0}, RELOC, COMMAND, 0, 0, 0, 0};
+    struct fixture f = {{0}, RELOC, COMMAND, 0, 0, 0, 0, 0, 0, 0};
+    const size_t params = parameters ? FULL_PARAMS : PARAMS;
     memcpy(f.data, "BCH\0\7\7", 6);
     const uint32_t starts[] = {CONTENT, STRING, COMMAND, RAW, RELOC};
     const uint32_t lengths[] = {2048, 256, 1024, 256};
@@ -77,7 +82,7 @@ static struct fixture fixture(unsigned width)
     for (unsigned i = 0; i < 4; ++i) word(f.data + 28 + i * 4, lengths[i]);
     memcpy(f.data + STRING, "pattern\0triangle\0surface\0node\xff\0", 30);
     dictionary(&f, 0, MODEL_TABLE, MODEL_TREE, MODEL, STRING + 8);
-    dictionary(&f, 1, PARAM_TABLE, PARAM_TREE, PARAMS, STRING + 17);
+    dictionary(&f, 1, PARAM_TABLE, PARAM_TREE, params, STRING + 17);
     for (unsigned i = 0; i < 12; ++i) word(f.data + MODEL + 4 + i * 4,
                                           float_bits(i == 0 || i == 5 || i == 10 ? 1.f : 0.f));
     pointer(&f, MODEL + 0x34, MATERIAL, 0);
@@ -90,13 +95,38 @@ static struct fixture fixture(unsigned width)
     for (unsigned i = 0; i < 4; ++i) word(f.data + MODEL + counts[i], 1);
     pointer(&f, MATERIAL_TREE + 20, STRING + 17, 1);
     pointer(&f, NODE_TREE + 20, STRING + 25, 1);
-    pointer(&f, MATERIAL, PARAMS, 0);
+    pointer(&f, MATERIAL, params, 0);
     pointer(&f, MATERIAL + 0x48, STRING, 1);
     pointer(&f, MATERIAL + 0x54, STRING + 17, 1);
     f.data[VISIBILITY] = 1;
     size_t start = f.cursor;
+    f.material_commands = start;
     single(&f, 0x80, 15, 1);
+    if (parameters) {
+        single(&f, 0x83, 15, 0x2220);
+        single(&f, 0x93, 1, 0x12345678); /* Partial: only bits 0..7 known. */
+    }
     stream(&f, MATERIAL + 0x10, start);
+    if (parameters) {
+        const uint32_t packed[3] = {0xff000001, 0x00030001, 1};
+        const float coordinates[3][5] = {{1, 1, 0, 0, 0}, {2, 3, .5f, -1, 4}, {0}};
+        for (unsigned unit = 0; unit < 3; ++unit) {
+            word(f.data + params + 12 + unit * 24, packed[unit]);
+            for (unsigned j = 0; j < 5; ++j)
+                word(f.data + params + 16 + unit * 24 + j * 4, float_bits(coordinates[unit][j]));
+        }
+        f.fragment = f.cursor;
+        single(&f, 0x40, 1, 2);
+        single(&f, 0x100, 3, 0x100);
+        single(&f, 0x101, 15, 0x76760000);
+        single(&f, 0x104, 3, 0x61);
+        single(&f, 0x107, 15, 0x0f51);
+        single(&f, 0xe0, 2, 0x800);
+        const uint32_t stage0[] = {0x00030003, 0, 1, 0xff000000, 0};
+        packet(&f, 0xc0, 15, 1, 5, stage0);
+        f.fragment_relocation = f.size;
+        stream(&f, params + 0xc8, f.fragment);
+    }
     start = f.cursor;
     single(&f, 0x203, 15, 0);
     stream(&f, MESH + 24, start);
@@ -130,6 +160,10 @@ static struct fixture fixture(unsigned width)
     f.data[RAW + 60 + 2 * width] = 1;
     finish(&f);
     return f;
+}
+static struct fixture fixture(unsigned width)
+{
+    return fixture_with(width, 0);
 }
 static void reject(struct fixture f, size_t at, uint32_t value)
 {
@@ -255,8 +289,68 @@ static void test_malformed_and_limits(void)
     finish(&f);
     assert(px_bch_model_decode(f.data, f.size, 0, &model) != PX_BCH_MODEL_OK);
 }
+static void test_material_parameters(void)
+{
+    struct fixture f = fixture(1);
+    struct px_bch_model model;
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    /* The legacy four-byte parameter object stays valid without metadata. */
+    assert(!model.materials[0].parameters_present);
+    assert(model.materials[0].unit_parameters[0].known_mask == 0);
+    px_bch_model_free(&model);
+
+    f = fixture_with(1, 1);
+    struct fixture before = f;
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(memcmp(&f, &before, sizeof f) == 0);
+    memset(f.data, 0, sizeof f.data); /* Output must not borrow the input. */
+    const struct px_bch_material *m = model.materials;
+    assert(m->parameters_present == 1 && m->texture_unit_config == 1);
+    assert(m->coordinators[0].packed == 0xff000001 && m->coordinators[0].scale[0] == 1);
+    assert(m->coordinators[1].packed == 0x00030001);
+    assert(m->coordinators[1].scale[0] == 2 && m->coordinators[1].scale[1] == 3);
+    assert(m->coordinators[1].rotation == .5f);
+    assert(m->coordinators[1].translation[0] == -1 && m->coordinators[1].translation[1] == 4);
+    assert(m->unit_parameters[0].value == 0x2220 && m->unit_parameters[0].known_mask == UINT32_MAX);
+    assert(m->unit_parameters[1].value == 0x78 && m->unit_parameters[1].known_mask == 0xff);
+    assert(m->unit_parameters[2].known_mask == 0);
+    const struct px_bch_fragment_state *s = &m->fragment;
+    assert(s->cull.value == 2 && s->cull.known_mask == 0xff);
+    assert(s->color_operation.value == 0x100 && s->color_operation.known_mask == 0xffff);
+    assert(s->blend.value == 0x76760000 && s->blend.known_mask == UINT32_MAX);
+    assert(s->alpha_test.value == 0x61 && s->alpha_test.known_mask == 0xffff);
+    assert(s->depth_color.value == 0x0f51);
+    assert(s->tev_buffer.value == 0x800 && s->tev_buffer.known_mask == 0xff00);
+    assert(s->tev[0][0].value == 0x00030003 && s->tev[0][2].value == 1);
+    assert(s->tev[0][3].value == 0xff000000 && s->tev[0][4].known_mask == UINT32_MAX);
+    assert(s->tev[1][0].known_mask == 0 && s->tev[5][4].known_mask == 0);
+    px_bch_model_free(&model);
+
+    /* Nonfinite coordinators and draws in a fragment stream are rejected. */
+    struct fixture bad = fixture_with(1, 1);
+    word(bad.data + FULL_PARAMS + 12 + 24 + 8, 0x7f800000);
+    assert(px_bch_model_decode(bad.data, bad.size, 0, &model) != PX_BCH_MODEL_OK);
+    assert(model.materials == NULL);
+    bad = fixture_with(1, 1);
+    word(bad.data + bad.fragment, 1);
+    word(bad.data + bad.fragment + 4, 0x000f022f);
+    assert(px_bch_model_decode(bad.data, bad.size, 0, &model) != PX_BCH_MODEL_OK);
+    /* A command pointer relocated as tag 3 does not opt into this metadata. */
+    bad = fixture_with(1, 1);
+    word(bad.data + bad.fragment_relocation,
+         (uint32_t)(3u << 25) | (uint32_t)((FULL_PARAMS + 0xc8 - CONTENT) / 4));
+    assert(px_bch_model_decode(bad.data, bad.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(!model.materials[0].parameters_present);
+    px_bch_model_free(&model);
+    /* An empty fragment stream violates the command contract. */
+    bad = fixture_with(1, 1);
+    word(bad.data + FULL_PARAMS + 0xcc, 0);
+    assert(px_bch_model_decode(bad.data, bad.size, 0, &model) != PX_BCH_MODEL_OK);
+}
 int main(void)
 {
+    test_material_parameters();
+
     test_geometry_and_ownership();
     test_integer_attributes_and_no_topology_guess();
     test_draw_snapshot();

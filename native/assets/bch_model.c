@@ -282,6 +282,47 @@ static void *grow(struct reader *r, void *array, size_t count, size_t item_size)
     if (next == NULL) fail(r, PX_BCH_MODEL_NO_MEMORY);
     return next;
 }
+static void observe(const struct commands *commands, unsigned reg,
+                    struct px_bch_register *out)
+{
+    out->known_mask = commands->known[reg];
+    out->value = commands->values[reg] & out->known_mask;
+}
+static int read_parameters(struct reader *r, size_t params, struct px_bch_material *out)
+{
+    /* Older synthetic or nonstandard parameter objects stay geometry-valid;
+     * only a relocated command pointer at +0xc8 opts into this metadata. */
+    const struct relocation *rel = span(params, 0xd0, r->sections[CONTENTS]) ?
+        relocation(r, params + 0xc8) : NULL;
+    if (rel == NULL || rel->tag != 2) return 1;
+    for (unsigned unit = 0; unit < 3; ++unit) {
+        const size_t at = params + 12 + (size_t)unit * 24;
+        struct px_bch_coordinator *c = out->coordinators + unit;
+        float values[5];
+        for (unsigned j = 0; j < 5; ++j) {
+            values[j] = f32(r->data + at + 4 + j * 4);
+            if (!bounded(values[j])) return 0;
+        }
+        c->packed = u32(r->data + at);
+        c->scale[0] = values[0]; c->scale[1] = values[1]; c->rotation = values[2];
+        c->translation[0] = values[3]; c->translation[1] = values[4];
+    }
+    struct commands fragment;
+    if (!read_commands(r, params + 0xc8, &fragment)) return 0;
+    if (fragment.draw_count) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+    struct px_bch_fragment_state *f = &out->fragment;
+    observe(&fragment, 0x40, &f->cull);
+    observe(&fragment, 0x100, &f->color_operation);
+    observe(&fragment, 0x101, &f->blend);
+    observe(&fragment, 0x104, &f->alpha_test);
+    observe(&fragment, 0x107, &f->depth_color);
+    observe(&fragment, 0xe0, &f->tev_buffer);
+    static const unsigned stages[6] = {0xc0, 0xc8, 0xd0, 0xd8, 0xf0, 0xf8};
+    for (unsigned stage = 0; stage < 6; ++stage)
+        for (unsigned j = 0; j < 5; ++j) observe(&fragment, stages[stage] + j, &f->tev[stage][j]);
+    out->parameters_present = 1;
+    return 1;
+}
 static int read_materials(struct reader *r, size_t model, struct px_bch_model *out)
 {
     const uint32_t count = u32(r->data + model + 0x38);
@@ -312,8 +353,12 @@ static int read_materials(struct reader *r, size_t model, struct px_bch_model *o
         if (!read_commands(r, at + 0x10, &commands) ||
             !value(&commands, 0x80, UINT32_MAX, &material->texture_unit_config)) return 0;
         if (commands.draw_count) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
-        for (unsigned unit = 0; unit < 3; ++unit)
+        static const unsigned unit_registers[3] = {0x83, 0x93, 0x9b};
+        for (unsigned unit = 0; unit < 3; ++unit) {
             if (!name(r, at + 0x48 + unit * 4, 1, material->texture_names + unit)) return 0;
+            observe(&commands, unit_registers[unit], &material->unit_parameters[unit]);
+        }
+        if (!read_parameters(r, params, material)) return 0;
     }
     return 1;
 }
