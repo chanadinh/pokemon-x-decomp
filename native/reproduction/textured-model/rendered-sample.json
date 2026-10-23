@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-23",
+  "archive": "a/1/0/2",
+  "entry": 0,
+  "subentry": 0,
+  "model": 0,
+  "mode": "textured",
+  "vertices": 767,
+  "triangles": 936,
+  "materials": 6,
+  "textures": 6,
+  "submission_order": [
+    0,
+    2,
+    5,
+    3,
+    4,
+    1
+  ],
+  "viewport": [
+    960,
+    640
+  ],
+  "camera": {
+    "projection": "orthographic inspection",
+    "yaw": 0.55,
+    "pitch": -0.35,
+    "zoom": 1
+  },
+  "backend": "SDL x11/software; portable CPU triangle rasterizer",
+  "rgb_sha256": "1e5c12955ed8143a179573e70404494afc8de0d7ce15b005462d78de9bd4af2d",
+  "bmp_sha256": "201022c4582106e53c6bd94852faab04f66a181dd3b920dc7de088ca2c5f4550",
+  "png_sha256": "b987693a363ff84bf009c6d537b7e2937e9e8d4fdba4d4855bcb2f11ae0a0f45",
+  "non_background_pixels": 88916,
+  "distinct_rgb_colors": 15140,
+  "local_png": "outputs/native-textured-model/model-frame.png",
+  "conversion": "BMP to RGB PNG; all captured alpha bytes verified255, RGB rows preserved exactly.",
+  "scope": "Unlit texture times vertex color with supported depth/alpha/cull/sampler/blend states; stable translucency-layer/priority/resource order. No original-game visual-equivalence claim."
+}

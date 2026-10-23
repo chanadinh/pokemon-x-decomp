@@ -1,0 +1,523 @@
+{
+  "purpose": "Independent original-byte and primary-source comparison of the bounded textured CGFX preview.",
+  "source_member": {
+    "archive": "a/1/0/2",
+    "entry": 0,
+    "subentry": 0,
+    "bytes": 442880,
+    "sha256": "1f46ec657dc01dcd4f5ab69580a76a71031049de8d869a379cc35abbb0389fb9",
+    "prior_asset_and_geometry_record": "../cgfx-textures/geometry-sample.json"
+  },
+  "independence": [
+    "A separate Python oracle reads original CGFX signed-relative pointers, metadata words and interleaved vertex bytes directly. It does not call the C parser to determine expected values.",
+    "Expected UVs are float32 pairs at stream offset24. Expected colors use byte components at offset32 multiplied by the stored float32 scale; the fixed-color shape reads its float4 directly, ignoring the fixed-buffer scale as SPICA Gfx.cs does.",
+    "The C implementation is compiled to an isolated shared library and loaded through ctypes structures matching cgfx_model.h. Owned arrays are compared byte-for-byte; all exposed material fields and draw fields are compared to the independent oracle. Freeing is verified to zero the scene.",
+    "The synthetic runtime fixture is separately authored in Python and embeds asymmetric Morton-tiled RGBA8 pixels, direct material command packets, interleaved UV/color attributes and explicit relative pointers. It does not copy original assets or the C unit fixture."
+  ],
+  "comparison": {
+    "result": "all comparisons passed",
+    "vertices": 767,
+    "draws": 6,
+    "materials": 6,
+    "material_fields_compared": 162,
+    "draw_fields_compared": 48,
+    "uv_bytes_compared": 6136,
+    "color_float32_bytes_compared": 12272,
+    "fixture_decodes": true,
+    "uv_float32_sha256": "f8cbd52709e6f445ff1abb9164f59cc1e99a2d74f2fcbc9f13306055847f366b",
+    "color_float32_sha256": "acbe31ca5b643977dea16e1e051268e05bc864bde4d1c16e934810ea0563da5b",
+    "source_rgba8_sha256": "07b41d753e394618871c397396cbae192c356d63c70337ab864ec74049b6cf32",
+    "color_free_zeroed": true,
+    "final_guard_rerun": "Passed after texture-coordinate configuration0, texture unit2D type0, and primitive index0 guards were added.",
+    "implementation_sha256": {
+      "native/assets/cgfx_model.c": "72863f38c6d6454428a4e79d594561c55dcd30e539a848e658e8a8314c588cf5",
+      "native/assets/cgfx_model.h": "053187aa70520068c6a67c2bcdf3a10fd3d9bf2cde87b7ca3d24a8c98bafc84f"
+    }
+  },
+  "draws": [
+    {
+      "shape_index": 0,
+      "object_index": 0,
+      "material_index": 0,
+      "first_index": 0,
+      "index_count": 450,
+      "vertex_count": 91,
+      "visible": 1,
+      "render_priority": 0,
+      "uv_sha256": "8382b6e3a492ceb6861bbac23a982168538fac0f9ee81c713959cd252ff4e514",
+      "color_float32_sha256": "f0dfc2b6178f8fe5b658012ede2d4a47eff4c98e089c126d16c2f88ea4fbef47"
+    },
+    {
+      "shape_index": 1,
+      "object_index": 1,
+      "material_index": 4,
+      "first_index": 450,
+      "index_count": 360,
+      "vertex_count": 108,
+      "visible": 1,
+      "render_priority": 0,
+      "uv_sha256": "f89b9d51266d275f6073ab53825f0b813b08124db603a82a3f784507b42b3222",
+      "color_float32_sha256": "9e1fc2da0ad33b7aead07a9fb56abab6d910c1589e4140812f6dbfca64c488ab"
+    },
+    {
+      "shape_index": 2,
+      "object_index": 2,
+      "material_index": 3,
+      "first_index": 810,
+      "index_count": 18,
+      "vertex_count": 8,
+      "visible": 1,
+      "render_priority": 0,
+      "uv_sha256": "326e2d66027dff18479195bc6bf0e2eb7249a25e8214e7bb023a091f7923b14b",
+      "color_float32_sha256": "b638277a8690e175a9137feff1e43c067f9faf4e2f600caf468fb05b0403b717"
+    },
+    {
+      "shape_index": 3,
+      "object_index": 3,
+      "material_index": 1,
+      "first_index": 828,
+      "index_count": 900,
+      "vertex_count": 310,
+      "visible": 1,
+      "render_priority": 0,
+      "uv_sha256": "a15ed6371330164b5c2f0448b7b3a8edb98dd748df0a2f78dd663c127668d79f",
+      "color_float32_sha256": "c1be479835ee9b2980db182c1fd25ab0f663a961ce18fe36ff968654cdcb7790"
+    },
+    {
+      "shape_index": 4,
+      "object_index": 4,
+      "material_index": 2,
+      "first_index": 1728,
+      "index_count": 180,
+      "vertex_count": 64,
+      "visible": 1,
+      "render_priority": 0,
+      "uv_sha256": "570041974676d3fe43bfa5f837c5bdbd9d524cc9493682d8b7d2ae52ed5293e3",
+      "color_float32_sha256": "d3d68393a9ee59847ec82b6757009c1fbc55c6f4fc71b41a411d2346d23c13cf"
+    },
+    {
+      "shape_index": 5,
+      "object_index": 5,
+      "material_index": 5,
+      "first_index": 1908,
+      "index_count": 900,
+      "vertex_count": 186,
+      "visible": 1,
+      "render_priority": 0,
+      "uv_sha256": "a0754afdc1fe2c90bf474003549d03108b21e100b8c26997d2cc1356ab0845f9",
+      "color_float32_sha256": "e6a2d44097722a9e999efed7584b561cd6a4b18bc6aa6b3fa431e0808f5b6178"
+    }
+  ],
+  "materials": [
+    {
+      "index": 0,
+      "name": "collision02_floor",
+      "texture_index": 0,
+      "texture_name": "collision02_floor",
+      "flags": 17,
+      "translucency_kind": 0,
+      "cull_mode": 1,
+      "depth_flags": 0,
+      "depth_function": 1,
+      "depth_command": [
+        16,
+        65799,
+        16777216,
+        524582
+      ],
+      "blend_mode": 0,
+      "blend_word": 16842752,
+      "blend_rgb_equation": 0,
+      "blend_alpha_equation": 0,
+      "blend_rgb_src": 1,
+      "blend_rgb_dst": 0,
+      "blend_alpha_src": 1,
+      "blend_alpha_dst": 0,
+      "alpha_enabled": 1,
+      "alpha_function": 6,
+      "alpha_reference": 0,
+      "wrap_u": 2,
+      "wrap_v": 2,
+      "min_filter": 0,
+      "mag_filter": 0,
+      "mip_filter": 1,
+      "sampler_min_filter": 3,
+      "lod_word": 0,
+      "uv_scale": [
+        1.0,
+        1.0
+      ],
+      "uv_rotation": 0.0,
+      "uv_translation": [
+        0.0,
+        0.0
+      ],
+      "color_write_mask_declared": false,
+      "preview_color_write_mask": 15
+    },
+    {
+      "index": 1,
+      "name": "collision02_kumo3",
+      "texture_index": 1,
+      "texture_name": "collision02_kumo01",
+      "flags": 17,
+      "translucency_kind": 2,
+      "cull_mode": 1,
+      "depth_flags": 1,
+      "depth_function": 4,
+      "depth_command": [
+        65,
+        65799,
+        50331648,
+        524582
+      ],
+      "blend_mode": 1,
+      "blend_word": 1987444736,
+      "blend_rgb_equation": 0,
+      "blend_alpha_equation": 0,
+      "blend_rgb_src": 6,
+      "blend_rgb_dst": 7,
+      "blend_alpha_src": 6,
+      "blend_alpha_dst": 7,
+      "alpha_enabled": 0,
+      "alpha_function": 6,
+      "alpha_reference": 0,
+      "wrap_u": 2,
+      "wrap_v": 2,
+      "min_filter": 0,
+      "mag_filter": 0,
+      "mip_filter": 1,
+      "sampler_min_filter": 3,
+      "lod_word": 0,
+      "uv_scale": [
+        1.0,
+        1.0
+      ],
+      "uv_rotation": 0.0,
+      "uv_translation": [
+        0.0,
+        0.0
+      ],
+      "color_write_mask_declared": false,
+      "preview_color_write_mask": 15
+    },
+    {
+      "index": 2,
+      "name": "collision02_kumo",
+      "texture_index": 2,
+      "texture_name": "collision02_kumo00",
+      "flags": 17,
+      "translucency_kind": 2,
+      "cull_mode": 1,
+      "depth_flags": 1,
+      "depth_function": 4,
+      "depth_command": [
+        65,
+        65799,
+        50331648,
+        524582
+      ],
+      "blend_mode": 1,
+      "blend_word": 1987444736,
+      "blend_rgb_equation": 0,
+      "blend_alpha_equation": 0,
+      "blend_rgb_src": 6,
+      "blend_rgb_dst": 7,
+      "blend_alpha_src": 6,
+      "blend_alpha_dst": 7,
+      "alpha_enabled": 0,
+      "alpha_function": 6,
+      "alpha_reference": 0,
+      "wrap_u": 2,
+      "wrap_v": 2,
+      "min_filter": 0,
+      "mag_filter": 0,
+      "mip_filter": 1,
+      "sampler_min_filter": 3,
+      "lod_word": 0,
+      "uv_scale": [
+        1.0,
+        1.0
+      ],
+      "uv_rotation": 0.0,
+      "uv_translation": [
+        0.0,
+        0.0
+      ],
+      "color_write_mask_declared": false,
+      "preview_color_write_mask": 15
+    },
+    {
+      "index": 3,
+      "name": "collision02_rainbow",
+      "texture_index": 3,
+      "texture_name": "collision02_rainbow",
+      "flags": 17,
+      "translucency_kind": 1,
+      "cull_mode": 1,
+      "depth_flags": 3,
+      "depth_function": 4,
+      "depth_command": [
+        65,
+        65799,
+        50331648,
+        524582
+      ],
+      "blend_mode": 0,
+      "blend_word": 16842752,
+      "blend_rgb_equation": 0,
+      "blend_alpha_equation": 0,
+      "blend_rgb_src": 1,
+      "blend_rgb_dst": 0,
+      "blend_alpha_src": 1,
+      "blend_alpha_dst": 0,
+      "alpha_enabled": 1,
+      "alpha_function": 6,
+      "alpha_reference": 128,
+      "wrap_u": 2,
+      "wrap_v": 3,
+      "min_filter": 0,
+      "mag_filter": 0,
+      "mip_filter": 1,
+      "sampler_min_filter": 3,
+      "lod_word": 0,
+      "uv_scale": [
+        1.0,
+        1.0
+      ],
+      "uv_rotation": 0.0,
+      "uv_translation": [
+        0.0,
+        0.0
+      ],
+      "color_write_mask_declared": false,
+      "preview_color_write_mask": 15
+    },
+    {
+      "index": 4,
+      "name": "collision02_shabon",
+      "texture_index": 4,
+      "texture_name": "collision02_shabon",
+      "flags": 17,
+      "translucency_kind": 3,
+      "cull_mode": 1,
+      "depth_flags": 1,
+      "depth_function": 4,
+      "depth_command": [
+        65,
+        65799,
+        50331648,
+        524582
+      ],
+      "blend_mode": 1,
+      "blend_word": 1987444736,
+      "blend_rgb_equation": 0,
+      "blend_alpha_equation": 0,
+      "blend_rgb_src": 6,
+      "blend_rgb_dst": 7,
+      "blend_alpha_src": 6,
+      "blend_alpha_dst": 7,
+      "alpha_enabled": 0,
+      "alpha_function": 6,
+      "alpha_reference": 0,
+      "wrap_u": 2,
+      "wrap_v": 2,
+      "min_filter": 0,
+      "mag_filter": 0,
+      "mip_filter": 1,
+      "sampler_min_filter": 3,
+      "lod_word": 0,
+      "uv_scale": [
+        1.0,
+        1.0
+      ],
+      "uv_rotation": 0.0,
+      "uv_translation": [
+        0.0,
+        0.0
+      ],
+      "color_write_mask_declared": false,
+      "preview_color_write_mask": 15
+    },
+    {
+      "index": 5,
+      "name": "collision02_skyw",
+      "texture_index": 5,
+      "texture_name": "collision02_wall",
+      "flags": 17,
+      "translucency_kind": 1,
+      "cull_mode": 1,
+      "depth_flags": 1,
+      "depth_function": 4,
+      "depth_command": [
+        65,
+        65799,
+        50331648,
+        524582
+      ],
+      "blend_mode": 1,
+      "blend_word": 1987444736,
+      "blend_rgb_equation": 0,
+      "blend_alpha_equation": 0,
+      "blend_rgb_src": 6,
+      "blend_rgb_dst": 7,
+      "blend_alpha_src": 6,
+      "blend_alpha_dst": 7,
+      "alpha_enabled": 0,
+      "alpha_function": 1,
+      "alpha_reference": 0,
+      "wrap_u": 3,
+      "wrap_v": 3,
+      "min_filter": 0,
+      "mag_filter": 0,
+      "mip_filter": 1,
+      "sampler_min_filter": 3,
+      "lod_word": 0,
+      "uv_scale": [
+        1.0,
+        1.0
+      ],
+      "uv_rotation": 0.0,
+      "uv_translation": [
+        0.0,
+        0.0
+      ],
+      "color_write_mask_declared": false,
+      "preview_color_write_mask": 15
+    }
+  ],
+  "observations": {
+    "material_to_texture": "Matched by the referenced TXOB texture name. Object-to-material indices are [0,4,3,1,2,5], not identity.",
+    "layout_correction": "SPICA GfxMaterialColor includes CommandCache at material+0x100. Cull/depth/sampler offsets in this report follow the typed SPICA structures and original command words; the older Ohana reader omits the color command-cache word and reads sampler fields before its typed header.",
+    "depth_mask": "Each selected depth command writes only byte0 of GPUREG_DEPTH_COLOR_MASK (header0x00010107). Upper-byte color/depth-write bits are unknown from that packet. Preview depth_write follows declared GfxFragOpDepth.Flags bit1; missing color-write mask explicitly falls back to RGBA. This is a preview interpretation, not a reconstructed full command-buffer state.",
+    "blending": "The four enabled blended materials use ADD with source-alpha and one-minus-source-alpha for both RGB and alpha. Alpha result is sourceAlpha^2 + destinationAlpha*(1-sourceAlpha), distinct from Porter-Duff source-over alpha.",
+    "orientation": "Pinned SPICA TextureConverter.cs52 and TextureCompression.cs42 reverse decoded row Y to Height-1-Y. H3DTexture.cs114 calls those converters and Rendering/Texture.cs uploads their output directly. Our decoder keeps tile-row order; converting V to1-V reproduces that row reversal when sampling top-down images.",
+    "ordering": "Pinned SPICA Gfx.cs426 assigns material TranslucencyKind to mesh Layer; Rendering/Model.cs83 sorts each layer by Priority, and516 renders layers0..3. Gfx.cs500 reverses layer1 explicitly as a workaround. The preview sorts ascending translucency kind, then priority, retaining original object order for ties; it does not adopt that workaround. Expected selected-sample draw indices [0,2,5,3,4,1].",
+    "shader_scope": "Material flags0x11 and nontrivial six-stage TEV state are present. Rendering intentionally uses unlit texture-times-vertex-color; full TEV, lighting, fog, shader behavior and game draw ordering are not reconstructed."
+  },
+  "reproduction": {
+    "inputs": "Obtain the independently extracted a/1/0/2 entry0 subentry0 member and verify the SHA256 above. No original member or vertex bytes are tracked.",
+    "local_oracle": "outputs/native-textured-model/independent-materials.py (ignored)",
+    "oracle_sha256": "3d5ac4c0ec13189a9fd67dfa6a6e1f3836b14a89c0b1aea35f2eec7632bb1635",
+    "oracle_algorithm": "Resolve CMDL through DATA slot0 DICT; resolve material DICT at CMDL+0xc0, object table+0xb8, shape table+0xc8. Resolve MTOB mapper+0x274, mapper TXOB reference+8, sampler+12, fragment+0x288. Read source values at offsets described by pinned primary types and the metadata above; command fields include byte write masks. For each object, follow its shape index; resolve stream groups, attribute table and payload; apply attribute scales and append shape-order UV/color float32 bytes. Compute descriptor index counts and running first_index values. Compare material fields, draw metadata and arrays with px_cgfx_model_decode_textured. All pointers and sizes are sample-specific bounded reads.",
+    "compile": "tools/native-build/bin/cc -std=c11 -Wall -Wextra -Werror -O2 -fPIC -shared native/assets/cgfx_model.c -lm -o outputs/native-textured-model/libscene-reference.so",
+    "runtime_tests": "source tools/native-sdl/activate.sh && python3 -m unittest discover -s native/tests -p test_model_viewer.py -v",
+    "runtime_assertions": [
+      "synthetic textured demo inspection/input/capture",
+      "raw and literal-LZ11 archive pipelines",
+      "V orientation using constant UVs and different top/bottom colors",
+      "vertex-color multiplication",
+      "GREATER alpha reference127 pass and128 reject for alpha128 texture",
+      "source-alpha RGB against known opaque background",
+      "unsupported material/UV/texture states reject before SDL/export",
+      "original archive bytes remain unchanged; existing archive export destination rejected",
+      "two coincident differently colored quads prove translucency preview ordering"
+    ]
+  },
+  "sources": [
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/Formats/CtrGfx/Model/Material/GfxMaterial.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/Formats/CtrGfx/Model/Material/GfxMaterial.cs",
+      "sha256": "3017d796068e7a346a69b353507e7556248bc8e618231982d4967540534cf4d6"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/Formats/CtrGfx/Model/Material/GfxMaterialColor.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/Formats/CtrGfx/Model/Material/GfxMaterialColor.cs",
+      "sha256": "7156850c07e3ebc0d77246e102308ad27f1636b42620570537516716ea8afd70"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/Formats/CtrGfx/Model/Material/GfxTextureMapper.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/Formats/CtrGfx/Model/Material/GfxTextureMapper.cs",
+      "sha256": "d44254388585cf3c7bbd30aa08a74f83e492ebf85fdc086dbc46724ef3afc700"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/Formats/CtrGfx/Model/Material/GfxTextureSamplerStd.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/Formats/CtrGfx/Model/Material/GfxTextureSamplerStd.cs",
+      "sha256": "4f800196156aa4c6d6c5a058b392c497ee672a9e05ef61182615afe46ef5eceb"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/Formats/CtrGfx/Model/Material/GfxFragOpDepth.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/Formats/CtrGfx/Model/Material/GfxFragOpDepth.cs",
+      "sha256": "5b8571209a06175fbccc6ffd0a88755ebfa8d041552c9f1ebf2bbaacd462f4a1"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/PICA/Commands/PICATestFunc.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/PICA/Commands/PICATestFunc.cs",
+      "sha256": "b13c1809964e16e6a73f9c60e0074c25df1275e52e3ea3df8bf4eb783f15a947"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/PICA/Commands/PICABlendFunction.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/PICA/Commands/PICABlendFunction.cs",
+      "sha256": "07a5db6d0e114201ef22833e02e98c48584973256eae20d1c416881b733affb1"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/PICA/Commands/PICATextureWrap.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/PICA/Commands/PICATextureWrap.cs",
+      "sha256": "97d59a45d7a65883ebd75c22bc35a311bbd7402c292deb354beb16e284c4be68"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/PICA/Converters/TextureConverter.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/PICA/Converters/TextureConverter.cs",
+      "sha256": "e1d1cccd4b8a12ae83009f41cca65ad835e396917bcdba9ab57a8d6bc7ef5fae"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/PICA/Converters/TextureCompression.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/PICA/Converters/TextureCompression.cs",
+      "sha256": "bde1882fa78f9e4056c8b82d70f7c893462986ee9abeb924ea510f104c052f89"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/Formats/CtrH3D/Texture/H3DTexture.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/Formats/CtrH3D/Texture/H3DTexture.cs",
+      "sha256": "ebf6de3b99cfb48c862ffebf92143b74d2d742dd67f98e9e4f64edefcd4ce1c9"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA.Rendering/Texture.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA.Rendering/Texture.cs",
+      "sha256": "105212f4a71c9a385d181467daf834c86ef4ac7955906041e2043e2a0bba01d9"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA.Rendering/Model.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA.Rendering/Model.cs",
+      "sha256": "1d631735868d7154ecf58f079d5fb40ae73e847956367676731ff00fa0977fc7"
+    },
+    {
+      "repository": "gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "path": "SPICA/Formats/CtrGfx/Gfx.cs",
+      "url": "https://github.com/gdkchan/SPICA/blob/bd29a7828595d7839cda2ac61c76bb63f9071250/SPICA/Formats/CtrGfx/Gfx.cs",
+      "sha256": "d6600d0cd7e7c4768f93d77d251e45c490f8428884bcf339e7b8191ad529098b"
+    }
+  ],
+  "limitations": [
+    "No running-game frame or hardware trace comparison.",
+    "Source consistency and byte-level extraction checks do not establish full game renderer equivalence.",
+    "Primary renderer draw ordering is used as an explicit preview policy, not proof of Pokemon X runtime ordering.",
+    "Only the selected original member is compared; synthetic fixtures exercise failure/ordering/alpha cases."
+  ]
+}
