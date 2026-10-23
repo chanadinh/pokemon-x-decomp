@@ -5,3 +5,4 @@ all test clean:
 	$(MAKE) -C battle_task $@
 	$(MAKE) -C encounter_builder $@
 	$(MAKE) -C pokemon_constructor $@
+	$(MAKE) -C pokemon_data $@

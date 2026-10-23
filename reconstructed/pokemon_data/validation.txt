@@ -1,0 +1,60 @@
+Command: make -C reconstructed test
+Directory: /workspace/pokemon-x-decomp
+Exit: 0
+make: Entering directory '/workspace/pokemon-x-decomp/reconstructed'
+make -C call_wild_battle test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/call_wild_battle'
+./build/test_call_wild_battle
+PASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/call_wild_battle'
+make -C wild_battle_setup test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/wild_battle_setup'
+./build/test_wild_battle_setup
+PASS: 65536 flag values; initializer holes; row decoding; optional paths; call order; mutation timing; return propagation; finisher; original wrapper integration
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/wild_battle_setup'
+make -C battle_task test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/battle_task'
+./build/test_battle_task
+PASS: 65536 selector/category pairs; 65536 key pairs; task factory and registration; optional paths; count boundaries; pointer mutation timing; full submit; all three source milestones integrated
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/battle_task'
+make -C encounter_builder test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/encounter_builder'
+./build/test_encounter_builder
+PASS: parameter bytes and holes; branch boundaries; callback timing; 768 weighted draws; signed dynamic counts; 512 config cases; four-milestone integration
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/encounter_builder'
+make -C pokemon_constructor test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/pokemon_constructor'
+./build/test_pokemon_constructor
+PASS: 66388 parameter normalization cases; 65536 levels; 256 stat counts; 256 ability selectors; 255 explicit forms; sentinel pairs; retries; callback mutation; narrowing and unsigned wrap
+PASS: constructor sequencing; raw zero allocations; preserved parameter holes; XOR vectors/round trip; 256 acquire states and 2304 restore masks; callback mutation; parameter normalization; five-milestone integration
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/pokemon_constructor'
+make -C pokemon_data test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/pokemon_data'
+mkdir -p build
+cc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror pokemon_data.c pokemon_codec.c pokemon_fields.c test_pokemon_data.c test_pokemon_codec.c test_pokemon_fields.c test_pokemon_data_chain.c ../pokemon_constructor/pokemon_constructor.c ../pokemon_constructor/pokemon_parameters.c ../encounter_builder/encounter_builder.c ../battle_task/battle_task.c ../wild_battle_setup/wild_battle_setup.c ../call_wild_battle/call_wild_battle.c   -o build/test_pokemon_data
+./build/test_pokemon_data
+PASS: all 26 setters; 8320 mapping/width cases; 12288 packed-byte cases; 520 corrupt fallback cases; 768 block selections; 4 absent-extra guards; 52 encrypted setter round trips
+PASS: 130 population cases; species-zero encoding; 32 block-order rows; 258 ability slots; growth bounds; resource mutation; complete payload comparisons
+PASS: Pokemon data population, field setters, storage codec, and six-module integration
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/pokemon_data'
+make: Leaving directory '/workspace/pokemon-x-decomp/reconstructed'
+
+
+Command: cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer pokemon_data.c pokemon_codec.c pokemon_fields.c test_pokemon_data.c test_pokemon_codec.c test_pokemon_fields.c test_pokemon_data_chain.c ../pokemon_constructor/pokemon_constructor.c ../pokemon_constructor/pokemon_parameters.c ../encounter_builder/encounter_builder.c ../battle_task/battle_task.c ../wild_battle_setup/wild_battle_setup.c ../call_wild_battle/call_wild_battle.c -o build/test_pokemon_data_sanitized
+Directory: /workspace/pokemon-x-decomp/reconstructed/pokemon_data
+Exit: 0
+
+
+Command: ./build/test_pokemon_data_sanitized
+Directory: /workspace/pokemon-x-decomp/reconstructed/pokemon_data
+Exit: 0
+Environment overrides: {"ASAN_OPTIONS": "detect_leaks=0", "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"}
+PASS: all 26 setters; 8320 mapping/width cases; 12288 packed-byte cases; 520 corrupt fallback cases; 768 block selections; 4 absent-extra guards; 52 encrypted setter round trips
+PASS: 130 population cases; species-zero encoding; 32 block-order rows; 258 ability slots; growth bounds; resource mutation; complete payload comparisons
+PASS: Pokemon data population, field setters, storage codec, and six-module integration
+
+
+Command: python3 reconstructed/pokemon_data/reproduction/export_data.py --project projects/cro_20261023T150920079989Z.gpr --output outputs/pokemon-data/reproduced
+Directory: /workspace/pokemon-x-decomp
+Exit: 0
+Observed read-only Ghidra export completed for 42 functions; all 84 assembly/pseudocode files compared byte-for-byte equal to retained evidence. Original input verification covered 3360 instruction bytes, 76 literal bytes, and 128 block-order table bytes.
