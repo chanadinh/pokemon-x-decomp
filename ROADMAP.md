@@ -13,14 +13,16 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Four connected host-source milestones now exist: the `CallWildBattle`
+Five connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
-and the per-record encounter builder/population/configuration helpers.
+the per-record encounter builder/population/configuration helpers, and the
+Pokémon constructor/parameter-normalization path.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
-creation-parameter preparation, weighted optional-value selection,
-and a final script-state write. The wider setup and the constructors
-inside the submission path still use stand-ins. There is no playable game
+creation-parameter preparation, weighted optional-value selection, random
+parameter resolution, allocation/manager setup, the extra-data XOR transform,
+and a final script-state write. Wider setup, data-population setters, and
+larger state services still use stand-ins. There is no playable game
 or renderer yet. Per-milestone validation records document the actual tests;
 these are synthetic-memory checks rather than a running-game comparison.
 
@@ -43,12 +45,14 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
 
 ## Immediate sequence for this workspace
 
-1. Reconstruct main constructor `0x0039a5a8`, its base initializer
-   `0x0039daf4`, and parameter-to-data helper `0x0039a8a4`. The Field
-   per-record builder and main consumer now have host implementations
-   through explicit callback boundaries. Copy-before-cleanup behavior is
-   traced, but data transformations and the state/scene constructors still
-   need implementation.
+1. Reconstruct data-population routine `0x0014f6b8` and its field setters,
+   then the remaining state services such as `0x0013a8d8`, `0x0012b744`,
+   `0x0012b808`, and `0x0013a7bc`. The outer constructor `0x0039a5a8`,
+   base initializer `0x0039daf4`, allocation path `0x0039a8a4`, parameter
+   normalizer `0x0014f324`, and XOR primitive `0x00167fb4` now have host
+   implementations through explicit service boundaries. Copy-before-cleanup
+   behavior is traced; a full original-format Pokémon object is not yet
+   produced by the host chain.
 2. Reconstruct setup function `0x15c75434` and its required callees, keeping
    field names provisional until callers, consumers, or runtime behavior
    support them. Establish the table's actual record count and field meanings.
