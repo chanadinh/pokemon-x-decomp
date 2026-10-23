@@ -1,0 +1,32 @@
+Validation performed 2026-10-23 on Linux-6.18.55-x86_64-with-glibc2.41
+
+Strict C11 build with -O2 -Wall -Wextra -Wpedantic -Werror and make test passed all four milestone suites. The first record below summarizes that observed output.
+Address and undefined-behavior instrumentation were also enabled in a separate build. Leak detection was disabled because it is unsupported under this container tracing environment.
+
+Directory: /workspace/pokemon-x-decomp/reconstructed
+$ make test
+Observed in the preceding execution: all four milestone targets passed. New suite: parameter bytes/holes, branches, callback timing, 768 weighted draws, dynamic signed counts, 512 config cases, and four-milestone integration.
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed/encounter_builder
+$ cc --version
+cc (Debian 14.2.0-19) 14.2.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed/encounter_builder
+$ cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer encounter_builder.c test_encounter_builder.c test_encounter_chain.c ../battle_task/battle_task.c ../wild_battle_setup/wild_battle_setup.c ../call_wild_battle/call_wild_battle.c -o build/test_encounter_builder_sanitized
+
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed/encounter_builder
+$ ASAN_OPTIONS=detect_leaks=0 ./build/test_encounter_builder_sanitized
+PASS: parameter bytes and holes; branch boundaries; callback timing; 768 weighted draws; signed dynamic counts; 512 config cases; four-milestone integration
+
+Exit code: 0
+
+These are assembly-derived model checks with synthetic dependencies, not differential execution of the original game.

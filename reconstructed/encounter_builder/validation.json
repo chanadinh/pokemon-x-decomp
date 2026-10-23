@@ -1,0 +1,58 @@
+[
+  {
+    "command": [
+      "make",
+      "test"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed",
+    "exit_code": 0,
+    "output_summary": "Observed in the preceding execution: all four milestone targets passed. New suite: parameter bytes/holes, branches, callback timing, 768 weighted draws, dynamic signed counts, 512 config cases, and four-milestone integration."
+  },
+  {
+    "command": [
+      "cc",
+      "--version"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed/encounter_builder",
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": "cc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+  },
+  {
+    "command": [
+      "cc",
+      "-std=c11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "encounter_builder.c",
+      "test_encounter_builder.c",
+      "test_encounter_chain.c",
+      "../battle_task/battle_task.c",
+      "../wild_battle_setup/wild_battle_setup.c",
+      "../call_wild_battle/call_wild_battle.c",
+      "-o",
+      "build/test_encounter_builder_sanitized"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed/encounter_builder",
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "./build/test_encounter_builder_sanitized"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed/encounter_builder",
+    "environment_overrides": {
+      "ASAN_OPTIONS": "detect_leaks=0"
+    },
+    "exit_code": 0,
+    "output": "PASS: parameter bytes and holes; branch boundaries; callback timing; 768 weighted draws; signed dynamic counts; 512 config cases; four-milestone integration\n"
+  }
+]

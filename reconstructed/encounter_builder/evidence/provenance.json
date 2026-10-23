@@ -1,0 +1,401 @@
+{
+  "inputs": {
+    "code.bin": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a",
+    "DllField.cro": "ed043eb6c5d4057d64ceefda99b59b0978412b982427551f6c99bf6084be6489"
+  },
+  "verified_functions": [
+    {
+      "address": "15ce4a10",
+      "input": "DllField.cro",
+      "file_offset": "0xe4a10",
+      "instruction_bytes": 792,
+      "instruction_bytes_sha256": "5539c951c860145342e8561b2aaf6f209ed15e0eb141ed81b332d190df7f60c7",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "15ce4958",
+      "input": "DllField.cro",
+      "file_offset": "0xe4958",
+      "instruction_bytes": 108,
+      "instruction_bytes_sha256": "b7685d383dca800e64fdcb1df47155637070608c44e55c285eca77e3b72d7850",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "15ce49c4",
+      "input": "DllField.cro",
+      "file_offset": "0xe49c4",
+      "instruction_bytes": 76,
+      "instruction_bytes_sha256": "5bf2b34b560f10c53639da4ef37df9149377ed8f047e43724e314ebb380889dd",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0014f220",
+      "input": "code.bin",
+      "file_offset": "0x4f220",
+      "instruction_bytes": 4,
+      "instruction_bytes_sha256": "379bec29dccd0a93c94826144d7ef6e42fab64ef195a3b8313a16926f66f388f",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "00167e18",
+      "input": "code.bin",
+      "file_offset": "0x67e18",
+      "instruction_bytes": 16,
+      "instruction_bytes_sha256": "e8ce23e73ecc76219f0a7b8e1f2729034fe48903688d2c9511515e920826281e",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "00167e2c",
+      "input": "code.bin",
+      "file_offset": "0x67e2c",
+      "instruction_bytes": 20,
+      "instruction_bytes_sha256": "c45b22ca4991aa8a2e60dd8e4a14fa9791706a0f6f1215afdd8e0d2d2fa6026c",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039a52c",
+      "input": "code.bin",
+      "file_offset": "0x29a52c",
+      "instruction_bytes": 40,
+      "instruction_bytes_sha256": "60413fd415a61bbf920eb9fd25f69ae8196eed363b56bdd23f412c787f79a604",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039a5a8",
+      "input": "code.bin",
+      "file_offset": "0x29a5a8",
+      "instruction_bytes": 124,
+      "instruction_bytes_sha256": "aa4ab9eae8d2fc45edf8e9d77b00e58eb8e5a7d37871cf682d985edeae336694",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039d804",
+      "input": "code.bin",
+      "file_offset": "0x29d804",
+      "instruction_bytes": 8,
+      "instruction_bytes_sha256": "a45abcce5cbcea690c542e25de3560638c3e2819854dce5fdf42a09285e9b725",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039e814",
+      "input": "code.bin",
+      "file_offset": "0x29e814",
+      "instruction_bytes": 184,
+      "instruction_bytes_sha256": "2dce0a70b9adb232de2011ed324139c007a80cecd2e7843b543f8e301a7107cb",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "00432a7c",
+      "input": "code.bin",
+      "file_offset": "0x332a7c",
+      "instruction_bytes": 128,
+      "instruction_bytes_sha256": "68be89aec4ba05952e931366b96ea9874860c4ae65a0afd01eaf3080b457adab",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "00432f00",
+      "input": "code.bin",
+      "file_offset": "0x332f00",
+      "instruction_bytes": 76,
+      "instruction_bytes_sha256": "6e22e8f45bbd25dfa54e0ff6dcab84ee61e1405e7be0467fe671209af607028a",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0045a908",
+      "input": "code.bin",
+      "file_offset": "0x35a908",
+      "instruction_bytes": 56,
+      "instruction_bytes_sha256": "ef33320f25edafb37a851348a4fe6eb8a9744663743f186cd9b3aa44c3318c74",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "002ff520",
+      "input": "code.bin",
+      "file_offset": "0x1ff520",
+      "instruction_bytes": 156,
+      "instruction_bytes_sha256": "b6a13fad45af1fa5b3f1ac4a3f09a3b8f05e4da46f99b3eff3068c8e571ac9fd",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039b39c",
+      "input": "code.bin",
+      "file_offset": "0x29b39c",
+      "instruction_bytes": 188,
+      "instruction_bytes_sha256": "8f5acb02182bc52e517863fc42bd29a885bb3083b6a238c3bf3ccfe890eeb9e8",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039b684",
+      "input": "code.bin",
+      "file_offset": "0x29b684",
+      "instruction_bytes": 152,
+      "instruction_bytes_sha256": "67beae594d61f13c0f19c4812583659773c6979eeb257872e894c39129859f28",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039daf4",
+      "input": "code.bin",
+      "file_offset": "0x29daf4",
+      "instruction_bytes": 104,
+      "instruction_bytes_sha256": "8886cb3d8a5d4cac369903da01ae417a14cb453b11c7c2f3152f58083a50cec7",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039dc54",
+      "input": "code.bin",
+      "file_offset": "0x29dc54",
+      "instruction_bytes": 96,
+      "instruction_bytes_sha256": "02aa0ed7ff29003d27bc24ae11e5bda695d4bee7a02a5a0e5e93c59f01948675",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "004a1658",
+      "input": "code.bin",
+      "file_offset": "0x3a1658",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "1fb4288c746b4854b03fa122b7493019568a3c36797bda86e87a718df3526b7d",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "004a16ac",
+      "input": "code.bin",
+      "file_offset": "0x3a16ac",
+      "instruction_bytes": 28,
+      "instruction_bytes_sha256": "e74c58f0b1f2f7a9e705f25f7adf802d449c57df03ff657e18955af5d1edeb83",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "00300ef8",
+      "input": "code.bin",
+      "file_offset": "0x200ef8",
+      "instruction_bytes": 136,
+      "instruction_bytes_sha256": "2a2057a5eddead5259bbbb2eebf72ea6e1b0a505d242c90b2468afb674e60546",
+      "matches_original_input": true,
+      "source": "Ghidra exact-function export"
+    },
+    {
+      "address": "0039a728",
+      "input": "code.bin",
+      "file_offset": "0x29a728",
+      "instruction_bytes": 16,
+      "instruction_bytes_sha256": "59345c5d3008cf8b67cf8df544ba7b5570e7c0a3c9e0eabbfcf610eedd1def60",
+      "matches_original_input": true,
+      "source": "Manual raw ARM review; this address lacks a Ghidra function entry"
+    }
+  ],
+  "selected_relocations": [
+    {
+      "module": "DllField",
+      "origin": "internal",
+      "patch_index": 1541,
+      "patch_file_offset": 1192776,
+      "type": 2,
+      "addend": 2134,
+      "symbol_address": 366201576,
+      "target_module": "DllField",
+      "symbol": "segment_2",
+      "address": 365841708,
+      "original_word": 0,
+      "value": 366203710,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 1159,
+      "patch_file_offset": 1116508,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 1372704,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_4f220",
+      "address": 364904964,
+      "original_word": 0,
+      "value": 1372704,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 1176,
+      "patch_file_offset": 1116712,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 1474072,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_67e18",
+      "address": 364915876,
+      "original_word": 0,
+      "value": 1474072,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 1178,
+      "patch_file_offset": 1116736,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 1474092,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_67e2c",
+      "address": 364915548,
+      "original_word": 0,
+      "value": 1474092,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 1184,
+      "patch_file_offset": 1116808,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 3777960,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_29a5a8",
+      "address": 364919068,
+      "original_word": 0,
+      "value": 3777960,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 1213,
+      "patch_file_offset": 1117156,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 3790852,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_29d804",
+      "address": 364919076,
+      "original_word": 0,
+      "value": 3790852,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 1228,
+      "patch_file_offset": 1117336,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 3794964,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_29e814",
+      "address": 364910228,
+      "original_word": 0,
+      "value": 3794964,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 2249,
+      "patch_file_offset": 1129588,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 4401788,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_332a7c",
+      "address": 364905860,
+      "original_word": 0,
+      "value": 4401788,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 2253,
+      "patch_file_offset": 1129636,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 4402944,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_332f00",
+      "address": 364905804,
+      "original_word": 0,
+      "value": 4402944,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 2503,
+      "patch_file_offset": 1132636,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 4565256,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_35a908",
+      "address": 364909292,
+      "original_word": 0,
+      "value": 4565256,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 3239,
+      "patch_file_offset": 1141468,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 1190176,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_22920",
+      "address": 364904988,
+      "original_word": 0,
+      "value": 1190176,
+      "status": "applied"
+    }
+  ],
+  "probability_table": {
+    "synthetic_address": "0x15d3d33e",
+    "file_offset": "0x13d33e",
+    "writable": true,
+    "bytes_hex": "3205003c1400",
+    "rows": [
+      [
+        50,
+        5,
+        0
+      ],
+      [
+        60,
+        20,
+        0
+      ]
+    ],
+    "matches_original_input": true
+  },
+  "virtual_cleanup": {
+    "vtable": "00598a50",
+    "slot_offset": 8,
+    "target": "0039a728",
+    "calls": "0039dc54",
+    "tail_branch": "002ff520"
+  },
+  "review": "Independent ARM/source review and separate ownership review completed. All listed bytes matched original inputs.",
+  "scope": "Builder, population loop and config selector reconstructed through adapters. Constructors, copy, transforms, random generator and cleanup remain dependency implementations. No original-game differential execution."
+}
