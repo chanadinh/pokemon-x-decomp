@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-23",
+  "baseline_commit": "6695be682f1fa37dd7790063d547d7c54e52aab4",
+  "result": "passed",
+  "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; local WSL host and native Windows untested",
+  "tested_source_sha256": {
+    "Makefile": "d953e5e028a960ee80f98f1e7422fc1b792507a59d73330eef76ab88369b606f",
+    "assets/bch_model.c": "92da8791ed64035733e9e95cfe27d78d7c0d5899a6ae5e6959cc40c6fea90d9a",
+    "assets/bch_model.h": "2c49e8bbf5f3de1587091a22d01e6d587fd25d94516e2bd5cd3b3e64155ec3e7",
+    "assets/bch_material.c": "9b1694ad33a22663f9113af4faae1afda8a60a0983a86e839e0f35d62688b86c",
+    "assets/bch_material.h": "9787f57df72143e6518a952ec503aa88b3d6248f921f63e5a8705a07edcfe116",
+    "assets/test_bch_model.c": "cfb34eeb457efc23e7192ab4afe8b28dbcb749a2df25d3b03777c0c7830e176d",
+    "assets/test_bch_material.c": "3da2d76684baa0d85a386f584d360473cd2559650e25974d93fce9ca7a2955a8",
+    "model_app.c": "67cec288c869b2b4a546c43429980cd1de5512427ea008a1a10ee62be20812bb",
+    "render/raster.c": "21c816fa1eb0af009befdeaa7dc66b2230b95f26f2b6f500385197c64d9ce554",
+    "render/raster.h": "c690d7e4a01613f691333ccd6145d32d5cc1f709de0e58302034e909016a6854",
+    "render/test_raster.c": "dc1e9f16c90e8cc8845b91bf3be189d983e5ed34517d4bb169e702b51644cbbe",
+    "tests/test_bch_textured_viewer.py": "ffe909d9c9777e693f0912504dfa3fd9be1d45d27c22a4759470bd2ffd7cf41f",
+    "reproduction/bch-textured/dump_materials.c": "b682af7b9378e076898efe400c96e5b4284e5620b973f42856c4a57f2e0063cd",
+    "reproduction/bch-textured/verify_materials.py": "cfe96272280532944c89bb55bd0f73ce77d46b12981aa8ab3ae674b731971077"
+  },
+  "checks": [
+    {
+      "command": "make -C native clean && make -C native all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 13,
+      "python_core_tests": {
+        "container": 8,
+        "bch_index_and_gr": 12,
+        "pica_commands": 12,
+        "bch_model": 11
+      },
+      "python_runtime_tests": {
+        "texture_viewer": 7,
+        "bch_texture_viewer": 6,
+        "model_viewer": 10,
+        "bch_model_viewer": 9,
+        "bch_textured_viewer": 5,
+        "field_viewer": 9
+      }
+    },
+    {
+      "command": "make -C reconstructed test",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "result": "passed",
+      "tests": 38,
+      "skipped": 2
+    },
+    {
+      "command": "ASan/UBSan (-fno-sanitize-recover=all), ASAN_OPTIONS=detect_leaks=1: BCH model, material and raster C suites; sanitized model viewer under the textured, BCH-model and model viewer runtime suites; one real-input textured run",
+      "result": "passed; no sanitizer or leak diagnostics"
+    },
+    {
+      "command": "SHA-256 comparison against reconstructed/*/SHA256SUMS and the previous native reproduction/ entries",
+      "result": "all 539 checkpoint files and all 63 earlier native reproduction files unchanged"
+    },
+    {
+      "command": "native/reproduction/bch-textured/verify_materials.py with hash-pinned field and texture payloads",
+      "result": "passed",
+      "materials": 12,
+      "register_observations": 432,
+      "bindings": 12,
+      "pixel_hashes_matching_earlier_verification": 12,
+      "runtime_capture_sha256": "2d9052489e155fb0ce60e7c75a2fb810682e3d0a8dae319d94284355f5ef0951",
+      "exact_texel_fraction": 0.998464,
+      "input_path": "single-member GARC wrappers around the exact payloads; the full local RomFS was not readable from this session",
+      "report": "reference-comparison.json",
+      "report_sha256": "b9a4cd8761c4984adefe2deace593d0baf2abf77d8208d9ca1f76ab75fab00c4"
+    }
+  ],
+  "scope": [
+    "Native BCH material parameter, sampler and fragment register observations",
+    "Unlit TEV-stage-0 preview interpretation and external texture binding by exact name",
+    "Additive source-alpha blending in the software rasterizer",
+    "BCH textured preview in the native model viewer with separate texture archive input"
+  ],
+  "limitations": [
+    "Combiner stages 1..5, constants and combiner buffer not executed",
+    "Projected texture, fragment lighting, fog and vertex colors not executed",
+    "Culling register reported, not executed; original primitive state still unknown",
+    "Depth comparison applied in the preview's own convention; PICA depth mapping not executed",
+    "Real RomFS archive path not exercised by the recorded capture",
+    "No field-scene integration, player, gameplay or running-game visual comparison",
+    "Native Windows build not verified"
+  ],
+  "logs_sha256": "a4a8837bd835936364fd2bb78faa9cfee568948504a06e4846a1a4032ff9dee2"
+}

@@ -27,9 +27,9 @@ working asset viewers and eight connected game-logic milestones; it is not yet a
 playable port.** The wireframe above uses an explicit triangle-list interpretation;
 the original field's primitive setup and materials still need verification.
 
-| Game logic | Native field geometry | Area textures | Preserved checkpoints |
+| Game logic | Native field model | Area textures | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
-| **8** connected C milestones | **12** meshes checked independently | **19** images, **100,608** pixels matched | **539** reconstruction file hashes |
+| **8** connected C milestones | **12** meshes and **12** material bindings checked independently | **19** images, **100,608** pixels matched | **539** reconstruction file hashes |
 
 ## See it running
 
@@ -53,15 +53,26 @@ show inspected original assets and resource data, with the limits described belo
   </tr>
 </table>
 
-The textured preview does not reproduce the game's complete shaders or lighting.
+<p align="center">
+  <a href="docs/native-bch.md#native-textured-preview"><img src="docs/images/native-bch-textured.png" alt="The original field 165 room drawn with its area 75 textures in the native model viewer" width="720"></a>
+</p>
+
+**The field gets its textures.** The same room now draws with area 75's
+textures. Each of its twelve materials picks its texture through its own first
+combiner stage, and an independent check re-derives all 432 register values the
+preview reads. [See the textured field preview →](docs/native-bch.md#native-textured-preview)
+
+The textured previews do not reproduce the game's complete shaders or lighting.
 The terrain image records an earlier milestone; its footer predates the separate
 BCH wireframe viewer shown above. The marker is an inspection tool, not a player
 character. [Capture provenance and validation](docs/images/README.md) identify the
 source of each image.
 
-The latest native checkpoint independently matches every position, UV and rebased
-index in the selected BCH field model. Original executable review also follows
-the zone's area ID into the texture archive and its BCH section consumer.
+The latest native checkpoint textures the selected BCH field model. Every bound
+texture matches an image already verified pixel by pixel, and 99.85% of the
+covered pixels in a software capture are exact texels. Earlier checkpoints match
+every position, UV and rebased index, and follow the zone's area ID into the
+texture archive and its BCH section consumer in the original executable.
 [Read the geometry evidence](native/reproduction/bch-native/README.txt) or
 [inspect the texture comparison](native/reproduction/bch-textures/README.txt).
 
@@ -110,6 +121,11 @@ native/build/pokemon_model_viewer --romfs /path/to/romfs \
 native/build/pokemon_model_viewer --romfs /path/to/romfs \
   --archive a/0/4/1 --entry 165 --section 1 --triangle-list
 
+# The same field with its area textures (unlit, first combiner stage only)
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured \
+  --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11
+
 # List the selected area's 19 BCH textures
 native/build/pokemon_asset_viewer --romfs /path/to/romfs \
   --archive a/0/1/3 --entry 75 --section 11 --list-textures
@@ -143,7 +159,8 @@ recovered original source or builds that match the original machine code.
 <details>
 <summary><strong>What the validation establishes</strong></summary>
 
-- The latest native milestone passes **12 C suites, 43 inspector tests and 41 viewer runtime tests**, plus AddressSanitizer and UndefinedBehaviorSanitizer checks on the BCH geometry reader.
+- The latest native milestone passes **13 C suites, 43 inspector tests and 46 viewer runtime tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the BCH material reader, preview interpreter and textured viewer.
+- The selected field's **12 material bindings and 432 register observations** match an independent parser that follows pinned CTRMap register layouts.
 - The selected area's **100,608 texture pixels** match an independent decoder and separately implemented alpha/tile reconstruction.
 - The selected field's **positions, UVs and indices** match an independent geometry reference at the native renderer's documented precision.
 - The area-consumer trace checks **1,348 instructions** against original executable bytes across thirteen functions.
@@ -160,7 +177,7 @@ not a completion percentage.
 
 The next step is to connect these tested pieces into a game scene:
 
-- **Complete the field renderer:** establish original primitive state, downstream texture bindings, projected materials and scene integration.
+- **Complete the field renderer:** run the remaining combiner stages, projected textures and lighting; establish original primitive state, culling and camera; integrate the scene.
 - **Connect the player:** reconstruct entry, movement, collision and interaction behavior.
 - **Finish the gameplay loop:** replace remaining resource stand-ins, connect battle and return-to-field behavior, and implement save/load.
 - **Compare against the original:** capture a repeatable reference scenario and check behavior at each boundary.

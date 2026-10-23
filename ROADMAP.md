@@ -33,7 +33,9 @@ and CGFX loading. A separate native model viewer now previews a checked
 unskinned model with orbit/zoom controls, wireframes, and an opt-in unlit
 textured mode. A field inspector now follows an original-code-backed zone/matrix
 selection and loads region terrain/collision data, with an explicitly restricted
-inspection marker. Field BCH graphics are still unsupported.
+inspection marker. The field's BCH environment model now has a native wireframe
+and an unlit, combiner-stage-0 textured preview; full material execution and
+scene integration are still missing.
 Game-runtime integration, full material/scene rendering,
 player movement/collision, the interactive
 battle loop, and playable save/load are still missing.
@@ -111,9 +113,15 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    per-component geometry checks. Area 75's nineteen textures decode in the native
    asset viewer, with every RGBA pixel checked independently. Original code now
    corroborates area selection and the AD section-11 BCH resource consumer.
-   Next establish the original primitive state and downstream material bindings,
-   implement the required materials/projected textures, and integrate the field
-   scene. Establish actual player entry and terrain collision consumers.
+   The native model viewer now textures the field: each material's TEV stage 0
+   selects its sampled unit (unit 1 for the four projection-mapped materials),
+   names resolve exactly in area 75's pack, and sampler/alpha/depth/blend state
+   comes from the material's command registers. An independent parser matches
+   all 12 bindings and 432 register observations; see
+   [textured evidence](native/reproduction/bch-textured/README.txt).
+   Next execute the remaining combiner stages, projected textures and lighting,
+   establish the original primitive state, culling and camera conventions, and
+   integrate the field scene. Establish actual player entry and terrain collision consumers.
    Capture the corresponding reference scenario.
 5. Connect explicit game-state/platform interfaces to the native application,
    then implement movement/collision, interaction, battle, return to the field,

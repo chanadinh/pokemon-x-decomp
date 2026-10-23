@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-23",
+  "baseline_commit": "6695be682f1fa37dd7790063d547d7c54e52aab4",
+  "previous_native_sha256sums": {
+    "entries": 118,
+    "sha256": "0b7835bfac76028f21f280cec034a800c72f7ee3e8323d76890f173199e8a5aa"
+  },
+  "immutable_reproduction_records": "All 63 reproduction/ entries of the previous native/SHA256SUMS were rechecked unchanged before this milestone's files were added.",
+  "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+  "changed_native_sources": [
+    "Makefile",
+    "README.md",
+    "assets/bch_model.c",
+    "assets/bch_model.h",
+    "assets/test_bch_model.c",
+    "model_app.c",
+    "render/raster.c",
+    "render/raster.h",
+    "render/test_raster.c"
+  ],
+  "added_native_files": [
+    "assets/bch_material.c",
+    "assets/bch_material.h",
+    "assets/test_bch_material.c",
+    "tests/test_bch_textured_viewer.py",
+    "reproduction/bch-textured/README.txt",
+    "reproduction/bch-textured/baseline.json",
+    "reproduction/bch-textured/dump_materials.c",
+    "reproduction/bch-textured/reference-comparison.json",
+    "reproduction/bch-textured/validation.json",
+    "reproduction/bch-textured/validation.txt",
+    "reproduction/bch-textured/verify_materials.py"
+  ]
+}

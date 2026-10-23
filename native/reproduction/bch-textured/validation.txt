@@ -1,0 +1,50 @@
+BCH textured field preview validation, 2026-10-23
+Baseline commit 6695be682f1fa37dd7790063d547d7c54e52aab4.
+Environment: Ubuntu 24.04 x86_64 cloud container, cc 13.3.0, Python 3.13,
+SDL 2.30.0+dfsg-1ubuntu3.1 (same package version as local-sdl-toolchain.json),
+SDL dummy video with the software renderer. Not run on the local WSL host or on
+native Windows. Source was frozen before the final runs; tested hashes are in
+validation.json.
+
+1. make -C native clean; make -C native all test test-runtime
+   Passed. 13 native C suites (new: test_bch_material; extended: test_bch_model,
+   test_raster). Python core: container 8, BCH index/GR 12, PICA commands 12,
+   BCH model 11. Python runtime: texture viewer 7, BCH texture viewer 6, model
+   viewer 10, BCH model viewer 9, BCH textured viewer 5 (new), field viewer 9.
+   Direct smokes: asset inspect/input, model wireframe/textured input, field input.
+
+2. make -C reconstructed test
+   Passed; all eight reconstruction suites and the eight-module integration.
+
+3. python3 -m unittest discover -s tests -v
+   Passed: 38 tests, 2 optional-dependency skips (PowerShell/3dstool).
+
+4. Sanitizers: -fsanitize=address,undefined -fno-sanitize-recover=all, with
+   ASAN_OPTIONS=detect_leaks=1.
+   Passed without diagnostics: test_bch_model, test_bch_material, test_raster;
+   the sanitized model viewer under test_bch_textured_viewer.py (5),
+   test_bch_model_viewer.py (9) and test_model_viewer.py (10); and a real-input
+   sanitized textured run (3 frames, input self-test, capture).
+
+5. Checkpoint integrity
+   All 539 reconstructed/*/SHA256SUMS entries match.
+   All 63 previous native reproduction/ entries in native/SHA256SUMS match.
+
+6. python3 -I native/reproduction/bch-textured/verify_materials.py
+   --field field165.bch (cb131a95...) --textures area75-world-textures.bch
+   (13cbbc54...) --bridge native/build/dump_bch_materials
+   --viewer native/build/pokemon_model_viewer --romfs <wrapper directory>
+   --model-args "--archive field.garc --entry 0"
+   --texture-args "--texture-archive area.garc --texture-entry 0"
+   --ctrmap <CTRMap 4b780a7 checkout>
+   Passed. 12 materials, 432 register observations, 12 coordinator/sampler
+   sets, 12 bindings; every bound image's RGBA hash equals the earlier verified
+   sample. CTRMap reference files hash-checked. Capture 960x640, sha256
+   2d9052489e155fb0ce60e7c75a2fb810682e3d0a8dae319d94284355f5ef0951;
+   75,422 of 75,538 covered pixels (99.8464%) are exact texels.
+   The wrapper directory held single-member GARCs around the exact payloads
+   because the session could not read the full local RomFS.
+
+Not established: combiner stages 1..5, projected texture, lighting, fog,
+vertex colors, culling convention, original primitive state, game camera or
+depth mapping, and any running-game visual comparison.

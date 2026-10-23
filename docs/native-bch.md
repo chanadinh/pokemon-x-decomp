@@ -168,7 +168,49 @@ The viewer reuses orbit/zoom controls, software rendering, input checks and
 exclusive frame capture. `--section` validates the complete AD/GR offset table;
 member and optional outer/inner decompression buffers share a 64 MiB input budget.
 All meshes are drawn, including those marked hidden. Visibility, priority, layers,
-material names and texture associations are reported as metadata. BCH `--textured`
-is rejected: projected coordinates, combiners, lighting and original render state
-are not replaced with guessed material behavior. Existing CGFX modes retain their
-own contracts. See the [native reproduction record](../native/reproduction/bch-native/README.txt).
+material names and texture associations are reported as metadata. Existing CGFX
+modes retain their own contracts. See the [native reproduction record](../native/reproduction/bch-native/README.txt).
+
+## Native textured preview
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured \
+  --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11
+```
+
+<img src="images/native-bch-textured.png" alt="The original field 165 room rendered with its area 75 textures in the native viewer" width="720">
+
+The native reader now also returns each material's parameter metadata when the
+relocated parameter object carries a fragment command stream at `+0xc8`: texture
+coordinators at `+12 + 24 × unit`, sampler registers `0x83/0x93/0x9b`, and the
+cull, color-operation, blend, alpha, depth/color-mask, combiner-buffer and six TEV
+stage registers, each with a bit-level known mask. Layouts and register meanings
+follow the pinned CTRMap `H3DMaterial`, `PICACommandReader` and `PICACommand`
+sources; they are format references, not original executable evidence.
+
+A separate preview interpreter accepts an unlit, stage-0-only subset. Stage 0 must
+sample one texture for both RGB and alpha, optionally modulated by primary or
+fragment-primary color, which the preview treats as white. That texture unit must
+be enabled, named, 2D, ordinarily UV-mapped with an identity coordinator, and
+non-border-clamped. Blending must be one of replace, source-alpha or additive
+source-alpha. Culling is reported but not executed. Everything else rejects
+before video.
+
+For field 165 the materials themselves settle the earlier unit question: the four
+projection-mapped materials name texture 1 in stage 0, so the preview samples
+their ordinary unit-1 image and reports the `projection_dummy` unit as unexecuted.
+That does not reproduce the projected term: those materials modulate by texture 0
+in stage 4, which this preview does not run. Twelve of the nineteen area textures
+are bound; two layer-1 materials blend (shadow and mirror) without depth writes.
+
+An independent verifier re-parses sections, relocations and command packets
+without the production tools and re-derives all 432 register observations and
+every preview field. It confirms each binding's exact name, earlier external index
+and previously verified pixel hash. In a 960×640 software capture, 99.85% of the
+covered pixels are exact texels of the bound images. This was run on the exact
+hash-pinned payloads in single-member archives, because the session could not read
+the full RomFS; the synthetic runtime tests cover the archive and section paths.
+Combiner stages 1–5, projection, lighting, fog, vertex colors, primitive state and
+the game camera remain open, so the capture is not the game's final appearance. See
+the [textured-preview record](../native/reproduction/bch-textured/README.txt).
