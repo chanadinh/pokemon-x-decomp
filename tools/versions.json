@@ -1,0 +1,56 @@
+{
+  "ghidra": {
+    "version": "12.1.4",
+    "url": "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.1.4_build/ghidra_12.1.4_PUBLIC_20260921.zip",
+    "sha256": "ddac49f903da9d5bac833e5cc79395098b9c33cfd3279be5f31bd00387d2d4db",
+    "installed_directory": "tools/ghidra_12.1.4_PUBLIC"
+  },
+  "jdk": {
+    "version": "21.0.13+9.0.LTS",
+    "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jdk_x64_linux_hotspot_21.0.13_9.tar.gz",
+    "sha256": "d7f5d5cf865a2902b70ff549b97586a7d3f234e016f041ab447ea740c7d66d1c",
+    "installed_directory": "tools/jdk-21.0.13+9"
+  },
+  "mapping_reference": {
+    "repository": "https://github.com/Raikaru/ghidra-ctr-loader",
+    "commit": "86866c4fe6d90f0a6ad5baa12b82252bb094451d",
+    "note": "Reference for ExHeader mapping; extension not built or used."
+  },
+  "game_input": {
+    "code_sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a",
+    "exheader_sha256": "ae8bbde2babb4a0222cdf08d2e71daba27ea4deb3c4fa9d17600d2068901f4db",
+    "program_id": "0004000000055D00",
+    "upload_sha256": "8be1cbab2e0e86264587ffed18d877a07fdd0d4793be4cc6aa456b7d339f026d",
+    "full_rom_hash_status": "Reported by uploaded extraction manifest; complete ROM not present here."
+  },
+  "rea": {
+    "repository": "https://github.com/morluto/rea",
+    "note": "Reviewed previously; not installed or used by this first-pass workflow."
+  },
+  "active_target": {
+    "name": "Pokemon X",
+    "expected_program_id": "0004000000055D00",
+    "game_data_received": true
+  },
+  "3dstool": {
+    "version": "1.2.6",
+    "commit": "e31a569b130d30eccd3f41ef5691cb2aca77e4f6",
+    "windows_url": "https://github.com/dnasdw/3dstool/releases/download/v1.2.6/3dstool.zip",
+    "windows_sha256_measured": "481e20f445eb2f0f506d0d88cd750385bc8377670d681d6f66f584a176027806",
+    "linux_sha256_measured": "d42e3de7766ee552b3609ac5acb7ad3f07209dd91bc45a21d3fc2b049790ede2",
+    "publisher_digest": null
+  },
+  "module_analysis": {
+    "input_archive_sha256": "a035d9775a1fb4d833cd4b463d59f39d2f6c0cd116abaae4ff93a2579c74313d",
+    "cro_count": 133,
+    "crs_count": 1,
+    "crr_count": 1,
+    "applied_relocations": 66019,
+    "unresolved_relocations": 0,
+    "candidate_functions": 44279,
+    "final_pseudocode_functions": 230,
+    "output": "/workspace/pokemon-x-decomp/outputs/modules-20261023T145553Z",
+    "saved_project": "/workspace/pokemon-x-decomp/projects/cro_20261023T150920079989Z.gpr",
+    "source_files_unchanged": true
+  }
+}
