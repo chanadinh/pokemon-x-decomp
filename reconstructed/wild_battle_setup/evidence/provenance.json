@@ -1,0 +1,156 @@
+{
+  "inputs": {
+    "DllField.cro": "ed043eb6c5d4057d64ceefda99b59b0978412b982427551f6c99bf6084be6489",
+    "code.bin": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a"
+  },
+  "functions": [
+    {
+      "address": "00301a9c",
+      "input_file": "code.bin",
+      "file_offset": "0x201a9c",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "f8983c95a4b6480c8eeadde47960b19928542adc0c610c1e3b7e499b3606cda8",
+      "every_instruction_matches_original_input": true
+    },
+    {
+      "address": "003bcb44",
+      "input_file": "code.bin",
+      "file_offset": "0x2bcb44",
+      "instruction_bytes": 48,
+      "instruction_bytes_sha256": "05cfe2e11d29a8200f4d4e6faba0317897926e389f6c6d6f1b9cbe91a1a7161f",
+      "every_instruction_matches_original_input": true
+    },
+    {
+      "address": "003dea54",
+      "input_file": "code.bin",
+      "file_offset": "0x2dea54",
+      "instruction_bytes": 16,
+      "instruction_bytes_sha256": "6c3fad640916822b6843e3c44952d1b9c174cdd812009a9474c2022217f01eaf",
+      "every_instruction_matches_original_input": true
+    },
+    {
+      "address": "004a4000",
+      "input_file": "code.bin",
+      "file_offset": "0x3a4000",
+      "instruction_bytes": 8,
+      "instruction_bytes_sha256": "ad59b996001108477115ba6a3ee081878236dfaba9b2350dec0c46e8c01a72d6",
+      "every_instruction_matches_original_input": true
+    },
+    {
+      "address": "004ce9bc",
+      "input_file": "code.bin",
+      "file_offset": "0x3ce9bc",
+      "instruction_bytes": 12,
+      "instruction_bytes_sha256": "e48db0258d2ee0d7504b456c52c3f148ecb7826cfc8923b9b2ce719cde0191d4",
+      "every_instruction_matches_original_input": true
+    },
+    {
+      "address": "15c75434",
+      "input_file": "DllField.cro",
+      "file_offset": "0x75434",
+      "instruction_bytes": 472,
+      "instruction_bytes_sha256": "0017f9877f657c41dd19def803f95edcef9d20fab53fd6297077d635d65a9935",
+      "every_instruction_matches_original_input": true
+    },
+    {
+      "address": "15c75610",
+      "input_file": "DllField.cro",
+      "file_offset": "0x75610",
+      "instruction_bytes": 120,
+      "instruction_bytes_sha256": "1acf7eb8ca3acac724c1f1dde042aff98c85c8eeaf30b07143c85dd44ebe4cc1",
+      "every_instruction_matches_original_input": true
+    },
+    {
+      "address": "15ca16dc",
+      "input_file": "DllField.cro",
+      "file_offset": "0xa16dc",
+      "instruction_bytes": 252,
+      "instruction_bytes_sha256": "722c8ceb9b2b18dbf502d865aeb245a2134e58d5e4849a17b6bf47fbc8aefc2b",
+      "every_instruction_matches_original_input": true
+    }
+  ],
+  "selected_relocations": [
+    {
+      "module": "DllField",
+      "origin": "internal",
+      "patch_index": 147,
+      "patch_file_offset": 1176048,
+      "type": 2,
+      "addend": 1132,
+      "symbol_address": 365879296,
+      "target_module": "DllField",
+      "symbol": "segment_1",
+      "address": 365565912,
+      "original_word": 0,
+      "value": 365880428,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 6,
+      "patch_file_offset": 1102672,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 3152540,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_201a9c",
+      "address": 364905580,
+      "original_word": 0,
+      "value": 3152540,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 1373,
+      "patch_file_offset": 1119076,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 3918660,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_2bcb44",
+      "address": 364919900,
+      "original_word": 0,
+      "value": 3918660,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 1798,
+      "patch_file_offset": 1124176,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 4057684,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_2dea54",
+      "address": 364916580,
+      "original_word": 0,
+      "value": 4057684,
+      "status": "applied"
+    },
+    {
+      "module": "DllField",
+      "origin": "import",
+      "patch_index": 2901,
+      "patch_file_offset": 1137412,
+      "type": 2,
+      "addend": 0,
+      "symbol_address": 4866048,
+      "target_module": "|static|",
+      "symbol": "anon_segment_0_3a4000",
+      "address": 364908948,
+      "original_word": 0,
+      "value": 4866048,
+      "status": "applied"
+    }
+  ],
+  "analysis_addresses": "CRO addresses are synthetic; main executable addresses retain original mapping.",
+  "review": "Independent ARM review and source review completed; initializer export repaired temporarily in read-only Ghidra session.",
+  "unreconstructed_dependencies": [
+    "15c75434",
+    "003bcb44"
+  ],
+  "limits": "Not a native game, original source, matching binary build, or differential test against the running game."
+}

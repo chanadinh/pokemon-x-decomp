@@ -1,0 +1,39 @@
+Validation performed 2026-10-23 on Linux-6.18.55-x86_64-with-glibc2.41
+
+Address and undefined-behavior instrumentation were enabled. Leak detection was disabled because it is unsupported under this container tracing environment; this source/test uses no heap allocation.
+
+Directory: /workspace/pokemon-x-decomp/reconstructed
+$ cc --version
+cc (Debian 14.2.0-19) 14.2.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed
+$ make test
+make -C call_wild_battle test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/call_wild_battle'
+./build/test_call_wild_battle
+PASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/call_wild_battle'
+make -C wild_battle_setup test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/wild_battle_setup'
+mkdir -p build
+cc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror wild_battle_setup.c test_wild_battle_setup.c ../call_wild_battle/call_wild_battle.c   -o build/test_wild_battle_setup
+./build/test_wild_battle_setup
+PASS: 65536 flag values; initializer holes; row decoding; optional paths; call order; mutation timing; return propagation; finisher; original wrapper integration
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/wild_battle_setup'
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed/wild_battle_setup
+$ cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer wild_battle_setup.c test_wild_battle_setup.c ../call_wild_battle/call_wild_battle.c -o build/test_wild_battle_setup_sanitized
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed/wild_battle_setup
+$ ASAN_OPTIONS=detect_leaks=0 ./build/test_wild_battle_setup_sanitized
+PASS: 65536 flag values; initializer holes; row decoding; optional paths; call order; mutation timing; return propagation; finisher; original wrapper integration
+Exit code: 0
+
+Checks use synthetic memory and assembly-derived expectations; no running 3DS game was used as a differential reference.
