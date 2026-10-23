@@ -1,13 +1,13 @@
-# Native texture and wireframe viewers
+# Native texture and model viewers
 
 This native C11/SDL2 application opens selected local Pokémon X archive entries
 and displays supported textures. It establishes an executable, window and event
 loop, monotonic timing, keyboard controls, image decoding, and bounded resource
 access. A separate executable previews a restricted subset of static CGFX mesh
-geometry as a wireframe. The eight reconstructed game-logic modules are
+geometry as a wireframe or an opt-in unlit textured preview. The eight reconstructed game-logic modules are
 not connected to gameplay in this application yet.
 
-A first playable still needs materials and map scene loading, player movement and collision,
+A first playable still needs complete rendering and map scene loading, player movement and collision,
 interactions, an interactive battle, return to the map, and save/load. See the
 [first-playable acceptance criteria](../docs/PLAYABLE_SLICE.md). This directory
 contains independently authored host/platform code, rather than an additional
@@ -104,7 +104,7 @@ renders three frames unless another count was supplied.
    owned, tightly packed RGBA8 pixels. Dimensions are capped at 4096 per side.
    Morton tile order, channel widths, cropping, and supported storage strides
    are documented in [the texture notes](../docs/native-textures.md).
-4. For CGFX revision `0x05000000`, select a bounded image TXOB image, resolve
+4. For CGFX revision `0x05000000`, select a bounded image TXOB, resolve
    its image descriptor, validate format/bpp/storage and single-mip payload,
    then decode through the shared PICA payload API. CGFX format IDs differ
    from BCLIM IDs; no synthetic container header is created. Unsupported mip
@@ -134,7 +134,7 @@ python3 native/tools/inspect_container.py --file selected.cgfx
 
 JSON is written to standard output. The checked sample contains the model name
 `ball_in_1` and two texture records. Those names do not establish a gameplay or
-map role. Materials, animation, and scene bindings remain to be decoded.
+map role. This metadata inspector does not decode material or scene bindings.
 See [the container evidence and limits](../docs/native-containers.md).
 
 ## Preview static geometry
@@ -158,6 +158,33 @@ loading accepts a restricted unskinned SOBJ subset with identity model
 transforms and triangle lists; unsupported layouts fail explicitly. See
 [the geometry contract and evidence](../docs/native-geometry.md).
 
+## Preview a textured model
+
+```sh
+native/build/pokemon_model_viewer --demo --textured
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/1/0/2 --entry 0 --textured
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/1/0/2 --entry 0 --textured --inspect
+```
+
+`--textured` resolves supported material references, UV0 and vertex colors,
+then decodes the referenced embedded images. The software rasterizer applies
+checked wrapping/filtering, alpha test, depth test/write, culling, and supported
+blend factors. The same orbit/zoom/reset controls and exclusive frame captures
+work in both modes. `--inspect --textured` validates and reports the bindings
+without opening a window.
+
+The preview uses texture multiplied by vertex color and an orthographic
+inspection camera. Lighting, fog, texture combiners, shader programs, material
+animation, and the game's draw ordering are not reproduced. The preview orders
+material translucency layers and priorities ascending, retaining resource order
+for ties; it does not sort triangles by distance. Supported material
+UV transforms are currently identity only. This is a bounded visual inspection
+tool, not a complete CGFX or PICA renderer. See the
+[material contract and evidence](../docs/native-materials.md) for the accepted
+states and the preview's ordering and coordinate conventions.
+
 ## Tests and evidence
 
 ```sh
@@ -180,6 +207,8 @@ The ETC milestone's additional validation and pinned references are in
 [`reproduction/texture-formats/`](reproduction/texture-formats/README.txt).
 Embedded-texture and wireframe validation is recorded separately in
 [`reproduction/cgfx-textures/`](reproduction/cgfx-textures/README.txt).
+Material, UV, and software-renderer validation is in
+[`reproduction/textured-model/`](reproduction/textured-model/README.txt).
 Static format references, synthetic tests, and local rendering do not establish
 visual equivalence with a running original game. Reference captures and a
 concrete map/interaction/battle scenario remain the next integration gate.

@@ -22,7 +22,7 @@ in the [source overview](../reconstructed/README.md) and
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
-| Renderer and game asset loading | Standalone BCLIM and embedded CGFX textures display; a separate static wireframe model preview works; materials, map scenes, and game renderer remain missing |
+| Renderer and game asset loading | Standalone BCLIM and embedded CGFX textures display; a static model has wireframe and unlit textured previews with checked bindings; full materials, map scenes, and game renderer remain missing |
 | Player controls, movement, and collision | Viewer keyboard controls work; player movement and collision are not implemented |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
@@ -109,8 +109,16 @@ keyboard orbit/zoom controls. Its stored name `collision02` does not establish
 a map or collision-system role. See the [geometry scope](native-geometry.md)
 and [new validation record](../native/reproduction/cgfx-textures/validation.json).
 
+The same mesh now supports an opt-in unlit textured preview. Six material
+bindings connect UV0 and vertex colors to embedded textures, with checked
+sampler, depth, culling, alpha-test, and supported blend states. The preview
+uses an inspection camera and a stable translucency-layer/priority order; it does not reproduce the
+game's lighting, fog, texture combiners, shaders, or transparent sorting.
+See the [material scope](native-materials.md) and
+[textured-preview evidence](../native/reproduction/textured-model/README.txt).
+
 These are bounded asset-preview paths. The applications do not yet call
-the eight reconstructed game-logic modules. Palette extensions, model materials,
+the eight reconstructed game-logic modules. Palette extensions, full material rendering,
 animation, map formats, and scene bindings remain unimplemented. The separate
 [CGFX inspector](native-containers.md) provides resource metadata alongside
 the native decoders.

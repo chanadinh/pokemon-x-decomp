@@ -5,6 +5,10 @@ CGFX meshes as wireframes. The verified local sample is `a/1/0/2`, entry `0`,
 subentry `0`, model `0`. Its stored name is `collision02`; that label does not
 establish a collision, map, or gameplay role.
 
+This page describes the positions-only API and wireframe mode. The additive
+`--textured` mode and its separate material/UV contract are documented in
+[the material preview notes](native-materials.md).
+
 ```sh
 native/build/pokemon_model_viewer --romfs /path/to/romfs \
   --archive a/1/0/2 --entry 0 --model 0 --inspect
@@ -131,8 +135,9 @@ unsupported types, skinning/topology, nonfinite numbers, limits, and both byte
 component signedness paths. Separate runtime tests use another layout to
 exercise raw/LZ11 GARC loading and the model-viewer CLI.
 
-For a later textured-model preview, the verified geometry must be connected
-to material texture references, UV transforms, sampler state, transparency,
-and draw ordering. Skeletons and nonidentity transforms require their own
+The additive textured-model preview connects this geometry to a bounded
+subset of material texture references, UVs, sampler state, and transparency.
+Full material behavior and game draw ordering remain unverified.
+Skeletons and nonidentity transforms require their own
 evidence and tests. Scene placement, collision behavior, and gameplay remain
 separate boundaries; a successful wireframe does not establish any of them.
