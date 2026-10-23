@@ -1,0 +1,166 @@
+{
+  "audit_date": "2026-10-23",
+  "description": "Selected local assets; metadata only, no copyrighted asset payloads. Relative archive paths are beneath the user-provided RomFS root.",
+  "sources": [
+    {
+      "repository": "https://github.com/kwsch/pk3DS",
+      "commit": "6daaca934ca2284a73ab743bf89c848c57cd9de1",
+      "path": "pk3DS.Core/CTR/GARC.cs",
+      "url": "https://github.com/kwsch/pk3DS/blob/6daaca934ca2284a73ab743bf89c848c57cd9de1/pk3DS.Core/CTR/GARC.cs",
+      "sha256": "acf066b682de5c087b96231195b2f1fc826f710110588b8b6cfaa223b6532561"
+    },
+    {
+      "repository": "https://github.com/kwsch/pk3DS",
+      "commit": "6daaca934ca2284a73ab743bf89c848c57cd9de1",
+      "path": "pk3DS.Core/CTR/LZSS.cs",
+      "url": "https://github.com/kwsch/pk3DS/blob/6daaca934ca2284a73ab743bf89c848c57cd9de1/pk3DS.Core/CTR/LZSS.cs",
+      "sha256": "ed1e9ff820fc330a15b76513c2816d470ef2ac0cf753c7ea2100d957fba7b46a"
+    },
+    {
+      "repository": "https://github.com/magical/nlzss",
+      "commit": "f27414f373eab53bfe3c1a819c40eb800323e690",
+      "path": "lzss3.py",
+      "url": "https://github.com/magical/nlzss/blob/f27414f373eab53bfe3c1a819c40eb800323e690/lzss3.py",
+      "sha256": "02d108e35d0c4522bdf72dbfdc48bb7907d96aa2ce910c1ca5178b7c75fe94f8"
+    }
+  ],
+  "survey": {
+    "archives": 271,
+    "members": 44512,
+    "clim_tail_candidates": 174,
+    "standalone_size_matches": 32,
+    "index_validation_errors": 0
+  },
+  "samples": [
+    {
+      "archive": "a/0/0/5",
+      "entry": 35,
+      "subentry": 0,
+      "absolute_member_offset": 3792672,
+      "archive_size": 4776312,
+      "archive_sha256": "05af1590a8bbc108b4803337fb92610a6e09e743bec9cc2400cc9abd04312e0a",
+      "member_size": 65576,
+      "member_sha256": "016cfbc4994e47a063c2a2b9038540aac6aee8c5a3fcf9dd94926337e0efbae5",
+      "compression": "none",
+      "decoded_size": 65576,
+      "decoded_sha256": "016cfbc4994e47a063c2a2b9038540aac6aee8c5a3fcf9dd94926337e0efbae5",
+      "footer": {
+        "magic": "CLIM",
+        "byte_order_mark": "0xfeff",
+        "header_size": 20,
+        "version": "0x02020000",
+        "declared_file_size": 65576,
+        "block_count": 1,
+        "reserved": 0,
+        "image_magic": "imag",
+        "image_info_size": 16,
+        "width": 320,
+        "height": 240,
+        "format_word": 10,
+        "declared_data_size": 65536
+      },
+      "size_check": true
+    },
+    {
+      "archive": "a/1/1/8",
+      "entry": 1,
+      "subentry": 0,
+      "absolute_member_offset": 44952,
+      "archive_size": 53184,
+      "archive_sha256": "89de3366dd7e31b7be34f43cec5f3960bc375d5747d7af58594a9d6444ee5264",
+      "member_size": 8232,
+      "member_sha256": "057c924c488ea00a1bfb4ad5c59e5ee4536324148852dfe8b9c0d024e5810554",
+      "compression": "none",
+      "decoded_size": 8232,
+      "decoded_sha256": "057c924c488ea00a1bfb4ad5c59e5ee4536324148852dfe8b9c0d024e5810554",
+      "footer": {
+        "magic": "CLIM",
+        "byte_order_mark": "0xfeff",
+        "header_size": 20,
+        "version": "0x02020000",
+        "declared_file_size": 8232,
+        "block_count": 1,
+        "reserved": 0,
+        "image_magic": "imag",
+        "image_info_size": 16,
+        "width": 36,
+        "height": 30,
+        "format_word": 9,
+        "declared_data_size": 8192
+      },
+      "size_check": true
+    },
+    {
+      "archive": "a/1/3/8",
+      "entry": 10,
+      "subentry": 0,
+      "absolute_member_offset": 182592,
+      "archive_size": 518128,
+      "archive_sha256": "d04fcd9bcf2f61f92d70386e6f3381553c33e12b6e9ab27a2a2b7deb5a84dc00",
+      "member_size": 131112,
+      "member_sha256": "fab85fb8bdd09a9c7010e8cc65a1cf1f9094bebbcea430eaf06a4590c5acfe9d",
+      "compression": "none",
+      "decoded_size": 131112,
+      "decoded_sha256": "fab85fb8bdd09a9c7010e8cc65a1cf1f9094bebbcea430eaf06a4590c5acfe9d",
+      "footer": {
+        "magic": "CLIM",
+        "byte_order_mark": "0xfeff",
+        "header_size": 20,
+        "version": "0x02020000",
+        "declared_file_size": 131112,
+        "block_count": 1,
+        "reserved": 0,
+        "image_magic": "imag",
+        "image_info_size": 16,
+        "width": 512,
+        "height": 128,
+        "format_word": 8,
+        "declared_data_size": 131072
+      },
+      "size_check": true
+    },
+    {
+      "archive": "a/1/6/0",
+      "entry": 0,
+      "subentry": 0,
+      "absolute_member_offset": 584,
+      "archive_size": 31832,
+      "archive_sha256": "81fda175386ab456f49d636d90c7153d5bb4857812f3c5a85c9c0c0ee1bebae7",
+      "member_size": 987,
+      "member_sha256": "cfce4a47b9817648db33a938182cf92e021a93023813c1ea960b01613eb61b43",
+      "compression": "LZ11",
+      "decoded_size": 8232,
+      "decoded_sha256": "f9ebf556b02fd1176e4d6791e168d0fc3c003f1f0e65c009245f1cf1c8863e3a",
+      "footer": {
+        "magic": "CLIM",
+        "byte_order_mark": "0xfeff",
+        "header_size": 20,
+        "version": "0x02020000",
+        "declared_file_size": 8232,
+        "block_count": 1,
+        "reserved": 0,
+        "image_magic": "imag",
+        "image_info_size": 16,
+        "width": 40,
+        "height": 40,
+        "format_word": 8,
+        "declared_data_size": 8192
+      },
+      "size_check": true
+    }
+  ],
+  "limitations": [
+    "No map/UI/gameplay role is inferred from numeric archive paths or image appearance.",
+    "A trailing CLIM footer alone is insufficient: 142 of 174 observed tail candidates do not declare the entire member size and are not classified as standalone images.",
+    "Compressed members were decoded using the new bounded C LZ implementation, with synthetic token-vector tests; this is not a game-reference execution comparison.",
+    "GARC support is limited to little-endian v4 packed allocation records; unselected large payloads were not read or hashed."
+  ],
+  "native_index_validation": {
+    "method": "native/tools/check_garc.c invoking px_garc_open/px_garc_count/px_garc_close for every archive; allocation indexes only, no payload reads",
+    "archives": 271,
+    "expected_members": 44512,
+    "exit_code": 0,
+    "stdout": "GARC C index validation: 271 archives; 44512 members; 0 failures\n",
+    "stderr": ""
+  }
+}
