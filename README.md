@@ -9,10 +9,12 @@ An early-stage reverse-engineering project for Pokémon X on Nintendo 3DS.
 Explore eight connected C reconstruction milestones, reviewed assembly evidence,
 and synthetic tests that run without game files.
 
-**Current status: eight tested game-logic milestones and a native asset viewer.
+**Current status: eight tested game-logic milestones, a native texture viewer,
+and a static wireframe model preview.
 There is no playable PC port or interactive battle yet.** The viewer loads
 selected original textures, including ETC1 and ETC1A4, through GARC/LZ/BCLIM
-decoding. The long-term goal is a native PC game;
+decoding, plus embedded CGFX textures. A separate viewer previews a bounded
+subset of unskinned CGFX geometry. The long-term goal is a native PC game;
 [the roadmap](ROADMAP.md) explains the work and evidence still needed. The
 [first playable slice](docs/PLAYABLE_SLICE.md) has concrete acceptance criteria
 and an inventory of the original assets already available locally.
@@ -44,9 +46,11 @@ native/build/pokemon_asset_viewer --demo
 native/build/pokemon_asset_viewer --romfs /path/to/romfs --archive a/1/6/0 --entry 0
 ```
 
-The viewer provides pan/zoom, image exports, and bounded archive/texture loading.
+The texture viewer provides pan/zoom, image exports, and bounded archive/texture loading.
 The demo requires no game files. [Build instructions and supported formats](native/README.md)
-describe the actual limits; maps, models, and gameplay are not implemented yet.
+describe the actual limits. `native/build/pokemon_model_viewer` provides a
+separate wireframe preview with orbit/zoom controls; materials, maps, and
+gameplay remain unimplemented.
 
 ## What works today
 

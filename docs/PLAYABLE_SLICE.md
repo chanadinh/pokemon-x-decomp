@@ -22,7 +22,7 @@ in the [source overview](../reconstructed/README.md) and
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
-| Renderer and game asset loading | Selected GARC → optional LZ10/LZ11 → raw/ETC1/ETC1A4 BCLIM → RGBA textures display; map/model/game renderer still missing |
+| Renderer and game asset loading | Standalone BCLIM and embedded CGFX textures display; a separate static wireframe model preview works; materials, map scenes, and game renderer remain missing |
 | Player controls, movement, and collision | Viewer keyboard controls work; player movement and collision are not implemented |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
@@ -101,12 +101,19 @@ local real-asset checks are recorded in
 [the foundation validation record](../native/reproduction/validation.json) and
 [the ETC milestone](../native/reproduction/texture-formats/README.txt).
 
-This completes a bounded asset-preview path. The application does not yet call
-the eight reconstructed game-logic modules. Palette extensions,
-embedded textures, model/map formats, and rendering scene bindings remain
-unimplemented in the viewer. A separate [CGFX inspector](native-containers.md)
-now indexes selected model and texture records, including their names, counts,
-and bounded texture extents; it does not render models or identify map roles.
+Embedded CGFX textures now decode through an explicit shared payload interface,
+with texture selection and listing in the viewer. Eleven real embedded images
+match an independent pixel reference. The separate native model viewer displays
+767 vertices and 936 triangles from six shapes in `a/1/0/2`, entry 0, with
+keyboard orbit/zoom controls. Its stored name `collision02` does not establish
+a map or collision-system role. See the [geometry scope](native-geometry.md)
+and [new validation record](../native/reproduction/cgfx-textures/validation.json).
+
+These are bounded asset-preview paths. The applications do not yet call
+the eight reconstructed game-logic modules. Palette extensions, model materials,
+animation, map formats, and scene bindings remain unimplemented. The separate
+[CGFX inspector](native-containers.md) provides resource metadata alongside
+the native decoders.
 A repeatable running-game capture is still required to select
 and compare the first map-to-battle scenario.
 

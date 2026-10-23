@@ -28,11 +28,15 @@ nature adjustment, growth-to-level resolution, and a final script-state write.
 Wider setup, real personal/growth resource loading, learnset access, move
 insertion, name construction, and maximum-PP services still use stand-ins.
 The native asset viewer now opens a window, handles pan/zoom input, and displays
-selected original raw, ETC1, and ETC1A4 textures through bounded GARC/LZ/BCLIM loading. Game-runtime
-integration, map/model rendering, player movement/collision, the interactive
+selected original raw, ETC1, and ETC1A4 textures through bounded GARC/LZ/BCLIM
+and CGFX loading. A separate native wireframe viewer now previews a checked
+unskinned model with orbit/zoom controls. Game-runtime
+integration, material/scene rendering, player movement/collision, the interactive
 battle loop, and playable save/load are still missing.
-Per-milestone validation records document the actual tests;
-these are synthetic-memory checks rather than a running-game comparison.
+Per-milestone validation records document the actual tests. Game-logic tests
+use synthetic memory; native asset tests also compare original-data decoding
+with independent references and exercise rendered previews. No running-game
+comparison is established.
 
 The [first playable slice](docs/PLAYABLE_SLICE.md) defines an end-to-end
 acceptance scenario and records the local asset audit. The original container
@@ -87,10 +91,12 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    ETC1, and ETC1A4 standalone textures, including LZ11-compressed samples.
    Identify and decode the minimal map,
    model, texture, animation, UI, and audio paths for the playable slice.
-   Palette extensions, model rendering, and map scene bindings remain unsupported.
+   Embedded CGFX textures and a restricted static wireframe model preview now work.
+   Palette extensions, materials, animation, and map scene bindings remain unsupported.
    The [CGFX inspector](docs/native-containers.md) now identifies bounded model
-   and texture records; use those checked inputs to investigate geometry and
-   materials before building scene loading.
+   and texture records; [geometry evidence](docs/native-geometry.md) records the
+   supported mesh subset. Next bind checked materials/UVs/textures to geometry,
+   then establish transforms, camera, and scene loading.
    Capture the corresponding reference scenario.
 5. Connect explicit game-state/platform interfaces to the native application,
    then implement movement/collision, interaction, battle, return to the field,

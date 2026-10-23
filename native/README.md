@@ -1,12 +1,13 @@
-# Native asset viewer foundation
+# Native texture and wireframe viewers
 
 This native C11/SDL2 application opens selected local Pokémon X archive entries
 and displays supported textures. It establishes an executable, window and event
 loop, monotonic timing, keyboard controls, image decoding, and bounded resource
-access. It is an asset viewer; the eight reconstructed game-logic modules are
+access. A separate executable previews a restricted subset of static CGFX mesh
+geometry as a wireframe. The eight reconstructed game-logic modules are
 not connected to gameplay in this application yet.
 
-A first playable still needs map/model loading, player movement and collision,
+A first playable still needs materials and map scene loading, player movement and collision,
 interactions, an interactive battle, return to the map, and save/load. See the
 [first-playable acceptance criteria](../docs/PLAYABLE_SLICE.md). This directory
 contains independently authored host/platform code, rather than an additional
@@ -70,6 +71,19 @@ Use a fresh output filename for each export. `--inspect` does not initialize
 the video driver and cannot be combined with window/input options.
 
 `--subentry` selects the original GARC bitmap bit, defaulting to zero.
+For CGFX members, `--texture N` selects an embedded image, defaulting to zero.
+`--list-textures` prints names, dimensions, hardware format IDs, and supported
+decode status without opening a window or decoding pixels. It cannot be combined
+with texture selection, exports, or window options. Both options require CGFX;
+ordinary BCLIM selections retain their existing behavior. For example:
+
+```sh
+native/build/pokemon_asset_viewer --romfs /path/to/romfs \
+  --archive a/0/3/7 --entry 0 --list-textures
+native/build/pokemon_asset_viewer --romfs /path/to/romfs \
+  --archive a/0/3/7 --entry 0 --texture 0
+```
+
 `--frames` requires a positive count. `--software` forces the SDL software
 renderer; otherwise the application tries accelerated rendering and falls back
 to software. `--self-test-input` injects pan, zoom, reset, resize, and Escape
@@ -82,7 +96,7 @@ renders three frames unless another count was supplied.
    262,144 members. The archive stays on disk; the application reads only the
    selected member, capped at 64 MiB. Original entry/subentry identities are
    retained. Unsupported layouts and invalid bounds fail with diagnostics.
-2. Decode a standalone BCLIM directly, or decode one LZ10/LZ11 stream when
+2. Decode a standalone BCLIM or CGFX directly, or decode one LZ10/LZ11 stream when
    indicated by its header. Decompressed output has a 64 MiB budget. Streams
    with invalid references, truncated tokens, or unexplained trailing data fail.
 3. Decode supported little-endian BCLIM version `0x02020000` raw, ETC1, and
@@ -90,11 +104,16 @@ renders three frames unless another count was supplied.
    owned, tightly packed RGBA8 pixels. Dimensions are capped at 4096 per side.
    Morton tile order, channel widths, cropping, and supported storage strides
    are documented in [the texture notes](../docs/native-textures.md).
-4. Upload decoded pixels into an SDL texture and display them over a checker
+4. For CGFX revision `0x05000000`, select a bounded image TXOB image, resolve
+   its image descriptor, validate format/bpp/storage and single-mip payload,
+   then decode through the shared PICA payload API. CGFX format IDs differ
+   from BCLIM IDs; no synthetic container header is created. Unsupported mip
+   chains and texture variants remain listable but cannot be displayed.
+5. Upload decoded pixels into an SDL texture and display them over a checker
    background with nearest-neighbor sampling and alpha blending.
 
-XY palette extensions, model rendering, embedded images, maps,
-animation, shaders, audio, and gameplay are outside the supported path. Finding
+XY palette extensions, model materials, maps, animation, shaders, audio, and
+gameplay are outside the texture path. Finding
 `CLIM` near a member's end does not establish that the entire member is a
 standalone texture. The decoder requires its complete size/layout contract.
 Selected-file hashes and format references are recorded with the reproduction
@@ -104,7 +123,7 @@ materials. The visible sample's role in game scenes is not established.
 
 The Python 3 tool indexes bounded, uncompressed CGFX containers independently
 of the viewer. It reports resource names and offsets, model counts, and supported
-inline texture metadata without reading a whole enclosing GARC archive:
+image texture metadata without reading a whole enclosing GARC archive:
 
 ```sh
 python3 native/tools/inspect_container.py \
@@ -115,8 +134,29 @@ python3 native/tools/inspect_container.py --file selected.cgfx
 
 JSON is written to standard output. The checked sample contains the model name
 `ball_in_1` and two texture records. Those names do not establish a gameplay or
-map role. Geometry, materials, animation, and scene bindings remain to be decoded.
+map role. Materials, animation, and scene bindings remain to be decoded.
 See [the container evidence and limits](../docs/native-containers.md).
+
+## Preview static geometry
+
+```sh
+native/build/pokemon_model_viewer --demo
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/1/0/2 --entry 0 --model 0
+```
+
+Arrows orbit; `+`/`-` zoom; `R`/Home resets; Escape exits. The preview centers
+and fits all decoded triangles using an orthographic camera. It draws all edges,
+including hidden edges, and all accepted shapes regardless of visibility.
+Materials, texture bindings, lighting, culling, and animation are not reproduced.
+The default camera is an inspection choice, not a recovered game camera.
+
+`--inspect` prints mesh counts and bounds without a window. `--capture-frame`
+exports a new BMP viewport file; existing files are preserved. `--frames`,
+`--software`, and `--self-test-input` support bounded smoke tests. Geometry
+loading accepts a restricted unskinned SOBJ subset with identity model
+transforms and triangle lists; unsupported layouts fail explicitly. See
+[the geometry contract and evidence](../docs/native-geometry.md).
 
 ## Tests and evidence
 
@@ -138,6 +178,8 @@ SDL's dummy video backend; actual desktop rendering is a separate local check.
 `reproduction/validation.json` preserves the foundation's commands and results.
 The ETC milestone's additional validation and pinned references are in
 [`reproduction/texture-formats/`](reproduction/texture-formats/README.txt).
+Embedded-texture and wireframe validation is recorded separately in
+[`reproduction/cgfx-textures/`](reproduction/cgfx-textures/README.txt).
 Static format references, synthetic tests, and local rendering do not establish
 visual equivalence with a running original game. Reference captures and a
 concrete map/interaction/battle scenario remain the next integration gate.

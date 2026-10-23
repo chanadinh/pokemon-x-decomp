@@ -1,7 +1,8 @@
 # Native BCLIM decoder
 
 `native/assets/bclim.c` independently implements a bounded subset of the 3DS
-BCLIM texture format. It accepts a complete, decompressed file and returns owned,
+BCLIM texture format and maps its format IDs to the shared PICA payload decoder
+in `native/assets/texture.c`. It accepts a complete, decompressed file and returns owned,
 tightly packed RGBA8 pixels. `px_bclim_free` releases that allocation. No game
 textures are included in the repository.
 
@@ -90,7 +91,7 @@ strict C11 build with AddressSanitizer and UndefinedBehaviorSanitizer.
 
 Local validation used user-provided RomFS archives. These selections are useful
 for reproducing the read-only asset path, but their bytes and generated previews
-remain under ignored `outputs/native-foundation/`:
+remain under ignored `outputs/native-foundation/` and `outputs/native-textures/`:
 
 | Archive | Entry / subentry | Compression | Texture | Observed preview |
 | --- | --- | --- | --- | --- |
@@ -100,7 +101,7 @@ remain under ignored `outputs/native-foundation/`:
 | `a/0/0/5` | 35 / 0 | None | 320×240 ETC1 | Gray triangular gradient background |
 | `a/1/5/9` | 0 / 0 | LZ11 | 40×40 ETC1A4 | Pale peach decorative panel with transparency |
 
-The compressed example expands from 987 bytes to an 8232-byte BCLIM file. Its
+The `a/1/6/0` example expands from 987 bytes to an 8232-byte BCLIM file. Its
 decoded RGBA bytes have SHA-256
 `481ae7a97121b365040f61a0eb2b12d13fc50439ddd6cd8fee251ca72b0a71d0`.
 This is an asset inspection foundation; it does not reconstruct the game's
