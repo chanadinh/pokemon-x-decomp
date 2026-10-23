@@ -1,0 +1,258 @@
+{
+  "baseline_commit": "97dd659f84c1a46c37e44f1a7d9778fc30bfd5e4",
+  "commit_count": 32,
+  "reconstruction_manifest_entries": 539,
+  "reconstruction_modules": {
+    "battle_task": 60,
+    "call_wild_battle": 12,
+    "encounter_builder": 59,
+    "pokemon_constructor": 56,
+    "pokemon_data": 104,
+    "pokemon_state": 108,
+    "pokemon_stats": 110,
+    "wild_battle_setup": 30
+  },
+  "native_baseline_files": [
+    {
+      "path": "native/Makefile",
+      "sha256": "dde0cb376379802e5b3c09e53acf9e2788e6925472746584b5ae682bcacb2f56"
+    },
+    {
+      "path": "native/README.md",
+      "sha256": "dd66459dd4dba81c1de193ce5e49123f2dd03f50e58e63d10af37d663dd0fc08"
+    },
+    {
+      "path": "native/app.c",
+      "sha256": "9c49f0e9cfe007164d875f625c8f18c9ee154101f4fc1de35c4968b1e26d60f4"
+    },
+    {
+      "path": "native/assets/bclim.c",
+      "sha256": "435481a0e980787cc4b51e4759c08fc400f623714ba3708dbafac7f7887726eb"
+    },
+    {
+      "path": "native/assets/bclim.h",
+      "sha256": "2227386cea50387501d5a6dd2071616178babfb9ae3946b1ac0d485bec2148ce"
+    },
+    {
+      "path": "native/assets/cgfx.c",
+      "sha256": "e71c15fe126daf60459ae1f52ea1704ba0910e33acab8bb36132c7987f169c49"
+    },
+    {
+      "path": "native/assets/cgfx.h",
+      "sha256": "23e1450208954d2417c5d7d6406bb7ae7a0b935be7d8244a63666e73ac775138"
+    },
+    {
+      "path": "native/assets/cgfx_model.c",
+      "sha256": "72863f38c6d6454428a4e79d594561c55dcd30e539a848e658e8a8314c588cf5"
+    },
+    {
+      "path": "native/assets/cgfx_model.h",
+      "sha256": "053187aa70520068c6a67c2bcdf3a10fd3d9bf2cde87b7ca3d24a8c98bafc84f"
+    },
+    {
+      "path": "native/assets/etc1.c",
+      "sha256": "deef12e77d38c580fc4ff68d98756fd64a86c45ffcb90f148db7103b04e9d616"
+    },
+    {
+      "path": "native/assets/etc1.h",
+      "sha256": "316747a510fb8694dcb5edc93a8dc5090e5b7fc59b0f57089c7dea1c2d782911"
+    },
+    {
+      "path": "native/assets/garc.c",
+      "sha256": "1303610c04e35c9e6ddf07c3db4e3780b5d8aab7fcc28dfca57f8271f1b359c4"
+    },
+    {
+      "path": "native/assets/garc.h",
+      "sha256": "7b422f59721e28a86feafc3d3e4f0f7a5306456cd3a9cb3748246db08c6615b8"
+    },
+    {
+      "path": "native/assets/lz.c",
+      "sha256": "d7cf990b7ae1761e9705ca66add0d27d4c2e4ffcd7600682b15493e22d1fa15c"
+    },
+    {
+      "path": "native/assets/lz.h",
+      "sha256": "50b1b147bc17608337529bc95c798b33a85d49249f5d8ea78bd1275e780b09e6"
+    },
+    {
+      "path": "native/assets/test_bclim.c",
+      "sha256": "bd3759291b5afa0c5359473268aab4dd38fc50e671096a39cf3cbf188c5579e0"
+    },
+    {
+      "path": "native/assets/test_cgfx.c",
+      "sha256": "0787e185ca21ba7e2854e75f4e40bcc5f0ea32e9edff0fc288da0650c955b314"
+    },
+    {
+      "path": "native/assets/test_cgfx_model.c",
+      "sha256": "5d66616c99357ff4a5fb32d6cf293763c8d4504eee388b2a5a67376535b504d7"
+    },
+    {
+      "path": "native/assets/test_cgfx_scene.c",
+      "sha256": "fe9442c0a346f8529f1d25ee19f9e90a665363c8dd824854cb2862793d154709"
+    },
+    {
+      "path": "native/assets/test_etc1.c",
+      "sha256": "c7ba3a95259566f8983780c2fa864fbe34afbf6586530edd1f2deed5c25a571f"
+    },
+    {
+      "path": "native/assets/test_garc.c",
+      "sha256": "560b56613ac6e9908cde6dc7503003ec6c794949382b4e80ba2aabe7150b7f4c"
+    },
+    {
+      "path": "native/assets/test_lz.c",
+      "sha256": "cb0668f0f638161f2f43dc8059262c71e9436017f98a1e23c86e49c0e5eb9305"
+    },
+    {
+      "path": "native/assets/test_texture.c",
+      "sha256": "0bb04105c2119ee8ac700d9c4aa5932eba804c93b376a86398f7961e4736a147"
+    },
+    {
+      "path": "native/assets/texture.c",
+      "sha256": "1a903e86b8ad188beae75db11d32c97895e4977b62ff930a614320efe7a8deb3"
+    },
+    {
+      "path": "native/assets/texture.h",
+      "sha256": "33e3601b5fcb94fb9b53b8b2f5dab8125dad794fcc194cb2ab44149f33f95b93"
+    },
+    {
+      "path": "native/model_app.c",
+      "sha256": "5b0a2d2e3bd0cec44880bea5526df1cc59162c46e207dbb193dbbc5073f802f7"
+    },
+    {
+      "path": "native/render/raster.c",
+      "sha256": "011b1794da009364e5de2afe9f2c212b8802fbff06e0a2f0ac78489a2fb08723"
+    },
+    {
+      "path": "native/render/raster.h",
+      "sha256": "006e3dfb68e9d63be7ebe3e505bb5281fc145a431fb32098a6c0bf6b7dcf9c4d"
+    },
+    {
+      "path": "native/render/test_raster.c",
+      "sha256": "880d998221e2037b7e9f5e60f4f46d8b76323edd074593aa1acd4cc997b3c83e"
+    },
+    {
+      "path": "native/reproduction/README.txt",
+      "sha256": "d9c189ba8f8d0d557b3905d727c3d465edbd4b3066751f359d2eab01d028a033"
+    },
+    {
+      "path": "native/reproduction/asset-samples.json",
+      "sha256": "fa34b59ebf7ddd5a26d809b49c83e80a1877e24893d1f9124857895d34f9f13a"
+    },
+    {
+      "path": "native/reproduction/cgfx-textures/README.txt",
+      "sha256": "b52e5f1fb8606b7c7ec7f195c994b604265014516cc06f96da5be5812f3ed270"
+    },
+    {
+      "path": "native/reproduction/cgfx-textures/baseline.json",
+      "sha256": "bc89d0a36c9aea0c0fb808eedde6907cca110bb831c713a606f57d9a21fb8e83"
+    },
+    {
+      "path": "native/reproduction/cgfx-textures/geometry-sample.json",
+      "sha256": "0de2aede33724f93429068c56f1e166a0e9a62dc3f4d97f23f87e6274ee758b3"
+    },
+    {
+      "path": "native/reproduction/cgfx-textures/reference-comparison.json",
+      "sha256": "fdbaaca68f0973f6f42ab7a67d3c5028511ce2716b3424a30c45475b16899290"
+    },
+    {
+      "path": "native/reproduction/cgfx-textures/rendered-samples.json",
+      "sha256": "d59b87038574bff482c8354b14345c0082827d1c30986bff91a6ff1207f6460b"
+    },
+    {
+      "path": "native/reproduction/cgfx-textures/validation.json",
+      "sha256": "a1f2e74d7e99d9ddd7dd57864ff22d7e39ddfce2e7082d106ceb3d8dce25c667"
+    },
+    {
+      "path": "native/reproduction/cgfx-textures/validation.txt",
+      "sha256": "22a1c35bed83881596bccb93878c33e6c07d994f16260832df3f00e1f6b1783a"
+    },
+    {
+      "path": "native/reproduction/local-sdl-toolchain.json",
+      "sha256": "16bec25f08cf3a339900556d63f73905b899877529355432530b3638eb560f58"
+    },
+    {
+      "path": "native/reproduction/texture-formats/README.txt",
+      "sha256": "358c82817982fb6e2b02d475a4fdcd7b1e4b389f77423708db148fe38bbb6305"
+    },
+    {
+      "path": "native/reproduction/texture-formats/asset-samples.json",
+      "sha256": "400bfef0d38f6994ae6eea8ba1b6e828298980166da4995d747fdcfb1a8a3a7f"
+    },
+    {
+      "path": "native/reproduction/texture-formats/baseline.json",
+      "sha256": "34797a23161520cd3c14e7852f6b0c27b0c2bd708c068391a1de88f9e7d96743"
+    },
+    {
+      "path": "native/reproduction/texture-formats/container-samples.json",
+      "sha256": "27d18e5c45a8d59c0c2b9626f68099e098e2cec14b5bd9446ebeb69df45b9c90"
+    },
+    {
+      "path": "native/reproduction/texture-formats/reference-comparison.json",
+      "sha256": "99a3e9ee5089a02938f4cb4466ea2de4286079ebe92e01a9b8082e864def48c3"
+    },
+    {
+      "path": "native/reproduction/texture-formats/validation.json",
+      "sha256": "54494f304d7cb63d87d944a3e1143547a2195938e8925831e22749ca6c524767"
+    },
+    {
+      "path": "native/reproduction/texture-formats/validation.txt",
+      "sha256": "cc2c4a2bb872e1c5e3ec747c6304efb7ccd03c3a8637ac52d5c00979d7af5c5e"
+    },
+    {
+      "path": "native/reproduction/textured-model/README.txt",
+      "sha256": "099a7d116fb8e8cc040bf08e9f45bffb512752580fe9fa00b5f66faaec04b82f"
+    },
+    {
+      "path": "native/reproduction/textured-model/baseline.json",
+      "sha256": "bf633479cd4c0c67b8f82fe987ee080478e3a04c8908edc02313b7db774a8bd5"
+    },
+    {
+      "path": "native/reproduction/textured-model/reference-comparison.json",
+      "sha256": "9f2776da3c42ef3394dd60bf057f8831084e7120cd08460d668e8493693789ec"
+    },
+    {
+      "path": "native/reproduction/textured-model/rendered-sample.json",
+      "sha256": "3ede847c5f33cdecee93c3dc35e5dd5f58e8fa9a896ca4837032658312d3f967"
+    },
+    {
+      "path": "native/reproduction/textured-model/validation.json",
+      "sha256": "efc25c24f8141b85f324746c025b3d4570dab1737b062902912694fbd362ece3"
+    },
+    {
+      "path": "native/reproduction/textured-model/validation.txt",
+      "sha256": "f3554962510e635ecbe2cdf51453dce3f764e8482429da4a04f60c488c822a1f"
+    },
+    {
+      "path": "native/reproduction/validation.json",
+      "sha256": "6833b15ca23b852eb32667c6a38ea009a75ffd8dcc543bbc470b14d123fd4b22"
+    },
+    {
+      "path": "native/reproduction/validation.txt",
+      "sha256": "9dd98ccdf3d6c2cb14a0dd0a77c5ead565f0f43d5144a4ca4718f48a1528e9a6"
+    },
+    {
+      "path": "native/tests/test_container.py",
+      "sha256": "394eabb3bb6a3d51c9048f7dbee30f9c4281fd92fbeb07242942b29c07c4a25c"
+    },
+    {
+      "path": "native/tests/test_model_viewer.py",
+      "sha256": "7b0bdc75473fc0be6060fba9d5a23d8b567c4f528c5d1cfc630b7eca2c5617b6"
+    },
+    {
+      "path": "native/tests/test_viewer.py",
+      "sha256": "cb2f6de647e929e308aa8e299337b09ae0fe20aafe165e10a361a09af9956226"
+    },
+    {
+      "path": "native/tools/check_garc.c",
+      "sha256": "e21a134e17269d642c1d27a07c231109f5e33aaa7d7c05ca0528b6cc6a8ca75a"
+    },
+    {
+      "path": "native/tools/inspect_container.py",
+      "sha256": "eb9100c11c2357933d9b7c7600405ef7fd77f84a00bf49b1a48e9f4a72505e38"
+    },
+    {
+      "path": "native/tools/survey_assets.py",
+      "sha256": "743fc379c11c1ec23a7af688c4ab1e8a04b9f91c6a45aefbb6665cb45b9f5006"
+    }
+  ],
+  "method": "Current manifests verified before new changes. Preserve all prior reproduction records and reconstruction checkpoints; earlier native source remains pinned in Git."
+}

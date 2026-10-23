@@ -1,0 +1,463 @@
+{
+  "schema_version": 1,
+  "scope": "Read-only original-code investigation; selected ARM instructions reviewed for the bounded bindings stated below. No game control loop reconstructed.",
+  "inputs": {
+    "main": {
+      "path": "inputs/pokemon-x-0f6d3e1d66cb/code.bin",
+      "bytes": 5156864,
+      "sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a"
+    },
+    "field": {
+      "path": "inputs/pokemon-x-modules-a035d9775a1f/modules/DllField.cro",
+      "bytes": 1302528,
+      "sha256": "ed043eb6c5d4057d64ceefda99b59b0978412b982427551f6c99bf6084be6489"
+    }
+  },
+  "address_map": {
+    "main": "virtual_address = code.bin file offset + 0x00100000 for these mapped segments",
+    "field": "synthetic Ghidra address = DllField.cro file offset + 0x15c00000; not a runtime CRO load address"
+  },
+  "export": {
+    "ghidra_version": "12.1.4",
+    "jdk_version": "21.0.13+9.0.LTS",
+    "project": "cro_20261023T150920079989Z",
+    "program": "main_text.bin",
+    "flags": [
+      "-noanalysis",
+      "-readOnly"
+    ],
+    "local_output": "outputs/native-field-scene/ghidra-session",
+    "project_saved": false,
+    "original_exporter_sha256": "aed7606c2df13a4bf28c246e191c33fbe8afcb3a67e2575c8e083e2ed43de3f0",
+    "note": "Local session also contains exploratory exports; the hashes below cover the selected evidence only. Portable exporter adds a finite once mode."
+  },
+  "archive_table": {
+    "address": "0x005af1e0",
+    "initializer_call": "0x0010808c -> 0x0010a368",
+    "installed_state_field": "+0x54",
+    "consumer": "0x0011c3e8 loads installed_table[archive_index]"
+  },
+  "archive_bindings": [
+    {
+      "index": 12,
+      "table_cell_address": "0x5af210",
+      "string_address": "0x5a11e8",
+      "path": "a/0/1/2",
+      "string_encoding": "UTF-16LE",
+      "pointer_bytes": "e8115a00",
+      "verified_original": true
+    },
+    {
+      "index": 13,
+      "table_cell_address": "0x5af214",
+      "string_address": "0x5a14a6",
+      "path": "a/0/1/3",
+      "string_encoding": "UTF-16LE",
+      "pointer_bytes": "a6145a00",
+      "verified_original": true
+    },
+    {
+      "index": 24,
+      "table_cell_address": "0x5af240",
+      "string_address": "0x5a17b2",
+      "path": "a/0/2/4",
+      "string_encoding": "UTF-16LE",
+      "pointer_bytes": "b2175a00",
+      "verified_original": true
+    },
+    {
+      "index": 41,
+      "table_cell_address": "0x5af284",
+      "string_address": "0x5a1014",
+      "path": "a/0/4/1",
+      "string_encoding": "UTF-16LE",
+      "pointer_bytes": "14105a00",
+      "verified_original": true
+    },
+    {
+      "index": 42,
+      "table_cell_address": "0x5af288",
+      "string_address": "0x5a12d2",
+      "path": "a/0/4/2",
+      "string_encoding": "UTF-16LE",
+      "pointer_bytes": "d2125a00",
+      "verified_original": true
+    }
+  ],
+  "functions": [
+    {
+      "address": "0x0010a368",
+      "source": "main",
+      "source_file_offset": "0xa368",
+      "instruction_count": 4,
+      "instruction_bytes": 16,
+      "sha256_of_instruction_bytes_in_address_order": "3dacecdaf3e5a3de07b13f8fb1d9cc3b5253b2bd99417d28fe09701581d42176",
+      "last_instruction_address": "0x10a374",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x0011c3e8",
+      "source": "main",
+      "source_file_offset": "0x1c3e8",
+      "instruction_count": 65,
+      "instruction_bytes": 260,
+      "sha256_of_instruction_bytes_in_address_order": "e90c3024f655d7bff43522c9ef050e41289cdbe4c51e7c7d40bb91db9aea4fc7",
+      "last_instruction_address": "0x11c4e8",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x00112b78",
+      "source": "main",
+      "source_file_offset": "0x12b78",
+      "instruction_count": 59,
+      "instruction_bytes": 236,
+      "sha256_of_instruction_bytes_in_address_order": "69340980ab31272582f85b2c63f574cdc2d476f3fe7c250c3575b769eb09098a",
+      "last_instruction_address": "0x112c60",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x00113464",
+      "source": "main",
+      "source_file_offset": "0x13464",
+      "instruction_count": 21,
+      "instruction_bytes": 84,
+      "sha256_of_instruction_bytes_in_address_order": "1536926e9fcaeaeadc1842a3505cf40933a2c145a401865d481f8a33a83d71d7",
+      "last_instruction_address": "0x1134b4",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x001173dc",
+      "source": "main",
+      "source_file_offset": "0x173dc",
+      "instruction_count": 11,
+      "instruction_bytes": 44,
+      "sha256_of_instruction_bytes_in_address_order": "f05884202de9dbf5ea56c7620cce2a1e4172f9f7ca4470336a268483cc7fd9c1",
+      "last_instruction_address": "0x117404",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003b843c",
+      "source": "main",
+      "source_file_offset": "0x2b843c",
+      "instruction_count": 243,
+      "instruction_bytes": 972,
+      "sha256_of_instruction_bytes_in_address_order": "81bb34cb5420e2ab4483573fdebc976cb7af1ac85a8e83c4a3d9f0371f362fc3",
+      "last_instruction_address": "0x3b8804",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003bbe1c",
+      "source": "main",
+      "source_file_offset": "0x2bbe1c",
+      "instruction_count": 81,
+      "instruction_bytes": 324,
+      "sha256_of_instruction_bytes_in_address_order": "5ee17f30808d9b19022d6c18cb3b1004459d39119151df3f70d44156d91afdfb",
+      "last_instruction_address": "0x3bbf5c",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003bbf68",
+      "source": "main",
+      "source_file_offset": "0x2bbf68",
+      "instruction_count": 45,
+      "instruction_bytes": 180,
+      "sha256_of_instruction_bytes_in_address_order": "091ac272641858ccc672f98ca39275273385f3e7a20352cecdd604ae6ee9625e",
+      "last_instruction_address": "0x3bc018",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x004a3154",
+      "source": "main",
+      "source_file_offset": "0x3a3154",
+      "instruction_count": 33,
+      "instruction_bytes": 132,
+      "sha256_of_instruction_bytes_in_address_order": "95476035039ba9382ab2e0265f3a481bf524a10e4cae113e7df97e1dcd7a33b5",
+      "last_instruction_address": "0x4a31d4",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x004a311c",
+      "source": "main",
+      "source_file_offset": "0x3a311c",
+      "instruction_count": 5,
+      "instruction_bytes": 20,
+      "sha256_of_instruction_bytes_in_address_order": "afaf85d97487614f4ec259d4e33d64eb7141b382b30c916b70d03091f1e3c435",
+      "last_instruction_address": "0x4a312c",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003e3bc4",
+      "source": "main",
+      "source_file_offset": "0x2e3bc4",
+      "instruction_count": 41,
+      "instruction_bytes": 164,
+      "sha256_of_instruction_bytes_in_address_order": "6512ffb84e50fe0db2e37a938475e36b8f08f1c932b5f5dcb6a191835f5c1618",
+      "last_instruction_address": "0x3e3c64",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003e3c68",
+      "source": "main",
+      "source_file_offset": "0x2e3c68",
+      "instruction_count": 35,
+      "instruction_bytes": 140,
+      "sha256_of_instruction_bytes_in_address_order": "fa3ba2afb910fea6ad88718c5c29882bb83b41ef2af8a32e7e51d6d18f36e253",
+      "last_instruction_address": "0x3e3cf0",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003e3660",
+      "source": "main",
+      "source_file_offset": "0x2e3660",
+      "instruction_count": 147,
+      "instruction_bytes": 588,
+      "sha256_of_instruction_bytes_in_address_order": "90e03d6b3c028e1b964262961a3e6e39d9981aed12efb021ff843d55b5424279",
+      "last_instruction_address": "0x3e38a8",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x15ca4cc0",
+      "source": "field",
+      "source_file_offset": "0xa4cc0",
+      "instruction_count": 253,
+      "instruction_bytes": 1012,
+      "sha256_of_instruction_bytes_in_address_order": "f2603964a01d57383c697c9bdbc7a4b47c6fc86ba209fd2e837a76d8521d12b5",
+      "last_instruction_address": "0x15ca50b0",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x15c28138",
+      "source": "field",
+      "source_file_offset": "0x28138",
+      "instruction_count": 269,
+      "instruction_bytes": 1076,
+      "sha256_of_instruction_bytes_in_address_order": "1dcf7c1cc94c05416e8b7fb233d004cd1b5bd68fc058b5d8ef153ce31f34fd77",
+      "last_instruction_address": "0x15c28568",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x15c843bc",
+      "source": "field",
+      "source_file_offset": "0x843bc",
+      "instruction_count": 84,
+      "instruction_bytes": 336,
+      "sha256_of_instruction_bytes_in_address_order": "27e4daa7a908e4f3885205427711dda0782bc41086b4bb364ab5cea8ec7a23e8",
+      "last_instruction_address": "0x15c84508",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x15c20614",
+      "source": "field",
+      "source_file_offset": "0x20614",
+      "instruction_count": 84,
+      "instruction_bytes": 336,
+      "sha256_of_instruction_bytes_in_address_order": "24a4403a872b808a3cf4a1781c72cb48be23d682e9427b38d30b927e9d985054",
+      "last_instruction_address": "0x15c20760",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003ccbe8",
+      "source": "main",
+      "source_file_offset": "0x2ccbe8",
+      "instruction_count": 15,
+      "instruction_bytes": 60,
+      "sha256_of_instruction_bytes_in_address_order": "2f5048b55ca2a8a282685b15d79a1c6aec7d0d2cff42e9842d5ab0efb5f1c3e7",
+      "last_instruction_address": "0x3ccc20",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003cd6a4",
+      "source": "main",
+      "source_file_offset": "0x2cd6a4",
+      "instruction_count": 15,
+      "instruction_bytes": 60,
+      "sha256_of_instruction_bytes_in_address_order": "1301bda49967f50b21e8cfc6132f20b04431d23987f659a18f4311d569f519c4",
+      "last_instruction_address": "0x3cd6dc",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x15c91dfc",
+      "source": "field",
+      "source_file_offset": "0x91dfc",
+      "instruction_count": 59,
+      "instruction_bytes": 236,
+      "sha256_of_instruction_bytes_in_address_order": "b64eae8d8c33813c8b4f46dce78abde551b5edd1e01c7d08889d40d743ade6ae",
+      "last_instruction_address": "0x15c91ee4",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003b8ce8",
+      "source": "main",
+      "source_file_offset": "0x2b8ce8",
+      "instruction_count": 51,
+      "instruction_bytes": 204,
+      "sha256_of_instruction_bytes_in_address_order": "45e3fe97c35d1c70e29c49d45f30ce8f1aa8d2ae1f0006d0416df54d8284b1c3",
+      "last_instruction_address": "0x3b8db0",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003b8dbc",
+      "source": "main",
+      "source_file_offset": "0x2b8dbc",
+      "instruction_count": 72,
+      "instruction_bytes": 288,
+      "sha256_of_instruction_bytes_in_address_order": "37e50f2a5a013c8cef8af3e2762beeaa6b9b4ba8b1d09f24008b0fc5840463c4",
+      "last_instruction_address": "0x3b8ed8",
+      "matches_original_bytes": true
+    },
+    {
+      "address": "0x003e15a4",
+      "source": "main",
+      "source_file_offset": "0x2e15a4",
+      "instruction_count": 47,
+      "instruction_bytes": 188,
+      "sha256_of_instruction_bytes_in_address_order": "01d3289976b099c8cb6a93d5d28904d70719fcaec17af0e4f7a40b7527d2072c",
+      "last_instruction_address": "0x3e167c",
+      "matches_original_bytes": true
+    }
+  ],
+  "reviewed_findings": [
+    {
+      "claim": "Zone object constructor opens archive index12; regular zone loading uses the destination zone ID as selected member.",
+      "instructions": [
+        "0x00112bf4..0x00112bfc",
+        "0x003bbe1c..0x003bbf54"
+      ],
+      "boundary": "Alternate nonarchive mode exists; it is not used as evidence for normal RomFS zone loading."
+    },
+    {
+      "claim": "Transition routine loads and activates the destination zone, reads unsigned16 at zone section0 offset4 as the matrix ID, and starts the archive42 matrix request.",
+      "chain": [
+        "0x003b843c",
+        "0x003bbe1c",
+        "0x003bbf68",
+        "0x004a3154",
+        "0x004a311c",
+        "0x003e3bc4"
+      ],
+      "matrix_archive_constructor": "0x00113464"
+    },
+    {
+      "claim": "Matrix parser reads section0 halfwords at0(version),2(lowbyte stored),4(width),6(height), copies width*height 16-bit entries from+8, and handles the version1 zone/LOD arrays separately.",
+      "function": "0x003e3660",
+      "boundary": "Copying 16-bit values alone does not prove every sentinel or gameplay meaning. CTRMap independently identifies field IDs and zone/LOD arrays."
+    },
+    {
+      "claim": "Field context setup constructs an RTTI-linked field::MapFileSimple object and stores archive index41 at that object+0x54.",
+      "function": "0x15ca4cc0",
+      "store_instruction": "0x15ca4f64",
+      "rtti_chain": {
+        "name_address": "0x15cfeafb",
+        "name": "N5field13MapFileSimpleE",
+        "typeinfo_address": "0x15cfc888",
+        "vtable_address": "0x15d05610"
+      },
+      "boundary": "The complete matrix-cell-to-streamed-field-request consumer has not been reconstructed."
+    },
+    {
+      "claim": "MapFileSimple loader passes section1 to15ca8678, section2 to0044f680, section3 through placement routine15c843bc, section4 through15c20614, and section5 through15ca8430.",
+      "function": "0x15c28138",
+      "boundary": "CTRMap independently identifies section1 as a model, section2 as coll data, section3 as placements, and section5 as a secondary model. Only the call/data flow is established by this export; these callees are not reconstructed."
+    },
+    {
+      "claim": "GR section3 starts with a32-bit count and uses44-byte records; position atrecord+4 and scale atrecord+28 pass through, rotation atrecord+16 multiplies byfloat32 0.01745329238474369, and finalrecord+40 is narrowed to16bits for15c329b4.",
+      "function": "0x15c843bc",
+      "rotation_literal": {
+        "address": "0x15c8450c",
+        "original_bytes": "35fa8e3c"
+      },
+      "boundary": "No building/NPC/spawn identity is inferred solely from this record layout."
+    },
+    {
+      "claim": "Section4 attachment uses signed16 counts at+8/+12 and relative offset tables at+20/+28, then sets backreferences in the referenced records.",
+      "functions": [
+        "0x15c20614",
+        "0x003ccbe8",
+        "0x003cd6a4"
+      ],
+      "boundary": "This is separate from section2 coll data. The section4 behavioral role and collision-query semantics remain open."
+    },
+    {
+      "claim": "Registered _MapChangeCore narrows the script destination to16bits, converts signed32 X*18/Y/Z*18 to float, narrows orientation argument to8bits, and submits a transition request through main003b8ce8/003b8dbc/003e15a4.",
+      "function": "0x15c91dfc",
+      "boundary": "Script coordinate conversion does not establish a default XY spawn point or the player movement/collision rules."
+    }
+  ],
+  "limitations": [
+    "Ghidra pseudocode and inferred function boundaries are analysis aids; reviewed instruction bytes and original metadata support the stated claims.",
+    "Only archive presence/index, zone-to-matrix selection, matrix copy layout, selected GR consumer paths, and map-change argument handling are established here.",
+    "No default XY spawn, collision masks, field model semantics, or complete movement/entry routine is reconstructed.",
+    "Native exact-tile marker rules are an inspection policy from independently identified standard cells, not a claim of game collision equivalence."
+  ],
+  "totals": {
+    "selected_functions": 23,
+    "instructions": 1739,
+    "instruction_bytes": 6956,
+    "all_instructions_match_original_bytes": true
+  },
+  "startup_excerpt": {
+    "address": "0x00108084",
+    "end_exclusive": "0x00108090",
+    "instruction_bytes": 12,
+    "bytes": "b4059fe50410a0e1b50800eb",
+    "sha256": "67a69a60d515e30f7dfed24bbe1e93765d43d860ddc5289fe9cba8d8ed077daa",
+    "table_pointer_literal": {
+      "address": "0x00108640",
+      "bytes": "e0f15a00"
+    },
+    "matches_original_bytes": true
+  },
+  "cro_rtti_relocation_proof": [
+    {
+      "pointer_file_offset": "0xfc88c",
+      "original_pointer_bytes": "00000000",
+      "relocation_record_file_offset": "0x138ce4",
+      "relocation_type": "ABS32 (2)",
+      "target_segment_index": 1,
+      "explicit_addend": 68347,
+      "target_file_offset": "0xfeafb",
+      "analysis_pointer": "0x15cfeafb"
+    },
+    {
+      "pointer_file_offset": "0x10560c",
+      "original_pointer_bytes": "00000000",
+      "relocation_record_file_offset": "0x135f24",
+      "relocation_type": "ABS32 (2)",
+      "target_segment_index": 1,
+      "explicit_addend": 59528,
+      "target_file_offset": "0xfc888",
+      "analysis_pointer": "0x15cfc888"
+    },
+    {
+      "pointer_file_offset": "0xa50b8",
+      "original_pointer_bytes": "00000000",
+      "relocation_record_file_offset": "0x13aa3c",
+      "relocation_type": "ABS32 (2)",
+      "target_segment_index": 1,
+      "explicit_addend": 95760,
+      "target_file_offset": "0x105610",
+      "analysis_pointer": "0x15d05610"
+    },
+    {
+      "pointer_file_offset": "0x10561c",
+      "original_pointer_bytes": "00000000",
+      "relocation_record_file_offset": "0x129d14",
+      "relocation_type": "ABS32 (2)",
+      "target_segment_index": 0,
+      "explicit_addend": 163768,
+      "target_file_offset": "0x28138",
+      "analysis_pointer": "0x15c28138"
+    }
+  ],
+  "map_change_import": {
+    "stub_address": "0x15c030b8",
+    "stub_instruction_bytes": "04f01fe5",
+    "literal_file_offset": "0x30bc",
+    "original_literal_bytes": "00000000",
+    "target_main_address": "0x003b8ce8",
+    "import_segment_index": 0,
+    "import_segment_offset": "0x2b8ce8",
+    "explicit_addend": 0,
+    "relocation_record_file_offset": "0x111220"
+  }
+}

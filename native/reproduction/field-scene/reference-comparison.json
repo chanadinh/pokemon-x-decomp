@@ -1,0 +1,397 @@
+{
+  "selected_chain": {
+    "zone": 5,
+    "area": 75,
+    "matrix": 12,
+    "field": 165,
+    "matrix_cell": [
+      0,
+      0
+    ]
+  },
+  "archive_definitions": {
+    "zone": "a/0/1/2",
+    "area": "a/0/1/3",
+    "field": "a/0/4/1",
+    "matrix": "a/0/4/2",
+    "building_models": "a/0/2/4"
+  },
+  "assets": [
+    {
+      "archive": "a/0/1/2",
+      "archive_bytes": 865160,
+      "archive_sha256": "dc0b7a0dd2764480eaebd4c1c057d1fa8e268ccdf8953945713bb091925190d2",
+      "archive_index_sha256": "4e06eaf900afdefe48837be09844460d45d284ca2d0df2ffd890f736167fbc20",
+      "archive_entries": 361,
+      "entry": 5,
+      "subentry": 0,
+      "member_offset": 19068,
+      "member_bytes": 605,
+      "member_sha256": "7e565f80a6e792f3ace24c5360b2f64f450ac2a58f84568d4a641f7e2e93e4b6",
+      "compression": "LZ11",
+      "decoded_bytes": 832,
+      "decoded_sha256": "299d64c94c249350c80d07aabbf5a97839510dbe20ec4c4ec471936eef10d52d",
+      "section_sizes": [
+        56,
+        268,
+        484,
+        0
+      ],
+      "section_sha256": [
+        "82c7667c816a2bda0d54a67329b46e72773c971e9368e08ad52de9b0ee9f84d2",
+        "903c53c6a88341d1d26747fe434b62a67da1e9aa5597feb201a0deae688e5258",
+        "e40e47c1fd9829d4a7e8439e1e926cab2e3e5b7dc56846170f87e98305463f11",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ]
+    },
+    {
+      "archive": "a/0/4/2",
+      "archive_bytes": 228368,
+      "archive_sha256": "37786d6473edc53d11eac8e60dfaf677895a402501242e4e920cc533cdf2eab3",
+      "archive_index_sha256": "04eb48547989af0f035b5effb6be1cfb043c7808ad71f14918d2642a66bb5eea",
+      "archive_entries": 227,
+      "entry": 12,
+      "subentry": 0,
+      "member_offset": 142360,
+      "member_bytes": 352,
+      "member_sha256": "3e70f9348b82168045b2b6c72b99cedb56e7f507c05bd9e3a909176d69bdc689",
+      "compression": "none",
+      "decoded_bytes": 352,
+      "decoded_sha256": "3e70f9348b82168045b2b6c72b99cedb56e7f507c05bd9e3a909176d69bdc689",
+      "section_sizes": [
+        12,
+        324
+      ],
+      "section_sha256": [
+        "98511efce869733f1e8c39b1e30115479d356e8a5571ebfa7d9d6a443c2b5ba6",
+        "cb64688f0581db98b902e52e08b5e90f6e7a7ea4d6a2acccb585210ae3be9522"
+      ]
+    },
+    {
+      "archive": "a/0/4/1",
+      "archive_bytes": 66250780,
+      "archive_sha256": "ab5acd0599c1d31ef03f1fcdf2149127812272cc2c8f53497948ffa1fe513e8b",
+      "archive_index_sha256": "5f50ad60ecbe212cc59c1d4ea38b5f00b84872effe9791ec53bc0ca0b14e3ea6",
+      "archive_entries": 1030,
+      "entry": 165,
+      "subentry": 0,
+      "member_offset": 14285408,
+      "member_bytes": 47644,
+      "member_sha256": "f4df794748c7a5b3e21f50702d96566590d40447492d12d9a2774e3b41d2dae9",
+      "compression": "LZ11",
+      "decoded_bytes": 163072,
+      "decoded_sha256": "4f298e8a1e1ab06cd68ed704f806f7ef49540a758c1f658c92990a7438d8dcf3",
+      "section_sizes": [
+        6528,
+        127232,
+        28544,
+        384,
+        128,
+        128
+      ],
+      "section_sha256": [
+        "920da956e2eafd8a733358df3d0b4cbdcd50dcf4bb59e0122f64a44fa8eaae88",
+        "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+        "a01c9b5533f9fe8c07f1ce0a2ff163965bb95771a3868e53c4781ee15e984453",
+        "a43438d408fed54b8e4cc4bf442244bb8e0b89316a02443fd01ee672303215b1",
+        "42daf0363e9c9f9894f3aa0e7f8ff5156580bb5c9686c5cfb638b0bcb5dfd679",
+        "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca"
+      ]
+    }
+  ],
+  "matrix": {
+    "width": 1,
+    "height": 1,
+    "has_lod": 0,
+    "unknown": 0,
+    "field_ids": [
+      165
+    ],
+    "section0_bytes": 12,
+    "section0_used_bytes": 10,
+    "section0_zero_padding": 2
+  },
+  "field_grid": {
+    "width": 40,
+    "height": 40,
+    "layout": "four raw bytes per cell, row-major; x is column, z is row",
+    "raw_cell_bytes": 6400,
+    "raw_cell_sha256": "b292e901104ffc2f8a010ffab931c17f1f5d1f7cf43df95c198652abe7069e2f",
+    "section_padding_bytes": 124,
+    "section_padding_is_zero": true,
+    "histogram_le_u32": {
+      "0x00000020": 52,
+      "0x01000021": 1542,
+      "0xd7000001": 1,
+      "0xdd000001": 1,
+      "0xde000001": 1,
+      "0xea000021": 1,
+      "0xef000021": 2
+    },
+    "standard_walkable_count": 52,
+    "standard_blocked_count": 1542,
+    "other_count": 6,
+    "standard_walkable_connected_component_size": 52,
+    "inspection_start_cell": [
+      3,
+      10
+    ],
+    "selected_cells": [
+      {
+        "x": 3,
+        "z": 10,
+        "raw_le_u32": "0x00000020"
+      },
+      {
+        "x": 2,
+        "z": 10,
+        "raw_le_u32": "0x01000021"
+      },
+      {
+        "x": 3,
+        "z": 9,
+        "raw_le_u32": "0x01000021"
+      },
+      {
+        "x": 4,
+        "z": 10,
+        "raw_le_u32": "0x00000020"
+      },
+      {
+        "x": 3,
+        "z": 11,
+        "raw_le_u32": "0x00000020"
+      },
+      {
+        "x": 2,
+        "z": 11,
+        "raw_le_u32": "0xef000021"
+      },
+      {
+        "x": 10,
+        "z": 14,
+        "raw_le_u32": "0xea000021"
+      },
+      {
+        "x": 39,
+        "z": 39,
+        "raw_le_u32": "0x01000021"
+      }
+    ]
+  },
+  "source_cell_labels": {
+    "20 00 00 00": "Walkable standard",
+    "21 00 00 01": "Unwalkable standard",
+    "interpretation": "Only exact full four-byte matches are used; primary editor stores its comparison integer in big-endian byte order. Other cells are retained raw and excluded by the inspector movement policy."
+  },
+  "world_coordinates": {
+    "tile_size": 18,
+    "region_size": 720,
+    "region_model_translation": "(matrix_column*720+360, 0, matrix_row*720+360)",
+    "cell_center_formula": "worldX=(matrix_column*40+cell_column)*18+9; worldZ=(matrix_row*40+cell_row)*18+9",
+    "inspection_start_center_xz": [
+      63,
+      189
+    ],
+    "evidence": "CTRMap TileMapPanel places region geometry at +360 plus720 per matrix cell; NPC getX/getZ multiply tile coordinates by18."
+  },
+  "collision_observation": {
+    "field": 165,
+    "raw_collision_triangles": 576,
+    "unique_exact_triangles": 390,
+    "standard_cell_center_tests": 52,
+    "all_center_height_candidates": [
+      0.0
+    ],
+    "method": "Independently read16 descriptor pairs at collision+672, floatXYZ+fourth word vertices at+800; preserve raw triangles, deduplicate exact records only for testing, and calculate XZ barycentric intersections at all52 standard-cell centers after subtracting360.",
+    "collision_xyzw_records_sha256": "46cdcda2598982ec1975d5740dc3e337375526a5288e4558ad3e48bbd4387f28"
+  },
+  "zone_entities": {
+    "furniture": 0,
+    "npcs": 0,
+    "warps": 1,
+    "triggers": [
+      0,
+      0
+    ],
+    "warp0": {
+      "target_zone": 4,
+      "target_warp": 1,
+      "face_direction": 3,
+      "transition_type": 5,
+      "coordinate_type": 0,
+      "world_x": 63,
+      "world_y": -9,
+      "world_z": 279,
+      "width": 1,
+      "height": 2,
+      "directionality": 0
+    },
+    "spawn_limitation": "CTRMap labels the XY zone-header coordinate-tail role unknown; no original player spawn is claimed."
+  },
+  "inspection_policy": "Marker starts at a selected exact standard-walkable cell and can move cardinally only to another exact standard-walkable cell. This is an inspector policy, not recovered game collision, player movement, warp activation or spawning.",
+  "scope_limitations": [
+    "Actual field model is BCH, outside the existing CGFX model renderer.",
+    "Area texture resources, props, NPCs, scripts, camera, encounters and game runtime are not rendered or executed.",
+    "Collision triangles were inspected independently but do not establish complete movement/height/step rules.",
+    "No running-game comparison."
+  ],
+  "sources": [
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/Workspace.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/Workspace.java",
+      "sha256": "127646a40bcf58a86e734353f954163ece74521ed5dc98dc50d9f273b66f051c"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/containers/AbstractGamefreakContainer.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/containers/AbstractGamefreakContainer.java",
+      "sha256": "6092d692dd463ee87b153245c5bb7acbc3420749db685535f0cb13ec3d00d19b"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/containers/GR.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/containers/GR.java",
+      "sha256": "efb3f1dc352fcaa1a9ddf485d1f9768eab260ca749bf7d5bf7c456357796326f"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/containers/ZO.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/containers/ZO.java",
+      "sha256": "0712aa850cfa44d28b949ace3ce511892709bbd2072959869363bfc6643b30f4"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/zone/ZoneHeader.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/zone/ZoneHeader.java",
+      "sha256": "2666736cf3b4e53b596f3787ce31e4356d12331c73369061009fc2afaa01c4aa"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/zone/ZoneEntities.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/zone/ZoneEntities.java",
+      "sha256": "cd1647f423fd10e7491ef15ce331b89eca803095d5614849342e926da0b03c9f"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/mapmatrix/MapMatrix.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/mapmatrix/MapMatrix.java",
+      "sha256": "65d1c7b2aecb58dcf3382378124fe5730f664d88185f0f7466b3e3e8be3c9315"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/tilemap/Tilemap.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/tilemap/Tilemap.java",
+      "sha256": "82d94c1e082493420404f505a83e46f1949e927d20868d923bfba3430b0616ee"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/tilemap/EditorTileset.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/tilemap/EditorTileset.java",
+      "sha256": "1e4b2eda33712800a75e2263ae759bd326d6003155dacf0f65e20a19a59d8e1c"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/resources/DefaultTileset.mets",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/resources/DefaultTileset.mets",
+      "sha256": "ed6d89408f86c094436234219a5a202d5f90d041dfa5040622fdce2155f62b87"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/gfcollision/GRCollisionFile.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/gfcollision/GRCollisionFile.java",
+      "sha256": "6a93077cc2e92636bd51da1009bab63565d13b19b25de722f35b97ab95b1a508"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/formats/gfcollision/GRCollisionMesh.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/formats/gfcollision/GRCollisionMesh.java",
+      "sha256": "d6045cea729841db25b0907a83d169d73648e9f4d156c19b75ce1dea3600b96c"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/humaninterface/TileMapPanel.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/humaninterface/TileMapPanel.java",
+      "sha256": "118d54b1a0061f35214ef5fef8be42fcaff57ae7f78dca00a1cad81adca72678"
+    },
+    {
+      "repository": "Rynbo/CTRMap",
+      "commit": "4b780a7bc32a75a7f31c162829b086355caf32f2",
+      "path": "src/ctrmap/humaninterface/ZoneLoadingPanel.java",
+      "url": "https://github.com/Rynbo/CTRMap/blob/4b780a7bc32a75a7f31c162829b086355caf32f2/src/ctrmap/humaninterface/ZoneLoadingPanel.java",
+      "sha256": "8b7697c4caed43b0fc8009f04e0e2586daa58a716b93645021ca58c6c5675fd8"
+    },
+    {
+      "repository": "kwsch/pk3DS",
+      "commit": "6daaca934ca2284a73ab743bf89c848c57cd9de1",
+      "path": "pk3DS.Core/Game/GARCReference.cs",
+      "url": "https://github.com/kwsch/pk3DS/blob/6daaca934ca2284a73ab743bf89c848c57cd9de1/pk3DS.Core/Game/GARCReference.cs",
+      "sha256": "83ef737845b26c8a60fed3bd5fc171939794f86548bba3258cb7d4a1158395ef"
+    }
+  ],
+  "independent_c_comparison": {
+    "result": "all comparisons passed",
+    "zone_header_bytes_compared": 56,
+    "matrix_field_ids_compared": 1,
+    "matrix_camera_records_compared": 1,
+    "grid_cells_compared": 1600,
+    "grid_bytes_compared": 6400,
+    "grid_sha256": "b292e901104ffc2f8a010ffab931c17f1f5d1f7cf43df95c198652abe7069e2f",
+    "section_metadata_records_compared": 6,
+    "collision_groups_compared": 16,
+    "collision_xyz_vertices_compared": 1728,
+    "collision_xyz_bytes_compared": 20736,
+    "collision_xyz_sha256": "65b0b6e21f90758c4e26089327d63674b97142acc93dcfdc6e8f4914971c0dbd",
+    "standard_cell_center_height_queries_compared": 52,
+    "freed_outputs_zeroed": true
+  },
+  "comparison_method": {
+    "raw_oracle": "Read bounded selected GARC members, decompress using the separately tested LZ path, then interpret signed/unsigned little-endian fields directly with Python struct. Expected cell data is the exact6400 bytes at GR section0+4; expected XYZ arrays concatenate each original16-byte collision vertex record first12bytes. Matrix field ID, camera record, all section extents, and collision group ranges are read independently from original bytes. Compare with an isolated field.c shared library through ctypes. No production parser computes expected outputs.",
+    "height_oracle": "For every exact standard-walkable cell, independently intersect all exact-unique original collision triangles using XZ barycentric coordinates at local tile center(18*x+9-360,18*z+9-360). All52 produce only height0. Production first-hit queries also return0 at all52 points.",
+    "test_sources": [
+      "../../assets/test_field.c",
+      "../../tests/test_field_viewer.py"
+    ],
+    "local_scripts": [
+      {
+        "path": "probe_field.py",
+        "sha256": "7fdc940858a06186f05dcb194c937b71669bd0b2e372ac623e70aa36c4c0e334"
+      },
+      {
+        "path": "compare_field.py",
+        "sha256": "ff21160d740f82f0ea639f7253c2c6fe95bf905fef3c77ba5117a0cf7e0ac531"
+      }
+    ],
+    "compile": "tools/native-build/bin/cc -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror -fPIC -shared native/assets/field.c -lm -o outputs/native-field-scene/libfield-independent.so",
+    "runtime_tests": "source tools/native-sdl/activate.sh && python3 -m unittest discover -s native/tests -p test_field_viewer.py -v",
+    "scope": "Independent C fixtures include signed matrix IDs and unsigned zone IDs, LOD planes, camera capacity, malformed offsets/padding/counts, owned output cleanup, and vertical/sloped/overlapping fixed triangles. Runtime fixtures cover raw/LZ archive chains, exact full-word marker policy, region placement, absent regions, captures/no-clobber, clipped large collision edges, and repeated-region instance budget."
+  },
+  "validation": {
+    "native_fixed_fixtures": "passed strict C11 -O2 -Wall -Wextra -Wpedantic -Werror",
+    "runtime_cases": 9,
+    "runtime_result": "all passed",
+    "runtime_elapsed_seconds": 11.518,
+    "runtime_binary": "isolated /tmp/px-field-viewer-independent",
+    "final_source_sha256": {
+      "native/assets/field.c": "381c78584f1c0dfeac290abef031901531b42ca3999596db028177609f64acb7",
+      "native/assets/field.h": "e93f8644a8ea79c99a2541c68f96885f367cf6039530d7f228a12297256dbb0d",
+      "native/field_app.c": "295b02f392cb64880c054e202ce9c766675989e5da57dad36d9bd400da68475f",
+      "native/assets/test_field.c": "6b41e2403f649e241115816eecc53280ebc02ca24a45e1a65ff1b0dca6123871",
+      "native/tests/test_field_viewer.py": "775c792201ac98e239217205274be603b7919c470e09f560fdb8e38a1849f628"
+    }
+  }
+}
