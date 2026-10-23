@@ -1,0 +1,11 @@
+Final integrated field-scene validation: PASS
+Recorded 2026-10-23. 13 commands completed with exit 0.
+10 native C suites; Python container 8, texture-runtime 7, model-runtime 10,
+field-runtime 9; 8 reconstructed C suites; 38 analysis tests (2 optional skips).
+New field parser and all 9 field runtime cases pass AddressSanitizer plus
+UndefinedBehaviorSanitizer. Leak detection disabled; no LeakSanitizer claim.
+Original-data headless inspection, x11/software frame/input/overlay captures,
+and the Windows-to-WSL Ubuntu launcher pass.
+All 539 reconstruction entries and 25 earlier native reproduction
+records remain unchanged. See validation.json for exact commands, captured
+outputs, environment overrides and tested source hashes.

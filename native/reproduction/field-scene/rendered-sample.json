@@ -1,0 +1,35 @@
+{
+  "viewport": [
+    1100,
+    760
+  ],
+  "scene": {
+    "zone": 5,
+    "matrix": 12,
+    "region": 165
+  },
+  "backend": "x11/software",
+  "review": "Both final BMPs converted losslessly to RGB PNG for visual inspection. Terrain colors, marker and optional original collision triangle edges are visible. No BCH environment rendering or original-game-frame equivalence claim.",
+  "captures": [
+    {
+      "path": "outputs/native-field-scene/field-frame.bmp",
+      "bytes": 3344122,
+      "sha256": "32fd27a2f362c6b683a243f2ad5a03f730128b24f8f25d5cecc0d19de79b6175"
+    },
+    {
+      "path": "outputs/native-field-scene/field-frame.png",
+      "bytes": 24739,
+      "sha256": "c2c95ab0a213202360e54397e5a3fb80427dbc85d7ee5b350355de57b8b61eb7"
+    },
+    {
+      "path": "outputs/native-field-scene/field-collision-frame.bmp",
+      "bytes": 3344122,
+      "sha256": "a4bbb4bf626b198bb08aed2331ee0382d4da40055f9df5e137927fb8cdcad777"
+    },
+    {
+      "path": "outputs/native-field-scene/field-collision-frame.png",
+      "bytes": 29012,
+      "sha256": "2335afaea29641d0c037bd082ec54963cdb2ea3099030a5d5a1e7a24862032de"
+    }
+  ]
+}
