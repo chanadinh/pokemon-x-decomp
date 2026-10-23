@@ -6,13 +6,20 @@ tests, reviewed evidence, and provenance. References below to `inputs/`,
 workspace artifacts; those files are excluded from Git. The host C tests
 use synthetic data and do not require the extracted game files.
 
+The sixth source milestone implements Pokémon data population, 26 field setters,
+the payload checksum, manager encoding/decoding, and block selection. See
+[pokemon_data](reconstructed/pokemon_data/README.md) for the storage layout,
+service boundaries, and tests. Its integration fixture connects all six modules
+using synthetic species and growth resources. Larger state routines and real
+resource loading remain to be reconstructed. `PokemonX-pokemon-data-source.zip`
+contains the six host-source milestones with reviewed evidence and tests.
+
 The fifth source milestone adds the constructor path and its creation-parameter
 normalizer, including random-default resolution, bounded selections, level
 clamping, buffer allocation, the extra-data XOR transform, and state handling.
 See [pokemon_constructor](reconstructed/pokemon_constructor/README.md) for
-reviewed behavior and remaining service callbacks. The integration test now
-connects all five modules; deeper data setters and state services still need
-implementation. `PokemonX-pokemon-constructor-source.zip` contains the five
+reviewed behavior and its service interfaces. Its original integration test
+connects five modules. `PokemonX-pokemon-constructor-source.zip` contains those five
 host-source milestones with reviewed evidence and tests.
 
 The fourth source milestone adds the per-record encounter builder,

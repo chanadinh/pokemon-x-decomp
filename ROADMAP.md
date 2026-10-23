@@ -13,16 +13,17 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Five connected host-source milestones now exist: the `CallWildBattle`
+Six connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
-the per-record encounter builder/population/configuration helpers, and the
-Pokémon constructor/parameter-normalization path.
+the per-record encounter builder/population/configuration helpers, the
+Pokémon constructor/parameter-normalization path, and data population/storage.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
 creation-parameter preparation, weighted optional-value selection, random
-parameter resolution, allocation/manager setup, the extra-data XOR transform,
-and a final script-state write. Wider setup, data-population setters, and
-larger state services still use stand-ins. There is no playable game
+parameter resolution, allocation/manager setup, 26 data-field setters,
+checksum/XOR storage transforms, block selection, and a final script-state write.
+Wider setup, real resource loading, and larger state services still use
+stand-ins. There is no playable game
 or renderer yet. Per-milestone validation records document the actual tests;
 these are synthetic-memory checks rather than a running-game comparison.
 
@@ -45,14 +46,17 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
 
 ## Immediate sequence for this workspace
 
-1. Reconstruct data-population routine `0x0014f6b8` and its field setters,
-   then the remaining state services such as `0x0013a8d8`, `0x0012b744`,
-   `0x0012b808`, and `0x0013a7bc`. The outer constructor `0x0039a5a8`,
+1. Reconstruct remaining state services such as `0x0013a8d8`, `0x0012b744`,
+   `0x0012b808`, and `0x0013a7bc`, then replace species/growth-resource
+   stand-ins with checked resource access. Population `0x0014f6b8`, its 26
+   setters, checksum `0x00174e0c`, manager codec `0x001685f0`/`0x00168660`,
+   and four block selectors now have host implementations. The outer constructor `0x0039a5a8`,
    base initializer `0x0039daf4`, allocation path `0x0039a8a4`, parameter
    normalizer `0x0014f324`, and XOR primitive `0x00167fb4` now have host
    implementations through explicit service boundaries. Copy-before-cleanup
-   behavior is traced; a full original-format Pokémon object is not yet
-   produced by the host chain.
+   behavior is traced. The six-module fixture produces and checks the encrypted
+   payload using synthetic resources; a complete game-valid object and behavior
+   against a running reference remain unverified.
 2. Reconstruct setup function `0x15c75434` and its required callees, keeping
    field names provisional until callers, consumers, or runtime behavior
    support them. Establish the table's actual record count and field meanings.
