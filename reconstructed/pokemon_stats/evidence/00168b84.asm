@@ -1,0 +1,13 @@
+00168b84  00c09de5  ldr r12,[sp,#0x0]
+00168b88  490f50e3  cmp r0,#0x124
+00168b8c  0100a003  moveq r0,#0x1
+00168b90  0700000a  beq 0x00168bb4
+00168b94  822083e0  add r2,r3,r2, lsl #0x1
+00168b98  2c2182e0  add r2,r2,r12, lsr #0x2
+00168b9c  14009fe5  ldr r0,[0x168bb8]
+00168ba0  920102e0  mul r2,r2,r1
+00168ba4  902280e0  umull r2,r0,r0,r2
+00168ba8  010080e0  add r0,r0,r1
+00168bac  0a0080e2  add r0,r0,#0xa
+00168bb0  7000ffe6  uxth r0,r0
+00168bb4  1eff2fe1  bx lr
