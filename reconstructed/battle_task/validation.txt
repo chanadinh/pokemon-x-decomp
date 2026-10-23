@@ -1,0 +1,45 @@
+Validation performed 2026-10-23 on Linux-6.18.55-x86_64-with-glibc2.41
+
+Address and undefined-behavior instrumentation were enabled. Leak detection was disabled because it is unsupported under this container tracing environment. Synthetic memory uses local arrays. No original game execution was performed.
+
+Directory: /workspace/pokemon-x-decomp/reconstructed
+$ cc --version
+cc (Debian 14.2.0-19) 14.2.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed
+$ make test
+make -C call_wild_battle test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/call_wild_battle'
+./build/test_call_wild_battle
+PASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/call_wild_battle'
+make -C wild_battle_setup test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/wild_battle_setup'
+./build/test_wild_battle_setup
+PASS: 65536 flag values; initializer holes; row decoding; optional paths; call order; mutation timing; return propagation; finisher; original wrapper integration
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/wild_battle_setup'
+make -C battle_task test
+make[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/battle_task'
+mkdir -p build
+cc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror battle_task.c test_battle_task.c ../wild_battle_setup/wild_battle_setup.c ../call_wild_battle/call_wild_battle.c   -o build/test_battle_task
+./build/test_battle_task
+PASS: 65536 selector/category pairs; 65536 key pairs; task factory and registration; optional paths; count boundaries; pointer mutation timing; full submit; all three source milestones integrated
+make[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/battle_task'
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed/battle_task
+$ cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer battle_task.c test_battle_task.c ../wild_battle_setup/wild_battle_setup.c ../call_wild_battle/call_wild_battle.c -o build/test_battle_task_sanitized
+Exit code: 0
+
+Directory: /workspace/pokemon-x-decomp/reconstructed/battle_task
+$ ASAN_OPTIONS=detect_leaks=0 ./build/test_battle_task_sanitized
+PASS: 65536 selector/category pairs; 65536 key pairs; task factory and registration; optional paths; count boundaries; pointer mutation timing; full submit; all three source milestones integrated
+Exit code: 0
+
+Independent raw ARM/source review passed; 20 exported function bodies (3364 instruction bytes) were matched against the original uploaded binaries.
+Final call-target verification: Field diagnostic veneer15c00200 -> main0014f220 (returning BX LR), distinct from fatal main0011e864. This corrects analysis notes; source and tests are unchanged.

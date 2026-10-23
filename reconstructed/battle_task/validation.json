@@ -1,0 +1,57 @@
+[
+  {
+    "command": [
+      "cc",
+      "--version"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed",
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": "cc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+  },
+  {
+    "command": [
+      "make",
+      "test"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed",
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": "make -C call_wild_battle test\nmake[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/call_wild_battle'\n./build/test_call_wild_battle\nPASS: 9 cases; argument snapshot, narrowing, call order, context identity, zero return\nmake[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/call_wild_battle'\nmake -C wild_battle_setup test\nmake[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/wild_battle_setup'\n./build/test_wild_battle_setup\nPASS: 65536 flag values; initializer holes; row decoding; optional paths; call order; mutation timing; return propagation; finisher; original wrapper integration\nmake[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/wild_battle_setup'\nmake -C battle_task test\nmake[1]: Entering directory '/workspace/pokemon-x-decomp/reconstructed/battle_task'\nmkdir -p build\ncc  -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror battle_task.c test_battle_task.c ../wild_battle_setup/wild_battle_setup.c ../call_wild_battle/call_wild_battle.c   -o build/test_battle_task\n./build/test_battle_task\nPASS: 65536 selector/category pairs; 65536 key pairs; task factory and registration; optional paths; count boundaries; pointer mutation timing; full submit; all three source milestones integrated\nmake[1]: Leaving directory '/workspace/pokemon-x-decomp/reconstructed/battle_task'\n"
+  },
+  {
+    "command": [
+      "cc",
+      "-std=c11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "battle_task.c",
+      "test_battle_task.c",
+      "../wild_battle_setup/wild_battle_setup.c",
+      "../call_wild_battle/call_wild_battle.c",
+      "-o",
+      "build/test_battle_task_sanitized"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed/battle_task",
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "./build/test_battle_task_sanitized"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed/battle_task",
+    "environment_overrides": {
+      "ASAN_OPTIONS": "detect_leaks=0"
+    },
+    "exit_code": 0,
+    "output": "PASS: 65536 selector/category pairs; 65536 key pairs; task factory and registration; optional paths; count boundaries; pointer mutation timing; full submit; all three source milestones integrated\n"
+  }
+]

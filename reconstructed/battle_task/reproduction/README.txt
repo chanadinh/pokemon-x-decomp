@@ -1,0 +1,1 @@
+Exports used Ghidra12.1.4, JDK21.0.13+9, -noanalysis and -readOnly. Recorded commands require the retained main_text.bin project and original prepared map, which are not included in this source-only bundle. export_functions.py is a workspace helper and expects the original tools/projects layout. Host tests require only a C11 compiler.

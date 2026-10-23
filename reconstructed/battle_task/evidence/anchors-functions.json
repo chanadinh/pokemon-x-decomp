@@ -1,0 +1,215 @@
+[
+  {
+    "address": "003bc520",
+    "name": "FUN_003bc520",
+    "body_bytes": 512,
+    "no_return": false,
+    "references_to": [
+      {
+        "from": "003bc1d0",
+        "type": "UNCONDITIONAL_CALL",
+        "function": "003bc140"
+      },
+      {
+        "from": "003bcb68",
+        "type": "UNCONDITIONAL_CALL",
+        "function": "003bcb44"
+      },
+      {
+        "from": "003cc190",
+        "type": "UNCONDITIONAL_CALL",
+        "function": "003cc0ec"
+      }
+    ],
+    "flow_references": [
+      {
+        "from": "003bc53c",
+        "to": "0012b284",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc564",
+        "to": "003c8ab4",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc574",
+        "to": "003bc588",
+        "type": "CONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc590",
+        "to": "00122920",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc59c",
+        "to": "0011294c",
+        "type": "CONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc5b0",
+        "to": "0019abf4",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc5cc",
+        "to": "0019abfc",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc5ec",
+        "to": "001cca9c",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc610",
+        "to": "001ceeb0",
+        "type": "CONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc61c",
+        "to": "003bc634",
+        "type": "CONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc624",
+        "to": "003bc644",
+        "type": "CONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc62c",
+        "to": "003bc668",
+        "type": "CONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc630",
+        "to": "003bc658",
+        "type": "UNCONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc640",
+        "to": "003bc650",
+        "type": "UNCONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc654",
+        "to": "003bc668",
+        "type": "UNCONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc674",
+        "to": "003bc6b4",
+        "type": "CONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc698",
+        "to": "003e0aa8",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc6a8",
+        "to": "0045a5c8",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bc6cc",
+        "to": "003bc6e0",
+        "type": "CONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc6e8",
+        "to": "003bc6f8",
+        "type": "CONDITIONAL_JUMP"
+      },
+      {
+        "from": "003bc6f4",
+        "to": "003bc708",
+        "type": "CONDITIONAL_JUMP"
+      }
+    ],
+    "decompiled": true
+  },
+  {
+    "address": "004f37e8",
+    "name": "FUN_004f37e8",
+    "body_bytes": 140,
+    "no_return": false,
+    "references_to": [
+      {
+        "from": "003bc734",
+        "type": "UNCONDITIONAL_CALL",
+        "function": "003bc720"
+      },
+      {
+        "from": "003bcb54",
+        "type": "UNCONDITIONAL_CALL",
+        "function": "003bcb44"
+      },
+      {
+        "from": "003bc1f0",
+        "type": "UNCONDITIONAL_CALL",
+        "function": "003bc1e0"
+      }
+    ],
+    "flow_references": [
+      {
+        "from": "004f37f0",
+        "to": "0012b27c",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "004f37fc",
+        "to": "00122920",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "004f3804",
+        "to": "004f385c",
+        "type": "CONDITIONAL_JUMP"
+      },
+      {
+        "from": "004f3810",
+        "to": "0012b27c",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "004f381c",
+        "to": "00109498",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "004f3868",
+        "to": "00108cf0",
+        "type": "UNCONDITIONAL_CALL"
+      }
+    ],
+    "decompiled": true
+  },
+  {
+    "address": "003bcb44",
+    "name": "_static_::anon_segment_0_2bcb44",
+    "body_bytes": 48,
+    "no_return": false,
+    "references_to": [
+      {
+        "from": "15c03c58",
+        "type": "COMPUTED_JUMP",
+        "function": "15c03c58"
+      }
+    ],
+    "flow_references": [
+      {
+        "from": "003bcb54",
+        "to": "004f37e8",
+        "type": "UNCONDITIONAL_CALL"
+      },
+      {
+        "from": "003bcb68",
+        "to": "003bc520",
+        "type": "UNCONDITIONAL_CALL"
+      }
+    ],
+    "decompiled": true
+  }
+]

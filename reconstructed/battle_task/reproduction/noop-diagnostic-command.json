@@ -1,0 +1,15 @@
+[
+  "/workspace/omega-ruby-decomp/tools/ghidra_12.1.4_PUBLIC/support/analyzeHeadless",
+  "/workspace/pokemon-x-decomp/projects",
+  "cro_20261023T150920079989Z",
+  "-process",
+  "main_text.bin",
+  "-noanalysis",
+  "-readOnly",
+  "-scriptPath",
+  "/workspace/pokemon-x-decomp/ghidra_scripts",
+  "-postScript",
+  "ExportFunctionSet.java",
+  "/workspace/pokemon-x-decomp/outputs/battle-data-consumer/noop-diagnostic",
+  "14f220"
+]
