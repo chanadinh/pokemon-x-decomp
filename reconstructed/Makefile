@@ -6,3 +6,4 @@ all test clean:
 	$(MAKE) -C encounter_builder $@
 	$(MAKE) -C pokemon_constructor $@
 	$(MAKE) -C pokemon_data $@
+	$(MAKE) -C pokemon_state $@
