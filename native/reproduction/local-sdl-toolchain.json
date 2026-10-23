@@ -1,0 +1,122 @@
+{
+  "platform": "Ubuntu 24.04 WSL2 x86_64",
+  "compiler_setup": "../../reconstructed/pokemon_state/reproduction/local-toolchain.json",
+  "sdl_version": "2.30.0",
+  "installation": "Verified Ubuntu packages extracted into ignored tools/native-sdl/sysroot; no system packages changed. Existing host graphics libraries are reused.",
+  "packages": [
+    {
+      "package": "libsdl2-dev",
+      "version": "2.30.0+dfsg-1ubuntu3.1",
+      "file": "libsdl2-dev_2.30.0+dfsg-1ubuntu3.1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libs/libsdl2/libsdl2-dev_2.30.0+dfsg-1ubuntu3.1_amd64.deb",
+      "sha256": "8d78c93699aafdb33205ef7712baeefc8d8aa806862fac4c2554f3f8db234da1"
+    },
+    {
+      "package": "libsdl2-2.0-0",
+      "version": "2.30.0+dfsg-1ubuntu3.1",
+      "file": "libsdl2-2.0-0_2.30.0+dfsg-1ubuntu3.1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libs/libsdl2/libsdl2-2.0-0_2.30.0+dfsg-1ubuntu3.1_amd64.deb",
+      "sha256": "a2e733f1339272f22cf7777d454b5d4f71e27335d89d4c99cf41e1ce1bb5c462"
+    },
+    {
+      "package": "libasound2t64",
+      "version": "1.2.11-1ubuntu0.3",
+      "file": "libasound2t64_1.2.11-1ubuntu0.3_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/a/alsa-lib/libasound2t64_1.2.11-1ubuntu0.3_amd64.deb",
+      "sha256": "5d17bfb5683eb99f1be951fe48e1be5bf3c52391913b6b74a8aecf9b4f5e779f"
+    },
+    {
+      "package": "libpulse0",
+      "version": "1:16.1+dfsg1-2ubuntu10.1",
+      "file": "libpulse0_16.1+dfsg1-2ubuntu10.1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/p/pulseaudio/libpulse0_16.1+dfsg1-2ubuntu10.1_amd64.deb",
+      "sha256": "b8d52aa6c2f74ae99e749c9f98d6ad2dbf924fd422371ac469725245cdd919fc"
+    },
+    {
+      "package": "libsamplerate0",
+      "version": "0.2.2-4build1",
+      "file": "libsamplerate0_0.2.2-4build1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libs/libsamplerate/libsamplerate0_0.2.2-4build1_amd64.deb",
+      "sha256": "8a389d1cae81860c9fb7cd9641c3f9d38815e80c0379b3181b4317489126f738"
+    },
+    {
+      "package": "libxss1",
+      "version": "1:1.2.3-1build3",
+      "file": "libxss1_1.2.3-1build3_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libx/libxss/libxss1_1.2.3-1build3_amd64.deb",
+      "sha256": "0ac60a2cc034ccc4bf4e2f846f38110469d7ae43b47e808d67aafc538bc3695e"
+    },
+    {
+      "package": "libdecor-0-0",
+      "version": "0.2.2-1build2",
+      "file": "libdecor-0-0_0.2.2-1build2_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libd/libdecor-0/libdecor-0-0_0.2.2-1build2_amd64.deb",
+      "sha256": "64bf085d16e504e9ed39b91d2a46748fb8881ad7f3603fbacef6c11c04aa7064"
+    },
+    {
+      "package": "libsndfile1",
+      "version": "1.2.2-1ubuntu5.24.04.1",
+      "file": "libsndfile1_1.2.2-1ubuntu5.24.04.1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libs/libsndfile/libsndfile1_1.2.2-1ubuntu5.24.04.1_amd64.deb",
+      "sha256": "fe2461b27e747fa88ede157ea39c6379e2101c280a730cda9c825f566a3808e5"
+    },
+    {
+      "package": "libasyncns0",
+      "version": "0.8-6build4",
+      "file": "libasyncns0_0.8-6build4_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/liba/libasyncns/libasyncns0_0.8-6build4_amd64.deb",
+      "sha256": "f8483917fd216e248143eba1c80dfc9384b94fb4dac402194a98c11505674269"
+    },
+    {
+      "package": "libflac12t64",
+      "version": "1.4.3+ds-2.1ubuntu2",
+      "file": "libflac12t64_1.4.3+ds-2.1ubuntu2_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/f/flac/libflac12t64_1.4.3+ds-2.1ubuntu2_amd64.deb",
+      "sha256": "f2396692573407b2fbc92cd83148342d4aec717d42d5e24ac64c471204a0b7a9"
+    },
+    {
+      "package": "libogg0",
+      "version": "1.3.5-3build1",
+      "file": "libogg0_1.3.5-3build1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libo/libogg/libogg0_1.3.5-3build1_amd64.deb",
+      "sha256": "fbdb2fedbafb02c3f07f2c2ddeb4018b5e94e13462f93fbececdcefc06fe2ac1"
+    },
+    {
+      "package": "libopus0",
+      "version": "1.4-1build1",
+      "file": "libopus0_1.4-1build1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/o/opus/libopus0_1.4-1build1_amd64.deb",
+      "sha256": "6d8da32a832e655c9603543b47a0bc90c6f60bdee0c00fe7499bd50acad566cf"
+    },
+    {
+      "package": "libvorbis0a",
+      "version": "1.3.7-1build3",
+      "file": "libvorbis0a_1.3.7-1build3_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libv/libvorbis/libvorbis0a_1.3.7-1build3_amd64.deb",
+      "sha256": "d704ac0a5dd7a9797a2f2dc86fc8333c9973023b98b3510dcd2f1cc00da3624d"
+    },
+    {
+      "package": "libvorbisenc2",
+      "version": "1.3.7-1build3",
+      "file": "libvorbisenc2_1.3.7-1build3_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libv/libvorbis/libvorbisenc2_1.3.7-1build3_amd64.deb",
+      "sha256": "866c561fe81d4430a48c820f4e62f3cd138f4c8c7664f9203f02c1ced2eb55d4"
+    },
+    {
+      "package": "libmpg123-0t64",
+      "version": "1.32.5-1ubuntu1.1",
+      "file": "libmpg123-0t64_1.32.5-1ubuntu1.1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/m/mpg123/libmpg123-0t64_1.32.5-1ubuntu1.1_amd64.deb",
+      "sha256": "bbe32128e3358f141f9f58ef6e76a7bef3e07d09165203665d30fdc27372b418"
+    },
+    {
+      "package": "libmp3lame0",
+      "version": "3.100-6build1",
+      "file": "libmp3lame0_3.100-6build1_amd64.deb",
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/l/lame/libmp3lame0_3.100-6build1_amd64.deb",
+      "sha256": "d739e9a3565f98b8b72a9e203a9a537bd1090af6cafb94c98adf8e27f9d3fb94"
+    }
+  ],
+  "activation": "# Repository-local SDL2 runtime and development files; source from bash.\nsource '/mnt/d/Projects/pokemon-x-decomp-local/tools/native-build/activate.sh'\nexport SDL_CFLAGS='-I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/SDL2 -I/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/include/x86_64-linux-gnu -D_REENTRANT'\nexport SDL_LIBS='-L/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu -Wl,-rpath-link,/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu -lSDL2'\nexport LD_LIBRARY_PATH='/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu:/mnt/d/Projects/pokemon-x-decomp-local/tools/native-sdl/sysroot/usr/lib/x86_64-linux-gnu/pulseaudio':\"$LD_LIBRARY_PATH\"\n",
+  "probe": "SDL video/timer initialization and hidden window creation succeeded using the WSLg x11 video driver."
+}

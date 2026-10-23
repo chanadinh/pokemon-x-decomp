@@ -20,3 +20,12 @@ jobs:
         run: make -C reconstructed test
       - name: Test analysis tools
         run: python3 -m unittest discover -s tests -v
+      - name: Test native asset decoders
+        run: make -C native test
+      - name: Install SDL2 for the native viewer
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
+      - name: Build and smoke-test the native viewer
+        run: |
+          make -C native all
+          make -C native test-runtime
+          SDL_VIDEODRIVER=dummy native/build/pokemon_asset_viewer --demo --software --frames 3 --self-test-input --screenshot native/build/demo.bmp
