@@ -1,31 +1,75 @@
+<div align="center">
+
 # Pokémon X decompilation
 
-**Reconstructing Pokémon X game logic in portable C, one verified subsystem at a time.**
+**From original 3DS data to native C, one verified subsystem at a time.**
 
 [![Host tests](https://github.com/chanadinh/pokemon-x-decomp/actions/workflows/tests.yml/badge.svg)](https://github.com/chanadinh/pokemon-x-decomp/actions/workflows/tests.yml)
-[![Roadmap](https://img.shields.io/badge/project-roadmap-blue)](ROADMAP.md)
+[![Language: C11](https://img.shields.io/badge/language-C11-60a5fa)](reconstructed/README.md)
+[![Stage: research & native previews](https://img.shields.io/badge/stage-research_%26_native_previews-38bdf8)](ROADMAP.md)
 
-An early-stage reverse-engineering project for Pokémon X on Nintendo 3DS.
-Explore eight connected C reconstruction milestones, reviewed assembly evidence,
-and synthetic tests that run without game files.
+[Get started](#get-started) · [See it running](#see-it-running) · [Explore the source](#rebuilding-the-rules) · [Next milestone](#the-road-to-a-playable-slice)
 
-**Current status: eight tested game-logic milestones, a native texture viewer,
-and native model and field terrain inspectors.
-There is no playable PC port or interactive battle yet.** The viewer loads
-selected original textures, including ETC1 and ETC1A4, through GARC/LZ/BCLIM
-decoding, plus embedded CGFX and selected BCH area textures. A separate viewer
-previews a bounded subset of unskinned CGFX geometry with checked texture/material bindings and
-an unlit software renderer. A field inspector follows a checked zone-to-matrix-to-region
-chain and displays terrain cells, collision edges, and a restricted inspection marker.
-The long-term goal is a native PC game;
-[the roadmap](ROADMAP.md) explains the work and evidence still needed. The
-[first playable slice](docs/PLAYABLE_SLICE.md) has concrete acceptance criteria
-and an inventory of the original assets already available locally.
+<a href="docs/native-bch.md"><img src="docs/images/native-bch-wireframe.png" alt="An original Pokémon X room reconstructed as a cyan wireframe in the native model viewer" width="960"></a>
 
-## Try the reconstructed logic
+*An original field model, decoded and drawn by the native viewer: 12 meshes, 2,356 vertices, 4,992 indices.*
 
-You need Git, Make, and a C11 compiler such as GCC or Clang. Python 3 is needed
-for the analysis-tool tests. On Linux or WSL:
+</div>
+
+This project is rebuilding Pokémon X's game logic and asset pipeline in portable C.
+The work now reaches from Pokémon construction and stat calculations to decoding
+original textures, inspecting field layouts, and drawing models in native SDL2
+applications. Every milestone comes with tests, recorded evidence, and an explicit
+account of what remains unknown.
+
+**The destination is a native PC game. Today, this is a research project with
+working asset viewers and eight connected game-logic milestones; it is not yet a
+playable port.** The wireframe above uses an explicit triangle-list interpretation;
+the original field's primitive setup and materials still need verification.
+
+| Game logic | Native field geometry | Area textures | Preserved checkpoints |
+| :---: | :---: | :---: | :---: |
+| **8** connected C milestones | **12** meshes checked independently | **19** images, **100,608** pixels matched | **539** reconstruction file hashes |
+
+## See it running
+
+These are actual captures from this workspace's native applications. The images
+show inspected original assets and resource data, with the limits described below.
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/native-materials.md"><img src="docs/images/native-textured-model.png" alt="Native textured model preview showing blue clouds, stars and a rainbow" width="480"></a>
+      <p><strong>Textures become geometry.</strong><br>
+      Six CGFX material bindings connect UVs, vertex colors and textures in an unlit software preview. Orbit and zoom around 767 vertices and 936 triangles.</p>
+      <p><a href="docs/native-materials.md">Explore the material renderer →</a></p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/native-field.md"><img src="docs/images/native-field-inspector.png" alt="Field inspector displaying colored terrain cells, collision edges and the zone-to-region resource chain" width="480"></a>
+      <p><strong>A field becomes inspectable.</strong><br>
+      Follow zone 5 → matrix 12 → region 165. Inspect terrain words, collision edges and an inspection marker with a deliberately restricted movement policy.</p>
+      <p><a href="docs/native-field.md">Follow the field resource chain →</a></p>
+    </td>
+  </tr>
+</table>
+
+The textured preview does not reproduce the game's complete shaders or lighting.
+The terrain image records an earlier milestone; its footer predates the separate
+BCH wireframe viewer shown above. The marker is an inspection tool, not a player
+character. [Capture provenance and validation](docs/images/README.md) identify the
+source of each image.
+
+The latest native checkpoint independently matches every position, UV and rebased
+index in the selected BCH field model. Original executable review also follows
+the zone's area ID into the texture archive and its BCH section consumer.
+[Read the geometry evidence](native/reproduction/bch-native/README.txt) or
+[inspect the texture comparison](native/reproduction/bch-textures/README.txt).
+
+## Get started
+
+### Run the reconstructed logic
+
+You need Git, Make, a C11 compiler and Python 3. On Linux or WSL:
 
 ```sh
 git clone https://github.com/chanadinh/pokemon-x-decomp.git
@@ -34,94 +78,111 @@ make -C reconstructed test
 python3 -m unittest discover -s tests -v
 ```
 
-The host C tests use synthetic data and require no ROM, extracted assets, or
-Ghidra installation. Extraction integration tests skip when their optional
-PowerShell and 3dstool dependencies are unavailable.
+These tests use synthetic data and need no game files or Ghidra. Optional
+extraction integration tests skip when PowerShell or 3dstool is unavailable.
 
-## Run the native asset viewer
+### Open a native demo
 
 With SDL2 development files and pkg-config installed:
 
 ```sh
-make -C native
+make -C native all
 native/build/pokemon_asset_viewer --demo
-# Use your locally extracted RomFS for the checked compressed texture sample:
-native/build/pokemon_asset_viewer --romfs /path/to/romfs --archive a/1/6/0 --entry 0
+native/build/pokemon_model_viewer --demo --textured
+native/build/pokemon_field_viewer --demo
 ```
 
-The texture viewer provides pan/zoom, image exports, and bounded archive/texture loading.
-The demo requires no game files. [Build instructions and supported formats](native/README.md)
-describe the actual limits. `native/build/pokemon_model_viewer` provides a
-separate preview with orbit/zoom controls. Add `--textured` for supported
-texture, vertex-color, depth, and blend states. Lighting, maps, and gameplay
-remain incomplete; this is not original-game rendering equivalence.
+All three demos run without game files. The texture viewer provides pan/zoom and
+image export; the model viewer provides orbit/zoom and frame capture; the field
+viewer provides terrain and collision inspection. See the
+[build instructions and controls](native/README.md).
 
-`native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5` loads the
-checked field layout. Arrows/WASD move an inspection marker on exact standard
-cells; `C` shows collision edges. See the [field evidence and limits](docs/native-field.md).
-The native model viewer now displays the selected BCH environment as an explicit
-triangle-list wireframe. Material rendering and actual player movement remain pending.
-The [BCH decoders](docs/native-bch.md) read the selected field's positions, UV0 and
-indices and preserve its external texture names. Use the model viewer with
-`--archive a/0/4/1 --entry 165 --section 1 --triangle-list`.
-The native texture viewer now opens the area's BCH images with
-`--archive a/0/1/3 --entry 75 --section 11 --texture 9`;
-see [the texture workflow](native/README.md#view-bch-area-textures).
+### Inspect your local game assets
 
-## What works today
+Replace `/path/to/romfs` with your locally extracted RomFS directory:
 
-| Reconstructed subsystem | Scope |
+```sh
+# Original textured CGFX sample
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/1/0/2 --entry 0 --textured
+
+# BCH field wireframe pictured above; topology interpretation is explicit
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list
+
+# List the selected area's 19 BCH textures
+native/build/pokemon_asset_viewer --romfs /path/to/romfs \
+  --archive a/0/1/3 --entry 75 --section 11 --list-textures
+
+# Terrain and collision inspector
+native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
+```
+
+## Rebuilding the rules
+
+The visual tools sit alongside eight connected C reconstruction milestones.
+An integration fixture connects wild-battle request preparation to Pokémon
+construction, payload storage, state refresh and stat calculations.
+
+| Subsystem | Reconstructed behavior |
 | --- | --- |
 | [Wild-battle script wrapper](reconstructed/call_wild_battle/README.md) | Argument handling and helper call order |
-| [Wild-battle setup](reconstructed/wild_battle_setup/README.md) | Buffer initialization, packed-record decoding, context updates |
-| [Battle task](reconstructed/battle_task/README.md) | Task creation, request consumption, list and state handling |
-| [Encounter builder](reconstructed/encounter_builder/README.md) | Creation parameters, population loop, configuration selection |
-| [Pokémon constructor](reconstructed/pokemon_constructor/README.md) | Parameter normalization, allocation, manager setup, XOR transform |
-| [Pokémon data](reconstructed/pokemon_data/README.md) | Population, 26 field setters, checksum, storage codec, block selection |
-| [Pokémon state](reconstructed/pokemon_state/README.md) | Base/extra initialization, derived-state sequencing, HP/PP refresh, 13 field accessors |
-| [Pokémon stats](reconstructed/pokemon_stats/README.md) | HP and five stat updates, nature adjustment, growth-to-level lookup, and supporting field accessors |
+| [Wild-battle setup](reconstructed/wild_battle_setup/README.md) | Buffer initialization, packed records and context updates |
+| [Battle task](reconstructed/battle_task/README.md) | Task creation, request consumption and state handling |
+| [Encounter builder](reconstructed/encounter_builder/README.md) | Creation parameters, population loop and configuration selection |
+| [Pokémon constructor](reconstructed/pokemon_constructor/README.md) | Parameter normalization, allocation, manager setup and XOR transform |
+| [Pokémon data](reconstructed/pokemon_data/README.md) | Population, 26 field setters, checksum and storage codec |
+| [Pokémon state](reconstructed/pokemon_state/README.md) | Initialization, HP/PP refresh and 13 field accessors |
+| [Pokémon stats](reconstructed/pokemon_stats/README.md) | HP/stat updates, nature adjustment and growth-to-level lookup |
 
-An eight-module integration fixture connects these paths with reconstructed
-HP/stat calculations and level resolution. Personal/growth resources, learnset
-access, move insertion, name construction, and maximum-PP services still use
-synthetic data or callbacks, as do wider game setup and platform dependencies.
-These are analyst-authored reconstructions, not
+Personal/growth resources, learnset access, move insertion, name construction and
+maximum-PP services still use synthetic resources or callbacks where their
+dependencies remain unresolved. These are analyst-authored reconstructions, not
 recovered original source or builds that match the original machine code.
 
-The analysis baseline covers 133 CRO modules, with 44,279 candidate functions
-and 230 exported pseudocode functions. These are analysis counts, **not a
-completion percentage**.
+<details>
+<summary><strong>What the validation establishes</strong></summary>
 
-## Help build the next milestone
+- The latest native milestone passes **12 C suites, 43 inspector tests and 41 viewer runtime tests**, plus AddressSanitizer and UndefinedBehaviorSanitizer checks on the BCH geometry reader.
+- The selected area's **100,608 texture pixels** match an independent decoder and separately implemented alpha/tile reconstruction.
+- The selected field's **positions, UVs and indices** match an independent geometry reference at the native renderer's documented precision.
+- The area-consumer trace checks **1,348 instructions** against original executable bytes across thirteen functions.
+- All **539 earlier reconstruction checkpoint files** retain their recorded hashes.
 
-Contributions are useful across C, ARM reverse engineering, tooling,
-documentation, and reference-based testing. Start with
-[CONTRIBUTING.md](CONTRIBUTING.md) and the
-[immediate roadmap](ROADMAP.md#immediate-sequence-for-this-workspace).
+These results validate specific boundaries. They do not establish running-game
+behavior or visual equivalence. The analysis baseline's 133 CRO modules, 44,279
+candidate functions and 230 exported pseudocode functions are inventory counts,
+not a completion percentage.
 
-Current priorities:
+</details>
 
-- Reconstruct learnset access, move insertion, name construction, and maximum-PP services.
-- Replace personal and growth-resource stand-ins with checked resource access.
-- Compare reconstructed behavior against a running reference.
-- Extend the native viewer with the map/model asset formats and game-state integration needed for the first playable slice.
+## The road to a playable slice
 
-[Report a reproducible bug](https://github.com/chanadinh/pokemon-x-decomp/issues/new?template=bug_report.yml)
+The next step is to connect these tested pieces into a game scene:
+
+- **Complete the field renderer:** establish original primitive state, downstream texture bindings, projected materials and scene integration.
+- **Connect the player:** reconstruct entry, movement, collision and interaction behavior.
+- **Finish the gameplay loop:** replace remaining resource stand-ins, connect battle and return-to-field behavior, and implement save/load.
+- **Compare against the original:** capture a repeatable reference scenario and check behavior at each boundary.
+
+The [roadmap](ROADMAP.md) tracks dependencies. The
+[first playable slice](docs/PLAYABLE_SLICE.md) defines acceptance criteria.
+
+Contributions in C, ARM reverse engineering, tooling, documentation and testing
+are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md),
+[report a reproducible bug](https://github.com/chanadinh/pokemon-x-decomp/issues/new?template=bug_report.yml),
 or [propose a research task](https://github.com/chanadinh/pokemon-x-decomp/issues/new?template=research_task.yml).
-If this work interests you, **star the repository** to bookmark it and help
-others discover it. Use **Watch → Custom → Releases** for release notifications.
+Star the repository to follow its progress, or use **Watch → Custom → Releases**
+for release notifications.
 
-## Project notes
+## Project notebook
 
-- [Native asset viewer](native/README.md)
-- [Source milestone overview](reconstructed/README.md)
-- [Roadmap and completion criteria](ROADMAP.md)
-- [First playable slice and local asset inventory](docs/PLAYABLE_SLICE.md)
-- [Local analysis history and reproduction workflow](docs/ANALYSIS_WORKSPACE.md)
-- [Recorded tool versions](tools/versions.json)
+[Native viewers](native/README.md) · [Source milestones](reconstructed/README.md) ·
+[Analysis workflow](docs/ANALYSIS_WORKSPACE.md) · [Tool versions](tools/versions.json) ·
+[Screenshot provenance](docs/images/README.md)
 
-Game inputs, generated analysis directories, saved Ghidra projects, and named
-ZIP bundles in the workspace notes are local artifacts excluded from Git.
-This repository does not distribute a ROM or extracted game assets.
-Pokémon is owned by its respective rights holders; this project is unofficial
-and unaffiliated. No project license has been declared yet.
+ROMs, executables, extracted model/texture payloads, generated analysis and saved
+Ghidra projects remain local and excluded from Git. Selected native-viewer
+screenshots are included for documentation. Pokémon is owned by its respective
+rights holders; this project is unofficial and unaffiliated. No project license
+has been declared yet.
