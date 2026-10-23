@@ -1,0 +1,21 @@
+Command: make -C reconstructed test
+Directory: /workspace/pokemon-x-decomp
+Exit: 0
+Observed in the preceding tool execution: all five host suites passed. Newly compiled constructor suite passed 66388 parameter cases, 256 acquire states, 2304 restore masks, mutation and XOR checks, and five-module chain integration.
+
+Command: cc -std=c11 -O1 -g -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer pokemon_constructor.c pokemon_parameters.c test_pokemon_constructor.c test_pokemon_parameters.c test_pokemon_constructor_chain.c ../encounter_builder/encounter_builder.c ../battle_task/battle_task.c ../wild_battle_setup/wild_battle_setup.c ../call_wild_battle/call_wild_battle.c -o build/test_pokemon_constructor_sanitized
+Directory: /workspace/pokemon-x-decomp/reconstructed/pokemon_constructor
+Exit: 0
+
+
+Command: ./build/test_pokemon_constructor_sanitized
+Directory: /workspace/pokemon-x-decomp/reconstructed/pokemon_constructor
+Exit: 0
+PASS: 66388 parameter normalization cases; 65536 levels; 256 stat counts; 256 ability selectors; 255 explicit forms; sentinel pairs; retries; callback mutation; narrowing and unsigned wrap
+PASS: constructor sequencing; raw zero allocations; preserved parameter holes; XOR vectors/round trip; 256 acquire states and 2304 restore masks; callback mutation; parameter normalization; five-milestone integration
+
+
+Command: python3 reconstructed/pokemon_constructor/reproduction/export_constructor.py --project projects/cro_20261023T150920079989Z.gpr --output outputs/pokemon-constructor/reproduced
+Directory: /workspace/pokemon-x-decomp
+Exit: 0
+Observed guarded read-only Ghidra reproduction completed for 19 functions; all 38 assembly/pseudocode files compared byte-for-byte equal to the retained reviewed evidence.

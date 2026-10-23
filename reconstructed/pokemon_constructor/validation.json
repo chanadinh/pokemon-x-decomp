@@ -1,0 +1,67 @@
+[
+  {
+    "command": [
+      "make",
+      "-C",
+      "reconstructed",
+      "test"
+    ],
+    "directory": "/workspace/pokemon-x-decomp",
+    "exit_code": 0,
+    "output_summary": "Observed in the preceding tool execution: all five host suites passed. Newly compiled constructor suite passed 66388 parameter cases, 256 acquire states, 2304 restore masks, mutation and XOR checks, and five-module chain integration."
+  },
+  {
+    "command": [
+      "cc",
+      "-std=c11",
+      "-O1",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "pokemon_constructor.c",
+      "pokemon_parameters.c",
+      "test_pokemon_constructor.c",
+      "test_pokemon_parameters.c",
+      "test_pokemon_constructor_chain.c",
+      "../encounter_builder/encounter_builder.c",
+      "../battle_task/battle_task.c",
+      "../wild_battle_setup/wild_battle_setup.c",
+      "../call_wild_battle/call_wild_battle.c",
+      "-o",
+      "build/test_pokemon_constructor_sanitized"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed/pokemon_constructor",
+    "environment_overrides": {},
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "./build/test_pokemon_constructor_sanitized"
+    ],
+    "directory": "/workspace/pokemon-x-decomp/reconstructed/pokemon_constructor",
+    "environment_overrides": {
+      "ASAN_OPTIONS": "detect_leaks=0",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    },
+    "exit_code": 0,
+    "output": "PASS: 66388 parameter normalization cases; 65536 levels; 256 stat counts; 256 ability selectors; 255 explicit forms; sentinel pairs; retries; callback mutation; narrowing and unsigned wrap\nPASS: constructor sequencing; raw zero allocations; preserved parameter holes; XOR vectors/round trip; 256 acquire states and 2304 restore masks; callback mutation; parameter normalization; five-milestone integration\n"
+  },
+  {
+    "command": [
+      "python3",
+      "reconstructed/pokemon_constructor/reproduction/export_constructor.py",
+      "--project",
+      "projects/cro_20261023T150920079989Z.gpr",
+      "--output",
+      "outputs/pokemon-constructor/reproduced"
+    ],
+    "directory": "/workspace/pokemon-x-decomp",
+    "exit_code": 0,
+    "output_summary": "Observed guarded read-only Ghidra reproduction completed for 19 functions; all 38 assembly/pseudocode files compared byte-for-byte equal to the retained reviewed evidence."
+  }
+]

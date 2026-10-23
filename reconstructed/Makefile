@@ -4,3 +4,4 @@ all test clean:
 	$(MAKE) -C wild_battle_setup $@
 	$(MAKE) -C battle_task $@
 	$(MAKE) -C encounter_builder $@
+	$(MAKE) -C pokemon_constructor $@
