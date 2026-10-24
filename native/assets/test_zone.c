@@ -88,6 +88,43 @@ int main(void)
     px_npc_registry_free(&reg);
     assert(px_npc_registry_decode(r, 48, NULL) == PX_ZONE_INVALID_ARGUMENT);
     assert(!strcmp(px_zone_result_string(PX_ZONE_INVALID), "invalid zone data"));
-    puts("zone entity and NPC registry tests passed");
+    /* Region props: two records and padding. */
+    uint8_t g[128] = {0};
+    put32(g, 2);
+    const float first[9] = {1, 1, 1, 0, 90, 0, 8145, 144, 10755}, second[9] = {2, .5f, 1, 0, 0, 0, -1, 0, 3};
+    put32(g + 4, 5); memcpy(g + 8, first, sizeof first); put32(g + 44, 9);
+    put32(g + 48, 10002); memcpy(g + 52, second, sizeof second);
+    struct px_gr_props props;
+    assert(px_gr_props_decode(g, sizeof g, &props) == PX_ZONE_OK && props.count == 2);
+    assert(props.props[0].uid == 5 && props.props[0].rotation[1] == 90 && props.props[0].position[2] == 10755 &&
+           props.props[0].unknown == 9);
+    assert(props.props[1].uid == 10002 && props.props[1].scale[1] == .5f && props.props[1].position[0] == -1);
+    px_gr_props_free(&props);
+    assert(props.props == NULL && props.count == 0);
+    assert(px_gr_props_decode(g, 4 + 2 * 0x2c - 1, &props) == PX_ZONE_TRUNCATED && !props.props);
+    assert(px_gr_props_decode(g, 3, &props) == PX_ZONE_TRUNCATED);
+    put32(g, 5000);
+    assert(px_gr_props_decode(g, sizeof g, &props) == PX_ZONE_INVALID);
+    put32(g, 0);
+    assert(px_gr_props_decode(g, 4, &props) == PX_ZONE_OK && props.count == 0);
+    px_gr_props_free(&props);
+    assert(px_gr_props_decode(NULL, 4, &props) == PX_ZONE_INVALID_ARGUMENT);
+    /* Prop registry: 80-byte entries, padding after them. */
+    uint8_t a[4 + 2 * 80 + 12] = {0};
+    put32(a, 2);
+    put16(a + 4, 5); put16(a + 6, 5); a[8] = 1;
+    put16(a + 84, 10002); put16(a + 86, 24); a[89] = 2; a[84 + 79] = 0x5a;
+    struct px_prop_registry pr;
+    assert(px_prop_registry_decode(a, sizeof a, &pr) == PX_ZONE_OK && pr.count == 2);
+    assert(px_prop_registry_find(&pr, 5)->model == 5 && px_prop_registry_find(&pr, 5)->event_script[0] == 1);
+    assert(px_prop_registry_find(&pr, 10002)->model == 24 && px_prop_registry_find(&pr, 10002)->event_script[1] == 2 &&
+           px_prop_registry_find(&pr, 10002)->raw[79] == 0x5a);
+    assert(!px_prop_registry_find(&pr, 6) && !px_prop_registry_find(NULL, 5));
+    px_prop_registry_free(&pr);
+    assert(px_prop_registry_decode(a, 4 + 2 * 80 - 1, &pr) == PX_ZONE_TRUNCATED && !pr.entries);
+    put32(a, 4097);
+    assert(px_prop_registry_decode(a, sizeof a, &pr) == PX_ZONE_INVALID);
+    assert(px_prop_registry_decode(a, sizeof a, NULL) == PX_ZONE_INVALID_ARGUMENT);
+    puts("zone entity, NPC registry, prop and prop registry tests passed");
     return 0;
 }

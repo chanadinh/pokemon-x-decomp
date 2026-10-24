@@ -128,6 +128,14 @@ void px_tev_evaluate(const struct px_tev_config *config, const struct px_tev_inp
     for (unsigned i = 0; i < 6; ++i) {
         const struct px_tev_stage *s = &config->stages[i];
         uint8_t constant[4], result[4];
+        if (i && !s->combine && !s->scale && (s->source & 0xf000f) == 0xf000f && !(s->operand & 0xf00f)) {
+            /* Pass-through: REPLACE of the previous color and alpha, unscaled,
+             * leaves previous as it is; only the buffer bookkeeping remains. */
+            memcpy(buffer, next, 4);
+            if (i < 4 && (config->buffer_update >> (8 + i)) & 1) memcpy(next, previous, 3);
+            if (i < 4 && (config->buffer_update >> (12 + i)) & 1) next[3] = previous[3];
+            continue;
+        }
         unpack(s->constant, constant);
         int rgb[3][3], alpha[3];
         for (unsigned j = 0; j < 3; ++j) {

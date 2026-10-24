@@ -193,8 +193,59 @@ static void test_field_projected_chain(void)
     px_tev_evaluate(&c, &in, b);
     assert(memcmp(a, b, 4) == 0);
 }
+/* Pass-through stages (REPLACE previous, unscaled) take a shortcut; it must
+ * agree with the general path: MODULATE previous by an all-255 constant is
+ * the identity too. Random chains, buffer updates included. */
+static uint32_t seed = 12345;
+static uint32_t NEXT(void) { seed = seed * 1103515245u + 12345u; return seed >> 8; }
+static void test_pass_through_shortcut(void)
+{
+    for (unsigned trial = 0; trial < 20000; ++trial) {
+        struct px_tev_config fast, slow;
+        memset(&fast, 0, sizeof fast);
+        static const uint32_t sources[] = {0, 1, 2, 3, 4, 5, 13, 14, 15};
+        for (unsigned i = 0; i < 6; ++i) {
+            struct px_tev_stage *st = &fast.stages[i];
+            if (i && NEXT() % 2) {
+                st->source = 0x000f000f; /* the other sources are ignored */
+                for (unsigned j = 1; j < 3; ++j)
+                    st->source |= sources[NEXT() % 9] << (4 * j) | sources[NEXT() % 9] << (16 + 4 * j);
+                st->operand = (NEXT() % 2) << 4 | (NEXT() % 8) << 16; /* ignored operands */
+                st->constant = NEXT();
+                continue;
+            }
+            for (unsigned j = 0; j < 3; ++j) {
+                st->source |= sources[NEXT() % 9] << (4 * j);
+                st->source |= sources[NEXT() % 9] << (16 + 4 * j);
+                st->operand |= (NEXT() % 2) << (4 * j);
+                st->operand |= (NEXT() % 8) << (12 + 4 * j);
+            }
+            st->combine = (NEXT() % 6) | (NEXT() % 6) << 16;
+            st->constant = NEXT();
+            st->scale = (NEXT() % 3) | (NEXT() % 3) << 16;
+        }
+        fast.buffer_color = NEXT();
+        fast.buffer_update = NEXT() & 0xff00;
+        slow = fast;
+        for (unsigned i = 1; i < 6; ++i) {
+            struct px_tev_stage *st = &slow.stages[i];
+            if (st->combine || st->scale || (st->source & 0xf000f) != 0xf000f || (st->operand & 0xf00f)) continue;
+            st->source = 0x00ef00ef; st->operand = 0; st->combine = 0x00010001; st->constant = 0xffffffff;
+        }
+        struct px_tev_inputs in;
+        uint8_t *bytes = (uint8_t *)&in;
+        for (size_t k = 0; k < sizeof in; ++k) bytes[k] = (uint8_t)NEXT();
+        uint8_t a[4], b[4];
+        assert(px_tev_valid(&fast) && px_tev_valid(&slow));
+        px_tev_evaluate(&fast, &in, a);
+        px_tev_evaluate(&slow, &in, b);
+        assert(!memcmp(a, b, 4));
+    }
+}
+
 int main(void)
 {
+    test_pass_through_shortcut();
     test_operations();
     test_operands_scale_and_constant();
     test_previous_and_buffer();

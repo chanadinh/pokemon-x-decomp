@@ -76,7 +76,7 @@ build/test_light: render/light.c render/light.h render/test_light.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) render/light.c render/test_light.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/test_bch_material: assets/bch_material.c assets/bch_material.h assets/bch_model.h render/tev.c render/tev.h assets/test_bch_material.c | build
-	$(CC) $(CPPFLAGS) $(CFLAGS) assets/bch_material.c render/tev.c assets/test_bch_material.c $(LDFLAGS) $(LDLIBS) -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) assets/bch_material.c render/tev.c assets/test_bch_material.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/test_tev: render/tev.c render/tev.h render/test_tev.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) render/tev.c render/test_tev.c $(LDFLAGS) $(LDLIBS) -o $@
@@ -137,6 +137,7 @@ test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemo
 	python3 -m unittest discover -s tests -p test_bch_motion_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_zone_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_talk_viewer.py -v
+	python3 -m unittest discover -s tests -p test_bch_town_viewer.py -v
 	SDL_VIDEODRIVER=dummy ./build/pokemon_field_viewer --demo --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_field_viewer.py -v
 

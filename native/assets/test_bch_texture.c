@@ -122,12 +122,28 @@ static void test_invalid(void)
 static void test_unsupported_is_listable(void)
 {
     struct fixture f = fixture(0);
-    word(f.data + 296, 0x20c);
+    word(f.data + 296, 0x00c); /* zero levels */
     struct px_bch *bch = NULL;
     struct px_texture_image image = {0};
     assert(px_bch_open(f.data, f.size, &bch) == PX_BCH_OK);
     assert(px_bch_texture(bch, 0)->decode_status == PX_BCH_UNSUPPORTED);
     assert(px_bch_decode_texture(bch, 0, &image) == PX_BCH_UNSUPPORTED && !image.rgba);
+    px_bch_close(bch);
+    word(f.data + 296, 0x1000c); /* unknown high bits */
+    assert(px_bch_open(f.data, f.size, &bch) == PX_BCH_OK);
+    assert(px_bch_texture(bch, 0)->decode_status == PX_BCH_UNSUPPORTED);
+    px_bch_close(bch);
+    /* Two levels: the base level decodes exactly as the single-level image. */
+    struct px_texture_image single = {0};
+    struct fixture g = fixture(0);
+    assert(px_bch_open(g.data, g.size, &bch) == PX_BCH_OK && px_bch_decode_texture(bch, 0, &single) == PX_BCH_OK);
+    px_bch_close(bch);
+    word(g.data + 296, 0x20c);
+    assert(px_bch_open(g.data, g.size, &bch) == PX_BCH_OK);
+    assert(px_bch_texture(bch, 0)->decode_status == PX_BCH_OK && px_bch_texture(bch, 0)->mipmap_levels == 2);
+    assert(px_bch_decode_texture(bch, 0, &image) == PX_BCH_OK && image.width == single.width &&
+           !memcmp(image.rgba, single.rgba, (size_t)image.width * image.height * 4));
+    px_texture_free(&image); px_texture_free(&single);
     px_bch_close(bch);
 }
 static void test_mixed(void)

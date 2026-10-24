@@ -1,0 +1,2495 @@
+{
+ "archive_sha256": {
+  "a/0/1/2": "dc0b7a0dd2764480eaebd4c1c057d1fa8e268ccdf8953945713bb091925190d2",
+  "a/0/4/2": "37786d6473edc53d11eac8e60dfaf677895a402501242e4e920cc533cdf2eab3",
+  "a/0/4/1": "ab5acd0599c1d31ef03f1fcdf2149127812272cc2c8f53497948ffa1fe513e8b",
+  "a/0/1/3": "803d8ec7d99f177fc4843845966bb40775901d5eaf47083a3e0a357f13b48bbe",
+  "a/0/2/4": "58b71c72c8987f45afd346dd52a1558011785e8437995af8d25d8f509e050d37"
+ },
+ "verifier_sha256": "15590d07ae847b8f8cf44f74a7d1ac039d6a0e0433d7e0026d6db29522adb7f0",
+ "bridge_source_sha256": "f9b0d1b313c22fe979232bbe04c264306cd661a60abf6c0f8e90e706ea9fb291",
+ "props": {
+  "regions": 1030,
+  "records": 1459,
+  "yaw_degrees": [
+   0.0,
+   90.0,
+   180.0,
+   270.0
+  ],
+  "non_identity_scale": 36,
+  "non_yaw_rotation": 0
+ },
+ "registries": {
+  "areas": 170,
+  "entries": 3063,
+  "reference_equals_model": 3063
+ },
+ "zones": {
+  "zones": 360,
+  "loaded": 287,
+  "multi_region_loaded": 68,
+  "failed": {
+   "BCH material 9: unsupported BCH blend or fragment operation": 1,
+   "region 923 failed to load.": 1,
+   "region 927 failed to load.": 1,
+   "the first cell of its bounding box is not its own.": 4,
+   "region 344 failed to load.": 1,
+   "BCH model: invalid BCH geometry, index, relocation, or command": 5,
+   "region 738 failed to load.": 1,
+   "region 351 failed to load.": 1,
+   "region 984 failed to load.": 1,
+   "region 988 failed to load.": 4,
+   "BCH model: unsupported BCH version or static geometry feature": 2,
+   "region 840 failed to load.": 1,
+   "BCH textures: BCH texture index does not exist": 1,
+   "--walk GR terrain: unsupported field layout": 9,
+   "region 361 failed to load.": 1,
+   "region 386 failed to load.": 1,
+   "region 402 failed to load.": 1,
+   "region 955 failed to load.": 1,
+   "region 559 failed to load.": 1,
+   "region 563 failed to load.": 1,
+   "region 571 failed to load.": 1,
+   "region 579 failed to load.": 1,
+   "region 587 failed to load.": 1,
+   "region 567 failed to load.": 1,
+   "region 575 failed to load.": 1,
+   "region 583 failed to load.": 1,
+   "region 591 failed to load.": 1,
+   "region 595 failed to load.": 1,
+   "region 599 failed to load.": 1,
+   "region 603 failed to load.": 1,
+   "region 87 failed to load.": 1,
+   "region 190 failed to load.": 1,
+   "region 226 failed to load.": 1,
+   "region 257 failed to load.": 1,
+   "region 135 failed to load.": 1,
+   "region 141 failed to load.": 1,
+   "region 144 failed to load.": 1,
+   "region 149 failed to load.": 1,
+   "region 950 failed to load.": 1,
+   "BCH material 7: unsupported BCH blend or fragment operation": 1,
+   "region 301 failed to load.": 1,
+   "region 316 failed to load.": 1,
+   "region 434 failed to load.": 1,
+   "region 445 failed to load.": 1,
+   "region 936 failed to load.": 1,
+   "region 464 failed to load.": 1,
+   "region 859 failed to load.": 1,
+   "region 475 failed to load.": 1,
+   "region 876 failed to load.": 1,
+   "region 483 failed to load.": 1,
+   "region 825 failed to load.": 1,
+   "region 529 failed to load.": 1,
+   "region 533 failed to load.": 1,
+   "region 545 failed to load.": 1
+  },
+  "props_drawn": 2313,
+  "props_not_drawn": 161,
+  "compared_props": 2474,
+  "compared_npc_tiles": 1891,
+  "compared_warp_tiles": 472
+ },
+ "per_zone": {
+  "0": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 11,
+   "props_drawn": 11
+  },
+  "1": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "2": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 5
+  },
+  "3": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 5
+  },
+  "4": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 11
+  },
+  "5": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 5
+  },
+  "6": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 8,
+   "props_drawn": 7
+  },
+  "7": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 9,
+   "props_drawn": 9
+  },
+  "8": {
+   "loaded": false,
+   "reason": "BCH material 9: unsupported BCH blend or fragment operation",
+   "derived": "loadable scene"
+  },
+  "9": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 5
+  },
+  "10": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 5
+  },
+  "11": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 5
+  },
+  "12": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "props": 14,
+   "props_drawn": 14
+  },
+  "13": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "14": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "15": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "16": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "17": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "18": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 20,
+   "props_drawn": 20
+  },
+  "19": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 9,
+   "props_drawn": 9
+  },
+  "20": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 9
+  },
+  "21": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "props": 16,
+   "props_drawn": 0
+  },
+  "22": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "props": 17,
+   "props_drawn": 0
+  },
+  "23": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "props": 13,
+   "props_drawn": 0
+  },
+  "24": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "25": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "26": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 20,
+   "props_drawn": 20
+  },
+  "27": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 12
+  },
+  "28": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 12
+  },
+  "29": {
+   "loaded": false,
+   "reason": "region 923 failed to load.",
+   "derived": "loadable scene"
+  },
+  "30": {
+   "loaded": false,
+   "reason": "region 927 failed to load.",
+   "derived": "loadable scene"
+  },
+  "31": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "32": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "33": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "34": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 15,
+   "props_drawn": 15
+  },
+  "35": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 14,
+   "props_drawn": 13
+  },
+  "36": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 14,
+   "props_drawn": 13
+  },
+  "37": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 14,
+   "props_drawn": 13
+  },
+  "38": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 5,
+   "props": 15,
+   "props_drawn": 15
+  },
+  "39": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "40": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "41": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "42": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 20,
+   "props_drawn": 20
+  },
+  "43": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "44": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "45": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 8,
+   "props_drawn": 8
+  },
+  "46": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "47": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "48": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "49": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 4
+  },
+  "50": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "51": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "52": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 20,
+   "props_drawn": 20
+  },
+  "53": {
+   "loaded": false,
+   "reason": "the first cell of its bounding box is not its own.",
+   "derived": "the first cell of its bounding box is not its own"
+  },
+  "54": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "55": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "56": {
+   "loaded": false,
+   "reason": "region 344 failed to load.",
+   "derived": "loadable scene"
+  },
+  "57": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "58": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 9
+  },
+  "59": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 9,
+   "props_drawn": 9
+  },
+  "60": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 9,
+   "props_drawn": 9
+  },
+  "61": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 9,
+   "props_drawn": 9
+  },
+  "62": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "63": {
+   "loaded": false,
+   "reason": "the first cell of its bounding box is not its own.",
+   "derived": "the first cell of its bounding box is not its own"
+  },
+  "64": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "65": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 26,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "66": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 18,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "67": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "68": {
+   "loaded": false,
+   "reason": "region 738 failed to load.",
+   "derived": "loadable scene"
+  },
+  "69": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "70": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "71": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "72": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "73": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "74": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "75": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "76": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "77": {
+   "loaded": false,
+   "reason": "region 351 failed to load.",
+   "derived": "loadable scene"
+  },
+  "78": {
+   "loaded": false,
+   "reason": "region 984 failed to load.",
+   "derived": "loadable scene"
+  },
+  "79": {
+   "loaded": false,
+   "reason": "region 988 failed to load.",
+   "derived": "loadable scene"
+  },
+  "80": {
+   "loaded": false,
+   "reason": "region 988 failed to load.",
+   "derived": "loadable scene"
+  },
+  "81": {
+   "loaded": false,
+   "reason": "region 988 failed to load.",
+   "derived": "loadable scene"
+  },
+  "82": {
+   "loaded": false,
+   "reason": "region 988 failed to load.",
+   "derived": "loadable scene"
+  },
+  "83": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 10
+  },
+  "84": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "85": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "86": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 4
+  },
+  "87": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 12
+  },
+  "88": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "89": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 3,
+   "props_drawn": 3
+  },
+  "90": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "91": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 4
+  },
+  "92": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 12
+  },
+  "93": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "94": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "95": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "96": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 15,
+   "props_drawn": 15
+  },
+  "97": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "98": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "99": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 8,
+   "props_drawn": 8
+  },
+  "100": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 8,
+   "props_drawn": 8
+  },
+  "101": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "102": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 15,
+   "props_drawn": 15
+  },
+  "103": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "104": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 8,
+   "props_drawn": 8
+  },
+  "105": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 9,
+   "props_drawn": 9
+  },
+  "106": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 11,
+   "props_drawn": 11
+  },
+  "107": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 9
+  },
+  "108": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "109": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "props": 11,
+   "props_drawn": 11
+  },
+  "110": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "111": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 4
+  },
+  "112": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 12
+  },
+  "113": {
+   "loaded": false,
+   "reason": "BCH model: unsupported BCH version or static geometry feature",
+   "derived": "loadable scene"
+  },
+  "114": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 4
+  },
+  "115": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 12
+  },
+  "116": {
+   "loaded": false,
+   "reason": "BCH model: unsupported BCH version or static geometry feature",
+   "derived": "loadable scene"
+  },
+  "117": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "118": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 22,
+   "props_drawn": 21
+  },
+  "119": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "120": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "121": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "122": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "123": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "124": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 3,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "125": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "126": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "127": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "128": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "129": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "130": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "131": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "132": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "133": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "134": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "135": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 11,
+   "props_drawn": 11
+  },
+  "136": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 33,
+   "props_drawn": 29
+  },
+  "137": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 33,
+   "props_drawn": 29
+  },
+  "138": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 33,
+   "props_drawn": 29
+  },
+  "139": {
+   "loaded": false,
+   "reason": "region 840 failed to load.",
+   "derived": "loadable scene"
+  },
+  "140": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "141": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "142": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "143": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "144": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 4
+  },
+  "145": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 12
+  },
+  "146": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "147": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "148": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "149": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 4
+  },
+  "150": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "151": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 24,
+   "props_drawn": 24
+  },
+  "152": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "153": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "154": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "155": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "156": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "157": {
+   "loaded": false,
+   "reason": "the first cell of its bounding box is not its own.",
+   "derived": "the first cell of its bounding box is not its own"
+  },
+  "158": {
+   "loaded": false,
+   "reason": "BCH textures: BCH texture index does not exist",
+   "derived": "loadable scene"
+  },
+  "159": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "160": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "161": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "162": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 20,
+   "props_drawn": 20
+  },
+  "163": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "164": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "165": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "166": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "167": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "168": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "169": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "170": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "171": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "172": {
+   "loaded": false,
+   "reason": "region 361 failed to load.",
+   "derived": "loadable scene"
+  },
+  "173": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "174": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "175": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "176": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "177": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "178": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "179": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "180": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "181": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "182": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "183": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 10
+  },
+  "184": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 10
+  },
+  "185": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 10
+  },
+  "186": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 10
+  },
+  "187": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "props": 13,
+   "props_drawn": 13
+  },
+  "188": {
+   "loaded": false,
+   "reason": "region 386 failed to load.",
+   "derived": "loadable scene"
+  },
+  "189": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "190": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "191": {
+   "loaded": false,
+   "reason": "region 402 failed to load.",
+   "derived": "loadable scene"
+  },
+  "192": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "193": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "194": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "195": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 20,
+   "props_drawn": 20
+  },
+  "196": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "197": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "198": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "199": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "200": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 16,
+   "props_drawn": 15
+  },
+  "201": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "202": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "203": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "204": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "205": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "206": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "207": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "208": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "209": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "210": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "211": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 8,
+   "props": 26,
+   "props_drawn": 26
+  },
+  "212": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "213": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "214": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "215": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "216": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 19,
+   "props_drawn": 19
+  },
+  "217": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "218": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "219": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 14,
+   "props_drawn": 13
+  },
+  "220": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 14,
+   "props_drawn": 13
+  },
+  "221": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 14,
+   "props_drawn": 13
+  },
+  "222": {
+   "loaded": false,
+   "reason": "region 955 failed to load.",
+   "derived": "loadable scene"
+  },
+  "223": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "224": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "225": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "226": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "227": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "228": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "229": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "230": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "231": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "232": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "233": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "props": 33,
+   "props_drawn": 33
+  },
+  "234": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "235": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 15,
+   "props_drawn": 14
+  },
+  "236": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "237": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 15,
+   "props_drawn": 14
+  },
+  "238": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 15,
+   "props_drawn": 14
+  },
+  "239": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 15,
+   "props_drawn": 14
+  },
+  "240": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 15,
+   "props_drawn": 14
+  },
+  "241": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 2
+  },
+  "242": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 12,
+   "props_drawn": 11
+  },
+  "243": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "244": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "245": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "246": {
+   "loaded": false,
+   "reason": "region 559 failed to load.",
+   "derived": "loadable scene"
+  },
+  "247": {
+   "loaded": false,
+   "reason": "region 563 failed to load.",
+   "derived": "loadable scene"
+  },
+  "248": {
+   "loaded": false,
+   "reason": "region 571 failed to load.",
+   "derived": "loadable scene"
+  },
+  "249": {
+   "loaded": false,
+   "reason": "region 579 failed to load.",
+   "derived": "loadable scene"
+  },
+  "250": {
+   "loaded": false,
+   "reason": "region 587 failed to load.",
+   "derived": "loadable scene"
+  },
+  "251": {
+   "loaded": false,
+   "reason": "region 567 failed to load.",
+   "derived": "loadable scene"
+  },
+  "252": {
+   "loaded": false,
+   "reason": "region 575 failed to load.",
+   "derived": "loadable scene"
+  },
+  "253": {
+   "loaded": false,
+   "reason": "region 583 failed to load.",
+   "derived": "loadable scene"
+  },
+  "254": {
+   "loaded": false,
+   "reason": "region 591 failed to load.",
+   "derived": "loadable scene"
+  },
+  "255": {
+   "loaded": false,
+   "reason": "region 595 failed to load.",
+   "derived": "loadable scene"
+  },
+  "256": {
+   "loaded": false,
+   "reason": "region 599 failed to load.",
+   "derived": "loadable scene"
+  },
+  "257": {
+   "loaded": false,
+   "reason": "region 603 failed to load.",
+   "derived": "loadable scene"
+  },
+  "258": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "259": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "260": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "261": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "262": {
+   "loaded": false,
+   "reason": "the first cell of its bounding box is not its own.",
+   "derived": "the first cell of its bounding box is not its own"
+  },
+  "263": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "264": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 15,
+   "props": 17,
+   "props_drawn": 16
+  },
+  "265": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 6
+  },
+  "266": {
+   "loaded": false,
+   "reason": "region 87 failed to load.",
+   "derived": "loadable scene"
+  },
+  "267": {
+   "loaded": false,
+   "reason": "region 190 failed to load.",
+   "derived": "loadable scene"
+  },
+  "268": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 8,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "269": {
+   "loaded": false,
+   "reason": "region 226 failed to load.",
+   "derived": "loadable scene"
+  },
+  "270": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "props": 9,
+   "props_drawn": 9
+  },
+  "271": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "272": {
+   "loaded": false,
+   "reason": "region 257 failed to load.",
+   "derived": "loadable scene"
+  },
+  "273": {
+   "loaded": false,
+   "reason": "region 135 failed to load.",
+   "derived": "loadable scene"
+  },
+  "274": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "275": {
+   "loaded": false,
+   "reason": "region 141 failed to load.",
+   "derived": "loadable scene"
+  },
+  "276": {
+   "loaded": false,
+   "reason": "region 144 failed to load.",
+   "derived": "loadable scene"
+  },
+  "277": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "278": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "279": {
+   "loaded": false,
+   "reason": "region 149 failed to load.",
+   "derived": "loadable scene"
+  },
+  "280": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 14,
+   "props_drawn": 13
+  },
+  "281": {
+   "loaded": false,
+   "reason": "region 950 failed to load.",
+   "derived": "loadable scene"
+  },
+  "282": {
+   "loaded": false,
+   "reason": "BCH material 7: unsupported BCH blend or fragment operation",
+   "derived": "loadable scene"
+  },
+  "283": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "props": 8,
+   "props_drawn": 8
+  },
+  "284": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 11,
+   "props_drawn": 10
+  },
+  "285": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 8,
+   "props": 18,
+   "props_drawn": 18
+  },
+  "286": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "287": {
+   "loaded": false,
+   "reason": "region 301 failed to load.",
+   "derived": "loadable scene"
+  },
+  "288": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 3,
+   "props": 44,
+   "props_drawn": 44
+  },
+  "289": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "290": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "291": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 7,
+   "props_drawn": 7
+  },
+  "292": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 8,
+   "props_drawn": 8
+  },
+  "293": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 8,
+   "props_drawn": 8
+  },
+  "294": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "295": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 15,
+   "props_drawn": 15
+  },
+  "296": {
+   "loaded": false,
+   "reason": "region 316 failed to load.",
+   "derived": "loadable scene"
+  },
+  "297": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 4
+  },
+  "298": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 14,
+   "props_drawn": 14
+  },
+  "299": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "300": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 6,
+   "props_drawn": 6
+  },
+  "301": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "302": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 12,
+   "props": 4,
+   "props_drawn": 3
+  },
+  "303": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "304": {
+   "loaded": false,
+   "reason": "region 434 failed to load.",
+   "derived": "loadable scene"
+  },
+  "305": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 2,
+   "props_drawn": 0
+  },
+  "306": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "307": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "308": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "309": {
+   "loaded": false,
+   "reason": "region 445 failed to load.",
+   "derived": "loadable scene"
+  },
+  "310": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "311": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "312": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "313": {
+   "loaded": false,
+   "reason": "region 936 failed to load.",
+   "derived": "loadable scene"
+  },
+  "314": {
+   "loaded": false,
+   "reason": "region 464 failed to load.",
+   "derived": "loadable scene"
+  },
+  "315": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "316": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "317": {
+   "loaded": false,
+   "reason": "region 859 failed to load.",
+   "derived": "loadable scene"
+  },
+  "318": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 9,
+   "props_drawn": 9
+  },
+  "319": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "320": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "321": {
+   "loaded": false,
+   "reason": "region 475 failed to load.",
+   "derived": "loadable scene"
+  },
+  "322": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "323": {
+   "loaded": false,
+   "reason": "region 876 failed to load.",
+   "derived": "loadable scene"
+  },
+  "324": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "325": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "326": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "327": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "328": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "329": {
+   "loaded": false,
+   "reason": "region 483 failed to load.",
+   "derived": "loadable scene"
+  },
+  "330": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "331": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "332": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "333": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "334": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "335": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "336": {
+   "loaded": false,
+   "reason": "region 825 failed to load.",
+   "derived": "loadable scene"
+  },
+  "337": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "338": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "339": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 2,
+   "props_drawn": 2
+  },
+  "340": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "341": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "342": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "343": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "344": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "345": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 1,
+   "props_drawn": 1
+  },
+  "346": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "347": {
+   "loaded": false,
+   "reason": "region 529 failed to load.",
+   "derived": "loadable scene"
+  },
+  "348": {
+   "loaded": false,
+   "reason": "region 533 failed to load.",
+   "derived": "loadable scene"
+  },
+  "349": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 38,
+   "props_drawn": 38
+  },
+  "350": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "351": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 0,
+   "props_drawn": 0
+  },
+  "352": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 8,
+   "props_drawn": 8
+  },
+  "353": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 10,
+   "props_drawn": 9
+  },
+  "354": {
+   "loaded": false,
+   "reason": "region 545 failed to load.",
+   "derived": "loadable scene"
+  },
+  "355": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 8,
+   "props_drawn": 7
+  },
+  "356": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "props": 11,
+   "props_drawn": 0
+  },
+  "357": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 15,
+   "props": 22,
+   "props_drawn": 22
+  },
+  "358": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 5,
+   "props_drawn": 5
+  },
+  "359": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "props": 4,
+   "props_drawn": 3
+  }
+ },
+ "earlier_captures_without_props": {
+  "bch-zone:0": "39dac8226ebeb9a727ee733a6eb6a1ebd034b7de76ee09e61c8abec170944d55",
+  "bch-zone:60": "0c42e3bae3a63d2ae7edaa4a96818cbef6aed87a602f16533a481355d9043e2e",
+  "bch-zone:200": "d34994de67b90d4b71d25a780f88d58e7e246ab47ba16d57b62a92aa3bc4b851",
+  "bch-talk": "7de47c74d5bb5dc18b4967a5ba14e59a84af68366c2678f748dc0cc60afc3621"
+ },
+ "runtime": {
+  "play": "DRRRRDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLLLULLUUUUUUULLL..",
+  "frames": 1300,
+  "lines": [
+   "warp from_zone=4 warp=0 target_zone=0 target_warp=1 result=loaded arrival=cell:35,37 stepped=1",
+   "talk zone=0 npc=1 id=1 script=6",
+   "message zone=0 line=13 page=1 text=\"Vaniville Town is pretty nice, right?\"",
+   "message zone=0 line=13 page=2 text=\"The Kalos region has lots of cool towns!\\nI want to see them all when I get big!\""
+  ],
+  "capture_sha256": {
+   "150": "3442d3ed890a7b1f74a5b9aae7544de7257615b19269274ab2aa64894c3ec120",
+   "600": "26ec68c361d13799df097db53a293b2c7fd37c2bb2ffead84ea2c73b499c4a56",
+   "1299": "1c4f82a5e31ad2db404e604671b3314b389e4e07a851fbaccb23767e0cafc69f"
+  },
+  "bands_capture_sha256": {
+   "1": "b4706074b063fd3f020a05ceaa0e13d32da067a8202fb72c5d263cc8e27fde3b",
+   "2": "b4706074b063fd3f020a05ceaa0e13d32da067a8202fb72c5d263cc8e27fde3b"
+  }
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "06c0e193c8ff389bf2450593444a47ebe0ceef24",
+ "previous_native_sha256sums": {
+  "entries": 212,
+  "sha256": "fb77303ae5c6bb6676d51b12d4039bda593d08ff3875af2df823f487aecd1c50"
+ },
+ "immutable_reproduction_records": "All earlier reproduction/ entries of the previous native/SHA256SUMS rechecked unchanged.",
+ "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+ "capture_regressions": "House captures of ../bch-zone and ../bch-talk now include region props; with --no-props they reproduce exactly. The ../bch-zone walk DRRRRD from zone 4 now loads the town (result=loaded arrival=cell:35,37) instead of falling back.",
+ "changed_native_sources": [
+  "Makefile",
+  "README.md",
+  "model_app.c",
+  "assets/bch_material.c",
+  "assets/bch_material.h",
+  "assets/bch_texture.c",
+  "assets/bch_texture.h",
+  "assets/test_bch_material.c",
+  "assets/test_bch_texture.c",
+  "assets/test_zone.c",
+  "assets/zone.c",
+  "assets/zone.h",
+  "render/raster.c",
+  "render/raster.h",
+  "render/test_raster.c",
+  "render/test_tev.c",
+  "render/tev.c",
+  "tests/test_bch_viewer.py",
+  "tests/test_bch_zone_viewer.py"
+ ],
+ "added_native_files": [
+  "tests/test_bch_town_viewer.py",
+  "reproduction/bch-town/README.txt",
+  "reproduction/bch-town/baseline.json",
+  "reproduction/bch-town/dump_town.c",
+  "reproduction/bch-town/reference-comparison.json",
+  "reproduction/bch-town/validation.json",
+  "reproduction/bch-town/validation.txt",
+  "reproduction/bch-town/verify_town.py"
+ ]
+}

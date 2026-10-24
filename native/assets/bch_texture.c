@@ -240,11 +240,13 @@ static enum px_bch_result read_texture(const struct px_bch *bch, size_t object,
             return PX_BCH_INVALID_HEADER;
         texture->data_size = (uint32_t)bytes;
     }
-    /* Mixed packs also admit the raw formats, under the same observed
-     * descriptor rule flags == 0x100 | format (single level). */
+    /* Mixed packs also admit the raw formats. Descriptor rule: flags ==
+     * (levels << 8) | format; with more than one level (mipmaps, stored after
+     * the base level) only the base level is decoded. */
     const int raw_format = bch->mixed && bits != 0 && texture->format <= PX_TEXTURE_A4;
     if ((texture->format != PX_TEXTURE_ETC1 && texture->format != PX_TEXTURE_ETC1A4 && !raw_format) ||
-        texture->flags != (UINT32_C(0x100) | texture->format) ||
+        (texture->flags & 0xffff00ffu) != texture->format || texture->mipmap_levels < 1 ||
+        texture->mipmap_levels > 13 ||
         !power_of_two(texture->width) || !power_of_two(texture->height) ||
         commands[0].unsupported || commands[1].unsupported || commands[2].unsupported)
         return PX_BCH_OK;

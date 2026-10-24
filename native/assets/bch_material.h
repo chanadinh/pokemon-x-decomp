@@ -70,6 +70,14 @@ struct px_bch_combiner_material {
     uint32_t sources, sampled_units, projected_units, disabled_units;
     uint32_t wrap_u[3], wrap_v[3], mag_linear[3], min_linear[3];
     struct px_bch_fragment_preview fragment;
+    /* Units whose UV0 is transformed: u' = m[0] u + m[1] v + m[2],
+     * v' = m[3] u + m[4] v + m[5] (stored V, before the image flip), the
+     * texture matrix of SPICA bd29a78 TextureTransform.GetTransform for the
+     * coordinator's scale, rotation, translation and transform type (0 Maya,
+     * 1 SoftImage, 2 3ds Max), in float32. Identity coordinators are not
+     * marked. */
+    uint32_t transformed_units;
+    float uv_matrix[3][6];
 };
 enum px_bch_material_result px_bch_material_combiners(
     const struct px_bch_material *material, struct px_bch_combiner_material *out);

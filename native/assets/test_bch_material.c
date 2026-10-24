@@ -1,6 +1,7 @@
 #include "bch_material.h"
 
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -186,12 +187,28 @@ static void test_combiner_chain(void)
     REJECT(x.fragment.tev[3][0] = full(0x0fff0ff6), PX_BCH_MATERIAL_UNSUPPORTED_COMBINER);
     REJECT(x.texture_names[1].present = 0, PX_BCH_MATERIAL_UNSUPPORTED_COMBINER);
     REJECT(x.coordinators[0].packed = 0x00010001, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);
-    REJECT(x.coordinators[1].translation[0] = .5f, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);
+    REJECT(x.coordinators[1].translation[0] = .5f; x.coordinators[1].packed = 0x00000301,
+           PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);  /* transform type 3 */
+    REJECT(x.coordinators[1].translation[0] = NAN, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);
+    REJECT(x.coordinators[1].scale[0] = INFINITY, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);
     REJECT(x.unit_parameters[1] = full(0x1220), PX_BCH_MATERIAL_UNSUPPORTED_SAMPLER);
     REJECT(x.unit_parameters[1].known_mask = 0, PX_BCH_MATERIAL_UNKNOWN_STATE);
     REJECT(x.fragment.color_operation = full(0), PX_BCH_MATERIAL_UNSUPPORTED_FRAGMENT);
     REJECT(x.fragment.depth_color.known_mask = 0xff, PX_BCH_MATERIAL_UNKNOWN_STATE);
 #undef REJECT
+    /* A transformed coordinator (Maya type 0): u' = u - .5, v' = v. */
+    m = full_chain();
+    m.coordinators[1].packed &= ~UINT32_C(0xff00);
+    m.coordinators[1].translation[0] = .5f;
+    assert(px_bch_material_combiners(&m, &out) == PX_BCH_MATERIAL_OK && out.transformed_units == 2);
+    assert(out.uv_matrix[1][0] == 1 && out.uv_matrix[1][1] == 0 && out.uv_matrix[1][2] == -.5f);
+    assert(out.uv_matrix[1][3] == 0 && out.uv_matrix[1][4] == 1 && out.uv_matrix[1][5] == 0);
+    /* Type 1 (SoftImage) with scale 2: u' = 2u - 2*.5. */
+    m.coordinators[1].packed |= 0x100; m.coordinators[1].scale[0] = 2;
+    assert(px_bch_material_combiners(&m, &out) == PX_BCH_MATERIAL_OK);
+    assert(out.uv_matrix[1][0] == 2 && out.uv_matrix[1][2] == -1 && out.uv_matrix[1][5] == 0);
+    m = full_chain();
+    assert(px_bch_material_combiners(&m, &out) == PX_BCH_MATERIAL_OK && out.transformed_units == 0);
     /* A projected unit needs no sampler of its own; unread units are ignored. */
     m = full_chain();
     m.unit_parameters[0].known_mask = 0;

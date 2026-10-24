@@ -398,8 +398,8 @@ NPCs block their tiles. Space turns the NPC ahead toward the player and reports
 its script number; the script engine, and so the dialogue, is not executed yet.
 
 Walking into the bedroom stairs loads zone 4, the floor below, and the stairs
-there lead back up. The front door leads outside, which is not supported yet:
-towns span several map regions. An independent model of the walking rules
+there lead back up. The front door leads outside, into the town described
+below. An independent model of the walking rules
 predicts the viewer's walks through the house exactly. See the
 [zone record](../native/reproduction/bch-zone/README.txt).
 
@@ -423,4 +423,34 @@ Python decoder and interpreter agree on every one of those runs.
 The window and font are drawn by the viewer itself: the game uses the console's
 system font, which is not part of the game data. See the
 [dialogue record](../native/reproduction/bch-talk/README.txt).
+
+## Vaniville Town
+
+<table>
+  <tr>
+    <td><img src="images/native-bch-town.png" alt="The player on the cobbled square of Vaniville Town, between two street lamps" width="440"></td>
+    <td><img src="images/native-bch-town-talk.png" alt="The player talking to a boy in front of a house in Vaniville Town" width="440"></td>
+  </tr>
+</table>
+
+The front door of the player's house now leads out into Vaniville Town, and
+the town's doors lead back in. A town spans several map regions. The viewer
+finds the zone's cells in the map matrix's table of zones, loads each region
+with its own terrain and collision, and joins their grids into one. NPCs and
+warps are stored in world tiles, which the viewer shifts into that grid. The
+town's NPCs stand in their places and talk with the game's own lines.
+
+Every region also places props: doors, lamps, fences, and the furniture inside
+the houses. The viewer draws them from the area's prop registry and the
+building-model archive, at their stored positions and turns. The house rooms
+of the earlier records now show their tables, cabinets and plants; without
+props (`--no-props`) the earlier captures are reproduced exactly.
+
+The scene is now heavier, so frames are drawn in horizontal bands on several
+CPU cores, with the same pixels as a single pass. 287 of the game's 360 zones
+now load (68 of them span several regions), and an independent reader
+agrees on every region placement, prop, NPC tile and warp tile. Bump maps,
+Fresnel terms and a few TV and PC models are not drawn yet. Walking north out
+of the town does not switch to Route 1 yet. See the
+[town record](../native/reproduction/bch-town/README.txt).
 

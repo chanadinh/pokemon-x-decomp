@@ -1,0 +1,101 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "06c0e193c8ff389bf2450593444a47ebe0ceef24",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "Makefile": "8d8d734d1890effeca16bf38e469126858fd830639c60c79706819f15ed7bbda",
+  "model_app.c": "3634d27a940ce5c0eea1ee0340cbab54a196c597c09ec33809991118b2797063",
+  "assets/zone.c": "c456916b25c5515a140accfb7c61c805ae179e64d9982f4717b4d9e269aa49d0",
+  "assets/zone.h": "c4200f723769f882911452aa86dc4be399584f97f514fb4f40009a6ca85687b0",
+  "assets/bch_material.c": "f804e0d36768fdb4063db547b2208ac655d0e126a3a04ed6f25a78a1ea809186",
+  "assets/bch_texture.c": "ea1e0b58e57f216481bde79b9aa07e12e708629c11f882c8e12731ca8d6d7984",
+  "render/raster.c": "f5d49db33440a70c6b356247be7946dfb7c14a38d056f471f0b6e0ee9de66e0a",
+  "render/tev.c": "7ed349648204333adde74d44d151ac49306707a3631c3581fcf2e2cc3b44e5fc",
+  "tests/test_bch_town_viewer.py": "862c48f706081bce8fcea6c531bbab7b1e31ae077a9c2b631db926afd41c53b7",
+  "reproduction/bch-town/dump_town.c": "f9b0d1b313c22fe979232bbe04c264306cd661a60abf6c0f8e90e706ea9fb291",
+  "reproduction/bch-town/verify_town.py": "15590d07ae847b8f8cf44f74a7d1ac039d6a0e0433d7e0026d6db29522adb7f0"
+ },
+ "checks": [
+  {
+   "command": "make -C native clean && make -C native all test test-runtime",
+   "result": "passed",
+   "native_c_suites": 21,
+   "python_tests": 110
+  },
+  {
+   "command": "make -C reconstructed test; python3 -m unittest discover -s tests",
+   "result": "passed"
+  },
+  {
+   "command": "ASan/UBSan (halt on error) with leak detection: viewer --inspect of zone 0, a 300-frame two-band run from the house into the town, and the town, zone and talk viewer suites under the sanitized viewer",
+   "result": "passed; no diagnostics"
+  },
+  {
+   "command": "checksums of reconstructed and earlier reproduction records",
+   "result": "all unchanged"
+  },
+  {
+   "command": "native/reproduction/bch-town/verify_town.py on the real archive paths",
+   "result": "passed",
+   "props": {
+    "regions": 1030,
+    "records": 1459,
+    "yaw_degrees": [
+     0.0,
+     90.0,
+     180.0,
+     270.0
+    ],
+    "non_identity_scale": 36,
+    "non_yaw_rotation": 0
+   },
+   "registries": {
+    "areas": 170,
+    "entries": 3063,
+    "reference_equals_model": 3063
+   },
+   "zones": {
+    "zones": 360,
+    "loaded": 287,
+    "multi_region_loaded": 68,
+    "props_drawn": 2313,
+    "props_not_drawn": 161,
+    "compared_props": 2474,
+    "compared_npc_tiles": 1891,
+    "compared_warp_tiles": 472
+   },
+   "earlier_captures_without_props": {
+    "bch-zone:0": "39dac8226ebeb9a727ee733a6eb6a1ebd034b7de76ee09e61c8abec170944d55",
+    "bch-zone:60": "0c42e3bae3a63d2ae7edaa4a96818cbef6aed87a602f16533a481355d9043e2e",
+    "bch-zone:200": "d34994de67b90d4b71d25a780f88d58e7e246ab47ba16d57b62a92aa3bc4b851",
+    "bch-talk": "7de47c74d5bb5dc18b4967a5ba14e59a84af68366c2678f748dc0cc60afc3621"
+   },
+   "runtime_lines": [
+    "warp from_zone=4 warp=0 target_zone=0 target_warp=1 result=loaded arrival=cell:35,37 stepped=1",
+    "talk zone=0 npc=1 id=1 script=6",
+    "message zone=0 line=13 page=1 text=\"Vaniville Town is pretty nice, right?\"",
+    "message zone=0 line=13 page=2 text=\"The Kalos region has lots of cool towns!\\nI want to see them all when I get big!\""
+   ],
+   "capture_sha256": {
+    "150": "3442d3ed890a7b1f74a5b9aae7544de7257615b19269274ab2aa64894c3ec120",
+    "600": "26ec68c361d13799df097db53a293b2c7fd37c2bb2ffead84ea2c73b499c4a56",
+    "1299": "1c4f82a5e31ad2db404e604671b3314b389e4e07a851fbaccb23767e0cafc69f"
+   },
+   "bands_capture_sha256": {
+    "1": "b4706074b063fd3f020a05ceaa0e13d32da067a8202fb72c5d263cc8e27fde3b",
+    "2": "b4706074b063fd3f020a05ceaa0e13d32da067a8202fb72c5d263cc8e27fde3b"
+   },
+   "report": "reference-comparison.json",
+   "report_sha256": "aaa3b966df3f2c54ce263c7d949e2340819d53fc9f238e484b75c832464a7d13"
+  }
+ ],
+ "limitations": [
+  "Prop and registry layouts from CTRMap, not traced in the game",
+  "No zone switch on walking into another zone's sub-cells",
+  "Bump maps, Fresnel, fog, point lights and prop animation not executed",
+  "7 prop models (TVs, PCs) refused by the BCH decoder",
+  "Camera scale, spawn and NPC visibility are inspection choices",
+  "No running-game comparison"
+ ]
+}

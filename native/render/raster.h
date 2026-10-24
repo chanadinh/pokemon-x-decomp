@@ -36,6 +36,11 @@ struct px_raster_target {
     uint8_t *rgba; /* Owned, tightly packed top-down straight RGBA8. */
     double *depth; /* Owned, width*height values. Lower z is closer. */
     uint64_t candidate_pixels; /* Work budget since the last clear. */
+    /* Optional row band: when band_y1 > band_y0 draws touch only rows
+     * band_y0 <= y < band_y1 (clear is unaffected). Disjoint bands of copies
+     * of one target may be drawn concurrently; each copy keeps its own
+     * candidate budget, counting only the rows of its band. */
+    uint32_t band_y0, band_y1;
 };
 struct px_raster_image {
     uint32_t width, height;

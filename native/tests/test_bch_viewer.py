@@ -158,7 +158,7 @@ class BCHViewerTests(unittest.TestCase):
                 self.run_viewer(root, '--inspect', '--screenshot', root / 'no.bmp', success=False)
                 self.assertFalse((root / 'no.bmp').exists())
             unsupported = bytearray(original)
-            struct.pack_into('<I', unsupported, 320 + 24, 0x20c)
+            struct.pack_into('<I', unsupported, 320 + 24, 0x1000c)  # unknown high descriptor bits
             (root / 'fixture.garc').write_bytes(archive(unsupported))
             self.assertIn('unsupported', self.run_viewer(root, '--list-textures').stdout)
             self.run_viewer(root, '--inspect', success=False)

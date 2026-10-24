@@ -27,7 +27,8 @@ struct px_bch_texture {
  * 64 MiB file, 65535 resources, 262144 relocations, 4096 words per command
  * stream, 4194304 total command words and 4096 pixels per dimension.
  * ETC1/ETC1A4, power-of-two dimensions >=8 and descriptor flags 0x10c/0x10d
- * are the validated single-level layouts. Unsupported texture metadata stays
+ * are the validated layouts: flags == (levels << 8) | format with 1..13
+ * levels; only the base level is decoded (mipmaps are not sampled). Unsupported texture metadata stays
  * listable through decode_status. Pixel allocation occurs only on selection.
  * Errors leave *out NULL. Arbitrary-byte names are borrowed until close. */
 enum px_bch_result px_bch_open(const uint8_t *data, size_t size,
@@ -35,7 +36,7 @@ enum px_bch_result px_bch_open(const uint8_t *data, size_t size,
 /* As px_bch_open, for a BCH that also holds other resources (models,
  * materials, lookup tables...): only category 3 is indexed, and relocation
  * tags 03 and 25..28 are additionally accepted (bounded, not interpreted).
- * Raw formats 0..11 also decode when flags == 0x100 | format. */
+ * Raw formats 0..11 also decode. */
 enum px_bch_result px_bch_open_mixed(const uint8_t *data, size_t size,
                                     struct px_bch **out);
 size_t px_bch_texture_count(const struct px_bch *bch);

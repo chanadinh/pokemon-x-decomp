@@ -1,0 +1,27 @@
+Town scene validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video with the software renderer. Not run on the local
+WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed.
+   21 native C suites (extended: test_zone, test_raster, test_tev,
+   test_bch_material, test_bch_texture); 110 Python tests (new: BCH town
+   viewer 2).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection: zone 0 inspect, a
+   two-band run from the house into the town, and the town, zone and talk
+   suites under the sanitized viewer: no diagnostics.
+4. Earlier records unchanged. With --no-props the viewer reproduces the
+   captures of ../bch-zone (frames 0, 60, 200) and ../bch-talk exactly; with
+   props the house captures change, and the ../bch-zone walk out of the
+   front door now loads the town.
+5. verify_town.py: 1,459 prop records in 1,030 regions and 3,063
+   registry entries in 170 areas identical to the native decoders;
+   287 of 360 zones load (68 multi-region), every zone_regions, prop
+   (2,474), NPC tile (1,891) and warp tile (472) line identical to
+   the independent derivation; the house-to-town walk and talk lines as
+   expected; the town capture identical in 1 and 2 bands.
+
+Not established: the game's own prop and zone-table semantics beyond the
+CTRMap layouts and the observed data, zone switching in the open world, bump
+mapping and Fresnel, and any running-game comparison.

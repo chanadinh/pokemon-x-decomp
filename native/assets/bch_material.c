@@ -1,5 +1,7 @@
 #include "bch_material.h"
 
+#include <math.h>
+
 #include <string.h>
 
 static int known(const struct px_bch_register *reg, uint32_t mask)
@@ -72,9 +74,31 @@ enum px_bch_material_result px_bch_material_combiners(
         const struct px_bch_coordinator *c = &m->coordinators[unit];
         const uint32_t mapping = (c->packed >> 16) & 255;
         if (mapping == 3) { result.projected_units |= 1u << unit; continue; }
-        if (mapping != 0 || c->scale[0] != 1 || c->scale[1] != 1 || c->rotation != 0 ||
-            c->translation[0] != 0 || c->translation[1] != 0)
-            return PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES;
+        if (mapping != 0) return PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES;
+        if (c->scale[0] != 1 || c->scale[1] != 1 || c->rotation != 0 ||
+            c->translation[0] != 0 || c->translation[1] != 0) {
+            const uint32_t type = (c->packed >> 8) & 255;
+            if (type > 2 || !isfinite(c->scale[0]) || !isfinite(c->scale[1]) || !isfinite(c->rotation) ||
+                !isfinite(c->translation[0]) || !isfinite(c->translation[1]))
+                return PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES;
+            const float sx = c->scale[0], sy = c->scale[1], tx = c->translation[0], ty = c->translation[1];
+            const float ca = (float)cos(c->rotation), sa = (float)sin(c->rotation);
+            float *mt = result.uv_matrix[unit];
+            /* SPICA's Matrix3x4: u' = M11 u + M21 v + M41, v' = M12 u + M22 v + M42. */
+            mt[0] = sx * ca; mt[1] = sx * -sa;
+            mt[3] = sy * sa; mt[4] = sy * ca;
+            if (type == 0) {
+                mt[2] = sx * ((0.5f * sa - 0.5f * ca) + 0.5f - tx);
+                mt[5] = sy * ((0.5f * -sa - 0.5f * ca) + 0.5f - ty);
+            } else if (type == 1) {
+                mt[2] = sx * (-ca * tx - sa * ty);
+                mt[5] = sy * (sa * tx - ca * ty);
+            } else {
+                mt[2] = sx * ca * (-tx - 0.5f) - sx * sa * (ty - 0.5f) + 0.5f;
+                mt[5] = sy * sa * (-tx - 0.5f) + sy * ca * (ty - 0.5f) + 0.5f;
+            }
+            result.transformed_units |= 1u << unit;
+        }
         const struct px_bch_register *sampler = &m->unit_parameters[unit];
         if (!known(sampler, UINT32_MAX)) return PX_BCH_MATERIAL_UNKNOWN_STATE;
         const uint32_t wrap_v = (sampler->value >> 8) & 7, wrap_u = (sampler->value >> 12) & 7;

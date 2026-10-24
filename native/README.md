@@ -449,17 +449,17 @@ follow a head locator by an explicit rule. See the
 ## Play a zone
 
 `--zone N` builds the scene from game data: the zone header's area and matrix, the
-matrix's single region, the area's textures, the zone's warps and NPCs and the NPC
-registry. The player walks in real time (WASD, Shift runs), Space talks to the NPC
+matrix's regions for the zone, the area's textures, the regions' props, the zone's
+warps and NPCs and the NPC registry. The player walks in real time (WASD, Shift runs), Space talks to the NPC
 ahead, and warps load their target zone:
 
 ```sh
 native/build/pokemon_model_viewer --romfs /path/to/romfs --zone 5
 ```
 
-Zone 5 is the bedroom; its stairs lead to zone 4. Towns and routes (multi-region
-matrices) are not loaded yet, scripts and dialogue are not executed, and the
-controller timing and arrival rule are inspection choices. `--arrive`, `--steps`,
+Zone 5 is the bedroom; its stairs lead to zone 4, whose front door leads out into
+Vaniville Town (zone 0). The controller timing and arrival rule are inspection
+choices. `--arrive`, `--steps`,
 `--play` and `--capture-at` support repeatable runs. See the
 [zone record](reproduction/bch-zone/README.txt).
 
@@ -468,4 +468,11 @@ NPC and shows the story-text lines it picks in a message window; Space turns the
 pages. Five native calls are given inferred meanings (message, player gender,
 work values, two waits) for a new game; see the
 [dialogue record](reproduction/bch-talk/README.txt).
+
+Towns and routes span several map regions: the matrix's sub-cell zone table names
+the zone's cells, whose regions load at their offsets with one joined terrain grid;
+NPC and warp tiles are world tiles. Region props (doors, lamps, furniture) come
+from the area's prop registry. BCH scenes draw in row bands on several cores
+(`--threads N`; same pixels as one pass); `--no-props` gives the earlier scenes.
+See the [town record](reproduction/bch-town/README.txt).
 

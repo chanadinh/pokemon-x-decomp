@@ -298,6 +298,10 @@ static enum px_raster_result draw(struct px_raster_target *target,
     if (ymin < 0) ymin = 0;
     if (xmax >= (int)target->width) xmax = (int)target->width - 1;
     if (ymax >= (int)target->height) ymax = (int)target->height - 1;
+    if (target->band_y1 > target->band_y0) {
+        if (ymin < (int64_t)target->band_y0) ymin = (int)target->band_y0;
+        if (ymax >= (int64_t)target->band_y1) ymax = (int)target->band_y1 - 1;
+    }
     if (xmin > xmax || ymin > ymax) return PX_RASTER_OK;
     candidates = (uint64_t)(xmax - xmin + 1) * (uint64_t)(ymax - ymin + 1);
     if (target->candidate_pixels > PX_RASTER_MAX_CANDIDATES ||

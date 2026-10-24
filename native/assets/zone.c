@@ -108,6 +108,78 @@ const struct px_npc_registry_entry *px_npc_registry_find(const struct px_npc_reg
     return NULL;
 }
 
+enum { PROP = 0x2C, PROP_ENTRY = 80, MAX_PROPS = 4096 };
+static float f32(const uint8_t *p) { const uint32_t v = u32(p); float f; memcpy(&f, &v, sizeof f); return f; }
+
+enum px_zone_result px_gr_props_decode(const uint8_t *data, size_t size, struct px_gr_props *out)
+{
+    if (!out) return PX_ZONE_INVALID_ARGUMENT;
+    memset(out, 0, sizeof *out);
+    if (!data && size) return PX_ZONE_INVALID_ARGUMENT;
+    if (size < 4) return PX_ZONE_TRUNCATED;
+    const uint32_t count = u32(data);
+    if (count > MAX_PROPS) return PX_ZONE_INVALID;
+    if ((size - 4) / PROP < count) return PX_ZONE_TRUNCATED;
+    out->props = calloc(count ? count : 1, sizeof *out->props);
+    if (!out->props) return PX_ZONE_NO_MEMORY;
+    out->count = count;
+    for (uint32_t i = 0; i < count; ++i) {
+        const uint8_t *r = data + 4 + (size_t)i * PROP;
+        struct px_gr_prop *p = &out->props[i];
+        p->uid = u32(r);
+        for (unsigned k = 0; k < 3; ++k) {
+            p->scale[k] = f32(r + 4 + 4 * k);
+            p->rotation[k] = f32(r + 16 + 4 * k);
+            p->position[k] = f32(r + 28 + 4 * k);
+        }
+        p->unknown = u32(r + 40);
+    }
+    return PX_ZONE_OK;
+}
+
+void px_gr_props_free(struct px_gr_props *props)
+{
+    if (!props) return;
+    free(props->props);
+    memset(props, 0, sizeof *props);
+}
+
+enum px_zone_result px_prop_registry_decode(const uint8_t *data, size_t size, struct px_prop_registry *out)
+{
+    if (!out) return PX_ZONE_INVALID_ARGUMENT;
+    memset(out, 0, sizeof *out);
+    if (!data && size) return PX_ZONE_INVALID_ARGUMENT;
+    if (size < 4) return PX_ZONE_TRUNCATED;
+    const uint32_t count = u32(data);
+    if (count > MAX_PROPS) return PX_ZONE_INVALID;
+    if ((size - 4) / PROP_ENTRY < count) return PX_ZONE_TRUNCATED;
+    out->entries = calloc(count ? count : 1, sizeof *out->entries);
+    if (!out->entries) return PX_ZONE_NO_MEMORY;
+    out->count = count;
+    for (uint32_t i = 0; i < count; ++i) {
+        const uint8_t *r = data + 4 + (size_t)i * PROP_ENTRY;
+        struct px_prop_registry_entry *e = &out->entries[i];
+        e->reference = u16(r); e->model = u16(r + 2);
+        e->event_script[0] = r[4]; e->event_script[1] = r[5];
+        memcpy(e->raw, r, PROP_ENTRY);
+    }
+    return PX_ZONE_OK;
+}
+
+void px_prop_registry_free(struct px_prop_registry *registry)
+{
+    if (!registry) return;
+    free(registry->entries);
+    memset(registry, 0, sizeof *registry);
+}
+
+const struct px_prop_registry_entry *px_prop_registry_find(const struct px_prop_registry *registry, uint32_t reference)
+{
+    for (uint32_t i = 0; registry && i < registry->count; ++i)
+        if (registry->entries[i].reference == reference) return &registry->entries[i];
+    return NULL;
+}
+
 const char *px_zone_result_string(enum px_zone_result result)
 {
     switch (result) {

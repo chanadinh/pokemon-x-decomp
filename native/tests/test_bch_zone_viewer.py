@@ -130,7 +130,7 @@ def write_romfs(root, registry=True, npc_model=3):
              zone(0, 2, warps=[{'zone': 0, 'warp': 0, 'face': 0, 'x': 0, 'z': 0}])]
     files = {
         'a/0/1/2': garc(zones),
-        'a/0/4/2': garc([matrix((0,)), matrix((1,)), matrix((0, 1), width=2)]),
+        'a/0/4/2': garc([matrix((0,)), matrix((1,)), matrix((-1,))]),
         'a/0/4/1': garc([field(), field()]),
         'a/0/1/3': garc([minipack(b'AD', [b''] * 11 + [texture_pack()])]),
         'a/0/0/3': garc([b'\0'] * 137 + [minipack(b'BM', [environment()])]),
@@ -170,11 +170,11 @@ class BCHZoneViewerTests(unittest.TestCase):
             self.assertIn('warp from_zone=0 warp=0 target_zone=1 target_warp=0 result=loaded '
                           'arrival=cell:20,21 stepped=1\n', out)
             self.assertIn('zone_walk zone=1 cell=20,21 facing=1 moves=3 blocked=1 warps=1', out)
-            # Zone 1's warp 1 targets a 2x1 matrix: not loaded, the step falls
-            # back to a plain (blocked) move and the scene stays.
+            # Zone 1's warp 1 targets a matrix without a region: not loaded,
+            # the step falls back to a plain (blocked) move and the scene stays.
             back = self.run_viewer(root, '--zone', 1, '--arrive', 0, '--steps', 'U', '--inspect')
             self.assertIn('warp from_zone=1 warp=1 target_zone=2 target_warp=0 result=not-loaded\n', back.stdout)
-            self.assertIn('matrix 2 is 2x1; only single-region matrices are supported', back.stderr)
+            self.assertIn('zone 2: matrix 2 has no region', back.stderr)
             self.assertIn('zone_walk zone=1 cell=20,21 facing=2 moves=1 blocked=1 warps=1', back.stdout)
 
     def test_runtime_walk_talk_and_warp(self):
@@ -223,7 +223,7 @@ class BCHZoneViewerTests(unittest.TestCase):
             self.run_viewer(root, '--zone', 0, '--arrive', 3, '--inspect', success=False)
             self.run_viewer(root, '--zone', 9, '--inspect', success=False)
             outdoor = self.run_viewer(root, '--zone', 2, '--inspect', success=False)
-            self.assertIn('only single-region matrices', outdoor.stderr)
+            self.assertIn('matrix 2 has no region', outdoor.stderr)
             destination = root / 'never.bmp'
             self.run_viewer(root, '--zone', 2, '--software', '--frames', 1, '--capture-frame', destination,
                             success=False)

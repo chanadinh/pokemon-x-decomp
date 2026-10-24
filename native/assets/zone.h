@@ -68,6 +68,30 @@ int32_t px_zone_warp_at(const struct px_zone_entities *entities, int32_t tile_x,
 enum px_zone_result px_npc_registry_decode(const uint8_t *data, size_t size, struct px_npc_registry *out);
 void px_npc_registry_free(struct px_npc_registry *registry);
 const struct px_npc_registry_entry *px_npc_registry_find(const struct px_npc_registry *registry, uint16_t id);
+/* Region props (GR section 3) and the area prop registry (AD section 0), as
+ * read by CTRMap 4b780a7 (GRPropData.java, GRProp.java, ADPropRegistry.java).
+ *
+ * Props: u32 count, then 0x2C-byte records: uid u32 (registry reference),
+ * scale x/y/z, rotation x/y/z (degrees), position x/y/z (world units: region
+ * local + 360 + 720 * matrix cell), all float, and an unknown u32. Trailing
+ * padding after the records is allowed.
+ *
+ * Registry: u32 count, then 80-byte entries: reference u16, model u16 (an
+ * a/0/2/4 BM entry), two event-script bytes, then fields kept raw; padding
+ * after the entries is allowed. Caps: 4096 records each. */
+struct px_gr_prop {
+    uint32_t uid, unknown;
+    float scale[3], rotation[3], position[3];
+};
+struct px_gr_props { uint32_t count; struct px_gr_prop *props; };
+struct px_prop_registry_entry { uint16_t reference, model; uint8_t event_script[2]; uint8_t raw[80]; };
+struct px_prop_registry { uint32_t count; struct px_prop_registry_entry *entries; };
+enum px_zone_result px_gr_props_decode(const uint8_t *data, size_t size, struct px_gr_props *out);
+void px_gr_props_free(struct px_gr_props *props);
+enum px_zone_result px_prop_registry_decode(const uint8_t *data, size_t size, struct px_prop_registry *out);
+void px_prop_registry_free(struct px_prop_registry *registry);
+/* The first entry with this reference, or NULL. */
+const struct px_prop_registry_entry *px_prop_registry_find(const struct px_prop_registry *registry, uint32_t reference);
 const char *px_zone_result_string(enum px_zone_result result);
 
 #endif

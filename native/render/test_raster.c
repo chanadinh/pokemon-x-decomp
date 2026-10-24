@@ -406,8 +406,37 @@ static void varyings(void)
     px_raster_free(&t);
 }
 
+/* Drawing the same triangles band by band into copies of one target gives
+ * the whole-target result; each band touches only its rows. */
+static void bands(void)
+{
+    struct px_raster_target whole, split;
+    OK(px_raster_create(13, 11, &whole)); OK(px_raster_create(13, 11, &split));
+    OK(px_raster_clear(&whole, black, INFINITY)); OK(px_raster_clear(&split, black, INFINITY));
+    struct px_raster_state state = px_raster_default_state();
+    state.blend = PX_RASTER_SOURCE_OVER;
+    struct px_raster_vertex a[3] = {vertex(-2, 1.3, 0, 0), vertex(14, 4.7, 0, 0), vertex(3.1, 12, 0, 0)};
+    struct px_raster_vertex b[3] = {vertex(12.5, -1, 0, 0), vertex(11, 10.2, 0, 0), vertex(0.2, 6.6, 0, 0)};
+    const uint8_t half[4] = {40, 200, 90, 128};
+    color(a, red, 0.5); color(b, half, 0.25);
+    OK(px_raster_draw(&whole, a, NULL, NULL, &state)); OK(px_raster_draw(&whole, b, NULL, NULL, &state));
+    const uint32_t cuts[] = {0, 3, 4, 9, 11};
+    for (unsigned k = 0; k + 1 < sizeof cuts / sizeof *cuts; ++k) {
+        struct px_raster_target band = split;
+        band.candidate_pixels = 0; band.band_y0 = cuts[k]; band.band_y1 = cuts[k + 1];
+        OK(px_raster_draw(&band, a, NULL, NULL, &state)); OK(px_raster_draw(&band, b, NULL, NULL, &state));
+        CHECK(band.candidate_pixels <= (uint64_t)2 * 13 * (cuts[k + 1] - cuts[k]));
+        if (k == 0) /* rows outside the band are untouched */
+            for (size_t i = (size_t)13 * 3; i < (size_t)13 * 11; ++i) CHECK(!memcmp(split.rgba + 4 * i, black, 4));
+    }
+    CHECK(!memcmp(whole.rgba, split.rgba, 13 * 11 * 4));
+    CHECK(!memcmp(whole.depth, split.depth, 13 * 11 * sizeof *whole.depth));
+    px_raster_free(&whole); px_raster_free(&split);
+}
+
 int main(void)
 {
+    bands();
     dimensions();uv_and_interpolation();sampling();alpha_blend();depth_and_comparisons();
     winding_and_shared_edges();clipping_and_invalid();shaded();varyings();
     puts("raster fixed-pixel tests passed");

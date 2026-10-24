@@ -35,13 +35,15 @@ struct options {
     int have_player_entry, have_player_section;
     uint32_t motion_section, motion_slot, motion_frame, walk_motion_slot;
     int have_motion_section, have_motion_slot, have_motion_frame, have_walk_motion;
-    uint32_t zone, arrive, run_motion_slot, capture_at;
+    uint32_t zone, arrive, run_motion_slot, capture_at, threads;
     int have_zone, have_arrive, silent, have_run_motion, have_capture_at;
     const char *play; /* --zone: scripted input during display */
     uint32_t entry, subentry, model, frames, section;
     uint32_t texture_entry, texture_subentry, texture_section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
     int have_section, triangle_list, combiners;
+    int allow_skeleton; /* --zone regions: retry a skeleton model as skinned */
+    int no_props;       /* --zone: leave region props out (the earlier scenes) */
     int have_texture_entry, have_texture_subentry, have_texture_section;
 };
 /* --walk: an inspection marker on the GR terrain grid. Policy as in the
@@ -58,6 +60,12 @@ struct zone_npc {
     uint16_t id, script, registry_model, model_entry;
 };
 enum { ZONE_MAX_PAGES = 64 };
+/* A region prop (GR section 3) in the scene frame. */
+struct zone_prop {
+    uint32_t model; /* index into prop_models, UINT32_MAX when not drawn */
+    uint32_t region, uid, entry;
+    double x, y, z, yaw, scale[3];
+};
 struct zone_state {
     uint32_t zone, area, matrix, region, text_id;
     struct px_zone_entities entities;
@@ -71,6 +79,21 @@ struct zone_state {
     int has_script, has_text;
     char *pages[ZONE_MAX_PAGES]; /* open message window pages, NULL-free when closed */
     uint32_t page_count, page;
+    /* Multi-region matrices (towns, routes): the zone's cells span cols x rows
+     * matrix cells from cell (cell_x0, cell_z0), whose region is the scene
+     * asset itself and defines the scene frame. cell_region holds per cell -1
+     * (not the zone's), 0 (the scene asset) or k (regions[k - 1], drawn and
+     * queried at region_offset[k - 1]). Single-region zones have none. */
+    uint32_t cols, rows, cell_x0, cell_z0;
+    int32_t *cell_region;
+    int16_t *subcell_zone; /* (cols * 4) x (rows * 4) matrix zone ids, 10 x 10 tiles each */
+    struct model_asset *regions;
+    double (*region_offset)[2];
+    uint32_t *region_entry, region_count;
+    struct zone_prop *props;
+    uint32_t prop_count, prop_model_count, prop_failed;
+    struct model_asset *prop_models;
+    uint32_t *prop_model_entry;
 };
 struct walker {
     const struct px_field_grid *grid;
@@ -169,6 +192,7 @@ struct model_asset {
     uint32_t *secondary_bound;
     uint32_t *light_index; /* 8 per material: environment light per setup slot */
     int lighting;
+    uint32_t approximated; /* --environment: materials whose bump map or Fresnel is not executed */
     /* --walk only: the GR member's terrain grid and collision triangles. */
     struct px_field_grid grid;
     struct px_field_collision collision;
@@ -202,6 +226,11 @@ static void asset_free(struct model_asset *asset)
         px_gf_script_free(&asset->zone->script);
         px_gf_text_free(&asset->zone->text);
         for (uint32_t i = 0; i < asset->zone->page_count; ++i) free(asset->zone->pages[i]);
+        for (uint32_t i = 0; i < asset->zone->region_count; ++i) asset_free(&asset->zone->regions[i]);
+        free(asset->zone->regions); free(asset->zone->region_offset); free(asset->zone->region_entry);
+        free(asset->zone->cell_region); free(asset->zone->subcell_zone);
+        for (uint32_t i = 0; i < asset->zone->prop_model_count; ++i) asset_free(&asset->zone->prop_models[i]);
+        free(asset->zone->prop_models); free(asset->zone->prop_model_entry); free(asset->zone->props);
         free(asset->zone);
     }
     px_bch_model_free(&asset->skin_source);
@@ -301,6 +330,8 @@ static void usage(FILE *stream, const char *program)
         "  --capture-at N     With --frames and --capture-frame: capture rendered\n"
         "                     frame N (0-based, default 0) instead of the first\n"
         "  --software         Force software rendering\n"
+        "  --threads N        BCH scenes: draw in N row bands (1..8; default: CPUs)\n"
+        "  --no-props         With --zone: do not load or draw region props\n"
         "  --self-test-input  Exercise orbit/zoom/reset/exit; default 3 frames\n"
         "Controls: arrows orbit, +/- zoom, R/Home reset, Escape exit.\n"
         "Orthographic wireframe by default; --textured uses a bounded software preview.\n"
@@ -344,6 +375,7 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--textured")) { o->textured = 1; continue; }
         if (!strcmp(arg, "--triangle-list")) { o->triangle_list = 1; continue; }
         if (!strcmp(arg, "--combiners")) { o->combiners = 1; continue; }
+        if (!strcmp(arg, "--no-props")) { o->no_props = 1; continue; }
         if (!strcmp(arg, "--walk")) { o->walk = 1; continue; }
         if (!strcmp(arg, "--skinned")) { o->skinned = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
@@ -358,7 +390,7 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--player-section") && strcmp(arg, "--motion-section") &&
             strcmp(arg, "--motion") && strcmp(arg, "--motion-frame") && strcmp(arg, "--walk-motion") &&
             strcmp(arg, "--zone") && strcmp(arg, "--arrive") && strcmp(arg, "--play") &&
-            strcmp(arg, "--capture-at")) return 0;
+            strcmp(arg, "--capture-at") && strcmp(arg, "--threads")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -407,6 +439,9 @@ static int parse(int argc, char **argv, struct options *o)
             } else if (!strcmp(arg, "--zone")) {
                 if (o->have_zone || n > 65535) return 0;
                 o->zone = n; o->have_zone = 1;
+            } else if (!strcmp(arg, "--threads")) {
+                if (o->threads || !n || n > 8) return 0;
+                o->threads = n;
             } else if (!strcmp(arg, "--capture-at")) {
                 if (o->have_capture_at) return 0;
                 o->capture_at = n; o->have_capture_at = 1;
@@ -735,8 +770,17 @@ static int bind_bch_textures(const uint8_t *data, size_t size, struct model_asse
     px_bch_close(pack);
     return 1;
 failed:
-    fprintf(stderr, "[model-viewer] BCH textures: %s\n", px_bch_result_string(result));
     px_bch_close(pack);
+    if (result == PX_BCH_UNSUPPORTED && !mixed) {
+        /* A pack outside the texture-only subset (outdoor areas: raw formats,
+         * extra relocation tags) is read again as a mixed BCH. */
+        if (asset->textures)
+            for (uint32_t i = 0; i < asset->texture_count; ++i) px_texture_free(&asset->textures[i]);
+        free(asset->textures); asset->textures = NULL; asset->texture_count = 0;
+        for (size_t i = 0; i < (size_t)asset->bch.material_count * 3; ++i) asset->bch_texture[i] = UINT32_MAX;
+        return bind_bch_textures(data, size, asset, 1);
+    }
+    fprintf(stderr, "[model-viewer] BCH textures: %s\n", px_bch_result_string(result));
     return 0;
 }
 
@@ -767,8 +811,13 @@ static int prepare_bch_lighting(struct model_asset *asset, int lighting)
     asset->lighting = lighting;
     for (uint32_t i = 0; i < bch->material_count; ++i) {
         const struct px_bch_material *m = &bch->materials[i];
-        if (!m->parameters_present || !(m->material_flags & 1) || m->fresnel_selector || m->bump_mode) {
-            fprintf(stderr, "[model-viewer] Material %" PRIu32 " uses unsupported fragment lighting state.\n", i);
+        /* Bump mapping and Fresnel (outdoor materials) are not executed: such
+         * a material is lit with its interpolated normal and an unmodulated
+         * alpha, an approximation counted in asset->approximated and
+         * reported. */
+        if (m->bump_mode == 1 || m->fresnel_selector) ++asset->approximated;
+        if (!m->parameters_present || !(m->material_flags & 1) || m->bump_mode > 1) {
+            fprintf(stderr, "[model-viewer] Material %" PRIu32 " uses unsupported fragment lighting state.\n", i); fprintf(stderr,"DBG p=%d f=%x fr=%d bump=%d\n",m->parameters_present,m->material_flags,m->fresnel_selector,m->bump_mode);
             return 0;
         }
         const struct px_bch_light_set *set = px_bch_environment_set(env, m->light_set_index);
@@ -845,11 +894,19 @@ static int decode_model(const struct options *o, const uint8_t *data, size_t siz
         enum px_bch_model_result status = o->skinned ?
             px_bch_model_decode_skinned(data, size, o->model, bch) :
             px_bch_model_decode(data, size, o->model, bch);
+        int skeleton = o->skinned;
+        if (status == PX_BCH_MODEL_UNSUPPORTED && o->allow_skeleton) {
+            /* --zone regions: a terrain model with a skeleton (rigid to its
+             * bones) is decoded skinned and baked in its rest pose. */
+            px_bch_model_free(bch);
+            status = px_bch_model_decode_skinned(data, size, o->model, bch);
+            skeleton = 1;
+        }
         if (status != PX_BCH_MODEL_OK) {
             fprintf(stderr, "[model-viewer] BCH model: %s\n", px_bch_model_result_string(status));
             return 0;
         }
-        if (o->skinned && bch->bones && !px_skin_bake_rest(bch)) {
+        if (skeleton && bch->bones && !px_skin_bake_rest(bch)) {
             fprintf(stderr, "[model-viewer] BCH skinning: rest pose failed\n");
             return 0;
         }
@@ -1124,6 +1181,197 @@ static int load_character(const struct options *o, uint32_t entry, int motion, s
     return 0;
 }
 
+/* Multi-region matrix: the zone's cells are those with a region and at
+ * least one of their 16 sub-cell zone ids equal to the zone; a matrix without
+ * a zone table (each such matrix is used by one zone) gives the zone every
+ * cell with a region. The scene frame is the region at the bounding box's
+ * first cell, which must be one of them. */
+static int cell_member(const struct px_field_matrix *m, uint32_t cx, uint32_t cz, uint32_t zone)
+{
+    if (m->field_ids[(size_t)cz * m->width + cx] < 0) return 0;
+    if (!m->zone_ids) return 1;
+    for (unsigned k = 0; k < 16; ++k)
+        if (m->zone_ids[((size_t)cz * 4 + k / 4) * m->width * 4 + (size_t)cx * 4 + k % 4] == (int32_t)zone) return 1;
+    return 0;
+}
+static int zone_cells(struct zone_state *zs, const struct px_field_matrix *m)
+{
+    uint32_t x0 = UINT32_MAX, z0 = UINT32_MAX, x1 = 0, z1 = 0;
+    for (uint32_t cz = 0; cz < m->height; ++cz)
+        for (uint32_t cx = 0; cx < m->width; ++cx) {
+            if (!cell_member(m, cx, cz, zs->zone)) continue;
+            if (cx < x0) x0 = cx;
+            if (cz < z0) z0 = cz;
+            if (cx > x1) x1 = cx;
+            if (cz > z1) z1 = cz;
+        }
+    if (x0 == UINT32_MAX) {
+        fprintf(stderr, "[model-viewer] zone %" PRIu32 ": no cell of matrix %" PRIu32 " belongs to it.\n", zs->zone, zs->matrix);
+        return 0;
+    }
+    zs->cell_x0 = x0; zs->cell_z0 = z0; zs->cols = x1 - x0 + 1; zs->rows = z1 - z0 + 1;
+    if (zs->cols * zs->rows > 64) {
+        fprintf(stderr, "[model-viewer] zone %" PRIu32 " spans %ux%u cells; at most 64 are supported.\n", zs->zone,
+                zs->cols, zs->rows);
+        return 0;
+    }
+    zs->cell_region = malloc((size_t)zs->cols * zs->rows * sizeof *zs->cell_region);
+    if (!zs->cell_region) return 0;
+    for (uint32_t cz = 0; cz < zs->rows; ++cz)
+        for (uint32_t cx = 0; cx < zs->cols; ++cx) {
+            const int member = cell_member(m, cx + x0, cz + z0, zs->zone);
+            zs->cell_region[(size_t)cz * zs->cols + cx] = member ? (int32_t)(cz || cx ? ++zs->region_count : 0) : -1;
+        }
+    zs->subcell_zone = malloc((size_t)zs->cols * zs->rows * 16 * sizeof *zs->subcell_zone);
+    if (!zs->subcell_zone) return 0;
+    for (uint32_t z = 0; z < zs->rows * 4; ++z)
+        for (uint32_t x = 0; x < zs->cols * 4; ++x)
+            zs->subcell_zone[(size_t)z * zs->cols * 4 + x] = m->zone_ids ?
+                m->zone_ids[((size_t)z0 * 4 + z) * m->width * 4 + (size_t)x0 * 4 + x] : (int16_t)zs->zone;
+    if (zs->cell_region[0] != 0) {
+        fprintf(stderr, "[model-viewer] zone %" PRIu32 ": the first cell of its bounding box is not its own.\n", zs->zone);
+        return 0;
+    }
+    zs->region = (uint32_t)m->field_ids[(size_t)z0 * m->width + x0];
+    return 1;
+}
+
+/* Load the zone's other regions (model, textures, environment, terrain) and
+ * replace the scene grid by the composite of all its cells (40 x 40 tiles
+ * each; cells not in the zone are blocked). */
+static int load_regions(const struct options *zo, const struct px_field_matrix *m, struct model_asset *asset)
+{
+    struct zone_state *zs = asset->zone;
+    zs->regions = calloc(zs->region_count, sizeof *zs->regions);
+    zs->region_offset = calloc(zs->region_count, sizeof *zs->region_offset);
+    zs->region_entry = calloc(zs->region_count, sizeof *zs->region_entry);
+    if (!zs->regions || !zs->region_offset || !zs->region_entry) return 0;
+    struct px_field_grid grid = {0};
+    grid.width = (uint16_t)(zs->cols * 40); grid.height = (uint16_t)(zs->rows * 40);
+    memcpy(grid.sections, asset->grid.sections, sizeof grid.sections);
+    grid.tiles = malloc((size_t)grid.width * grid.height * sizeof *grid.tiles);
+    if (!grid.tiles) return 0;
+    for (size_t i = 0; i < (size_t)grid.width * grid.height; ++i) grid.tiles[i] = UINT32_C(0x01000021);
+    for (uint32_t cz = 0; cz < zs->rows; ++cz)
+        for (uint32_t cx = 0; cx < zs->cols; ++cx) {
+            const int32_t k = zs->cell_region[(size_t)cz * zs->cols + cx];
+            if (k < 0) continue;
+            struct model_asset *r = asset;
+            if (k > 0) {
+                struct options ro = *zo;
+                ro.entry = (uint32_t)m->field_ids[(size_t)(cz + zs->cell_z0) * m->width + cx + zs->cell_x0];
+                ro.player_archive = NULL; ro.have_motion_slot = ro.have_motion_section = 0;
+                ro.have_walk_motion = ro.have_run_motion = 0; ro.quiet = 1;
+                r = &zs->regions[k - 1];
+                zs->region_entry[k - 1] = ro.entry;
+                zs->region_offset[k - 1][0] = 720.0 * cx; zs->region_offset[k - 1][1] = 720.0 * cz;
+                if (!load(&ro, r)) {
+                    fprintf(stderr, "[model-viewer] zone %" PRIu32 ": region %" PRIu32 " failed to load.\n", zs->zone,
+                            ro.entry);
+                    free(grid.tiles); return 0;
+                }
+            }
+            if (r->grid.width != 40 || r->grid.height != 40) {
+                fprintf(stderr, "[model-viewer] zone %" PRIu32 ": a region grid is %ux%u, not 40x40.\n", zs->zone,
+                        r->grid.width, r->grid.height);
+                free(grid.tiles); return 0;
+            }
+            for (uint32_t z = 0; z < 40; ++z)
+                memcpy(grid.tiles + ((size_t)cz * 40 + z) * grid.width + (size_t)cx * 40, r->grid.tiles + (size_t)z * 40,
+                       40 * sizeof *grid.tiles);
+        }
+    px_field_grid_free(&asset->grid);
+    asset->grid = grid;
+    /* Start on the first walkable tile of the zone's own sub-cells. */
+    walk_start(&asset->walker, &asset->grid);
+    asset->walker.active = 0;
+    for (int z = 0; z < asset->grid.height && !asset->walker.active; ++z)
+        for (int x = 0; x < asset->grid.width && !asset->walker.active; ++x)
+            if (walkable(&asset->walker, x, z) &&
+                zs->subcell_zone[(size_t)(z / 10) * zs->cols * 4 + (size_t)(x / 10)] == (int32_t)zs->zone) {
+                asset->walker.active = 1; asset->walker.x = x; asset->walker.z = z;
+            }
+    return 1;
+}
+
+/* Region props: every region's GR section 3, each prop's model the a/0/2/4
+ * BM entry its uid names in the area registry (AD section 0; the uid itself
+ * when absent, as CTRMap), section 0, textured from the area's AD section 1,
+ * lit like the region, rest pose. Placement: scale, then rotation about +Y
+ * by the stored degrees, then the position less the scene origin. A prop
+ * whose model fails to load is listed and not drawn. */
+static int load_props(const struct options *zo, struct model_asset *asset)
+{
+    struct zone_state *zs = asset->zone;
+    struct resource r = {0};
+    struct px_prop_registry registry = {0};
+    int have_registry = 0;
+    /* Sections are read raw: a count of 16 or 17 would look like an LZ header. */
+    struct px_field_span span;
+    if (read_resource(zo->romfs, "a/0/1/3", zs->area, 0, 0, 0, "prop registry", &r)) {
+        have_registry = px_field_section(r.data, r.size, "AD", 0, &span) == PX_FIELD_OK &&
+                        px_prop_registry_decode(span.data, span.size, &registry) == PX_ZONE_OK;
+        resource_free(&r);
+    }
+    const double origin_x = 360.0 + 720.0 * zs->cell_x0, origin_z = 360.0 + 720.0 * zs->cell_z0;
+    int ok = 1;
+    for (uint32_t k = 0; k <= zs->region_count && ok; ++k) {
+        const uint32_t region = k ? zs->region_entry[k - 1] : zs->region;
+        struct px_gr_props props = {0};
+        if (!read_resource(zo->romfs, "a/0/4/1", region, 0, 0, 0, "region props", &r)) continue;
+        const enum px_zone_result pr = px_field_section(r.data, r.size, "GR", 3, &span) == PX_FIELD_OK ?
+            px_gr_props_decode(span.data, span.size, &props) : PX_ZONE_TRUNCATED;
+        resource_free(&r);
+        if (pr != PX_ZONE_OK) {
+            fprintf(stderr, "[model-viewer] region %" PRIu32 " props: %s\n", region, px_zone_result_string(pr));
+            continue;
+        }
+        if (props.count) {
+            struct zone_prop *grown = realloc(zs->props, (size_t)(zs->prop_count + props.count) * sizeof *grown);
+            if (!grown) { px_gr_props_free(&props); ok = 0; break; }
+            zs->props = grown;
+        }
+        for (uint32_t i = 0; i < props.count; ++i) {
+            const struct px_gr_prop *g = &props.props[i];
+            const struct px_prop_registry_entry *e = have_registry ? px_prop_registry_find(&registry, g->uid) : NULL;
+            struct zone_prop *z = &zs->props[zs->prop_count++];
+            memset(z, 0, sizeof *z);
+            z->region = region; z->uid = g->uid; z->entry = e ? e->model : g->uid;
+            z->x = g->position[0] - origin_x; z->y = g->position[1]; z->z = g->position[2] - origin_z;
+            z->yaw = g->rotation[1] * (3.14159265358979323846 / 180.0);
+            for (unsigned c = 0; c < 3; ++c) z->scale[c] = g->scale[c];
+            z->model = UINT32_MAX;
+            if (g->rotation[0] != 0 || g->rotation[2] != 0) { ++zs->prop_failed; continue; } /* only yaw */
+            for (uint32_t m = 0; m < zs->prop_model_count; ++m)
+                if (zs->prop_model_entry[m] == z->entry) z->model = m;
+            if (z->model != UINT32_MAX) {
+                if (!zs->prop_models[z->model].bch.mesh_count) z->model = UINT32_MAX, ++zs->prop_failed;
+                continue;
+            }
+            struct model_asset *models = realloc(zs->prop_models, (size_t)(zs->prop_model_count + 1) * sizeof *models);
+            uint32_t *entries = models ? realloc(zs->prop_model_entry, (size_t)(zs->prop_model_count + 1) * sizeof *entries) : NULL;
+            if (models) zs->prop_models = models;
+            if (!entries) { ok = 0; break; }
+            zs->prop_model_entry = entries;
+            struct model_asset *model = &zs->prop_models[zs->prop_model_count];
+            memset(model, 0, sizeof *model);
+            zs->prop_model_entry[zs->prop_model_count] = z->entry;
+            struct options po = *zo;
+            po.archive = "a/0/2/4"; po.entry = z->entry; po.subentry = 0; po.model = 0;
+            po.have_section = 1; po.section = 0;
+            po.texture_section = 1;
+            po.walk = 0; po.player_archive = NULL; po.quiet = 1;
+            po.have_motion_slot = po.have_motion_section = po.have_walk_motion = po.have_run_motion = 0;
+            if (load(&po, model) && model->bch.mesh_count) z->model = zs->prop_model_count;
+            else { asset_free(model); ++zs->prop_failed; }
+            ++zs->prop_model_count;
+        }
+        px_gr_props_free(&props);
+    }
+    px_prop_registry_free(&registry);
+    return ok;
+}
+
 static int load_zone(const struct options *o, uint32_t zone, struct model_asset *asset)
 {
     struct zone_state *zs = calloc(1, sizeof *zs);
@@ -1175,13 +1423,13 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
     resource_free(&r);
     int ok = fs == PX_FIELD_OK;
     if (!ok) fprintf(stderr, "[model-viewer] matrix %" PRIu32 ": %s\n", zs->matrix, px_field_result_string(fs));
-    else if (matrix.width != 1 || matrix.height != 1 || matrix.field_ids[0] < 0) {
-        fprintf(stderr, "[model-viewer] zone %" PRIu32 ": matrix %" PRIu32 " is %ux%u; only single-region "
-                "matrices are supported.\n", zone, zs->matrix, matrix.width, matrix.height);
-        ok = 0;
-    } else zs->region = (uint32_t)matrix.field_ids[0];
-    px_field_matrix_free(&matrix);
-    if (!ok) return 0;
+    else if (matrix.width == 1 && matrix.height == 1) {
+        if (matrix.field_ids[0] < 0) {
+            fprintf(stderr, "[model-viewer] zone %" PRIu32 ": matrix %" PRIu32 " has no region.\n", zone, zs->matrix);
+            ok = 0;
+        } else zs->region = (uint32_t)matrix.field_ids[0];
+    } else ok = zone_cells(zs, &matrix);
+    if (!ok) { px_field_matrix_free(&matrix); return 0; }
     struct options zo = *o;
     zo.have_zone = 0; zo.have_arrive = 0;
     zo.archive = "a/0/4/1"; zo.entry = zs->region; zo.have_entry = 1; zo.subentry = 0; zo.model = 0;
@@ -1191,13 +1439,22 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
     zo.texture_subentry = 0; zo.have_texture_section = 1; zo.texture_section = 11;
     zo.environment_archive = "a/0/0/3"; zo.environment_entry = 137; zo.have_environment_entry = 1;
     zo.environment_subentry = 0; zo.have_environment_section = 1; zo.environment_section = 0; zo.scene = 0;
-    zo.walk = 1; zo.steps = NULL;
+    zo.walk = 1; zo.steps = NULL; zo.allow_skeleton = 1;
     zo.player_archive = "a/0/2/1"; zo.player_entry = 2; zo.have_player_entry = 1;
     zo.player_section = 0; zo.have_player_section = 1;
     zo.have_motion_section = zo.have_motion_slot = 1; zo.motion_section = 1; zo.motion_slot = 1;
     zo.have_motion_frame = 0; zo.have_walk_motion = 1; zo.walk_motion_slot = 3;
     zo.have_run_motion = 1; zo.run_motion_slot = 4;
-    if (!load(&zo, asset)) return 0;
+    if (!load(&zo, asset) || (zs->cell_region && !load_regions(&zo, &matrix, asset))) {
+        px_field_matrix_free(&matrix); return 0;
+    }
+    px_field_matrix_free(&matrix);
+    if (!o->no_props && !load_props(&zo, asset)) return 0;
+    /* Entities store world tiles (40 per cell): move them into the scene frame. */
+    const int32_t tile_dx = 40 * (int32_t)zs->cell_x0, tile_dz = 40 * (int32_t)zs->cell_z0;
+    for (uint32_t i = 0; i < zs->entities.warp_count; ++i) {
+        zs->entities.warps[i].tile_x -= tile_dx; zs->entities.warps[i].tile_y -= tile_dz;
+    }
     struct walker *w = &asset->walker;
     w->zone = zs;
     if (npc_at(zs, w->x, w->z) >= 0) { /* never start inside an NPC */
@@ -1224,7 +1481,7 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
     for (uint32_t i = 0; i < zs->entities.npc_count; ++i) {
         const struct px_zone_npc *n = &zs->entities.npcs[i];
         struct zone_npc *z = &zs->npcs[zs->npc_count++];
-        z->x = n->tile_x; z->z = n->tile_y; z->facing = zone_facing(n->face);
+        z->x = n->tile_x - tile_dx; z->z = n->tile_y - tile_dz; z->facing = zone_facing(n->face);
         z->id = n->id; z->script = n->script; z->registry_model = n->model; z->model_entry = UINT16_MAX;
         const struct px_npc_registry_entry *e = px_npc_registry_find(&registry, n->model);
         if (e) {
@@ -1244,6 +1501,29 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
                "player=a/0/2/1:2 motions=idle:1,walk:3,run:4\n", zone, zs->area, zs->matrix, zs->region,
                zs->entities.furniture_count, zs->entities.npc_count, zs->entities.warp_count,
                zs->entities.trigger1_count, zs->entities.trigger2_count);
+        if (zs->cell_region) {
+            printf("zone_regions zone=%" PRIu32 " matrix=%" PRIu32 " cells=%ux%u origin_cell=%u,%u scene=%" PRIu32,
+                   zone, zs->matrix, zs->cols, zs->rows, zs->cell_x0, zs->cell_z0, zs->region);
+            for (uint32_t i = 0; i < zs->region_count; ++i)
+                printf(" region=%" PRIu32 "@%.0f,%.0f", zs->region_entry[i], zs->region_offset[i][0], zs->region_offset[i][1]);
+            printf(" tile_origin=%u,%u\n", 40 * zs->cell_x0, 40 * zs->cell_z0);
+        }
+        uint32_t drawn = 0;
+        for (uint32_t i = 0; i < zs->prop_count; ++i) {
+            const struct zone_prop *pr = &zs->props[i];
+            drawn += pr->model != UINT32_MAX;
+            printf("prop index=%" PRIu32 " region=%" PRIu32 " uid=%" PRIu32 " model_entry=a/0/2/4:%" PRIu32
+                   " position=%.9g,%.9g,%.9g yaw_degrees=%.9g scale=%.9g,%.9g,%.9g drawn=%s\n", i, pr->region, pr->uid,
+                   pr->entry, pr->x, pr->y, pr->z, pr->yaw * (180.0 / 3.14159265358979323846), pr->scale[0],
+                   pr->scale[1], pr->scale[2], pr->model != UINT32_MAX ? "yes" : "no");
+        }
+        printf("zone_props zone=%" PRIu32 " props=%" PRIu32 " models=%" PRIu32 " drawn=%" PRIu32 " not_drawn=%" PRIu32
+               " registry=a/0/1/3:%" PRIu32 ":0 textures=a/0/1/3:%" PRIu32 ":1 pose=rest\n", zone, zs->prop_count,
+               zs->prop_model_count, drawn, zs->prop_count - drawn, zs->area, zs->area);
+        uint32_t approximated = asset->approximated;
+        for (uint32_t i = 0; i < zs->region_count; ++i) approximated += zs->regions[i].approximated;
+        for (uint32_t i = 0; i < zs->prop_model_count; ++i) approximated += zs->prop_models[i].approximated;
+        printf("zone_lighting zone=%" PRIu32 " unexecuted_bump_or_fresnel_materials=%" PRIu32 "\n", zone, approximated);
         printf("dialogue zone=%" PRIu32 " script=%s text=a/0/8/2:%" PRIu32 ":%s lines=%" PRIu32
                " natives=policy-inferred female=1\n", zone, zs->has_script ? "yes" : "no", zs->text_id,
                zs->has_text ? "yes" : "no", zs->has_text ? zs->text.line_count : 0);
@@ -1651,7 +1931,15 @@ static void combiner_fragment(void *context, double u, double v, const double rg
     for (unsigned unit = 0; unit < 3; ++unit) {
         if ((m->sampled_units >> unit) & 1) {
             double texel[4];
-            px_raster_sample(&s->images[unit], &s->samplers[unit], u, v, texel);
+            double su = u, sv = v;
+            if ((m->transformed_units >> unit) & 1) {
+                /* The matrix acts on stored UV (V up); v is the flipped image V. */
+                const float *mt = m->uv_matrix[unit];
+                const double stored = 1.0 - v;
+                su = mt[0] * u + mt[1] * stored + mt[2];
+                sv = 1.0 - (mt[3] * u + mt[4] * stored + mt[5]);
+            }
+            px_raster_sample(&s->images[unit], &s->samplers[unit], su, sv, texel);
             for (unsigned c = 0; c < 4; ++c) in.texture[unit][c] = quantize(texel[c]);
         } else if ((m->projected_units >> unit) & 1) {
             memset(in.texture[unit], 255, 4);
@@ -1724,9 +2012,23 @@ static int fragment_state(const struct px_bch_fragment_preview *m, struct px_ras
 
 /* Shared inspection camera: orthographic, fitted to the room's bounds. */
 struct view { double center[3], radius, scale, cy, sy, cp, sp; int w, h; };
+/* Floor height at a scene point: the first stored collision triangle of the
+ * region whose cell holds it (multi-region zones), else the scene's own. */
+static int scene_height(const struct model_asset *asset, double x, double z, double *height)
+{
+    const struct zone_state *zs = asset->zone;
+    if (!zs || !zs->cell_region) return px_field_collision_first_height(&asset->collision, x, z, height) == PX_FIELD_OK;
+    const double fx = floor((x + 360) / 720), fz = floor((z + 360) / 720);
+    if (!(fx >= 0 && fz >= 0 && fx < zs->cols && fz < zs->rows)) return 0;
+    const int32_t k = zs->cell_region[(size_t)fz * zs->cols + (size_t)fx];
+    if (k < 0) return 0;
+    if (k == 0) return px_field_collision_first_height(&asset->collision, x, z, height) == PX_FIELD_OK;
+    return px_field_collision_first_height(&zs->regions[k - 1].collision, x - zs->region_offset[k - 1][0],
+                                           z - zs->region_offset[k - 1][1], height) == PX_FIELD_OK;
+}
 /* Placement of a model in the room's frame: rotation about +Y by yaw (radians),
  * then translation. The room itself uses the identity placement. */
-struct placement { double x, y, z, yaw; };
+struct placement { double x, y, z, yaw; int scaled; double scale[3]; /* scale applies when scaled */ };
 
 static void project_bch(const struct model_asset *asset, const struct view *v, const struct placement *at,
                         struct px_raster_vertex *points, double (*normals)[4])
@@ -1734,9 +2036,11 @@ static void project_bch(const struct model_asset *asset, const struct view *v, c
     const struct px_cgfx_model *mesh = &asset->wire;
     const struct px_bch_model *bch = &asset->bch;
     const double c = at ? cos(at->yaw) : 1, s = at ? sin(at->yaw) : 0;
+    const double sx = at && at->scaled ? at->scale[0] : 1, sy = at && at->scaled ? at->scale[1] : 1;
+    const double sz = at && at->scaled ? at->scale[2] : 1;
     for (uint32_t i = 0; i < mesh->vertex_count; ++i) {
-        const double px = mesh->positions[3 * (size_t)i], py = mesh->positions[3 * (size_t)i + 1];
-        const double pz = mesh->positions[3 * (size_t)i + 2];
+        const double px = sx * mesh->positions[3 * (size_t)i], py = sy * mesh->positions[3 * (size_t)i + 1];
+        const double pz = sz * mesh->positions[3 * (size_t)i + 2];
         const double wx = c * px + s * pz + (at ? at->x : 0), wy = py + (at ? at->y : 0);
         const double wz = -s * px + c * pz + (at ? at->z : 0);
         double x = (wx - v->center[0]) / v->radius;
@@ -1752,8 +2056,9 @@ static void project_bch(const struct model_asset *asset, const struct view *v, c
         for (unsigned j = 0; j < 4; ++j)
             points[i].rgba[j] = asset->bch_combiner ? bch->colors[4 * (size_t)i + j] : 1;
         if (normals) {
-            const double nx = bch->normals[3 * (size_t)i], ny = bch->normals[3 * (size_t)i + 1];
-            const double nz = bch->normals[3 * (size_t)i + 2];
+            /* Inverse-transpose of the scale; lighting renormalizes. */
+            const double nx = bch->normals[3 * (size_t)i] / sx, ny = bch->normals[3 * (size_t)i + 1] / sy;
+            const double nz = bch->normals[3 * (size_t)i + 2] / sz;
             normals[i][0] = c * nx + s * nz; normals[i][1] = ny; normals[i][2] = -s * nx + c * nz; normals[i][3] = 0;
         }
     }
@@ -1833,12 +2138,115 @@ static int draw_bch_meshes(const struct model_asset *asset, const struct px_rast
     return 1;
 }
 
+enum { PX_MAX_BANDS = 8 };
+/* Per-scene buffers: the scene's vertices, and one shared buffer for the
+ * player and NPCs (each is projected and drawn in turn); one set per band. */
+struct frame_buffers {
+    SDL_FPoint *points;
+    struct px_raster_vertex *vertices, *character_points;
+    double (*normals)[4], (*character_normals)[4];
+    struct combiner_counts *counts;
+    size_t vertex_stride, character_stride;
+    unsigned bands;
+};
+/* One pass over the scene into target (or its band): the scene asset, the
+ * zone's other regions and props, then the player and NPCs (or the marker). */
+static int draw_scene(const struct model_asset *asset, const struct view *v, struct px_raster_vertex *points,
+                      double (*normals)[4], struct px_raster_vertex *player_points, double (*player_normals)[4],
+                      struct px_raster_target *target, struct combiner_counts *counts)
+{
+    project_bch(asset, v, NULL, points, normals);
+    if (!draw_bch_meshes(asset, points, normals, target, counts)) return 0;
+    for (uint32_t i = 0; asset->zone && i < asset->zone->region_count; ++i) {
+        /* The zone's other regions, at their cell offsets (same buffers). */
+        const struct placement at = {asset->zone->region_offset[i][0], 0, asset->zone->region_offset[i][1], 0, 0, {0}};
+        project_bch(&asset->zone->regions[i], v, &at, points, normals);
+        if (!draw_bch_meshes(&asset->zone->regions[i], points, normals, target, NULL)) return 0;
+    }
+    for (uint32_t i = 0; asset->zone && i < asset->zone->prop_count; ++i) {
+        const struct zone_prop *pr = &asset->zone->props[i];
+        if (pr->model == UINT32_MAX) continue;
+        struct placement at = {pr->x, pr->y, pr->z, pr->yaw, 1, {pr->scale[0], pr->scale[1], pr->scale[2]}};
+        project_bch(&asset->zone->prop_models[pr->model], v, &at, points, normals);
+        if (!draw_bch_meshes(&asset->zone->prop_models[pr->model], points, normals, target, NULL)) return 0;
+    }
+    const double center[3] = {v->center[0], v->center[1], v->center[2]}, radius = v->radius, scale = v->scale;
+    const double cy = v->cy, sy = v->sy, cp = v->cp, sp = v->sp;
+    const int w = v->w, h = v->h;
+    enum px_raster_result result;
+    if (asset->walk && asset->walker.active && asset->player) {
+        /* Player: rest pose standing on the first stored collision triangle
+         * under the marker's cell center, facing its last step direction. */
+        struct placement at = {cell_center(asset->walker.x) + asset->player->glide[0], 0,
+                               cell_center(asset->walker.z) + asset->player->glide[1],
+                               asset->walker.facing * 1.5707963267948966, 0, {0}};
+        if (!scene_height(asset, at.x, at.z, &at.y) &&
+            !scene_height(asset, cell_center(asset->walker.x),
+                                            cell_center(asset->walker.z), &at.y)) at.y = 0;
+        project_bch(asset->player, v, &at, player_points, player_normals);
+        if (!draw_bch_meshes(asset->player, player_points, player_normals, target, NULL)) return 0;
+        /* --zone NPCs on their tiles, same buffers (projected and drawn in turn). */
+        for (uint32_t i = 0; asset->zone && i < asset->zone->npc_count; ++i) {
+            const struct zone_npc *n = &asset->zone->npcs[i];
+            if (!n->model) continue;
+            struct placement np = {cell_center(n->x), 0, cell_center(n->z), n->facing * 1.5707963267948966, 0, {0}};
+            if (!scene_height(asset, np.x, np.z, &np.y)) np.y = 0;
+            project_bch(n->model, v, &np, player_points, player_normals);
+            if (!draw_bch_meshes(n->model, player_points, player_normals, target, NULL)) return 0;
+        }
+    } else if (asset->walk && asset->walker.active) {
+        /* Marker: a 14 x 28 x 14 box standing on the first stored collision
+         * triangle under the cell center (height 0 if none). Depth tested. */
+        const double mx = cell_center(asset->walker.x), mz = cell_center(asset->walker.z);
+        double my = 0;
+        if (!scene_height(asset, mx, mz, &my)) my = 0;
+        struct px_raster_vertex corner[8];
+        for (unsigned k = 0; k < 8; ++k) {
+            const double px = mx + ((k & 1) ? 7 : -7), py = my + ((k & 2) ? 28 : 0), pz = mz + ((k & 4) ? 7 : -7);
+            const double x = (px - center[0]) / radius, y = (py - center[1]) / radius, z = (pz - center[2]) / radius;
+            const double rx = cy * x + sy * z, rz = -sy * x + cy * z;
+            corner[k] = (struct px_raster_vertex){w * 0.5 + rx * scale, h * 0.5 - (cp * y - sp * rz) * scale,
+                                                  -(sp * y + cp * rz), 0, 0, {1, 1, 1, 1}};
+        }
+        static const unsigned char faces[6][4] = {
+            {2, 3, 7, 6}, {0, 1, 5, 4}, {0, 2, 6, 4}, {1, 3, 7, 5}, {0, 1, 3, 2}, {4, 5, 7, 6}};
+        static const double shade[6] = {1.0, 0.45, 0.7, 0.7, 0.85, 0.85};
+        const struct px_raster_state marker_state = px_raster_default_state();
+        for (unsigned f = 0; f < 6; ++f) {
+            struct px_raster_vertex quad[4];
+            for (unsigned k = 0; k < 4; ++k) {
+                quad[k] = corner[faces[f][k]];
+                quad[k].rgba[0] = 0.96 * shade[f]; quad[k].rgba[1] = 0.33 * shade[f];
+                quad[k].rgba[2] = 0.25 * shade[f]; quad[k].rgba[3] = 1;
+            }
+            const struct px_raster_vertex t0[3] = {quad[0], quad[1], quad[2]}, t1[3] = {quad[0], quad[2], quad[3]};
+            result = px_raster_draw(target, t0, NULL, NULL, &marker_state);
+            if (result == PX_RASTER_OK) result = px_raster_draw(target, t1, NULL, NULL, &marker_state);
+            if (result != PX_RASTER_OK) { SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0; }
+        }
+    }
+    return 1;
+}
+
+struct band_job {
+    const struct model_asset *asset;
+    const struct view *view;
+    struct px_raster_vertex *points, *player_points;
+    double (*normals)[4], (*player_normals)[4];
+    struct px_raster_target target;
+    int ok;
+};
+static int band_thread(void *data)
+{
+    struct band_job *j = data;
+    j->ok = draw_scene(j->asset, j->view, j->points, j->normals, j->player_points, j->player_normals, &j->target, NULL);
+    return 0;
+}
+
 static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *asset,
-                             const struct camera *camera, struct px_raster_vertex *points,
-                             double (*normals)[4],
+                             const struct camera *camera, const struct frame_buffers *b,
                              struct px_raster_target *target, SDL_Texture **frame,
-                             const char *path, struct combiner_counts *counts,
-                             struct px_raster_vertex *player_points, double (*player_normals)[4])
+                             const char *path, struct combiner_counts *counts)
 {
     const struct px_cgfx_model *mesh = &asset->wire;
     int out_w, out_h, w, h;
@@ -1866,11 +2274,14 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
         v.radius += half * half;
     }
     v.radius = sqrt(v.radius); if (v.radius < 1e-20) v.radius = 1;
+    /* Multi-region zones: the camera keeps the house interior's scale (zone 4
+     * room bounds radius, about 185) rather than the region's; a choice. */
+    if (asset->zone && asset->zone->cell_region) v.radius = 185;
     if (asset->walk && asset->walker.active) {
         /* Follow the marker: center on its cell, 18 units above the floor. */
         double floor_y = 0;
-        if (px_field_collision_first_height(&asset->collision, cell_center(asset->walker.x),
-                                            cell_center(asset->walker.z), &floor_y) != PX_FIELD_OK) floor_y = 0;
+        if (!scene_height(asset, cell_center(asset->walker.x),
+                                            cell_center(asset->walker.z), &floor_y)) floor_y = 0;
         v.center[0] = cell_center(asset->walker.x);
         v.center[1] = floor_y + 18;
         v.center[2] = cell_center(asset->walker.z);
@@ -1882,61 +2293,35 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
     v.scale = (w < h ? w : h) * 0.42 * camera->zoom;
     v.cy = cos(camera->yaw); v.sy = sin(camera->yaw);
     v.cp = cos(camera->pitch); v.sp = sin(camera->pitch);
-    project_bch(asset, &v, NULL, points, normals);
-    if (!draw_bch_meshes(asset, points, normals, target, counts)) return 0;
-    const double center[3] = {v.center[0], v.center[1], v.center[2]}, radius = v.radius, scale = v.scale;
-    const double cy = v.cy, sy = v.sy, cp = v.cp, sp = v.sp;
-    if (asset->walk && asset->walker.active && asset->player) {
-        /* Player: rest pose standing on the first stored collision triangle
-         * under the marker's cell center, facing its last step direction. */
-        struct placement at = {cell_center(asset->walker.x) + asset->player->glide[0], 0,
-                               cell_center(asset->walker.z) + asset->player->glide[1],
-                               asset->walker.facing * 1.5707963267948966};
-        if (px_field_collision_first_height(&asset->collision, at.x, at.z, &at.y) != PX_FIELD_OK &&
-            px_field_collision_first_height(&asset->collision, cell_center(asset->walker.x),
-                                            cell_center(asset->walker.z), &at.y) != PX_FIELD_OK) at.y = 0;
-        project_bch(asset->player, &v, &at, player_points, player_normals);
-        if (!draw_bch_meshes(asset->player, player_points, player_normals, target, NULL)) return 0;
-        /* --zone NPCs on their tiles, same buffers (projected and drawn in turn). */
-        for (uint32_t i = 0; asset->zone && i < asset->zone->npc_count; ++i) {
-            const struct zone_npc *n = &asset->zone->npcs[i];
-            if (!n->model) continue;
-            struct placement np = {cell_center(n->x), 0, cell_center(n->z), n->facing * 1.5707963267948966};
-            if (px_field_collision_first_height(&asset->collision, np.x, np.z, &np.y) != PX_FIELD_OK) np.y = 0;
-            project_bch(n->model, &v, &np, player_points, player_normals);
-            if (!draw_bch_meshes(n->model, player_points, player_normals, target, NULL)) return 0;
+    /* The frame is split into row bands drawn concurrently (each band sees
+     * every triangle in the same order, so pixels match a single pass); the
+     * counted first frame is drawn in one pass. */
+    const unsigned bands = counts ? 1 : b->bands;
+    struct band_job jobs[PX_MAX_BANDS];
+    SDL_Thread *threads[PX_MAX_BANDS] = {0};
+    for (unsigned k = 0; k < bands; ++k) {
+        struct band_job *j = &jobs[k];
+        j->asset = asset; j->view = &v;
+        j->points = b->vertices + k * b->vertex_stride; j->normals = b->normals ? b->normals + k * b->vertex_stride : NULL;
+        j->player_points = b->character_points ? b->character_points + k * b->character_stride : NULL;
+        j->player_normals = b->character_normals ? b->character_normals + k * b->character_stride : NULL;
+        j->target = *target;
+        if (bands > 1) {
+            j->target.band_y0 = (uint32_t)((uint64_t)h * k / bands);
+            j->target.band_y1 = (uint32_t)((uint64_t)h * (k + 1) / bands);
         }
-    } else if (asset->walk && asset->walker.active) {
-        /* Marker: a 14 x 28 x 14 box standing on the first stored collision
-         * triangle under the cell center (height 0 if none). Depth tested. */
-        const double mx = cell_center(asset->walker.x), mz = cell_center(asset->walker.z);
-        double my = 0;
-        if (px_field_collision_first_height(&asset->collision, mx, mz, &my) != PX_FIELD_OK) my = 0;
-        struct px_raster_vertex corner[8];
-        for (unsigned k = 0; k < 8; ++k) {
-            const double px = mx + ((k & 1) ? 7 : -7), py = my + ((k & 2) ? 28 : 0), pz = mz + ((k & 4) ? 7 : -7);
-            const double x = (px - center[0]) / radius, y = (py - center[1]) / radius, z = (pz - center[2]) / radius;
-            const double rx = cy * x + sy * z, rz = -sy * x + cy * z;
-            corner[k] = (struct px_raster_vertex){w * 0.5 + rx * scale, h * 0.5 - (cp * y - sp * rz) * scale,
-                                                  -(sp * y + cp * rz), 0, 0, {1, 1, 1, 1}};
-        }
-        static const unsigned char faces[6][4] = {
-            {2, 3, 7, 6}, {0, 1, 5, 4}, {0, 2, 6, 4}, {1, 3, 7, 5}, {0, 1, 3, 2}, {4, 5, 7, 6}};
-        static const double shade[6] = {1.0, 0.45, 0.7, 0.7, 0.85, 0.85};
-        const struct px_raster_state marker_state = px_raster_default_state();
-        for (unsigned f = 0; f < 6; ++f) {
-            struct px_raster_vertex quad[4];
-            for (unsigned k = 0; k < 4; ++k) {
-                quad[k] = corner[faces[f][k]];
-                quad[k].rgba[0] = 0.96 * shade[f]; quad[k].rgba[1] = 0.33 * shade[f];
-                quad[k].rgba[2] = 0.25 * shade[f]; quad[k].rgba[3] = 1;
-            }
-            const struct px_raster_vertex t0[3] = {quad[0], quad[1], quad[2]}, t1[3] = {quad[0], quad[2], quad[3]};
-            result = px_raster_draw(target, t0, NULL, NULL, &marker_state);
-            if (result == PX_RASTER_OK) result = px_raster_draw(target, t1, NULL, NULL, &marker_state);
-            if (result != PX_RASTER_OK) goto raster_error;
-        }
+        j->ok = 0;
     }
+    for (unsigned k = 1; k < bands; ++k)
+        if (!(threads[k] = SDL_CreateThread(band_thread, "band", &jobs[k]))) band_thread(&jobs[k]);
+    jobs[0].ok = draw_scene(asset, &v, jobs[0].points, jobs[0].normals, jobs[0].player_points, jobs[0].player_normals,
+                            &jobs[0].target, counts);
+    int all = jobs[0].ok;
+    for (unsigned k = 1; k < bands; ++k) {
+        if (threads[k]) SDL_WaitThread(threads[k], NULL);
+        all &= jobs[k].ok;
+    }
+    if (!all) return 0;
     if (asset->zone && asset->zone->page_count)
         px_text_window(target->rgba, target->width, target->height, asset->zone->pages[asset->zone->page],
                        asset->zone->page + 1 < asset->zone->page_count);
@@ -1948,12 +2333,6 @@ raster_error:
     SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0;
 }
 
-struct frame_buffers {
-    SDL_FPoint *points;
-    struct px_raster_vertex *vertices, *character_points;
-    double (*normals)[4], (*character_normals)[4];
-    struct combiner_counts *counts;
-};
 static void buffers_free(struct frame_buffers *b)
 {
     free(b->points); free(b->vertices); free(b->character_points);
@@ -1966,18 +2345,28 @@ static int buffers_alloc(const struct options *o, const struct model_asset *asse
 {
     buffers_free(b);
     const struct px_cgfx_model *mesh = o->textured && !asset->bch_textured ? &asset->scene.mesh : &asset->wire;
-    const size_t n = mesh->vertex_count ? mesh->vertex_count : 1;
-    if (o->textured) b->vertices = malloc(n * sizeof *b->vertices);
+    size_t n = mesh->vertex_count ? mesh->vertex_count : 1;
+    for (uint32_t i = 0; asset->zone && i < asset->zone->region_count; ++i)
+        if (asset->zone->regions[i].wire.vertex_count > n) n = asset->zone->regions[i].wire.vertex_count;
+    for (uint32_t i = 0; asset->zone && i < asset->zone->prop_model_count; ++i)
+        if (asset->zone->prop_models[i].wire.vertex_count > n) n = asset->zone->prop_models[i].wire.vertex_count;
+    /* BCH scenes draw in row bands, one per CPU (at most PX_MAX_BANDS) or
+     * --threads. */
+    int cpus = o->threads ? (int)o->threads : SDL_GetCPUCount();
+    b->bands = asset->bch_textured ? (unsigned)(cpus < 1 ? 1 : cpus > PX_MAX_BANDS ? PX_MAX_BANDS : cpus) : 1;
+    b->vertex_stride = n;
+    if (o->textured) b->vertices = malloc(n * b->bands * sizeof *b->vertices);
     else b->points = malloc(n * sizeof *b->points);
     if (o->textured ? !b->vertices : !b->points) return 0;
-    if (asset->bch_combiner && !(b->normals = calloc(n, sizeof *b->normals))) return 0;
+    if (asset->bch_combiner && !(b->normals = calloc(n * b->bands, sizeof *b->normals))) return 0;
     uint32_t characters = asset->player ? asset->player->wire.vertex_count : 0;
     for (uint32_t i = 0; asset->zone && i < asset->zone->npc_count; ++i)
         if (asset->zone->npcs[i].model && asset->zone->npcs[i].model->wire.vertex_count > characters)
             characters = asset->zone->npcs[i].model->wire.vertex_count;
+    b->character_stride = characters ? characters : 1;
     if (asset->player) {
-        b->character_points = calloc(characters ? characters : 1, sizeof *b->character_points);
-        b->character_normals = calloc(characters ? characters : 1, sizeof *b->character_normals);
+        b->character_points = calloc(b->character_stride * b->bands, sizeof *b->character_points);
+        b->character_normals = calloc(b->character_stride * b->bands, sizeof *b->character_normals);
         if (!b->character_points || !b->character_normals) return 0;
     }
     if (asset->bch_combiner && !(b->counts = calloc(asset->bch.material_count ? asset->bch.material_count : 1,
@@ -2228,9 +2617,8 @@ static int window(const struct options *o, struct model_asset *asset)
                 }
             }
         }
-        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, b.vertices, b.normals, &target, &frame, path,
-                                                     frames == 0 ? b.counts : NULL, b.character_points,
-                                                     b.character_normals) :
+        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, &b, &target, &frame, path,
+                                                     frames == 0 ? b.counts : NULL) :
             o->textured ? !draw_textured(renderer, asset, &c, b.vertices, &target, &frame, path) :
                           !draw(renderer, mesh, &c, b.points, path)) goto done;
         if (frames == 0 && b.counts)
@@ -2482,8 +2870,7 @@ int main(int argc, char **argv)
         if (!w->active) printf(" marker=none\n");
         else {
             double y = 0;
-            const int hit = px_field_collision_first_height(&asset.collision, cell_center(w->x),
-                                                             cell_center(w->z), &y) == PX_FIELD_OK;
+            const int hit = scene_height(&asset, cell_center(w->x), cell_center(w->z), &y);
             printf(" marker=cell:%d,%d local=%.9g,%.9g height=%s%.9g moves=%" PRIu32 " blocked=%" PRIu32 "\n",
                    w->x, w->z, cell_center(w->x), cell_center(w->z), hit ? "" : "none:", y, w->moves, w->blocked);
         }
