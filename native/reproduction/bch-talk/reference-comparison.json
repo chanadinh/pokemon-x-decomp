@@ -1,0 +1,40 @@
+{
+ "archive_sha256": {
+  "a/0/8/2": "16b9a70f11fd6ac5779a577a16e457b793028be612d279dab28d1abf59349999",
+  "a/0/1/2": "dc0b7a0dd2764480eaebd4c1c057d1fa8e268ccdf8953945713bb091925190d2"
+ },
+ "verifier_sha256": "bccd07ba9ff7eefe7f113dc3c0226e046a9d79d59facac7dea825a3cf944d2dd",
+ "bridge_source_sha256": "4cae33bcc15f2d23a710ac778cb84fcec101d1a5d16d32708c228eed9d9ed846",
+ "text": {
+  "files": 424,
+  "lines": 7607,
+  "unrenderable": 0,
+  "all_lines_match": true
+ },
+ "talks": {
+  "npcs": 2524,
+  "results": {
+   "halted": 2213,
+   "yields": 311
+  },
+  "npcs_with_lines": 1183,
+  "message_lines": 1282,
+  "all_lines_in_zone_text": true,
+  "all_runs_match": true
+ },
+ "viewer": {
+  "inspect": [
+   "dialogue zone=4 script=yes text=a/0/8/2:53:yes lines=4 natives=policy-inferred female=1",
+   "npc_dialogue index=0 script=1 result=halted steps=276 lines=1"
+  ],
+  "runtime": [
+   "dialogue zone=4 script=yes text=a/0/8/2:53:yes lines=4 natives=policy-inferred female=1",
+   "talk zone=4 npc=0 id=0 script=1",
+   "dialogue zone=4 script=1 result=halted lines=1",
+   "message zone=4 line=1 page=1 text=\"Oh, you must be the new young lady from\\nnext door. Welcome to Vaniville Town!\"",
+   "message zone=4 line=1 page=2 text=\"We have a son who is just about the same\\nage as you. If you do meet our Calem,\"",
+   "message zone=4 line=1 page=3 text=\"I hope you two will become good friends.\""
+  ],
+  "capture_sha256": "7de47c74d5bb5dc18b4967a5ba14e59a84af68366c2678f748dc0cc60afc3621"
+ }
+}

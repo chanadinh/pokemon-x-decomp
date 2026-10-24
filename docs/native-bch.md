@@ -403,3 +403,24 @@ towns span several map regions. An independent model of the walking rules
 predicts the viewer's walks through the house exactly. See the
 [zone record](../native/reproduction/bch-zone/README.txt).
 
+## Talking to NPCs
+
+<p align="center"><img src="images/native-bch-talk.png" alt="The player facing the NPC downstairs, with a message window showing her greeting" width="720"></p>
+
+Talking now runs the game's own script. Each zone carries a compiled Pawn 3.3
+script; its entry point picks an event by the NPC's script number. The viewer
+runs that event in an independently written interpreter and shows the lines of
+story text it selects. The text comes from the game's English story-text archive,
+which decodes in full: 424 files and 7,607 lines.
+
+The script calls native functions by name hash. Five of them have meanings
+inferred from how the scripts use them: show a message, ask whether the player is
+female, read a story value, and two "is it finished" waits. Everything else does
+nothing, as in a new game. With that, 1,183 of the 2,524 NPCs in the game say
+something, and every line they pick exists in their zone's text. A separate
+Python decoder and interpreter agree on every one of those runs.
+
+The window and font are drawn by the viewer itself: the game uses the console's
+system font, which is not part of the game data. See the
+[dialogue record](../native/reproduction/bch-talk/README.txt).
+

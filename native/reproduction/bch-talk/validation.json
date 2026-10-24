@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "2fea62c006ba8fa09fa483ebfd5539233eef1dca",
+  "result": "passed",
+  "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; local WSL host and native Windows untested",
+  "tested_source_sha256": {
+    "Makefile": "8769a8a1a2c8116a1adf9fb3c074483143058d3497b5b3851749b849f6cd0116",
+    "model_app.c": "dee3702436c9c5f9c3848a65b89bce07a47bc26c6d30dd7f4fa9bd6f38562290",
+    "assets/gf_text.c": "2354b3bb022e6981d4128ab408c39af9e315a0217a09a1b843615b9ae9b49a61",
+    "assets/gf_text.h": "1abed86c2957861fb9de70235d364d99594025e461f42ad94ab0249e799d646e",
+    "assets/gf_script.c": "fb03e79cae724818870ea79f73d6f3207a39aa03856d6a3974ca04be9d35e0b2",
+    "assets/gf_script.h": "51b5ae47708bd80c48e4b9ce2f5c276f3f32588e739a5673013db0a55e4d1f0f",
+    "assets/zone_talk.c": "7f13588fc5236b5b08c3643f25b5f09d626d775eef0e6f71548ceae3726daca9",
+    "assets/zone_talk.h": "cbe7652c02fe4f3d63bac739e8a818cd55dd5843809b661f15d59f6348b032b6",
+    "assets/test_gf_text.c": "f4c39d2b84900cf3e9bed10155ae082d9678247b5f725f969041e340b5621e3b",
+    "assets/test_gf_script.c": "71e5d51899f13cda1a486aa59516be6400ce9f5516125588c5a4c5563d983899",
+    "render/text.c": "5612b772a194849d7205c106aa65f1c0216ac4d1ea5e0c63ce4bdf4a3392fc63",
+    "render/text.h": "432b7cafd5b2b212bbfdd287b3db0abc3e1df2862e2229d501fd9f79b942a649",
+    "render/text_glyphs.inc": "e27d63507821ed6d3cf1aee49bd149100bc1b4643ee0157deb5a30941a0a97ea",
+    "tests/test_bch_talk_viewer.py": "33af9b19bc3503d73021882c9ba4558cbf0344744ac466b3cd0e07b339904ab7",
+    "reproduction/bch-talk/dump_talk.c": "4cae33bcc15f2d23a710ac778cb84fcec101d1a5d16d32708c228eed9d9ed846",
+    "reproduction/bch-talk/verify_talk.py": "bccd07ba9ff7eefe7f113dc3c0226e046a9d79d59facac7dea825a3cf944d2dd"
+  },
+  "checks": [
+    {
+      "command": "make -C native clean && make -C native all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 21,
+      "python_tests": 108
+    },
+    {
+      "command": "make -C reconstructed test; python3 -m unittest discover -s tests",
+      "result": "passed (38 tests, 2 skips)"
+    },
+    {
+      "command": "ASan/UBSan with leak detection: test_gf_text, test_gf_script, dump_talk on all 424 text files and every zone script (12 events each), sanitized viewer under the talk, zone and motion suites and a real-data talk run",
+      "result": "passed; no diagnostics; capture identical"
+    },
+    {
+      "command": "earlier records",
+      "result": "all reproduction entries unchanged; ../bch-zone report reproduces except its frame-519 capture (window now open)"
+    },
+    {
+      "command": "native/reproduction/bch-talk/verify_talk.py on the real archive paths",
+      "result": "passed",
+      "text": {
+        "files": 424,
+        "lines": 7607,
+        "unrenderable": 0,
+        "all_lines_match": true
+      },
+      "talks": {
+        "npcs": 2524,
+        "results": {
+          "halted": 2213,
+          "yields": 311
+        },
+        "npcs_with_lines": 1183,
+        "message_lines": 1282,
+        "all_lines_in_zone_text": true,
+        "all_runs_match": true
+      },
+      "viewer_capture_sha256": "7de47c74d5bb5dc18b4967a5ba14e59a84af68366c2678f748dc0cc60afc3621",
+      "report_sha256": "af3396a98668003496b29c8a072a4d20c3bdb2a1c040cccbc6ef025945864064"
+    }
+  ],
+  "limitations": [
+    "Native semantics inferred from script usage (five natives); all others return 0",
+    "Fresh-game state; no flags, work values or save data",
+    "English story text only; placeholder player name",
+    "Self-authored font and window, not the game art",
+    "No running-game comparison"
+  ],
+  "logs_sha256": "9fd596e697855cabd708f4513a3d1a82fcf8ee89505eba0b5bd36378965794cb"
+}

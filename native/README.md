@@ -463,3 +463,9 @@ controller timing and arrival rule are inspection choices. `--arrive`, `--steps`
 `--play` and `--capture-at` support repeatable runs. See the
 [zone record](reproduction/bch-zone/README.txt).
 
+Space in front of an NPC runs the zone's own script (a Pawn 3.3 image) for that
+NPC and shows the story-text lines it picks in a message window; Space turns the
+pages. Five native calls are given inferred meanings (message, player gender,
+work values, two waits) for a new game; see the
+[dialogue record](reproduction/bch-talk/README.txt).
+

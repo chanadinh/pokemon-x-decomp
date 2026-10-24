@@ -8,9 +8,13 @@
 #include "assets/garc.h"
 #include "assets/lz.h"
 #include "assets/zone.h"
+#include "assets/gf_script.h"
+#include "assets/gf_text.h"
+#include "assets/zone_talk.h"
 #include "render/light.h"
 #include "render/raster.h"
 #include "render/skin.h"
+#include "render/text.h"
 
 #include <SDL.h>
 #include <errno.h>
@@ -53,12 +57,20 @@ struct zone_npc {
     int x, z, facing;
     uint16_t id, script, registry_model, model_entry;
 };
+enum { ZONE_MAX_PAGES = 64 };
 struct zone_state {
-    uint32_t zone, area, matrix, region;
+    uint32_t zone, area, matrix, region, text_id;
     struct px_zone_entities entities;
     struct zone_npc *npcs;
     uint32_t npc_count;
     char message[192];
+    /* Dialogue: the zone script (ZO section 2) and the zone's story text
+     * (a/0/8/2, English, entry = header u16 at 6); either may be absent. */
+    struct px_gf_script script;
+    struct px_gf_text text;
+    int has_script, has_text;
+    char *pages[ZONE_MAX_PAGES]; /* open message window pages, NULL-free when closed */
+    uint32_t page_count, page;
 };
 struct walker {
     const struct px_field_grid *grid;
@@ -187,6 +199,9 @@ static void asset_free(struct model_asset *asset)
             if (asset->zone->npcs[i].model) { asset_free(asset->zone->npcs[i].model); free(asset->zone->npcs[i].model); }
         free(asset->zone->npcs);
         px_zone_entities_free(&asset->zone->entities);
+        px_gf_script_free(&asset->zone->script);
+        px_gf_text_free(&asset->zone->text);
+        for (uint32_t i = 0; i < asset->zone->page_count; ++i) free(asset->zone->pages[i]);
         free(asset->zone);
     }
     px_bch_model_free(&asset->skin_source);
@@ -1132,6 +1147,28 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
         return 0;
     }
     zs->area = header.area_id; zs->matrix = header.matrix_id;
+    zs->text_id = (uint32_t)header.raw_header[6] | (uint32_t)header.raw_header[7] << 8;
+    {
+        struct px_field_span script;
+        if (read_resource(o->romfs, "a/0/1/2", zone, 0, 0, 0, "zone", &r)) {
+            if (px_field_section(r.data, r.size, "ZO", 2, &script) == PX_FIELD_OK &&
+                px_gf_script_decode(script.data, script.size, &zs->script) == PX_GF_SCRIPT_OK) zs->has_script = 1;
+            resource_free(&r);
+        }
+    }
+    {
+        /* Optional: without the story text archive NPCs still face the player. */
+        char path[512];
+        snprintf(path, sizeof path, "%s/a/0/8/2", o->romfs);
+        FILE *probe = fopen(path, "rb");
+        if (probe) {
+            fclose(probe);
+            if (read_resource(o->romfs, "a/0/8/2", zs->text_id, 0, 0, 0, "story text", &r)) {
+                zs->has_text = px_gf_text_decode(r.data, r.size, &zs->text) == PX_GF_TEXT_OK;
+                resource_free(&r);
+            }
+        }
+    }
     struct px_field_matrix matrix = {0};
     if (!read_resource(o->romfs, "a/0/4/2", zs->matrix, 0, 0, 0, "matrix", &r)) return 0;
     fs = px_field_matrix_decode(r.data, r.size, &matrix);
@@ -1207,6 +1244,18 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
                "player=a/0/2/1:2 motions=idle:1,walk:3,run:4\n", zone, zs->area, zs->matrix, zs->region,
                zs->entities.furniture_count, zs->entities.npc_count, zs->entities.warp_count,
                zs->entities.trigger1_count, zs->entities.trigger2_count);
+        printf("dialogue zone=%" PRIu32 " script=%s text=a/0/8/2:%" PRIu32 ":%s lines=%" PRIu32
+               " natives=policy-inferred female=1\n", zone, zs->has_script ? "yes" : "no", zs->text_id,
+               zs->has_text ? "yes" : "no", zs->has_text ? zs->text.line_count : 0);
+        for (uint32_t i = 0; zs->has_script && i < zs->npc_count; ++i) {
+            struct px_zone_talk talk;
+            px_zone_talk(&zs->script, zs->npcs[i].script, 1, &talk);
+            printf("npc_dialogue index=%" PRIu32 " script=%u result=%s steps=%" PRIu32 " lines=", i,
+                   zs->npcs[i].script, px_gf_script_result_string(talk.run.result), talk.run.steps);
+            for (uint32_t k = 0; k < talk.line_count; ++k) printf("%s%" PRId32, k ? "," : "", talk.lines[k]);
+            if (!talk.line_count) printf("none");
+            putchar('\n');
+        }
         for (uint32_t i = 0; i < zs->entities.warp_count; ++i) {
             const struct px_zone_warp *wp = &zs->entities.warps[i];
             if (!wp->supported) {
@@ -1888,6 +1937,9 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
             if (result != PX_RASTER_OK) goto raster_error;
         }
     }
+    if (asset->zone && asset->zone->page_count)
+        px_text_window(target->rgba, target->width, target->height, asset->zone->pages[asset->zone->page],
+                       asset->zone->page + 1 < asset->zone->page_count);
     if (SDL_UpdateTexture(*frame, NULL, target->rgba, w * 4) ||
         SDL_RenderClear(renderer) || SDL_RenderCopy(renderer, *frame, NULL, NULL)) return 0;
     if (path && !capture(renderer, path, out_w, out_h)) return 0;
@@ -1942,6 +1994,50 @@ static int buffers_alloc(const struct options *o, const struct model_asset *asse
  * --frames bounds the run (deterministic captures). Idle plays slot 1. Space
  * or Return faces the NPC ahead toward the player and reports its script;
  * the zone script VM is not executed. */
+/* Run the NPC's zone-script event and open its lines as message pages: a
+ * page ends at the text's scroll/clear codes or after two lines. */
+static void zone_dialogue(struct zone_state *zs, const struct zone_npc *n)
+{
+    for (uint32_t i = 0; i < zs->page_count; ++i) free(zs->pages[i]);
+    zs->page_count = zs->page = 0;
+    if (!zs->has_script || !zs->has_text) return;
+    struct px_zone_talk talk;
+    px_zone_talk(&zs->script, n->script, 1, &talk);
+    printf("dialogue zone=%" PRIu32 " script=%u result=%s lines=%" PRIu32 "\n", zs->zone, n->script,
+           px_gf_script_result_string(talk.run.result), talk.line_count);
+    static char buffer[1 << 14];
+    for (uint32_t k = 0; k < talk.line_count; ++k) {
+        if (talk.lines[k] < 0 || px_gf_text_render(&zs->text, (uint32_t)talk.lines[k], "Player", buffer,
+                                                   sizeof buffer) < 0) continue;
+        char *at = buffer;
+        while (*at && zs->page_count < ZONE_MAX_PAGES) {
+            /* Take up to two lines, stopping at a page break. */
+            char *end = at;
+            int lines = 0;
+            while (*end && *end != '\f') {
+                if (*end == '\n' && ++lines == 2) break;
+                ++end;
+            }
+            const size_t length = (size_t)(end - at);
+            char *page = malloc(length + 1);
+            if (!page) return;
+            memcpy(page, at, length); page[length] = 0;
+            if (length) {
+                zs->pages[zs->page_count++] = page;
+                printf("message zone=%" PRIu32 " line=%" PRId32 " page=%" PRIu32 " text=\"", zs->zone, talk.lines[k],
+                       zs->page_count);
+                for (const char *q = page; *q; ++q) {
+                    if (*q == '\n') fputs("\\n", stdout);
+                    else if (*q == '"' || *q == '\\') printf("\\%c", *q);
+                    else putchar(*q);
+                }
+                puts("\"");
+            } else free(page);
+            at = *end ? end + 1 : end;
+        }
+    }
+}
+
 struct zone_motion {
     int stepping, run, dx, dz;
     uint64_t start_ms;
@@ -1963,7 +2059,7 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
     if (zm->stepping && motion_now - zm->start_ms * 30 / 1000 >= zm->length) {
         zm->stepping = 0; zm->phase += zm->length;
     }
-    if (!zm->stepping) {
+    if (!zm->stepping && !asset->zone->page_count) {
         const Uint8 *keys = SDL_GetKeyboardState(NULL);
         char direction = keys[SDL_SCANCODE_W] ? 'U' : keys[SDL_SCANCODE_S] ? 'D' : keys[SDL_SCANCODE_A] ? 'L' :
                          keys[SDL_SCANCODE_D] ? 'R' : c->queued;
@@ -1996,7 +2092,19 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
             zm->dz = w->facing == 0 ? 1 : w->facing == 2 ? -1 : 0;
         } else zm->phase = 0;
     }
-    if (c->interact) {
+    if (asset->zone->page_count) {
+        /* A message window is open: Space/Return turns the page; no walking.
+         * --play: a '.' turns it too; other scripted input waits. */
+        if (!c->interact && c->play && *c->play == '.') { ++c->play; c->interact = 1; }
+        if (c->interact) {
+            c->interact = 0;
+            if (++asset->zone->page >= asset->zone->page_count) {
+                for (uint32_t i = 0; i < asset->zone->page_count; ++i) free(asset->zone->pages[i]);
+                asset->zone->page_count = asset->zone->page = 0;
+            }
+        }
+        c->queued = 0;
+    } else if (c->interact) {
         c->interact = 0;
         const int dx = w->facing == 1 ? 1 : w->facing == 3 ? -1 : 0, dz = w->facing == 0 ? 1 : w->facing == 2 ? -1 : 0;
         const int k = npc_at(asset->zone, w->x + dx, w->z + dz);
@@ -2006,6 +2114,7 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
             snprintf(asset->zone->message, sizeof asset->zone->message,
                      "NPC %u: script %u (zone script VM not implemented)", n->id, n->script);
             printf("talk zone=%" PRIu32 " npc=%d id=%u script=%u\n", asset->zone->zone, k, n->id, n->script);
+            zone_dialogue(asset->zone, n);
         } else snprintf(asset->zone->message, sizeof asset->zone->message, "nothing to talk to");
     }
     struct model_asset *p = asset->player;

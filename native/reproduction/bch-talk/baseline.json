@@ -1,0 +1,37 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "2fea62c006ba8fa09fa483ebfd5539233eef1dca",
+ "previous_native_sha256sums": {
+  "entries": 193,
+  "sha256": "9cb6a11f5eac2f800c42fd4b58b3d020e1e1e1c84ecca8b840abb37dc9f7fe0e"
+ },
+ "immutable_reproduction_records": "All earlier reproduction/ entries of the previous native/SHA256SUMS rechecked unchanged.",
+ "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+ "capture_regressions": "Only the ../bch-zone frame-519 capture changes (the talk now opens a window); its other captures and lines reproduce.",
+ "changed_native_sources": [
+  "Makefile",
+  "README.md",
+  "model_app.c"
+ ],
+ "added_native_files": [
+  "assets/gf_text.c",
+  "assets/gf_text.h",
+  "assets/gf_script.c",
+  "assets/gf_script.h",
+  "assets/zone_talk.c",
+  "assets/zone_talk.h",
+  "assets/test_gf_text.c",
+  "assets/test_gf_script.c",
+  "render/text.c",
+  "render/text.h",
+  "render/text_glyphs.inc",
+  "tests/test_bch_talk_viewer.py",
+  "reproduction/bch-talk/README.txt",
+  "reproduction/bch-talk/baseline.json",
+  "reproduction/bch-talk/dump_talk.c",
+  "reproduction/bch-talk/reference-comparison.json",
+  "reproduction/bch-talk/validation.json",
+  "reproduction/bch-talk/validation.txt",
+  "reproduction/bch-talk/verify_talk.py"
+ ]
+}

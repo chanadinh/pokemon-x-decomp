@@ -1,0 +1,24 @@
+NPC dialogue validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container, cc 13.3.0, Python 3.13,
+SDL 2.30.0, dummy video with the software renderer. Not run on the local WSL
+host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed.
+   21 native C suites (new: test_gf_text, test_gf_script); 108 Python tests
+   (new: BCH talk viewer 2).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan with leak detection: the two new suites, dump_talk over all
+   424 text files and every zone script, the sanitized viewer under the
+   talk, zone and motion suites and a real-data talk run: no diagnostics;
+   capture identical.
+4. Earlier records unchanged; ../bch-zone reproduces except its frame-519
+   capture, which now shows the open message window.
+5. verify_talk.py: 424 text files / 7,607 lines identical; 2,524 NPC script
+   runs identical (2,213 halt, 311 yield limit; 1,183 NPCs, 1,282 lines, all
+   within their zone's text); the house talk's three pages match the
+   independent rendering. Capture sha256
+   7de47c74d5bb5dc18b4967a5ba14e59a84af68366c2678f748dc0cc60afc3621.
+
+Not established: what the natives do in the game (five are inferred from
+script usage), story state, other languages, the game's font and window
+art, and any running-game comparison.
