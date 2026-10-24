@@ -567,7 +567,9 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
         else if (semantic == 7) mesh->bone_index_source = 2;
         else mesh->bone_weight_source = 2;
     }
-    if (!(semantics & (1u << 4))) return 0;
+    /* A mesh without texture coordinates (untextured outdoor geometry) gets
+     * UV (0, 0); uv_source records it. */
+    mesh->uv_source = (semantics >> 4) & 1;
     size_t start;
     if (!raw_pointer(r, &enable, 0x203, 0x26, (size_t)mesh->vertex_count * stride, &start)) return 0;
     const uint32_t new_count = out->vertex_count + mesh->vertex_count;
@@ -577,6 +579,8 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
     allocation = grow(r, out->uvs, (size_t)new_count * 2, sizeof *out->uvs);
     if (allocation == NULL) return 0;
     out->uvs = allocation;
+    if (!mesh->uv_source)
+        memset(out->uvs + (size_t)out->vertex_count * 2, 0, (size_t)mesh->vertex_count * 2 * sizeof *out->uvs);
     allocation = grow(r, out->colors, (size_t)new_count * 4, sizeof *out->colors);
     if (allocation == NULL) return 0;
     out->colors = allocation;

@@ -484,3 +484,36 @@ For fun, `--silly giant` makes the player three times larger, and
 `--silly moonwalk` makes the player walk facing backwards with the walk cycle
 reversed. Neither is game behaviour, and they change nothing else.
 
+## A first wild battle
+
+<table>
+  <tr>
+    <td><img src="images/native-bch-route2.png" alt="The player walking through the tall grass of Route 2" width="440"></td>
+    <td><img src="images/native-bch-battle.png" alt="A battle screen: a wild Scatterbug against Froakie, with the move menu open" width="440"></td>
+  </tr>
+</table>
+
+Route 2 has tall grass, and stepping into it can now start a wild battle. The
+wild Pokémon comes from the zone's own encounter table, at the levels it
+lists: on Route 2 that is Bunnelby, Zigzagoon, Fletchling, Pidgey, Scatterbug
+or Weedle. The player's partner is Froakie by default. Both use the game's
+base stats, types, moves and learnsets, the game's type chart from its battle
+module, and the game's nature table. HP and stats are computed by the
+reconstructed routines of the [stats milestone](../reconstructed/pokemon_stats/README.md),
+which run inside the viewer for the first time.
+
+The battle itself is one-on-one: Fight with up to four moves, or Run. Damage,
+critical hits, accuracy, stat stages, turn order and escaping follow the
+published Generation VI formulas, until they can be traced in the game's
+battle module. Status moves change stats as their move data says; other
+effects, items, catching and experience are not there yet. The battle
+screen is the viewer's own, with coloured placeholders where the Pokémon's
+models will go. After the battle the player walks on with the partner's HP
+kept.
+
+Meshes without texture coordinates now decode too, which brings 328 of the
+360 zones into the viewer. An independent check agrees on all the battle data, on 9,576 stat
+calculations and 20,000 damage calculations, and predicts every message of
+the recorded battle. See the
+[battle record](../native/reproduction/bch-battle/README.txt).
+

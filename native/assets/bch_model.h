@@ -94,6 +94,8 @@ struct px_bch_mesh {
      * 1 stored attribute after its uniform scale, 2 fixed attribute decoded
      * from float24 registers 0x232..0x235 (x,y,z,w = R,G,B,A), unscaled. */
     uint32_t color_source;
+    /* Texture coordinate 0 (semantic 4): 1 stored, 0 absent (uvs hold 0,0). */
+    uint32_t uv_source;
     /* Normal input (semantic 1): 0 absent (normals hold 0,0,0), 1 stored
      * after its uniform scale, 2 fixed float24 x,y,z. Not normalized. */
     uint32_t normal_source;

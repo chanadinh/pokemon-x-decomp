@@ -481,3 +481,9 @@ player's world position (Vaniville Town → Route 1 → Aquacorde Town); scenes
 include a ring of neighbouring cells. `--silly giant` and `--silly moonwalk` are
 for fun. See the [route record](reproduction/bch-route/README.txt).
 
+Tall grass starts wild encounters from the zone's table (Route 2, `--zone 259`);
+the battle uses the game's species, move, learnset and type data, stats from the
+reconstructed routines, and published damage formulas (`--partner`,
+`--partner-level`, `--seed`, `--encounter-rate`, `--code-bin`). See the
+[battle record](reproduction/bch-battle/README.txt).
+

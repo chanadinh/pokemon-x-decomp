@@ -4,13 +4,19 @@ CFLAGS = -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror
 SDL_CFLAGS ?= $(shell $(PKG_CONFIG) --cflags sdl2 2>/dev/null)
 SDL_LIBS ?= $(shell $(PKG_CONFIG) --libs sdl2 2>/dev/null)
 
+# The reconstructed HP and stat routines (and the data module they link
+# against) run in the battle path.
+RECON = ../reconstructed
+STATS_SOURCES = $(RECON)/pokemon_stats/stats_math.c $(RECON)/pokemon_data/pokemon_data.c \
+	$(RECON)/pokemon_data/pokemon_codec.c $(RECON)/pokemon_data/pokemon_fields.c \
+	$(RECON)/pokemon_constructor/pokemon_constructor.c $(RECON)/pokemon_constructor/pokemon_parameters.c
 ASSET_SOURCES = assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/texture.c assets/cgfx.c assets/bch_texture.c assets/field.c
 ASSET_HEADERS = assets/garc.h assets/lz.h assets/bclim.h assets/etc1.h assets/texture.h assets/cgfx.h assets/bch_texture.h assets/field.h
-MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c assets/bch_texture.c assets/field.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c render/tev.c render/light.c render/skin.c assets/gf_motion.c assets/zone.c assets/gf_script.c assets/gf_text.c assets/zone_talk.c render/text.c
-MODEL_HEADERS = assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h render/skin.h assets/bch_scene.h assets/gf_motion.h assets/zone.h assets/gf_script.h assets/gf_text.h assets/zone_talk.h render/text.h render/text_glyphs.inc
+MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c assets/bch_texture.c assets/field.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c render/tev.c render/light.c render/skin.c assets/gf_motion.c assets/zone.c assets/gf_script.c assets/gf_text.c assets/zone_talk.c render/text.c assets/pokedata.c game/battle.c game/battle_ui.c $(STATS_SOURCES)
+MODEL_HEADERS = assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h render/skin.h assets/bch_scene.h assets/gf_motion.h assets/zone.h assets/gf_script.h assets/gf_text.h assets/zone_talk.h render/text.h render/text_glyphs.inc assets/pokedata.h game/battle.h game/battle_ui.h
 FIELD_SOURCES = assets/field.c assets/garc.c assets/lz.c
 FIELD_HEADERS = assets/field.h assets/garc.h assets/lz.h
-CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script
+CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script build/test_pokedata build/test_battle
 
 .PHONY: all test test-core test-runtime clean check-sdl
 all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer
@@ -62,6 +68,12 @@ build/test_gf_text: assets/gf_text.c assets/gf_text.h assets/test_gf_text.c | bu
 
 build/test_gf_script: assets/gf_script.c assets/gf_script.h assets/zone_talk.c assets/zone_talk.h assets/test_gf_script.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/gf_script.c assets/zone_talk.c assets/test_gf_script.c $(LDFLAGS) $(LDLIBS) -o $@
+
+build/test_pokedata: assets/pokedata.c assets/pokedata.h assets/test_pokedata.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) assets/pokedata.c assets/test_pokedata.c $(LDFLAGS) $(LDLIBS) -o $@
+
+build/test_battle: game/battle.c game/battle.h game/battle_ui.c game/battle_ui.h game/test_battle.c assets/pokedata.c render/text.c $(STATS_SOURCES) | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) game/battle.c game/battle_ui.c game/test_battle.c assets/pokedata.c render/text.c $(STATS_SOURCES) $(LDFLAGS) $(LDLIBS) -o $@
 
 build/test_zone: assets/zone.c assets/zone.h assets/test_zone.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/zone.c assets/test_zone.c $(LDFLAGS) $(LDLIBS) -lm -o $@
@@ -115,6 +127,8 @@ test test-core: $(CORE_TESTS)
 	./build/test_zone
 	./build/test_gf_text
 	./build/test_gf_script
+	./build/test_pokedata
+	./build/test_battle
 	python3 -m unittest discover -s tests -p test_container.py -v
 	python3 -m unittest discover -s tests -p test_bch.py -v
 	python3 -m unittest discover -s tests -p test_pica_commands.py -v
@@ -138,6 +152,7 @@ test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemo
 	python3 -m unittest discover -s tests -p test_bch_zone_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_talk_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_town_viewer.py -v
+	python3 -m unittest discover -s tests -p test_bch_battle_viewer.py -v
 	SDL_VIDEODRIVER=dummy ./build/pokemon_field_viewer --demo --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_field_viewer.py -v
 

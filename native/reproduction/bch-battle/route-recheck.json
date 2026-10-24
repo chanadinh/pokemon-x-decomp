@@ -1,0 +1,64 @@
+{
+ "command": "../bch-route/verify_route.py with this viewer",
+ "result": "passed",
+ "zones": {
+  "zones": 360,
+  "loaded": 328,
+  "multi_region_loaded": 109,
+  "props_drawn": 2705,
+  "props_not_drawn": 159,
+  "compared_props": 2864,
+  "compared_npc_tiles": 2217,
+  "compared_warp_tiles": 593,
+  "neighbour_regions_left_out": 2
+ },
+ "failed": {
+  "region 923 failed to load.": 1,
+  "region 927 failed to load.": 1,
+  "BCH model: invalid BCH geometry, index, relocation, or command": 3,
+  "region 738 failed to load.": 1,
+  "BCH model: unsupported BCH version or static geometry feature": 2,
+  "BCH textures: BCH texture index does not exist": 1,
+  "--walk GR terrain: unsupported field layout": 9,
+  "region 955 failed to load.": 1,
+  "region 564 failed to load.": 1,
+  "region 572 failed to load.": 1,
+  "region 580 failed to load.": 1,
+  "region 588 failed to load.": 1,
+  "region 87 failed to load.": 1,
+  "region 141 failed to load.": 1,
+  "region 144 failed to load.": 1,
+  "region 149 failed to load.": 1,
+  "region 950 failed to load.": 1,
+  "region 301 failed to load.": 1,
+  "region 937 failed to load.": 1,
+  "region 475 failed to load.": 1,
+  "region 876 failed to load.": 1
+ },
+ "earlier_captures_without_props": {
+  "bch-zone:0": "39dac8226ebeb9a727ee733a6eb6a1ebd034b7de76ee09e61c8abec170944d55",
+  "bch-zone:60": "0c42e3bae3a63d2ae7edaa4a96818cbef6aed87a602f16533a481355d9043e2e",
+  "bch-zone:200": "d34994de67b90d4b71d25a780f88d58e7e246ab47ba16d57b62a92aa3bc4b851",
+  "bch-talk": "7de47c74d5bb5dc18b4967a5ba14e59a84af68366c2678f748dc0cc60afc3621"
+ },
+ "crossings": [
+  [
+   0,
+   258,
+   460,
+   589
+  ],
+  [
+   258,
+   8,
+   460,
+   559
+  ]
+ ],
+ "capture_sha256": {
+  "aquacorde": "ef971253aea1ed8fa9a4b22b59537a749d369986ef3b1b7bb4494b4889602b87",
+  "route1": "c2b0dfc9469c1317ae00bde0d92083274d6717f1949478c12a4d1c2c19423067",
+  "giant": "0d7a807ff517751208911047f5b0e4e9213ec3bb376648916fea8e2abaf8b74f",
+  "moonwalk": "f97fe6178a1695915d93ca89b4d585babbadccc8164b55b6f6a45de7577d0793"
+ }
+}

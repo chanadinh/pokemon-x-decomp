@@ -1,0 +1,40 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "f7b68cb4240ae708cc30d6fca50c1e4bbe2da413",
+ "previous_native_sha256sums": {
+  "entries": 226,
+  "sha256": "7ca3299a9ed87409e52c57b982a65e9d381a76ed1b7581a4986726df1d7f33fe"
+ },
+ "immutable_reproduction_records": "All earlier reproduction/ entries of the previous native/SHA256SUMS rechecked unchanged.",
+ "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged; the stats routines are linked into the viewer unmodified.",
+ "capture_regressions": "../bch-route Aquacorde and giant captures change (hidden meshes and placeholder planes not drawn); route-recheck.json.",
+ "changed_native_sources": [
+  "Makefile",
+  "README.md",
+  "model_app.c",
+  "assets/bch_model.c",
+  "assets/bch_model.h",
+  "assets/test_bch_model.c",
+  "render/text.c",
+  "render/text.h"
+ ],
+ "added_native_files": [
+  "assets/pokedata.c",
+  "assets/pokedata.h",
+  "assets/test_pokedata.c",
+  "game/battle.c",
+  "game/battle.h",
+  "game/battle_ui.c",
+  "game/battle_ui.h",
+  "game/test_battle.c",
+  "tests/test_bch_battle_viewer.py",
+  "reproduction/bch-battle/README.txt",
+  "reproduction/bch-battle/baseline.json",
+  "reproduction/bch-battle/dump_battle.c",
+  "reproduction/bch-battle/reference-comparison.json",
+  "reproduction/bch-battle/route-recheck.json",
+  "reproduction/bch-battle/validation.json",
+  "reproduction/bch-battle/validation.txt",
+  "reproduction/bch-battle/verify_battle.py"
+ ]
+}

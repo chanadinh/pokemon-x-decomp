@@ -37,6 +37,16 @@ static void fill(uint8_t *rgba, uint32_t width, uint32_t height, int x0, int y0,
     for (int y = y0; y < y1; ++y) for (int x = x0; x < x1; ++x) plot(rgba, width, height, x, y, c);
 }
 
+void px_text_rect(uint8_t *rgba, uint32_t width, uint32_t height, int x0, int y0, int x1, int y1,
+                  const uint8_t color[4])
+{
+    if (x0 < 0) x0 = 0;
+    if (y0 < 0) y0 = 0;
+    if (x1 > (int)width) x1 = (int)width;
+    if (y1 > (int)height) y1 = (int)height;
+    fill(rgba, width, height, x0, y0, x1, y1, color);
+}
+
 int px_text_draw(uint8_t *rgba, uint32_t width, uint32_t height, int x, int y, const char *text,
                  const uint8_t color[4], int scale)
 {

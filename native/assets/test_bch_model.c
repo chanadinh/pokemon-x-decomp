@@ -147,8 +147,10 @@ static struct fixture fixture_with(unsigned width, int parameters)
                                0, skinned ? 0x3210 : stored_normal ? 0x210 : 0x10,
                                skinned ? 0x40180000 : stored_normal ? 0x30180000 : 0x20140000};
     packet(&f, 0x200, 15, 1, 6, config);
+    /* parameters bit 5: the second stored attribute is texture coordinate 1
+     * (semantic 5), so the mesh has no texture coordinate 0. */
     const uint32_t permutation[] = {skinned ? 0x8740 : fixed_color ? 0x340 :
-                                    (fixed_normal || stored_normal) ? 0x140 : 0x40, 0};
+                                    (fixed_normal || stored_normal) ? 0x140 : (parameters & 32) ? 0x50 : 0x40, 0};
     packet(&f, 0x2bb, 15, 1, 2, permutation);
     single(&f, 0x242, 1, skinned ? 3 : fixed || stored_normal ? 2 : 1);
     const uint32_t offset[] = {0x80000006, 0, float_bits(30), float_bits(-20), float_bits(10)};
@@ -408,6 +410,15 @@ static void test_normals(void)
     static const float expected[9] = {0, 127, 0, -127, 0, 0, 1, -2, 64};
     assert(memcmp(model.normals, expected, sizeof expected) == 0);
     assert(model.uvs[0] == .125f && model.positions[0] == 6); /* other attributes unchanged */
+    px_bch_model_free(&model);
+    /* Without texture coordinate 0 the UVs are (0, 0) and uv_source 0. */
+    f = fixture_with(1, 32);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.meshes[0].uv_source == 0 && model.positions[0] == 6);
+    for (uint32_t v = 0; v < model.vertex_count * 2; ++v) assert(model.uvs[v] == 0);
+    px_bch_model_free(&model);
+    f = fixture_with(1, 0);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK && model.meshes[0].uv_source == 1);
     px_bch_model_free(&model);
     /* A two-element stored normal is unsupported. */
     f = fixture_with(1, 8);

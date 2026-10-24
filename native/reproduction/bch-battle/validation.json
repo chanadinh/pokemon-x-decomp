@@ -1,0 +1,90 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "f7b68cb4240ae708cc30d6fca50c1e4bbe2da413",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "Makefile": "64ef2d432ee2cf744ddedc391883474062f5e2258c84c7fbe8529d18761cb342",
+  "model_app.c": "51504345014b385139a38499ceddc4571979a33bb37d1309fe54fb4d8e582812",
+  "assets/pokedata.c": "91b47a2540ce1c564850d0ebee5f8b766bcff0e3743015f912a97f2f4bbb73c9",
+  "game/battle.c": "d83a2de3065a12a840bdc76678871ccc513f270d33b6650266be45b2a66c8def",
+  "game/battle_ui.c": "e3ea9d31e3f90cb812606de723c53fa87e28c1e331a0d88af03b1d3e9fb43eed",
+  "tests/test_bch_battle_viewer.py": "813c4b9f5985c78ad2fccd1ccd9d6060d1ab9a486fd5b78c43c1a0a64128af75",
+  "reproduction/bch-battle/dump_battle.c": "abfe458decba95a5b1979b0e6fdff9c5058071f916491717199db2ef36833dbb",
+  "reproduction/bch-battle/verify_battle.py": "227c917ad7e0495ee7c2d8ee316a2c5d35021f71d372b487cb9122c8ac994e8c"
+ },
+ "checks": [
+  {
+   "command": "make -C native clean && make -C native all test test-runtime",
+   "result": "passed",
+   "native_c_suites": 23,
+   "python_tests": 112
+  },
+  {
+   "command": "make -C reconstructed test; python3 -m unittest discover -s tests",
+   "result": "passed"
+  },
+  {
+   "command": "ASan/UBSan (halt on error) with leak detection: test_pokedata, test_battle, a Route 2 battle in the display loop, the battle and town viewer suites under the sanitized viewer",
+   "result": "passed; no diagnostics"
+  },
+  {
+   "command": "checksums of reconstructed and earlier reproduction records",
+   "result": "all unchanged"
+  },
+  {
+   "command": "native/reproduction/bch-battle/verify_battle.py on the real archive paths and code.bin",
+   "result": "passed",
+   "tables": {
+    "personal": 799,
+    "moves": 618,
+    "learnsets": 799,
+    "learnset_pairs": 12531,
+    "chart_counts": {
+     "0": 8,
+     "2": 61,
+     "4": 204,
+     "8": 51
+    }
+   },
+   "wild_zones": 53,
+   "stats": {
+    "cases": 9576,
+    "identical": 9576
+   },
+   "damage": {
+    "cases": 20000,
+    "identical": 20000,
+    "immune": 759
+   },
+   "runtime_lines": [
+    "partner species=656 name=Froakie level=5 nature=12 iv=11,23,10,14,21,17 stats=19,11,9,12,12,10 moves=1,45,145,0",
+    "encounter zone=259 cell=100,89 slot=7 species=664 level=3",
+    "wild species=664 name=Scatterbug level=3 nature=7 iv=15,17,16,26,18,5 stats=15,7,7,6,7,6 moves=33,81,0,0",
+    "battle turn=1 message=\"Froakie used Pound!\"",
+    "battle turn=1 message=\"The wild Scatterbug used String Shot!\"",
+    "battle turn=1 message=\"Froakie's Speed fell sharply!\"",
+    "battle turn=2 message=\"Froakie used Pound!\"",
+    "battle turn=2 message=\"The wild Scatterbug used String Shot!\"",
+    "battle turn=2 message=\"Froakie's Speed fell sharply!\"",
+    "battle turn=3 message=\"The wild Scatterbug used Tackle!\"",
+    "battle turn=3 message=\"Froakie used Pound!\"",
+    "battle turn=3 message=\"A critical hit!\"",
+    "battle turn=3 message=\"The wild Scatterbug fainted!\"",
+    "battle_end result=won turns=3 partner_hp=16/19 wild_hp=0/15"
+   ],
+   "report": "reference-comparison.json",
+   "report_sha256": "14a8e86dd6b9a76e2f6b8f8670d34895de96ddd477bf3012c71c100c2f9e254d"
+  },
+  {
+   "command": "native/reproduction/bch-route/verify_route.py with this viewer",
+   "result": "passed",
+   "report": "route-recheck.json"
+  }
+ ],
+ "limitations": [
+  "Encounter rate, slot odds and battle formulas are published or chosen, not traced in the game's code",
+  "No battle models, catching, experience or move effects beyond stat changes",
+  "No running-game comparison"
+ ]
+}

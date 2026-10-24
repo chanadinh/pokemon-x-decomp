@@ -1,0 +1,22 @@
+Wild battle validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video with the software renderer. Not run on the local
+WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed.
+   23 native C suites (new: test_pokedata, test_battle; extended:
+   test_bch_model); 112 Python tests (new: BCH battle viewer 2).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection: the new suites, a Route 2
+   battle and the battle and town viewer suites under the sanitized viewer:
+   no diagnostics.
+4. Earlier records unchanged. ../bch-route/verify_route.py passes with this
+   viewer: 328 of 360 zones load; its Aquacorde and giant captures change.
+5. verify_battle.py: 799 personal entries, 618 moves, 799 learnsets (12,531
+   pairs), 53 wild tables and the type chart identical to an independent
+   parser; 9,576 stat cases of the reconstructed routines identical to the
+   published formulas; 20,000 damage cases identical; the Route 2 battle
+   (Scatterbug, 3 turns, won) predicted message for message.
+
+Not established: the game's own encounter rate, slot odds, damage and move
+effect code (DllBattle.cro), and any running-game comparison.

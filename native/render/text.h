@@ -18,6 +18,9 @@ int px_text_has_glyph(uint32_t code);
  * pixels. Each glyph is 5x7 cells of `scale` pixels, advance 6 * scale. */
 int px_text_draw(uint8_t *rgba, uint32_t width, uint32_t height, int x, int y, const char *text,
                  const uint8_t color[4], int scale);
+/* Fill [x0, x1) x [y0, y1), clipped to the frame. */
+void px_text_rect(uint8_t *rgba, uint32_t width, uint32_t height, int x0, int y0, int x1, int y1,
+                  const uint8_t color[4]);
 /* A message window over the bottom of the frame: a framed box and up to two
  * lines of `page` (lines separated by '\n'), with a small arrow when `more`. */
 void px_text_window(uint8_t *rgba, uint32_t width, uint32_t height, const char *page, int more);

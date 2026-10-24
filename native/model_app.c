@@ -11,6 +11,9 @@
 #include "assets/gf_script.h"
 #include "assets/gf_text.h"
 #include "assets/zone_talk.h"
+#include "assets/pokedata.h"
+#include "game/battle.h"
+#include "game/battle_ui.h"
 #include "render/light.h"
 #include "render/raster.h"
 #include "render/skin.h"
@@ -37,6 +40,12 @@ struct options {
     int have_motion_section, have_motion_slot, have_motion_frame, have_walk_motion;
     uint32_t zone, arrive, run_motion_slot, capture_at, threads;
     int have_zone, have_arrive, silent, have_run_motion, have_capture_at;
+    /* --zone wild encounters: the partner Pokémon, the random seed, the
+     * percent chance per grass step and the code.bin holding the nature
+     * table (natures are neutral without it). */
+    uint32_t partner, partner_level, seed, encounter_rate;
+    int have_partner, have_partner_level, have_seed, have_encounter_rate;
+    const char *code_bin;
     const char *play; /* --zone: scripted input during display */
     int silly; /* --silly: 0 none, 1 giant, 2 moonwalk (for fun; not game behaviour) */
     uint32_t entry, subentry, model, frames, section;
@@ -44,6 +53,7 @@ struct options {
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
     int have_section, triangle_list, combiners;
     int allow_skeleton; /* --zone regions: retry a skeleton model as skinned */
+    int hide_invisible; /* --zone scenes: meshes whose visible flag is 0 are not drawn */
     int no_props;       /* --zone: leave region props out (the earlier scenes) */
     int have_texture_entry, have_texture_subentry, have_texture_section;
 };
@@ -78,6 +88,9 @@ struct zone_state {
     struct px_gf_script script;
     struct px_gf_text text;
     int has_script, has_text;
+    /* Wild Pokémon (ZO section 3), when the zone has them. */
+    struct px_encounter_table wild;
+    int has_wild;
     char *pages[ZONE_MAX_PAGES]; /* open message window pages, NULL-free when closed */
     uint32_t page_count, page;
     /* Multi-region matrices (towns, routes): the zone's cells span cols x rows
@@ -88,6 +101,10 @@ struct zone_state {
     uint32_t cols, rows, cell_x0, cell_z0;
     double main_offset[2]; /* the scene asset's cell, from the origin cell */
     int32_t refused; /* a neighbouring zone that failed to load, or -1 */
+    /* Placeholder regions (a single untextured flat plane over the cell): the
+     * scene asset when hide_main, else region k when region_hidden[k]. */
+    int hide_main;
+    uint8_t *region_hidden;
     int32_t *cell_region;
     int16_t *subcell_zone; /* (cols * 4) x (rows * 4) matrix zone ids, 10 x 10 tiles each */
     struct model_asset *regions;
@@ -114,6 +131,8 @@ struct camera {
     int interact;
     const char *play; /* --play cursor */
     int internal_w, internal_h; /* --zone: fixed render size, scaled to the window */
+    int in_battle;     /* keys drive the battle menu instead */
+    char battle_key;   /* U, D, L, R, '.' or 'x', or 0 */
 };
 static int npc_at(const struct zone_state *zone, int x, int z)
 {
@@ -121,11 +140,15 @@ static int npc_at(const struct zone_state *zone, int x, int z)
         if (zone->npcs[i].x == x && zone->npcs[i].z == z) return (int)i;
     return -1;
 }
+/* --zone: tall grass, the tile family 0x2?002004 (Route 2's grass patches:
+ * 0x20002004; 0x21..0x23 variants elsewhere), is walkable and starts wild
+ * encounters. An inspection reading of the words, not the game's collision. */
+static int grass_tile(uint32_t word) { return (word & UINT32_C(0xF0FFFFFF)) == UINT32_C(0x20002004); }
 static int walkable(const struct walker *w, int x, int z)
 {
-    return x >= 0 && z >= 0 && x < w->grid->width && z < w->grid->height &&
-           w->grid->tiles[(size_t)z * w->grid->width + (size_t)x] == UINT32_C(0x00000020) &&
-           npc_at(w->zone, x, z) < 0;
+    if (x < 0 || z < 0 || x >= w->grid->width || z >= w->grid->height) return 0;
+    const uint32_t word = w->grid->tiles[(size_t)z * w->grid->width + (size_t)x];
+    return (word == UINT32_C(0x00000020) || (w->zone && grass_tile(word))) && npc_at(w->zone, x, z) < 0;
 }
 static void walk_start(struct walker *w, const struct px_field_grid *grid)
 {
@@ -217,6 +240,7 @@ struct model_asset {
     uint32_t motion_start, motion_posed;
     int motion_fixed, motion_ready;
     int bch_textured;
+    int hide_invisible; /* skip meshes whose visible flag is 0 */
 };
 
 static void asset_free(struct model_asset *asset)
@@ -232,7 +256,7 @@ static void asset_free(struct model_asset *asset)
         for (uint32_t i = 0; i < asset->zone->page_count; ++i) free(asset->zone->pages[i]);
         for (uint32_t i = 0; asset->zone->regions && i < asset->zone->region_count; ++i) asset_free(&asset->zone->regions[i]);
         free(asset->zone->regions); free(asset->zone->region_offset); free(asset->zone->region_entry);
-        free(asset->zone->cell_region); free(asset->zone->subcell_zone);
+        free(asset->zone->cell_region); free(asset->zone->subcell_zone); free(asset->zone->region_hidden);
         for (uint32_t i = 0; i < asset->zone->prop_model_count; ++i) asset_free(&asset->zone->prop_models[i]);
         free(asset->zone->prop_models); free(asset->zone->prop_model_entry); free(asset->zone->props);
         free(asset->zone);
@@ -334,14 +358,20 @@ static void usage(FILE *stream, const char *program)
         "  --capture-at N     With --frames and --capture-frame: capture rendered\n"
         "                     frame N (0-based, default 0) instead of the first\n"
         "  --software         Force software rendering\n"
-        "  --threads N        BCH scenes: draw in N row bands (1..8; default: CPUs)\n"
+        , program);
+    fputs("  --threads N        BCH scenes: draw in N row bands (1..8; default: CPUs)\n"
         "  --no-props         With --zone: do not load or draw region props\n"
+        "  --partner N        With --zone: the partner Pokemon's species (default 656)\n"
+        "  --partner-level N  Its level, 1..100 (default 5)\n"
+        "  --seed N           Random seed for encounters and battles (default 1)\n"
+        "  --encounter-rate N Percent chance per grass step, 0..100 (default 10)\n"
+        "  --code-bin PATH    code.bin for the nature table (else natures are neutral)\n"
         "  --silly MODE       With --zone, for fun: giant (a three-times player) or\n"
         "                     moonwalk (walks facing backwards, cycle reversed)\n"
         "  --self-test-input  Exercise orbit/zoom/reset/exit; default 3 frames\n"
         "Controls: arrows orbit, +/- zoom, R/Home reset, Escape exit.\n"
         "Orthographic wireframe by default; --textured uses a bounded software preview.\n"
-        "Inspection camera; lighting only with --environment-archive; animation only with --motion.\n", program);
+        "Inspection camera; lighting only with --environment-archive; animation only with --motion.\n", stream);
 }
 
 static int number(const char *text, uint32_t *out)
@@ -396,7 +426,9 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--player-section") && strcmp(arg, "--motion-section") &&
             strcmp(arg, "--motion") && strcmp(arg, "--motion-frame") && strcmp(arg, "--walk-motion") &&
             strcmp(arg, "--zone") && strcmp(arg, "--arrive") && strcmp(arg, "--play") &&
-            strcmp(arg, "--capture-at") && strcmp(arg, "--threads") && strcmp(arg, "--silly")) return 0;
+            strcmp(arg, "--capture-at") && strcmp(arg, "--threads") && strcmp(arg, "--silly") &&
+            strcmp(arg, "--partner") && strcmp(arg, "--partner-level") && strcmp(arg, "--seed") &&
+            strcmp(arg, "--encounter-rate") && strcmp(arg, "--code-bin")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -405,8 +437,9 @@ static int parse(int argc, char **argv, struct options *o)
         else if (!strcmp(arg, "--texture-archive")) o->texture_archive = value;
         else if (!strcmp(arg, "--environment-archive")) o->environment_archive = value;
         else if (!strcmp(arg, "--player-archive")) o->player_archive = value;
+        else if (!strcmp(arg, "--code-bin")) { if (o->code_bin) return 0; o->code_bin = value; }
         else if (!strcmp(arg, "--play")) {
-            if (o->play || strspn(value, "UDLRudlr.") != strlen(value) || strlen(value) > 4096) return 0;
+            if (o->play || strspn(value, "UDLRudlr.x") != strlen(value) || strlen(value) > 4096) return 0;
             o->play = value;
         }
         else if (!strcmp(arg, "--steps")) {
@@ -451,6 +484,18 @@ static int parse(int argc, char **argv, struct options *o)
             } else if (!strcmp(arg, "--zone")) {
                 if (o->have_zone || n > 65535) return 0;
                 o->zone = n; o->have_zone = 1;
+            } else if (!strcmp(arg, "--partner")) {
+                if (o->have_partner || !n || n > 798) return 0;
+                o->partner = n; o->have_partner = 1;
+            } else if (!strcmp(arg, "--partner-level")) {
+                if (o->have_partner_level || !n || n > 100) return 0;
+                o->partner_level = n; o->have_partner_level = 1;
+            } else if (!strcmp(arg, "--seed")) {
+                if (o->have_seed) return 0;
+                o->seed = n; o->have_seed = 1;
+            } else if (!strcmp(arg, "--encounter-rate")) {
+                if (o->have_encounter_rate || n > 100) return 0;
+                o->encounter_rate = n; o->have_encounter_rate = 1;
             } else if (!strcmp(arg, "--threads")) {
                 if (o->threads || !n || n > 8) return 0;
                 o->threads = n;
@@ -1102,6 +1147,7 @@ static int load(const struct options *o, struct model_asset *asset)
     if (!read_resource(o->romfs, o->archive, o->entry, o->subentry, o->have_section,
                        o->section, "model", &model)) return 0;
     int ok = decode_model(o, model.data, model.size, asset);
+    asset->hide_invisible = o->hide_invisible;
     if (ok && o->have_motion_slot && o->skinned && !o->player_archive)
         ok = load_motion(o, model.data, model.size, asset);
     if (ok && o->walk) {
@@ -1256,6 +1302,24 @@ static int zone_cells(struct zone_state *zs, const struct px_field_matrix *m)
     return 1;
 }
 
+/* A placeholder region model: one mesh of at most 6 vertices, flat at y=0
+ * across exactly the cell, whose materials name no texture. Such cells fill
+ * the matrix around a route (region 0 of matrix 0 is one); the viewer does
+ * not draw them (an inspection choice: in the game they stay below the
+ * terrain, out of the field camera's view). */
+static int placeholder_region(const struct model_asset *r)
+{
+    const struct px_bch_model *b = &r->bch;
+    if (b->mesh_count != 1 || r->wire.vertex_count > 6) return 0;
+    for (unsigned c = 0; c < 3; c += 2)
+        if (r->wire.bounds_min[c] != -360 || r->wire.bounds_max[c] != 360) return 0;
+    if (r->wire.bounds_min[1] != 0 || r->wire.bounds_max[1] != 0) return 0;
+    for (uint32_t i = 0; i < b->material_count; ++i)
+        for (unsigned u = 0; u < 3; ++u)
+            if (b->materials[i].texture_names[u].present) return 0;
+    return 1;
+}
+
 /* Load the zone's other regions (model, textures, environment, terrain) and
  * replace the scene grid by the composite of all its cells (40 x 40 tiles
  * each; cells not in the zone are blocked). */
@@ -1265,7 +1329,9 @@ static int load_regions(const struct options *zo, const struct px_field_matrix *
     zs->regions = calloc(zs->region_count, sizeof *zs->regions);
     zs->region_offset = calloc(zs->region_count, sizeof *zs->region_offset);
     zs->region_entry = calloc(zs->region_count, sizeof *zs->region_entry);
-    if (!zs->regions || !zs->region_offset || !zs->region_entry) return 0;
+    zs->region_hidden = calloc(zs->region_count ? zs->region_count : 1, 1);
+    if (!zs->regions || !zs->region_offset || !zs->region_entry || !zs->region_hidden) return 0;
+    zs->hide_main = placeholder_region(asset);
     struct px_field_grid grid = {0};
     grid.width = (uint16_t)(zs->cols * 40); grid.height = (uint16_t)(zs->rows * 40);
     memcpy(grid.sections, asset->grid.sections, sizeof grid.sections);
@@ -1299,6 +1365,7 @@ static int load_regions(const struct options *zo, const struct px_field_matrix *
                     continue;
                 }
             }
+            if (k > 0) zs->region_hidden[k - 1] = (uint8_t)placeholder_region(r);
             if (r->grid.width != 40 || r->grid.height != 40) {
                 fprintf(stderr, "[model-viewer] zone %" PRIu32 ": a region grid is %ux%u, not 40x40.\n", zs->zone,
                         r->grid.width, r->grid.height);
@@ -1430,6 +1497,9 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
         if (read_resource(o->romfs, "a/0/1/2", zone, 0, 0, 0, "zone", &r)) {
             if (px_field_section(r.data, r.size, "ZO", 2, &script) == PX_FIELD_OK &&
                 px_gf_script_decode(script.data, script.size, &zs->script) == PX_GF_SCRIPT_OK) zs->has_script = 1;
+            struct px_field_span wild;
+            if (px_field_section(r.data, r.size, "ZO", 3, &wild) == PX_FIELD_OK &&
+                px_encounter_table_decode(wild.data, wild.size, &zs->wild) == PX_POKEDATA_OK) zs->has_wild = 1;
             resource_free(&r);
         }
     }
@@ -1468,7 +1538,7 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
     zo.texture_subentry = 0; zo.have_texture_section = 1; zo.texture_section = 11;
     zo.environment_archive = "a/0/0/3"; zo.environment_entry = 137; zo.have_environment_entry = 1;
     zo.environment_subentry = 0; zo.have_environment_section = 1; zo.environment_section = 0; zo.scene = 0;
-    zo.walk = 1; zo.steps = NULL; zo.allow_skeleton = 1;
+    zo.walk = 1; zo.steps = NULL; zo.allow_skeleton = 1; zo.hide_invisible = 1;
     zo.player_archive = "a/0/2/1"; zo.player_entry = 2; zo.have_player_entry = 1;
     zo.player_section = 0; zo.have_player_section = 1;
     zo.have_motion_section = zo.have_motion_slot = 1; zo.motion_section = 1; zo.motion_slot = 1;
@@ -1537,6 +1607,16 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
             for (uint32_t i = 0; i < zs->region_count; ++i)
                 printf(" region=%" PRIu32 "@%.0f,%.0f", zs->region_entry[i], zs->region_offset[i][0], zs->region_offset[i][1]);
             printf(" tile_origin=%u,%u\n", 40 * zs->cell_x0, 40 * zs->cell_z0);
+            uint32_t hidden = zs->hide_main;
+            for (uint32_t i = 0; i < zs->region_count; ++i) hidden += zs->region_hidden[i];
+            if (hidden) {
+                printf("zone_placeholders zone=%" PRIu32 " regions=", zone);
+                const char *sep = "";
+                if (zs->hide_main) { printf("%" PRIu32, zs->region); sep = ","; }
+                for (uint32_t i = 0; i < zs->region_count; ++i)
+                    if (zs->region_hidden[i]) { printf("%s%" PRIu32, sep, zs->region_entry[i]); sep = ","; }
+                printf(" drawn=no\n");
+            }
         }
         uint32_t drawn = 0;
         for (uint32_t i = 0; i < zs->prop_count; ++i) {
@@ -1580,6 +1660,215 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
         }
     }
     return 1;
+}
+
+/* --zone wild encounters and battles. Game tables load once, on the first
+ * encounter: personal (a/2/1/8), moves (a/2/1/2), learnsets (a/2/1/4, per
+ * species), the type chart (DllBattle.cro in the RomFS root), English names
+ * (a/0/7/4 files 80, 14, 17) and, with --code-bin, the nature table. The
+ * partner Pokémon and its HP persist across battles and zones.
+ * Policy (inspection choices, not traced in the game's code): a completed
+ * step onto tall grass starts an encounter with --encounter-rate percent
+ * (default 10); the grass slot is chosen with the weights 20, 20, 10, 10,
+ * 10, 10, 5, 5, 4, 4, 1, 1 (community-documented Generation VI odds), the
+ * level uniformly in the slot's range, IVs 0..31 and the nature uniformly;
+ * moves are the learnset's at that level. Losing heals the partner. */
+struct game_session {
+    int loaded, failed;
+    struct px_personal *personal; uint32_t personal_count;
+    struct px_move *moves; uint32_t move_count;
+    uint8_t chart[PX_TYPE_COUNT][PX_TYPE_COUNT];
+    uint8_t natures[125];
+    int have_natures;
+    char **species_names, **move_names, **type_names;
+    uint32_t species_name_count, move_name_count, type_name_count;
+    struct px_battle_data data;
+    struct px_rng rng;
+    struct px_battler partner;
+    int have_partner, pending, active;
+    struct px_battler wild;
+    struct px_battle battle;
+    struct px_battle_ui ui;
+    uint32_t encounters, battles;
+};
+static struct game_session g_game;
+
+static char **text_lines(const struct options *o, uint32_t file, uint32_t *count)
+{
+    struct resource r = {0};
+    struct px_gf_text text;
+    *count = 0;
+    if (!read_resource(o->romfs, "a/0/7/4", file, 0, 0, 0, "game text", &r)) return NULL;
+    const int ok = px_gf_text_decode(r.data, r.size, &text) == PX_GF_TEXT_OK;
+    resource_free(&r);
+    if (!ok) return NULL;
+    char **lines = calloc(text.line_count ? text.line_count : 1, sizeof *lines);
+    static char buffer[1024];
+    for (uint32_t i = 0; lines && i < text.line_count; ++i) {
+        if (px_gf_text_render(&text, i, "Player", buffer, sizeof buffer) < 0) buffer[0] = 0;
+        lines[i] = malloc(strlen(buffer) + 1);
+        if (lines[i]) strcpy(lines[i], buffer);
+        else buffer[0] = 0;
+    }
+    if (lines) *count = text.line_count;
+    px_gf_text_free(&text);
+    return lines;
+}
+
+static int game_load(const struct options *o)
+{
+    struct game_session *g = &g_game;
+    if (g->loaded || g->failed) return g->loaded;
+    g->failed = 1;
+    char error[256], path[1024];
+    for (unsigned table = 0; table < 2; ++table) {
+        snprintf(path, sizeof path, "%s/%s", o->romfs, table ? "a/2/1/2" : "a/2/1/8");
+        struct px_garc *archive = NULL;
+        if (!px_garc_open(path, &archive, error, sizeof error)) {
+            fprintf(stderr, "[model-viewer] battle data: %s\n", error); return 0;
+        }
+        /* The personal archive's last entry is every entry concatenated. */
+        const uint32_t count = (uint32_t)px_garc_count(archive) - (table ? 0 : 1);
+        if (table) g->moves = calloc(count, sizeof *g->moves); else g->personal = calloc(count, sizeof *g->personal);
+        int ok = table ? g->moves != NULL : g->personal != NULL;
+        for (uint32_t i = 0; ok && i < count; ++i) {
+            uint8_t *member = NULL; size_t size = 0;
+            ok = px_garc_read(archive, i, 0, 1u << 20, &member, &size, error, sizeof error) &&
+                 (table ? px_move_decode(member, size, &g->moves[i]) : px_personal_decode(member, size, &g->personal[i]))
+                 == PX_POKEDATA_OK;
+            free(member);
+        }
+        px_garc_close(archive);
+        if (!ok) { fprintf(stderr, "[model-viewer] battle data: %s entries do not decode\n", path); return 0; }
+        if (table) g->move_count = count; else g->personal_count = count;
+    }
+    snprintf(path, sizeof path, "%s/DllBattle.cro", o->romfs);
+    FILE *f = fopen(path, "rb");
+    uint8_t *cro = NULL;
+    size_t cro_size = 0;
+    if (f) {
+        cro = malloc(1u << 21);
+        if (cro) cro_size = fread(cro, 1, 1u << 21, f);
+        fclose(f);
+    }
+    const enum px_pokedata_result chart = px_type_chart_decode(cro, cro_size, g->chart);
+    free(cro);
+    if (chart != PX_POKEDATA_OK) {
+        fprintf(stderr, "[model-viewer] battle data: DllBattle.cro type chart: %s\n", px_pokedata_result_string(chart));
+        return 0;
+    }
+    if (o->code_bin && (f = fopen(o->code_bin, "rb"))) {
+        g->have_natures = !fseek(f, 0x470f6c, SEEK_SET) && fread(g->natures, 1, 125, f) == 125;
+        fclose(f);
+    }
+    g->species_names = text_lines(o, 80, &g->species_name_count);
+    g->move_names = text_lines(o, 14, &g->move_name_count);
+    g->type_names = text_lines(o, 17, &g->type_name_count);
+    g->data = (struct px_battle_data){g->personal, g->personal_count, g->moves, g->move_count,
+                                      (const uint8_t (*)[PX_TYPE_COUNT])g->chart,
+                                      g->have_natures ? g->natures : NULL};
+    g->rng.state = o->have_seed ? (o->seed ? o->seed : 1) : 1;
+    g->loaded = 1; g->failed = 0;
+    if (!o->silent)
+        printf("battle_data personal=%" PRIu32 " moves=%" PRIu32 " chart=DllBattle.cro:0xD12A8 natures=%s "
+               "names=%" PRIu32 ",%" PRIu32 ",%" PRIu32 " formulas=reconstructed-stats,community-damage\n",
+               g->personal_count, g->move_count, g->have_natures ? "code.bin:0x00570f6c" : "neutral",
+               g->species_name_count, g->move_name_count, g->type_name_count);
+    return 1;
+}
+
+/* A Pokémon of the species at the level: random IVs and nature, its
+ * learnset's moves at that level. */
+static int game_pokemon(const struct options *o, uint16_t species, uint8_t level, struct px_battler *out)
+{
+    /* Read raw: learnset members are not compressed, and a first move id of
+     * 16 or 17 would look like an LZ header. */
+    static struct px_learnset learnset;
+    char error[256], path[1024];
+    snprintf(path, sizeof path, "%s/a/2/1/4", o->romfs);
+    struct px_garc *archive = NULL;
+    uint8_t *member = NULL; size_t size = 0;
+    if (!px_garc_open(path, &archive, error, sizeof error)) { fprintf(stderr, "[model-viewer] learnsets: %s\n", error); return 0; }
+    const int read = px_garc_read(archive, species, 0, 1u << 20, &member, &size, error, sizeof error);
+    px_garc_close(archive);
+    const enum px_pokedata_result lr = read ? px_learnset_decode(member, size, &learnset) : PX_POKEDATA_TRUNCATED;
+    free(member);
+    if (lr != PX_POKEDATA_OK) return 0;
+    uint16_t moves[4];
+    px_learnset_moves_at(&learnset, level, moves);
+    uint8_t iv[6];
+    for (unsigned k = 0; k < 6; ++k) iv[k] = (uint8_t)px_rng_below(&g_game.rng, 32);
+    const uint8_t nature = (uint8_t)px_rng_below(&g_game.rng, 25);
+    return px_battler_make(&g_game.data, species, level, iv, nature, moves, out);
+}
+
+static void print_battler(const char *what, const struct px_battler *b)
+{
+    printf("%s species=%u name=%s level=%u nature=%u iv=%u,%u,%u,%u,%u,%u stats=%u,%u,%u,%u,%u,%u moves=%u,%u,%u,%u\n",
+           what, b->species, b->species < g_game.species_name_count ? g_game.species_names[b->species] : "?", b->level,
+           b->nature, b->iv[0], b->iv[1], b->iv[2], b->iv[3], b->iv[4], b->iv[5], b->stats[0], b->stats[1],
+           b->stats[2], b->stats[3], b->stats[4], b->stats[5], b->moves[0], b->moves[1], b->moves[2], b->moves[3]);
+}
+
+/* After a completed step onto grass: roll, and on an encounter prepare the
+ * wild Pokémon (g_game.pending). Returns 1 on an encounter. */
+static int maybe_encounter(const struct options *o, struct model_asset *asset)
+{
+    const struct zone_state *zs = asset->zone;
+    const struct walker *w = &asset->walker;
+    if (!zs || !zs->has_wild || !w->active || !w->last_moved) return 0;
+    if (!grass_tile(asset->grid.tiles[(size_t)w->z * asset->grid.width + (size_t)w->x])) return 0;
+    unsigned first, count;
+    px_slot_range(PX_SLOTS_GRASS, &first, &count);
+    if (!zs->wild.slots[first].species || !game_load(o)) return 0;
+    const uint32_t rate = o->have_encounter_rate ? o->encounter_rate : 10;
+    if (px_rng_below(&g_game.rng, 100) >= rate) return 0;
+    static const unsigned weights[12] = {20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1};
+    unsigned roll = px_rng_below(&g_game.rng, 100), slot = 0;
+    while (slot < 11 && roll >= weights[slot]) roll -= weights[slot++];
+    const struct px_encounter_slot *s = &zs->wild.slots[first + slot];
+    if (!s->species) return 0;
+    const uint8_t level = (uint8_t)(s->min_level + px_rng_below(&g_game.rng, s->max_level - s->min_level + 1u));
+    if (!game_pokemon(o, s->species, level, &g_game.wild)) return 0;
+    if (!g_game.have_partner) {
+        if (!game_pokemon(o, (uint16_t)(o->have_partner ? o->partner : 656),
+                          (uint8_t)(o->have_partner_level ? o->partner_level : 5), &g_game.partner)) return 0;
+        g_game.have_partner = 1;
+        print_battler("partner", &g_game.partner);
+    }
+    ++g_game.encounters;
+    printf("encounter zone=%" PRIu32 " cell=%d,%d slot=%u species=%u level=%u\n", zs->zone, w->x, w->z, slot,
+           s->species, level);
+    print_battler("wild", &g_game.wild);
+    g_game.pending = 1;
+    return 1;
+}
+
+static void battle_begin(void)
+{
+    struct game_session *g = &g_game;
+    g->pending = 0; g->active = 1; ++g->battles;
+    px_battle_start(&g->battle, &g->data, &g->partner, &g->wild, px_rng_next(&g->rng));
+    px_battle_ui_start(&g->ui, &g->battle, (const char *const *)g->species_names, g->species_name_count,
+                       (const char *const *)g->move_names, g->move_name_count, (const char *const *)g->type_names);
+}
+
+/* One battle input; ends the battle after its last page. */
+static void battle_input(char key)
+{
+    struct game_session *g = &g_game;
+    const uint32_t before = g->ui.page_count;
+    if (px_battle_ui_input(&g->ui, &g->battle, key))
+        for (uint32_t i = before; i < g->ui.page_count; ++i)
+            printf("battle turn=%" PRIu32 " message=\"%s\"\n", g->battle.turn, g->ui.pages[i]);
+    if (g->ui.phase != PX_UI_DONE) return;
+    static const char *const result[] = {"choosing", "won", "lost", "escaped"};
+    g->partner = g->battle.side[0];
+    if (g->battle.state == PX_BATTLE_LOST) { g->partner.hp = g->partner.stats[0]; memset(g->partner.stages, 0, 8); }
+    memset(g->partner.stages, 0, sizeof g->partner.stages);
+    printf("battle_end result=%s turns=%" PRIu32 " partner_hp=%u/%u wild_hp=%u/%u\n", result[g->battle.state],
+           g->battle.turn, g->partner.hp, g->partner.stats[0], g->battle.side[1].hp, g->battle.side[1].stats[0]);
+    g->active = 0;
 }
 
 /* Arrival policy (inspection, consistent with the three house warps): stand
@@ -1681,7 +1970,8 @@ static void zone_steps(const struct options *o, struct model_asset *asset, const
     for (const char *p = steps; p && *p; ++p) {
         walk_step(&asset->walker, *p);
         if (asset->walker.warp_hit >= 0) zone_warp(o, asset);
-        else if (asset->walker.last_moved) zone_cross(o, asset);
+        else if (asset->walker.last_moved && !zone_cross(o, asset) && maybe_encounter(o, asset))
+            g_game.pending = 0; /* --steps reports encounters; battles need the display loop */
     }
 }
 
@@ -1698,6 +1988,21 @@ static void event(struct camera *c, const SDL_Event *e)
 {
     if (e->type == SDL_QUIT) c->running = 0;
     if (e->type != SDL_KEYDOWN) return;
+    if (c->in_battle) {
+        /* Battle menu: WASD or arrows move the cursor, Space/Return confirm,
+         * X/Backspace cancel, Escape still exits. */
+        switch (e->key.keysym.sym) {
+        case SDLK_ESCAPE: c->running = 0; break;
+        case SDLK_w: case SDLK_UP: c->battle_key = 'U'; break;
+        case SDLK_s: case SDLK_DOWN: c->battle_key = 'D'; break;
+        case SDLK_a: case SDLK_LEFT: c->battle_key = 'L'; break;
+        case SDLK_d: case SDLK_RIGHT: c->battle_key = 'R'; break;
+        case SDLK_SPACE: case SDLK_RETURN: c->battle_key = '.'; break;
+        case SDLK_x: case SDLK_BACKSPACE: c->battle_key = 'x'; break;
+        default: break;
+        }
+        return;
+    }
     switch (e->key.keysym.sym) {
     case SDLK_ESCAPE: c->running = 0; break;
     case SDLK_LEFT: c->yaw -= 0.1; break;
@@ -2149,6 +2454,7 @@ static int draw_bch_meshes(const struct model_asset *asset, const struct px_rast
     enum px_raster_result result;
     for (uint32_t i = 0; i < bch->mesh_count; ++i) {
         const struct px_bch_mesh *m = &bch->meshes[asset->draw_order[i]];
+        if (asset->hide_invisible && !m->visible) continue;
         if (asset->bch_combiner) {
             struct combiner_shader shader;
             struct px_raster_state state;
@@ -2233,11 +2539,14 @@ static int draw_scene(const struct model_asset *asset, const struct view *v, str
 {
     const struct placement main_at = {asset->zone ? asset->zone->main_offset[0] : 0, 0,
                                       asset->zone ? asset->zone->main_offset[1] : 0, 0, 0, {0}};
-    project_bch(asset, v, main_at.x || main_at.z ? &main_at : NULL, points, normals);
-    if (!draw_bch_meshes(asset, points, normals, target, counts)) return 0;
+    if (!asset->zone || !asset->zone->hide_main) {
+        project_bch(asset, v, main_at.x || main_at.z ? &main_at : NULL, points, normals);
+        if (!draw_bch_meshes(asset, points, normals, target, counts)) return 0;
+    }
     for (uint32_t i = 0; asset->zone && i < asset->zone->region_count; ++i) {
         /* The zone's other regions, at their cell offsets (same buffers). */
         const struct placement at = {asset->zone->region_offset[i][0], 0, asset->zone->region_offset[i][1], 0, 0, {0}};
+        if (asset->zone->region_hidden && asset->zone->region_hidden[i]) continue;
         project_bch(&asset->zone->regions[i], v, &at, points, normals);
         if (!draw_bch_meshes(&asset->zone->regions[i], points, normals, target, NULL)) return 0;
     }
@@ -2376,7 +2685,7 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
     /* The frame is split into row bands drawn concurrently (each band sees
      * every triangle in the same order, so pixels match a single pass); the
      * counted first frame is drawn in one pass. */
-    const unsigned bands = counts ? 1 : b->bands;
+    const unsigned bands = g_game.active ? 0 : counts ? 1 : b->bands;
     struct band_job jobs[PX_MAX_BANDS];
     SDL_Thread *threads[PX_MAX_BANDS] = {0};
     for (unsigned k = 0; k < bands; ++k) {
@@ -2394,15 +2703,18 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
     }
     for (unsigned k = 1; k < bands; ++k)
         if (!(threads[k] = SDL_CreateThread(band_thread, "band", &jobs[k]))) band_thread(&jobs[k]);
-    jobs[0].ok = draw_scene(asset, &v, jobs[0].points, jobs[0].normals, jobs[0].player_points, jobs[0].player_normals,
-                            &jobs[0].target, counts);
-    int all = jobs[0].ok;
+    int all = 1;
+    if (bands) {
+        jobs[0].ok = draw_scene(asset, &v, jobs[0].points, jobs[0].normals, jobs[0].player_points,
+                                jobs[0].player_normals, &jobs[0].target, counts);
+        all = jobs[0].ok;
+    } else px_battle_ui_draw(target->rgba, target->width, target->height, &g_game.ui, &g_game.battle);
     for (unsigned k = 1; k < bands; ++k) {
         if (threads[k]) SDL_WaitThread(threads[k], NULL);
         all &= jobs[k].ok;
     }
     if (!all) return 0;
-    if (asset->zone && asset->zone->page_count)
+    if (asset->zone && asset->zone->page_count && !g_game.active)
         px_text_window(target->rgba, target->width, target->height, asset->zone->pages[asset->zone->page],
                        asset->zone->page + 1 < asset->zone->page_count);
     if (SDL_UpdateTexture(*frame, NULL, target->rgba, w * 4) ||
@@ -2528,6 +2840,20 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
     if (zm->stepping && motion_now - zm->start_ms * 30 / 1000 >= zm->length) {
         zm->stepping = 0; zm->phase += zm->length;
     }
+    if (!zm->stepping && g_game.pending) { battle_begin(); zm->phase = 0; }
+    c->in_battle = g_game.active;
+    if (g_game.active) {
+        /* Battle: one key (or one --play input) per frame drives the menu. */
+        char key = c->battle_key;
+        c->battle_key = 0; c->queued = 0; c->interact = 0;
+        if (!key && c->play && *c->play) {
+            key = *c->play++;
+            if (key >= 'a' && key != 'x') key = (char)(key - 'a' + 'A');
+        }
+        if (key) battle_input(key);
+        c->in_battle = g_game.active;
+        return 1;
+    }
     if (!zm->stepping && !asset->zone->page_count) {
         const Uint8 *keys = SDL_GetKeyboardState(NULL);
         char direction = keys[SDL_SCANCODE_W] ? 'U' : keys[SDL_SCANCODE_S] ? 'D' : keys[SDL_SCANCODE_A] ? 'L' :
@@ -2557,6 +2883,7 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
             if (w->zone && asset->zone->message[0] && !*swapped && w->warp_hit < 0 && moved)
                 asset->zone->message[0] = 0;
         }
+        if (moved && !*swapped) maybe_encounter(o, asset); /* the battle starts once the step ends */
         if (moved) {
             zm->stepping = 1; zm->run = run; zm->start_ms = now_ms;
             zm->length = run ? RUN_STEP_FRAMES : WALK_STEP_FRAMES;

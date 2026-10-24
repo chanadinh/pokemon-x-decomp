@@ -1,0 +1,131 @@
+{
+ "archive_sha256": {
+  "a/2/1/8": "d1bfcbc0fb6505210164f329843f29d435cc5aba9b8e4c77de68dd3095bf8933",
+  "a/2/1/2": "2c47e7aea1fc9d434fb96f282e478d265d9c34c4ca0481eae3e4f6e3229fabe4",
+  "a/2/1/4": "db997ccf93ef5520dac813af0def23be77fb373d83a211de80f2e298c59d60b0",
+  "a/0/1/2": "dc0b7a0dd2764480eaebd4c1c057d1fa8e268ccdf8953945713bb091925190d2",
+  "DllBattle.cro": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1"
+ },
+ "code_bin_sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a",
+ "verifier_sha256": "227c917ad7e0495ee7c2d8ee316a2c5d35021f71d372b487cb9122c8ac994e8c",
+ "bridge_source_sha256": "abfe458decba95a5b1979b0e6fdff9c5058071f916491717199db2ef36833dbb",
+ "tables": {
+  "personal": 799,
+  "moves": 618,
+  "learnsets": 799,
+  "learnset_pairs": 12531,
+  "chart_counts": {
+   "0": 8,
+   "2": 61,
+   "4": 204,
+   "8": 51
+  }
+ },
+ "wild": {
+  "zones_with_wild": 53,
+  "route2_grass": [
+   [
+    659,
+    0,
+    2,
+    2
+   ],
+   [
+    659,
+    0,
+    3,
+    3
+   ],
+   [
+    263,
+    0,
+    3,
+    3
+   ],
+   [
+    661,
+    0,
+    2,
+    2
+   ],
+   [
+    661,
+    0,
+    3,
+    3
+   ],
+   [
+    16,
+    0,
+    3,
+    3
+   ],
+   [
+    664,
+    30,
+    2,
+    2
+   ],
+   [
+    664,
+    30,
+    3,
+    3
+   ],
+   [
+    13,
+    0,
+    3,
+    3
+   ],
+   [
+    263,
+    0,
+    4,
+    4
+   ],
+   [
+    16,
+    0,
+    4,
+    4
+   ],
+   [
+    13,
+    0,
+    4,
+    4
+   ]
+  ]
+ },
+ "stats": {
+  "cases": 9576,
+  "identical": 9576
+ },
+ "damage": {
+  "cases": 20000,
+  "identical": 20000,
+  "immune": 759
+ },
+ "runtime": {
+  "zone": 259,
+  "seed": 1,
+  "play": "RDDDDDDDDD........................................................................................................................",
+  "lines": [
+   "partner species=656 name=Froakie level=5 nature=12 iv=11,23,10,14,21,17 stats=19,11,9,12,12,10 moves=1,45,145,0",
+   "encounter zone=259 cell=100,89 slot=7 species=664 level=3",
+   "wild species=664 name=Scatterbug level=3 nature=7 iv=15,17,16,26,18,5 stats=15,7,7,6,7,6 moves=33,81,0,0",
+   "battle turn=1 message=\"Froakie used Pound!\"",
+   "battle turn=1 message=\"The wild Scatterbug used String Shot!\"",
+   "battle turn=1 message=\"Froakie's Speed fell sharply!\"",
+   "battle turn=2 message=\"Froakie used Pound!\"",
+   "battle turn=2 message=\"The wild Scatterbug used String Shot!\"",
+   "battle turn=2 message=\"Froakie's Speed fell sharply!\"",
+   "battle turn=3 message=\"The wild Scatterbug used Tackle!\"",
+   "battle turn=3 message=\"Froakie used Pound!\"",
+   "battle turn=3 message=\"A critical hit!\"",
+   "battle turn=3 message=\"The wild Scatterbug fainted!\"",
+   "battle_end result=won turns=3 partner_hp=16/19 wild_hp=0/15"
+  ]
+ }
+}
