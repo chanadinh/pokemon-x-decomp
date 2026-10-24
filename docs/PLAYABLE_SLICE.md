@@ -21,9 +21,9 @@ in the [source overview](../reconstructed/README.md) and
 | Reviewed game logic | Eight connected host-source milestones, including HP/stat updates and level resolution |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
-| Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
-| Renderer and game asset loading | BCLIM/CGFX/BCH textures; the selected field room renders with its textures, six combiner stages, vertex colors and directional lighting from its scene environment; verified terrain/collision loading in the same frame. Vertex shader, point lights, fog, projection, culling and the game camera remain missing |
-| Player controls, movement, and collision | The skinned player-character model walks the lit room on exact standard cells over the collision floor, playing its walk cycle from the game's motion pack; entry/spawn, the game's motion choice and its movement and collision rules are not implemented |
+| Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |
+| Renderer and game asset loading | BCLIM/CGFX/BCH textures, texture transforms and base mip levels; zones load from game data with their regions (several per town), terrain and collision, region props, area textures, six combiner stages, vertex colors and directional lighting. 287 of 360 zones load. Vertex shader, bump maps, Fresnel, point lights, fog, projection, culling and the game camera remain missing |
+| Player controls, movement, and collision | The animated player walks and runs in real time through the house and Vaniville Town on exact standard cells over the collision floor; NPCs block, doors and stairs load their target zones, and NPCs answer with their script's lines. The game's own controller, spawn and collision rules are not reconstructed |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
 | Reference execution comparisons | No repeatable running-game capture is part of the current validation |
@@ -138,13 +138,13 @@ and compare the first map-to-battle scenario.
 
 ## What remains before the first playable
 
-Status on 2026-10-24, by acceptance criterion below. Every item needs original
+Status on 2026-10-24 (after the town milestone), by acceptance criterion below. Every item needs original
 code or a reference capture behind it, not only a plausible native version.
 
 | Criterion | Done | Remaining |
 | --- | --- | --- |
-| 1. Load one map with player, environment and UI assets | Room 165: geometry, textures, combiners, lighting and terrain/collision in one scene; the player-character model skinned, textured and animated from its GF1 motion pack | Trace how a zone binds its environment and day/night, and which player model and outfit the game loads; which motions the game plays and how (rate, blending, foot placement); vertex shader outputs; culling, fog, projected textures and the field camera; decode the field UI |
-| 2. Move, collide, interact | `--zone`: the player walks and runs in real time over standard cells, NPCs block, warps load their target zone (the house's two floors), Space runs the NPC's zone-script event and shows its story-text lines in a message window | Outdoor zones (multi-region matrices, building models, type-1 warps); reconstruct the player controller (spawn, speeds, terrain flags, collision response) from the game's code; script natives beyond the five inferred ones (story flags, choices, actor commands, battles), the game's font and window |
+| 1. Load one map with player, environment and UI assets | Zones from game data: the house and Vaniville Town (four regions) with geometry, textures, combiners, lighting, terrain/collision and region props in one scene; the player-character model skinned, textured and animated from its GF1 motion pack; 287 of 360 zones load | Trace how a zone binds its environment and day/night, and which player model and outfit the game loads; which motions the game plays and how (rate, blending, foot placement); vertex shader outputs; culling, fog, projected textures and the field camera; decode the field UI |
+| 2. Move, collide, interact | `--zone`: the player walks and runs in real time over standard cells, NPCs block, warps load their target zone (the house's two floors and Vaniville Town), Space runs the NPC's zone-script event and shows its story-text lines in a message window | Seamless zone switching on routes, type-1 warps, story flags for NPC visibility; reconstruct the player controller (spawn, speeds, terrain flags, collision response) from the game's code; script natives beyond the five inferred ones (story flags, choices, actor commands, battles), the game's font and window |
 | 3. Wild encounter and interactive battle | Encounter-record preparation, Pokémon construction, data/state and stats (eight milestones, synthetic resources) | Real personal/learnset/move resources; the encounter trigger on terrain; battle setup, the turn loop and damage, move effects, AI, battle UI and assets, and the battle outcome |
 | 4. Return to the field with state preserved | — | Battle-to-field transition and party/world state |
 | 5. Save and load | — | Save layout, serialization and the slice's state |

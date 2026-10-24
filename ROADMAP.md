@@ -40,6 +40,12 @@ vertex shader, point lights, projection and scene integration are still missing.
 Game-runtime integration, full material/scene rendering,
 player movement/collision, the interactive
 battle loop, and playable save/load are still missing.
+Since then the native model viewer has grown into a walkable field slice:
+`--zone` loads a zone from game data, the animated player walks the house and
+Vaniville Town in real time, doors and stairs change zones, region props are
+drawn, and NPCs answer with lines chosen by their zone's own Pawn script. 287 of
+360 zones load. Battles, menus, story state, saving and audio are not
+implemented. See [the field slice](README.md#play-the-field-slice).
 Per-milestone validation records document the actual tests. Game-logic tests
 use synthetic memory; native asset tests also compare original-data decoding
 with independent references and exercise rendered previews. No running-game

@@ -6,13 +6,13 @@
 
 [![Host tests](https://github.com/chanadinh/pokemon-x-decomp/actions/workflows/tests.yml/badge.svg)](https://github.com/chanadinh/pokemon-x-decomp/actions/workflows/tests.yml)
 [![Language: C11](https://img.shields.io/badge/language-C11-60a5fa)](reconstructed/README.md)
-[![Stage: research & native previews](https://img.shields.io/badge/stage-research_%26_native_previews-38bdf8)](ROADMAP.md)
+[![Stage: walkable field slice](https://img.shields.io/badge/stage-walkable_field_slice-38bdf8)](ROADMAP.md)
 
-[Get started](#get-started) · [See it running](#see-it-running) · [Explore the source](#rebuilding-the-rules) · [Next milestone](#the-road-to-a-playable-slice)
+[Play the slice](#play-the-field-slice) · [Get started](#get-started) · [See it running](#see-it-running) · [Explore the source](#rebuilding-the-rules) · [Next milestone](#the-road-to-a-playable-slice)
 
-<a href="docs/native-bch.md"><img src="docs/images/native-bch-wireframe.png" alt="An original Pokémon X room reconstructed as a cyan wireframe in the native model viewer" width="960"></a>
+<a href="docs/native-bch.md#vaniville-town"><img src="docs/images/native-bch-town.png" alt="The player standing on the cobbled square of Vaniville Town, between two street lamps" width="960"></a>
 
-*An original field model, decoded and drawn by the native viewer: 12 meshes, 2,356 vertices, 4,992 indices.*
+*Vaniville Town, loaded entirely from the game's own data and drawn by the native viewer: four map regions, their props and the town's NPCs.*
 
 </div>
 
@@ -22,19 +22,54 @@ original textures, inspecting field layouts, and drawing models in native SDL2
 applications. Every milestone comes with tests, recorded evidence, and an explicit
 account of what remains unknown.
 
-**The destination is a native PC game. Today, this is a research project with
-working asset viewers and eight connected game-logic milestones; it is not yet a
-playable port.** The wireframe above uses an explicit triangle-list interpretation;
-the original field's primitive setup and materials still need verification.
+**The destination is a native PC game. Today you can walk out of the player's
+house into Vaniville Town, open doors and talk to the townspeople with the game's
+own lines. There are no battles, menus, story events or saving yet, so this is
+not yet a playable port.**
 
-| Game logic | Native field model | Area textures | Preserved checkpoints |
+| Zones that load | Townspeople who speak | Story text | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
-| **8** connected C milestones | **12** meshes and **12** material bindings checked independently | **19** images, **100,608** pixels matched | **539** reconstruction file hashes |
+| **287** of 360, every placement checked independently | **1,183** NPCs run their own script | **424** files, **7,607** lines decoded | **539** reconstruction file hashes |
+
+## Play the field slice
+
+<table>
+  <tr>
+    <td width="50%"><a href="docs/native-bch.md#vaniville-town"><img src="docs/images/native-bch-town-talk.png" alt="The player talking to a boy in Vaniville Town, with his line in a message window" width="440"></a></td>
+    <td width="50%"><a href="docs/native-bch.md#talking-to-npcs"><img src="docs/images/native-bch-talk.png" alt="The player downstairs in the house, facing an NPC who greets the player" width="440"></a></td>
+  </tr>
+</table>
+
+Start in the bedroom, walk downstairs, talk to the NPC there and step out of the
+front door into Vaniville Town. Every person, door, lamp and piece of furniture
+comes from the game files on your machine. On Linux or WSL, with SDL2
+development files installed:
+
+```sh
+make -C native
+native/build/pokemon_model_viewer --romfs /path/to/romfs --zone 5
+# or start outside the house: --zone 0 --arrive 1
+```
+
+| Key | Action |
+| --- | --- |
+| W A S D | Walk (hold Shift to run) |
+| Space or Enter | Talk to the person ahead; turn the page of a message |
+| Arrow keys, + / − | Turn and zoom the camera |
+| Esc | Quit |
+
+What works: walking and running with the game's motions, collision with the
+terrain and NPCs, doors and stairs between zones, NPC dialogue from each zone's
+compiled script, and region props. What is missing: battles, menus, story
+events, saving, sound, and walking on from the town onto Route 1. See the
+[town record](native/reproduction/bch-town/README.txt) for exactly what was
+checked.
 
 ## See it running
 
-These are actual captures from this workspace's native applications. The images
-show inspected original assets and resource data, with the limits described below.
+These are actual captures from this workspace's native applications, in the order
+the work was done. They show original assets and resource data, with the limits
+described below.
 
 <table>
   <tr>
@@ -84,7 +119,13 @@ The player is skinned and animated from the game's own motion pack. With
 real time, takes the stairs between floors and talks to the NPC downstairs, who
 answers with her line from the game's own script and text.
 
-<p align="center"><a href="docs/native-bch.md#talking-to-npcs"><img src="docs/images/native-bch-talk.png" alt="The player downstairs facing the NPC, with her greeting in a message window" width="720"></a></p>
+
+**The house opens onto the town.** A town spans several map regions. The viewer
+finds the zone's cells in the map's table of zones, joins their terrain into one
+grid and places the town's NPCs and doors from their world tiles. Each region's
+props, from doors and lamps to the tables inside the houses, come from the area's
+prop registry. Frames are drawn in bands on several CPU cores with the same
+pixels as one pass. [See Vaniville Town →](docs/native-bch.md#vaniville-town)
 
 [What remains before the first playable →](docs/PLAYABLE_SLICE.md#what-remains-before-the-first-playable)
 
@@ -95,7 +136,7 @@ BCH wireframe viewer shown above. The marker is an inspection tool, not a player
 character. [Capture provenance and validation](docs/images/README.md) identify the
 source of each image.
 
-The latest native checkpoint textures the selected BCH field model. Every bound
+An earlier native checkpoint textured the selected BCH field model. Every bound
 texture matches an image already verified pixel by pixel, and 99.85% of the
 covered pixels in a software capture are exact texels. Earlier checkpoints match
 every position, UV and rebased index, and follow the zone's area ID into the
@@ -189,7 +230,9 @@ recovered original source or builds that match the original machine code.
 <details>
 <summary><strong>What the validation establishes</strong></summary>
 
-- The latest native milestone passes **17 C suites, 43 inspector tests and 57 viewer runtime tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the lighting and combiner evaluators, BCH readers and viewer.
+- The latest native milestone passes **21 C suites and 110 Python tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the viewer's zone, town and dialogue runs.
+- For all **360 zones**, an independent reader re-derives each scene from the map matrix and agrees with the viewer on every region placement, **2,474** props, **1,891** NPC tiles and **472** warp tiles in the **287** zones that load. **1,459** prop records and **3,063** prop-registry entries match the native decoders.
+- All **2,524** NPC script runs and all **7,607** story-text lines match a separately written Pawn interpreter and text decoder.
 - The field's **16 environment lights, 12 light sets and 7,068 normal components** match an independent parser. The lighting evaluator matches an independent float32 oracle of the pinned emulator behavior on **20,970** evaluations, and **44** original-code words back its sign and color conventions.
 - The six-stage combiner evaluator matches an independent oracle of the pinned emulator behavior on **116,000** evaluations, and **2,356** decoded vertex colors match bit for bit.
 - The selected field's **12 material bindings and 432 register observations** match an independent parser that follows pinned CTRMap register layouts.
@@ -209,8 +252,9 @@ not a completion percentage.
 
 The next step is to connect these tested pieces into a game scene:
 
-- **Complete the field renderer:** add the vertex shader's outputs, point lights and the day/night selection, fog and projected textures; establish original primitive state, culling and camera; integrate the scene.
-- **Connect the player:** reconstruct entry, movement, collision and interaction behavior.
+- **Open the world:** switch zones seamlessly when walking from the town onto Route 1, and honor the story flags that decide which NPCs appear.
+- **Complete the field renderer:** add the vertex shader's outputs, bump maps, point lights and the day/night selection, fog and projected textures; establish original culling and the game camera.
+- **Ground the player in the game's code:** reconstruct the game's own controller (spawn, speeds, terrain flags, collision response) and the remaining script natives.
 - **Finish the gameplay loop:** replace remaining resource stand-ins, connect battle and return-to-field behavior, and implement save/load.
 - **Compare against the original:** capture a repeatable reference scenario and check behavior at each boundary.
 
