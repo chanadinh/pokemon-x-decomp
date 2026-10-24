@@ -130,6 +130,10 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    ambient lighting, using the light-vector sign and color products traced in
    the original code; an independent oracle matches it. See
    [lighting evidence](native/reproduction/bch-lighting/README.txt).
+   `--walk` adds the same GR's terrain grid and collision in the model's frame,
+   checked at all 52 walkable cells, with an inspection marker
+   ([walk evidence](native/reproduction/bch-walk/README.txt)). The gap list to
+   the first playable is in [the slice document](docs/PLAYABLE_SLICE.md#what-remains-before-the-first-playable).
    Next trace the environment's binding to the field and the day/night
    selection, then execute the vertex shader (normal quaternion, primary color),
    point lights, projected textures with a camera, fog, the original primitive

@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "ac2e749910f807731a20821b80157f05eed69ffb",
+  "result": "passed",
+  "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; local WSL host and native Windows untested",
+  "tested_source_sha256": {
+    "Makefile": "cff3a1bd64fcfa6dd43c0125afee4493d94ce27663de25009f941bb1b958023d",
+    "model_app.c": "50894e5a209347480d0e479462ebd925a59b95dc880a4a3ce14b4534e3959d4e",
+    "tests/test_bch_walk_viewer.py": "463f4db4af3d2be23465880b75d73acf77955452e31102af15cd3adb6f8c9cff",
+    "reproduction/bch-walk/verify_walk.py": "d26e75d300ebe553ea983db21f6df49d72902640151b5a0c5c9dbaa01649a847"
+  },
+  "checks": [
+    {
+      "command": "make -C native clean && make -C native all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 16,
+      "python_core_tests": {
+        "container": 8,
+        "bch_index_and_gr": 12,
+        "pica_commands": 12,
+        "bch_model": 11
+      },
+      "python_runtime_tests": {
+        "texture_viewer": 7,
+        "bch_texture_viewer": 6,
+        "model_viewer": 10,
+        "bch_model_viewer": 9,
+        "bch_textured_viewer": 5,
+        "bch_combiner_viewer": 4,
+        "bch_lighting_viewer": 2,
+        "bch_walk_viewer": 2,
+        "field_viewer": 9
+      }
+    },
+    {
+      "command": "make -C reconstructed test",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "result": "passed",
+      "tests": 38,
+      "skipped": 2
+    },
+    {
+      "command": "ASan/UBSan (-fno-sanitize-recover=all), ASAN_OPTIONS=detect_leaks=1: sanitized model viewer under the walk, lighting, combiner, textured, BCH-model and model viewer suites; a real-input --walk run",
+      "result": "passed; no diagnostics; sanitized walk capture byte-identical"
+    },
+    {
+      "command": "SHA-256 comparison against reconstructed/*/SHA256SUMS and previous native reproduction/ entries; four earlier capture regressions",
+      "result": "all unchanged"
+    },
+    {
+      "command": "native/reproduction/bch-walk/verify_walk.py on the real archive paths",
+      "result": "passed",
+      "standard_cells": 52,
+      "reachable": 52,
+      "collision_heights": [
+        0.0
+      ],
+      "cells_with_flat_surface_above_collision": 25,
+      "gr_member_sha256": "f4df794748c7a5b3e21f50702d96566590d40447492d12d9a2774e3b41d2dae9",
+      "runtime_capture_sha256": "55f1b9b264592a85a153c985617ee87729f10ea600955401a897a3aa095fdb5e",
+      "report": "reference-comparison.json",
+      "report_sha256": "1cfcd6f416afaf45287bf80ebfa534b3a68216a8616f48d0c192ef39495da20e"
+    }
+  ],
+  "scope": [
+    "GR terrain grid and collision loaded with the BCH room in one frame",
+    "Inspection marker with the field inspector's exact-cell policy, scripted steps and a depth-tested box"
+  ],
+  "limitations": [
+    "Not the game's player movement, collision response, entry or camera",
+    "No player model or animation",
+    "Culling not executed; the walk camera looks down instead",
+    "No running-game comparison"
+  ],
+  "logs_sha256": "1b83cd2d93f367b80c55387dc9ff401a70666f1db52ae9534bb3591e8051f0fb"
+}

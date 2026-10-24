@@ -1,0 +1,26 @@
+Walkable lit field validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container, cc 13.3.0, Python 3.13,
+SDL 2.30.0, dummy video with the software renderer. Not run on the local WSL
+host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime
+   Passed. 16 native C suites. Python core 43; runtime: texture viewer 7, BCH
+   texture viewer 6, model viewer 10, BCH model viewer 9, BCH textured 5, BCH
+   combiner 4, BCH lighting 2, BCH walk 2 (new), field viewer 9. 97 Python
+   tests in total.
+2. make -C reconstructed test: passed.
+3. python3 -m unittest discover -s tests: 38 tests, 2 optional skips.
+4. ASan/UBSan with leak detection: the sanitized viewer under the walk,
+   lighting, combiner, textured, BCH-model and model viewer suites and a
+   real-input --walk run passed without diagnostics; capture identical.
+5. All 539 reconstructed and 85 earlier native reproduction entries match;
+   the stage-0, combiner and lit day/night captures are byte-identical.
+6. python3 -I -B native/reproduction/bch-walk/verify_walk.py --romfs <RomFS>
+   --viewer native/build/pokemon_model_viewer
+   Passed: 52 standard cells, all reachable from (3,10); at each, the viewer's
+   cell, center and moves match and its collision height (0) equals a flat
+   model surface; 25 carpet cells also have a surface at 0.5. Capture
+   (--steps DDDRRR) sha256 55f1b9b264592a85a153c985617ee87729f10ea600955401a897a3aa095fdb5e.
+
+Not established: the game's movement and collision rules, entry, player
+model, field camera, culling and any running-game comparison.

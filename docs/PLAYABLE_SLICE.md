@@ -22,8 +22,8 @@ in the [source overview](../reconstructed/README.md) and
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
-| Renderer and game asset loading | BCLIM/CGFX/BCH textures, CGFX material preview and an explicit BCH triangle-list wireframe; verified terrain/collision loading; BCH materials and complete game rendering remain missing |
-| Player controls, movement, and collision | A restricted inspection marker follows exact standard cells; actual player entry, movement and collision rules are not implemented |
+| Renderer and game asset loading | BCLIM/CGFX/BCH textures; the selected field room renders with its textures, six combiner stages, vertex colors and directional lighting from its scene environment; verified terrain/collision loading in the same frame. Vertex shader, point lights, fog, projection, culling and the game camera remain missing |
+| Player controls, movement, and collision | An inspection marker walks the lit room on exact standard cells over the collision floor; the player model, entry/spawn, and the game's movement and collision rules are not implemented |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
 | Reference execution comparisons | No repeatable running-game capture is part of the current validation |
@@ -135,6 +135,24 @@ animation, BCH environment graphics and player scene bindings remain unimplement
 the native decoders.
 A repeatable running-game capture is still required to select
 and compare the first map-to-battle scenario.
+
+## What remains before the first playable
+
+Status on 2026-10-24, by acceptance criterion below. Every item needs original
+code or a reference capture behind it, not only a plausible native version.
+
+| Criterion | Done | Remaining |
+| --- | --- | --- |
+| 1. Load one map with player, environment and UI assets | Room 165: geometry, textures, combiners, lighting and terrain/collision in one scene | Trace how a zone binds its environment and day/night; vertex shader outputs; culling, fog, projected textures and the field camera; find, decode and skin the player character model and its animations; decode the field UI |
+| 2. Move, collide, interact | A WASD marker on exact standard cells over collision | Reconstruct the player controller (entry/spawn, walking/running, facing, terrain flags, collision response, warps) and one interaction: the script VM, an NPC or object event, and the message box |
+| 3. Wild encounter and interactive battle | Encounter-record preparation, Pokémon construction, data/state and stats (eight milestones, synthetic resources) | Real personal/learnset/move resources; the encounter trigger on terrain; battle setup, the turn loop and damage, move effects, AI, battle UI and assets, and the battle outcome |
+| 4. Return to the field with state preserved | — | Battle-to-field transition and party/world state |
+| 5. Save and load | — | Save layout, serialization and the slice's state |
+| 6. Reference comparisons | Static asset and code-byte checks | A recorded run (emulator or hardware) of the chosen scenario with states and frames to compare |
+| Audio | — | `sound/` BCSAR decoding and playback for the field and battle |
+
+The field and battle sides can proceed in parallel. The largest single items
+are the battle engine, the script VM and the reference capture.
 
 ## Acceptance criteria for the first playable
 

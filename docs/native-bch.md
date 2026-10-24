@@ -286,3 +286,18 @@ An independent oracle matched all lights, sets, material parameters and 7,068
 normal components, all 65,536 color products and 20,970 lighting evaluations.
 It also bounded the untraced float16 rounding of the light vector at one level.
 See the [lighting record](../native/reproduction/bch-lighting/README.txt).
+
+## Walking the lit room
+
+Add `--walk` to the lighting command to load the terrain grid and collision of
+the same GR member. An inspection marker then moves around the lit room: WASD
+moves it, and `--steps UDLR...` scripts the moves.
+
+<img src="images/native-bch-walk.png" alt="Top-down view of the lit room with the red inspection marker on the walkable floor" width="720">
+
+The model, the 40 × 40 terrain grid and the collision share one region-local
+frame. An independent check walked the marker to all 52 standard cells, and at
+each one the collision height matches a floor surface of the room model. The
+marker uses the field inspector's exact-cell policy, not the game's movement
+rules. See the [walk record](../native/reproduction/bch-walk/README.txt).
+

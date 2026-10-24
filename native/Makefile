@@ -112,6 +112,7 @@ test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemo
 	python3 -m unittest discover -s tests -p test_bch_textured_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_combiner_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_lighting_viewer.py -v
+	python3 -m unittest discover -s tests -p test_bch_walk_viewer.py -v
 	SDL_VIDEODRIVER=dummy ./build/pokemon_field_viewer --demo --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_field_viewer.py -v
 

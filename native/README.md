@@ -397,3 +397,14 @@ bound, and the sensitivity line reports how much the final color could change.
 Materials without fragment lighting, Fresnel/bump use, ambient lights, missing
 normals or light sets fail before a window opens. See the
 [lighting record](reproduction/bch-lighting/README.txt).
+
+## Walk the lit field
+
+`--walk` (BCH from a GR `--section`, textured) also decodes that GR's terrain grid
+and collision and draws an inspection marker on the collision floor. WASD moves it
+one cell, and `--steps UDLR...` applies moves before display or `--inspect`. Only
+exact standard cells (`0x00000020`) admit it, as in the field inspector. The camera
+starts looking down, because culling is not executed. `--inspect` prints the
+marker's cell, local position and collision height. See the
+[walk record](reproduction/bch-walk/README.txt).
+

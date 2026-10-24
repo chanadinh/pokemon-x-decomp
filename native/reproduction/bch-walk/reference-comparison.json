@@ -1,0 +1,1080 @@
+{
+ "gr_member_sha256": "f4df794748c7a5b3e21f50702d96566590d40447492d12d9a2774e3b41d2dae9",
+ "gr_decompressed_sha256": "4f298e8a1e1ab06cd68ed704f806f7ef49540a758c1f658c92990a7438d8dcf3",
+ "field_bch_sha256": "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+ "verifier_sha256": "d26e75d300ebe553ea983db21f6df49d72902640151b5a0c5c9dbaa01649a847",
+ "grid": [
+  40,
+  40
+ ],
+ "standard_cells": 52,
+ "start": [
+  3,
+  10
+ ],
+ "reachable_from_start": 52,
+ "all_reachable_cells_match": true,
+ "collision_heights": [
+  0.0
+ ],
+ "cells_with_flat_surface_above_collision": [
+  {
+   "cell": [
+    5,
+    11
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    6,
+    11
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    7,
+    11
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    8,
+    11
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    9,
+    11
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    5,
+    12
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    6,
+    12
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    7,
+    12
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    8,
+    12
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    9,
+    12
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    5,
+    13
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    6,
+    13
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    7,
+    13
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    8,
+    13
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    9,
+    13
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    5,
+    14
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    6,
+    14
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    7,
+    14
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    8,
+    14
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    9,
+    14
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    5,
+    15
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    6,
+    15
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    7,
+    15
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    8,
+    15
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  },
+  {
+   "cell": [
+    9,
+    15
+   ],
+   "heights": [
+    0.0,
+    0.5
+   ]
+  }
+ ],
+ "three_up_from_start": "walk policy=exact-cell-0x00000020 movement=inspection-not-game-rules grid=40x40 standard_cells=52 collision_vertices=1728 marker=cell:3,10 local=-297,-171 height=0 moves=0 blocked=3",
+ "cells": [
+  {
+   "cell": [
+    3,
+    10
+   ],
+   "local": [
+    -297.0,
+    -171.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    4,
+    10
+   ],
+   "local": [
+    -279.0,
+    -171.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    5,
+    10
+   ],
+   "local": [
+    -261.0,
+    -171.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    11,
+    10
+   ],
+   "local": [
+    -153.0,
+    -171.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    3,
+    11
+   ],
+   "local": [
+    -297.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    4,
+    11
+   ],
+   "local": [
+    -279.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    5,
+    11
+   ],
+   "local": [
+    -261.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    6,
+    11
+   ],
+   "local": [
+    -243.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    7,
+    11
+   ],
+   "local": [
+    -225.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    8,
+    11
+   ],
+   "local": [
+    -207.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    9,
+    11
+   ],
+   "local": [
+    -189.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    10,
+    11
+   ],
+   "local": [
+    -171.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    11,
+    11
+   ],
+   "local": [
+    -153.0,
+    -153.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    3,
+    12
+   ],
+   "local": [
+    -297.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    4,
+    12
+   ],
+   "local": [
+    -279.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    5,
+    12
+   ],
+   "local": [
+    -261.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    6,
+    12
+   ],
+   "local": [
+    -243.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    7,
+    12
+   ],
+   "local": [
+    -225.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    8,
+    12
+   ],
+   "local": [
+    -207.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    9,
+    12
+   ],
+   "local": [
+    -189.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    10,
+    12
+   ],
+   "local": [
+    -171.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    11,
+    12
+   ],
+   "local": [
+    -153.0,
+    -135.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    1,
+    13
+   ],
+   "local": [
+    -333.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    2,
+    13
+   ],
+   "local": [
+    -315.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    3,
+    13
+   ],
+   "local": [
+    -297.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    4,
+    13
+   ],
+   "local": [
+    -279.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    5,
+    13
+   ],
+   "local": [
+    -261.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    6,
+    13
+   ],
+   "local": [
+    -243.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    7,
+    13
+   ],
+   "local": [
+    -225.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    8,
+    13
+   ],
+   "local": [
+    -207.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    9,
+    13
+   ],
+   "local": [
+    -189.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    10,
+    13
+   ],
+   "local": [
+    -171.0,
+    -117.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    4,
+    14
+   ],
+   "local": [
+    -279.0,
+    -99.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    5,
+    14
+   ],
+   "local": [
+    -261.0,
+    -99.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    6,
+    14
+   ],
+   "local": [
+    -243.0,
+    -99.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    7,
+    14
+   ],
+   "local": [
+    -225.0,
+    -99.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    8,
+    14
+   ],
+   "local": [
+    -207.0,
+    -99.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    9,
+    14
+   ],
+   "local": [
+    -189.0,
+    -99.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    4,
+    15
+   ],
+   "local": [
+    -279.0,
+    -81.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    5,
+    15
+   ],
+   "local": [
+    -261.0,
+    -81.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    6,
+    15
+   ],
+   "local": [
+    -243.0,
+    -81.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    7,
+    15
+   ],
+   "local": [
+    -225.0,
+    -81.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    8,
+    15
+   ],
+   "local": [
+    -207.0,
+    -81.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    9,
+    15
+   ],
+   "local": [
+    -189.0,
+    -81.0
+   ],
+   "model_flat_heights": [
+    0.0,
+    0.5
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    10,
+    15
+   ],
+   "local": [
+    -171.0,
+    -81.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    4,
+    16
+   ],
+   "local": [
+    -279.0,
+    -63.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    5,
+    16
+   ],
+   "local": [
+    -261.0,
+    -63.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    6,
+    16
+   ],
+   "local": [
+    -243.0,
+    -63.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    7,
+    16
+   ],
+   "local": [
+    -225.0,
+    -63.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    8,
+    16
+   ],
+   "local": [
+    -207.0,
+    -63.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    9,
+    16
+   ],
+   "local": [
+    -189.0,
+    -63.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  },
+  {
+   "cell": [
+    10,
+    16
+   ],
+   "local": [
+    -171.0,
+    -63.0
+   ],
+   "model_flat_heights": [
+    0.0
+   ],
+   "reachable": true,
+   "viewer_collision_height": 0.0
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "ac2e749910f807731a20821b80157f05eed69ffb",
+  "previous_native_sha256sums": {
+    "entries": 153,
+    "sha256": "4067d49773d201b23311b359a1d6ebc5bbef8c98d412ac9d21d87c705398cf4a"
+  },
+  "immutable_reproduction_records": "All 85 reproduction/ entries of the previous native/SHA256SUMS were rechecked unchanged.",
+  "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+  "capture_regressions": "From the real archive paths the stage-0 (2d905248...0951), combiner (bb9e433d...f0c4), lit day (1dc1e452...243a) and lit night (640c936a...00fe) captures are byte-identical.",
+  "changed_native_sources": [
+    "Makefile",
+    "README.md",
+    "model_app.c"
+  ],
+  "added_native_files": [
+    "tests/test_bch_walk_viewer.py",
+    "reproduction/bch-walk/README.txt",
+    "reproduction/bch-walk/baseline.json",
+    "reproduction/bch-walk/reference-comparison.json",
+    "reproduction/bch-walk/validation.json",
+    "reproduction/bch-walk/validation.txt",
+    "reproduction/bch-walk/verify_walk.py"
+  ]
+}

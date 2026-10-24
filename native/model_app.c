@@ -23,13 +23,49 @@ struct options {
     uint32_t environment_entry, environment_subentry, environment_section, scene;
     int have_environment_entry, have_environment_subentry, have_environment_section, have_scene;
     int lighting; /* 0 none, 1 day, 2 night */
+    int walk;
+    const char *steps;
     uint32_t entry, subentry, model, frames, section;
     uint32_t texture_entry, texture_subentry, texture_section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
     int have_section, triangle_list, combiners;
     int have_texture_entry, have_texture_subentry, have_texture_section;
 };
-struct camera { double yaw, pitch, zoom; int running; };
+/* --walk: an inspection marker on the GR terrain grid. Policy as in the
+ * field viewer: only the exact word 0x00000020 admits the marker, which starts
+ * at the first such cell in row-major order and moves one cardinal cell per
+ * key. This is not reconstructed player movement or game collision. */
+struct walker {
+    const struct px_field_grid *grid;
+    int active, x, z;
+    uint32_t moves, blocked;
+};
+struct camera { double yaw, pitch, zoom; int running; struct walker *walk; };
+static int walkable(const struct walker *w, int x, int z)
+{
+    return x >= 0 && z >= 0 && x < w->grid->width && z < w->grid->height &&
+           w->grid->tiles[(size_t)z * w->grid->width + (size_t)x] == UINT32_C(0x00000020);
+}
+static void walk_start(struct walker *w, const struct px_field_grid *grid)
+{
+    memset(w, 0, sizeof *w);
+    w->grid = grid;
+    for (int z = 0; z < grid->height && !w->active; ++z)
+        for (int x = 0; x < grid->width && !w->active; ++x)
+            if (walkable(w, x, z)) { w->active = 1; w->x = x; w->z = z; }
+}
+/* One cardinal step: U = -Z, D = +Z, L = -X, R = +X in region-local space. */
+static void walk_step(struct walker *w, char direction)
+{
+    if (!w->active) return;
+    const int dx = direction == 'L' ? -1 : direction == 'R' ? 1 : 0;
+    const int dz = direction == 'U' ? -1 : direction == 'D' ? 1 : 0;
+    if (walkable(w, w->x + dx, w->z + dz)) { w->x += dx; w->z += dz; ++w->moves; }
+    else ++w->blocked;
+}
+/* Region-local cell center: (cell + 0.5) * 18 - 360, as the field viewer. */
+static double cell_center(int cell) { return (cell + 0.5) * 18 - 360; }
+
 struct model_asset {
     struct px_cgfx_model wire;
     struct px_cgfx_scene scene;
@@ -51,6 +87,11 @@ struct model_asset {
     uint32_t *point_bound;
     uint32_t *light_index; /* 8 per material: environment light per setup slot */
     int lighting;
+    /* --walk only: the GR member's terrain grid and collision triangles. */
+    struct px_field_grid grid;
+    struct px_field_collision collision;
+    struct walker walker;
+    int walk;
     int bch_textured;
 };
 
@@ -67,6 +108,8 @@ static void asset_free(struct model_asset *asset)
     free(asset->point_bound);
     free(asset->light_index);
     px_bch_environment_free(&asset->environment);
+    px_field_grid_free(&asset->grid);
+    px_field_collision_free(&asset->collision);
     px_cgfx_scene_free(&asset->scene);
     px_cgfx_model_free(&asset->wire);
     px_bch_model_free(&asset->bch);
@@ -117,6 +160,10 @@ static void usage(FILE *stream, const char *program)
         "  --lighting day|night  With --combiners and an environment: execute the\n"
         "                     material light set's directional lights (default day;\n"
         "                     day omits light_night, night omits light_sun)\n"
+        "  --walk             BCH from a GR section: load that GR's terrain grid and\n"
+        "                     collision and add an inspection marker (WASD moves it\n"
+        "                     one cell; only exact standard cells 0x00000020 admit it)\n"
+        "  --steps UDLR...    Apply marker moves before inspection or display (--walk)\n"
         "  --inspect          Print decoded mesh metadata without a window\n"
         "  --capture-frame F  Save first viewport to a new BMP file\n"
         "  --frames N         Exit after a positive number of frames\n"
@@ -164,6 +211,7 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--textured")) { o->textured = 1; continue; }
         if (!strcmp(arg, "--triangle-list")) { o->triangle_list = 1; continue; }
         if (!strcmp(arg, "--combiners")) { o->combiners = 1; continue; }
+        if (!strcmp(arg, "--walk")) { o->walk = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
             strcmp(arg, "--subentry") && strcmp(arg, "--model") && strcmp(arg, "--frames") &&
             strcmp(arg, "--capture-frame") && strcmp(arg, "--section") &&
@@ -171,7 +219,7 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--texture-subentry") && strcmp(arg, "--texture-section") &&
             strcmp(arg, "--environment-archive") && strcmp(arg, "--environment-entry") &&
             strcmp(arg, "--environment-subentry") && strcmp(arg, "--environment-section") &&
-            strcmp(arg, "--scene") && strcmp(arg, "--lighting")) return 0;
+            strcmp(arg, "--scene") && strcmp(arg, "--lighting") && strcmp(arg, "--steps")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -179,6 +227,10 @@ static int parse(int argc, char **argv, struct options *o)
         else if (!strcmp(arg, "--capture-frame")) o->capture = value;
         else if (!strcmp(arg, "--texture-archive")) o->texture_archive = value;
         else if (!strcmp(arg, "--environment-archive")) o->environment_archive = value;
+        else if (!strcmp(arg, "--steps")) {
+            if (o->steps || strspn(value, "UDLR") != strlen(value) || strlen(value) > 4096) return 0;
+            o->steps = value;
+        }
         else if (!strcmp(arg, "--lighting")) {
             if (o->lighting) return 0;
             if (!strcmp(value, "day")) o->lighting = 1;
@@ -226,6 +278,8 @@ static int parse(int argc, char **argv, struct options *o)
     if (environment_options && (!o->combiners || !o->environment_archive ||
         !o->have_environment_entry || !relative_path(o->environment_archive))) return 0;
     if (o->environment_archive && !o->lighting) o->lighting = 1;
+    if ((o->steps && !o->walk) || (o->walk && (o->demo || !o->have_section || !o->triangle_list || !o->textured)))
+        return 0;
     if (o->inspect && (o->capture || o->frames || o->self_test)) return 0;
     if (o->self_test && !o->frames) o->frames = 3;
     return 1;
@@ -640,6 +694,21 @@ static int load(const struct options *o, struct model_asset *asset)
     if (!read_resource(o->romfs, o->archive, o->entry, o->subentry, o->have_section,
                        o->section, "model", &model)) return 0;
     int ok = decode_model(o, model.data, model.size, asset);
+    if (ok && o->walk) {
+        const uint8_t *gr = model.decoded ? model.decoded : model.member;
+        const size_t gr_size = model.decoded ? model.decoded_size : model.member_size;
+        enum px_field_result status = gr_size >= 2 && !memcmp(gr, "GR", 2) ?
+            px_field_grid_decode(gr, gr_size, &asset->grid) : PX_FIELD_UNSUPPORTED;
+        if (status == PX_FIELD_OK) status = px_field_collision_decode(gr, gr_size, &asset->collision);
+        if (status != PX_FIELD_OK) {
+            fprintf(stderr, "[model-viewer] --walk GR terrain: %s\n", px_field_result_string(status));
+            ok = 0;
+        } else {
+            asset->walk = 1;
+            walk_start(&asset->walker, &asset->grid);
+            for (const char *p = o->steps; p && *p; ++p) walk_step(&asset->walker, *p);
+        }
+    }
     if (ok) print_resource("", o->archive, o->entry, o->subentry, o->model,
                            o->have_section, o->section, &model);
     resource_free(&model);
@@ -675,7 +744,12 @@ static int load(const struct options *o, struct model_asset *asset)
     return ok;
 }
 
-static void reset(struct camera *c) { c->yaw = 0.55; c->pitch = -0.35; c->zoom = 1; c->running = 1; }
+/* Walk mode starts looking steeply down so the room's walls (culling is not
+ * executed) do not hide the floor; both are inspection choices. */
+static void reset(struct camera *c)
+{
+    c->yaw = c->walk ? 0 : 0.55; c->pitch = c->walk ? -1.2 : -0.35; c->zoom = 1; c->running = 1;
+}
 static void event(struct camera *c, const SDL_Event *e)
 {
     if (e->type == SDL_QUIT) c->running = 0;
@@ -689,6 +763,10 @@ static void event(struct camera *c, const SDL_Event *e)
     case SDLK_PLUS: case SDLK_EQUALS: case SDLK_KP_PLUS: c->zoom *= 1.25; break;
     case SDLK_MINUS: case SDLK_KP_MINUS: c->zoom /= 1.25; break;
     case SDLK_r: case SDLK_HOME: reset(c); break;
+    case SDLK_w: if (c->walk) walk_step(c->walk, 'U'); break;
+    case SDLK_s: if (c->walk) walk_step(c->walk, 'D'); break;
+    case SDLK_a: if (c->walk) walk_step(c->walk, 'L'); break;
+    case SDLK_d: if (c->walk) walk_step(c->walk, 'R'); break;
     default: break;
     }
     c->yaw = fmod(c->yaw, 6.283185307179586);
@@ -708,11 +786,23 @@ static int input_test(struct camera *c)
 {
     SDL_Event e; while (SDL_PollEvent(&e)) {}
     reset(c);
-    if (!inject(c, SDLK_RIGHT) || c->yaw <= 0.55 || !inject(c, SDLK_UP) || c->pitch >= -0.35 ||
+    const struct camera initial = *c;
+    if (!inject(c, SDLK_RIGHT) || c->yaw <= initial.yaw || !inject(c, SDLK_UP) || c->pitch >= initial.pitch ||
         !inject(c, SDLK_PLUS) || c->zoom <= 1 || !inject(c, SDLK_HOME) ||
-        c->yaw != 0.55 || c->pitch != -0.35 || c->zoom != 1 ||
+        c->yaw != initial.yaw || c->pitch != initial.pitch || c->zoom != 1 ||
         !inject(c, SDLK_ESCAPE) || c->running) return 0;
-    reset(c); fprintf(stderr, "[model-viewer] Input self-test passed: orbit, zoom, reset, Escape.\n");
+    struct walker *w = c->walk;
+    reset(c);
+    if (w && w->active) {
+        /* A step and its reverse return to the start, or both are blocked. */
+        const struct walker before = *w;
+        if (!inject(c, SDLK_d) || !inject(c, SDLK_a) || w->x != before.x || w->z != before.z ||
+            w->moves + w->blocked != before.moves + before.blocked + 2) return 0;
+        *w = before;
+        fprintf(stderr, "[model-viewer] Input self-test passed: orbit, zoom, reset, Escape, WASD.\n");
+        return 1;
+    }
+    fprintf(stderr, "[model-viewer] Input self-test passed: orbit, zoom, reset, Escape.\n");
     return 1;
 }
 
@@ -1142,6 +1232,37 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
             if (result != PX_RASTER_OK) goto raster_error;
         }
     }
+    if (asset->walk && asset->walker.active) {
+        /* Marker: a 14 x 28 x 14 box standing on the first stored collision
+         * triangle under the cell center (height 0 if none). Depth tested. */
+        const double mx = cell_center(asset->walker.x), mz = cell_center(asset->walker.z);
+        double my = 0;
+        if (px_field_collision_first_height(&asset->collision, mx, mz, &my) != PX_FIELD_OK) my = 0;
+        struct px_raster_vertex corner[8];
+        for (unsigned k = 0; k < 8; ++k) {
+            const double px = mx + ((k & 1) ? 7 : -7), py = my + ((k & 2) ? 28 : 0), pz = mz + ((k & 4) ? 7 : -7);
+            const double x = (px - center[0]) / radius, y = (py - center[1]) / radius, z = (pz - center[2]) / radius;
+            const double rx = cy * x + sy * z, rz = -sy * x + cy * z;
+            corner[k] = (struct px_raster_vertex){w * 0.5 + rx * scale, h * 0.5 - (cp * y - sp * rz) * scale,
+                                                  -(sp * y + cp * rz), 0, 0, {1, 1, 1, 1}};
+        }
+        static const unsigned char faces[6][4] = {
+            {2, 3, 7, 6}, {0, 1, 5, 4}, {0, 2, 6, 4}, {1, 3, 7, 5}, {0, 1, 3, 2}, {4, 5, 7, 6}};
+        static const double shade[6] = {1.0, 0.45, 0.7, 0.7, 0.85, 0.85};
+        const struct px_raster_state marker_state = px_raster_default_state();
+        for (unsigned f = 0; f < 6; ++f) {
+            struct px_raster_vertex quad[4];
+            for (unsigned k = 0; k < 4; ++k) {
+                quad[k] = corner[faces[f][k]];
+                quad[k].rgba[0] = 0.96 * shade[f]; quad[k].rgba[1] = 0.33 * shade[f];
+                quad[k].rgba[2] = 0.25 * shade[f]; quad[k].rgba[3] = 1;
+            }
+            const struct px_raster_vertex t0[3] = {quad[0], quad[1], quad[2]}, t1[3] = {quad[0], quad[2], quad[3]};
+            result = px_raster_draw(target, t0, NULL, NULL, &marker_state);
+            if (result == PX_RASTER_OK) result = px_raster_draw(target, t1, NULL, NULL, &marker_state);
+            if (result != PX_RASTER_OK) goto raster_error;
+        }
+    }
     if (SDL_UpdateTexture(*frame, NULL, target->rgba, w * 4) ||
         SDL_RenderClear(renderer) || SDL_RenderCopy(renderer, *frame, NULL, NULL)) return 0;
     if (path && !capture(renderer, path, w, h)) return 0;
@@ -1150,7 +1271,7 @@ raster_error:
     SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0;
 }
 
-static int window(const struct options *o, const struct model_asset *asset)
+static int window(const struct options *o, struct model_asset *asset)
 {
     const struct px_cgfx_model *mesh = o->textured && !asset->bch_textured ?
         &asset->scene.mesh : &asset->wire;
@@ -1172,7 +1293,10 @@ static int window(const struct options *o, const struct model_asset *asset)
     else points = malloc((size_t)mesh->vertex_count * sizeof *points);
     if (o->textured ? !vertices : !points) goto done;
     if (asset->bch_combiner && !(normals = calloc(mesh->vertex_count, sizeof *normals))) goto done;
-    struct camera c; reset(&c);
+    struct camera c;
+    memset(&c, 0, sizeof c);
+    c.walk = asset->walk ? &asset->walker : NULL;
+    reset(&c);
     if (o->self_test && !input_test(&c)) { SDL_SetError("Input self-test failed"); goto done; }
     SDL_RendererInfo info; if (SDL_GetRendererInfo(renderer, &info)) goto done;
     fprintf(stderr, "[model-viewer] Video=%s renderer=%s; orthographic %s.\n",
@@ -1387,6 +1511,23 @@ int main(int argc, char **argv)
            mesh.bounds_max[0], mesh.bounds_max[1], mesh.bounds_max[2]);
     if (asset.bch.mesh_count) print_bch_metadata(&asset.bch, asset.bch_textured);
     if (asset.bch_textured) print_bch_bindings(&asset);
+    if (asset.walk) {
+        const struct walker *w = &asset.walker;
+        uint32_t standard = 0;
+        for (size_t i = 0; i < (size_t)asset.grid.width * asset.grid.height; ++i)
+            standard += asset.grid.tiles[i] == UINT32_C(0x00000020);
+        printf("walk policy=exact-cell-0x00000020 movement=inspection-not-game-rules grid=%ux%u "
+               "standard_cells=%" PRIu32 " collision_vertices=%" PRIu32,
+               asset.grid.width, asset.grid.height, standard, asset.collision.vertex_count);
+        if (!w->active) printf(" marker=none\n");
+        else {
+            double y = 0;
+            const int hit = px_field_collision_first_height(&asset.collision, cell_center(w->x),
+                                                             cell_center(w->z), &y) == PX_FIELD_OK;
+            printf(" marker=cell:%d,%d local=%.9g,%.9g height=%s%.9g moves=%" PRIu32 " blocked=%" PRIu32 "\n",
+                   w->x, w->z, cell_center(w->x), cell_center(w->z), hit ? "" : "none:", y, w->moves, w->blocked);
+        }
+    }
     else if (o.textured) {
         uint32_t decoded = 0;
         for (uint32_t i = 0; i < asset.texture_count; ++i) decoded += asset.textures[i].rgba != NULL;
