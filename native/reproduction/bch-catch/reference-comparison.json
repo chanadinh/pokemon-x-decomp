@@ -1,0 +1,64 @@
+{
+ "growth": {
+  "tables": 8,
+  "identical": true,
+  "published_formulas": "all 101 levels, 8 tables",
+  "species_per_group": {
+   "0": 333,
+   "1": 22,
+   "2": 14,
+   "3": 201,
+   "4": 55,
+   "5": 173
+  }
+ },
+ "cases": {
+  "total": 266514,
+  "identical": 266514,
+  "level": 239400,
+  "start": 3192,
+  "gain": 4788,
+  "catch": 19134,
+  "catch_certain": 1061,
+  "catch_impossible": 0
+ },
+ "runtime_won": {
+  "play": "RDDDDDDDDD........................................................................................................................",
+  "lines": [
+   "battle_data personal=799 moves=618 chart=DllBattle.cro:0xD12A8 natures=code.bin:0x00570f6c names=800,618,18 growth=a/2/1/7:8 learnsets=799 balls=10 formulas=reconstructed-stats-and-levels,community-damage-and-catch",
+   "partner species=656 name=Froakie level=5 nature=12 iv=11,23,10,14,21,17 stats=19,11,9,12,12,10 moves=1,45,145,0",
+   "encounter zone=259 cell=100,89 slot=7 species=664 level=3",
+   "wild species=664 name=Scatterbug level=3 nature=7 iv=15,17,16,26,18,5 stats=15,7,7,6,7,6 moves=33,81,0,0",
+   "battle turn=1 message=\"Froakie used Pound!\"",
+   "battle turn=1 message=\"The wild Scatterbug used String Shot!\"",
+   "battle turn=1 message=\"Froakie's Speed fell sharply!\"",
+   "battle turn=2 message=\"Froakie used Pound!\"",
+   "battle turn=2 message=\"The wild Scatterbug used String Shot!\"",
+   "battle turn=2 message=\"Froakie's Speed fell sharply!\"",
+   "battle turn=3 message=\"The wild Scatterbug used Tackle!\"",
+   "battle turn=3 message=\"Froakie used Pound!\"",
+   "battle turn=3 message=\"A critical hit!\"",
+   "battle turn=3 message=\"The wild Scatterbug fainted!\"",
+   "battle turn=3 message=\"Froakie gained 17 Exp. Points!\"",
+   "battle_end result=won turns=3 partner_hp=16/19 level=5 exp=152 wild_hp=0/15 balls=10"
+  ]
+ },
+ "runtime_caught": {
+  "play": "RDDDDDDDDD..R..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.xR..x.x.x.x.x.x.x.x.x.x",
+  "throws": 2,
+  "lines": [
+   "battle_data personal=799 moves=618 chart=DllBattle.cro:0xD12A8 natures=code.bin:0x00570f6c names=800,618,18 growth=a/2/1/7:8 learnsets=799 balls=10 formulas=reconstructed-stats-and-levels,community-damage-and-catch",
+   "partner species=656 name=Froakie level=5 nature=12 iv=11,23,10,14,21,17 stats=19,11,9,12,12,10 moves=1,45,145,0",
+   "encounter zone=259 cell=100,89 slot=7 species=664 level=3",
+   "wild species=664 name=Scatterbug level=3 nature=7 iv=15,17,16,26,18,5 stats=15,7,7,6,7,6 moves=33,81,0,0",
+   "battle turn=1 message=\"You threw a Poké Ball!\"",
+   "battle turn=1 message=\"Gah! It was so close, too!\"",
+   "battle turn=1 message=\"The wild Scatterbug used String Shot!\"",
+   "battle turn=1 message=\"The wild Scatterbug's attack missed!\"",
+   "battle turn=2 message=\"You threw a Poké Ball!\"",
+   "battle turn=2 message=\"Gotcha! Scatterbug was caught!\"",
+   "battle_end result=caught turns=2 partner_hp=19/19 level=5 exp=135 wild_hp=15/15 balls=8",
+   "party count=2 0:Froakie:Lv5:19/19 1:Scatterbug:Lv3:15/15"
+  ]
+ }
+}

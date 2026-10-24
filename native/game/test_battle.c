@@ -39,7 +39,7 @@ static void tables(void)
 int main(void)
 {
     tables();
-    const struct px_battle_data data = {personal, 4, moves, 6, (const uint8_t (*)[PX_TYPE_COUNT])chart, NULL};
+    const struct px_battle_data data = {personal, 4, moves, 6, (const uint8_t (*)[PX_TYPE_COUNT])chart, NULL, NULL, 0, NULL, 0};
     const uint8_t iv[6] = {31, 31, 31, 31, 31, 31}, low[6] = {0, 0, 0, 0, 0, 0};
     const uint16_t set[4] = {1, 2, 3, 4};
     struct px_battler a, b, g;
@@ -54,7 +54,7 @@ int main(void)
     /* A nature table: nature 1 raises Attack and lowers Defense by 10%. */
     uint8_t natures[125] = {0};
     natures[5] = 1; natures[6] = 0xff;
-    const struct px_battle_data natured = {personal, 4, moves, 6, (const uint8_t (*)[PX_TYPE_COUNT])chart, natures};
+    const struct px_battle_data natured = {personal, 4, moves, 6, (const uint8_t (*)[PX_TYPE_COUNT])chart, natures, NULL, 0, NULL, 0};
     assert(px_battler_make(&natured, 1, 50, iv, 1, set, &g) && g.stats[1] == 83 && g.stats[2] == 54);
     /* Damage: floor(floor(4 * 40 * 12 / 10) / 50) + 2 = 5 against Defense 10. */
     struct px_battler t = a;
@@ -127,12 +127,65 @@ int main(void)
     assert(ui.phase == PX_UI_MESSAGES && !strcmp(ui.pages[0], "Froakie used Growl!"));
     while (ui.phase == PX_UI_MESSAGES) px_battle_ui_input(&ui, &x, '.');
     assert(ui.phase == PX_UI_COMMAND);
-    px_battle_ui_input(&ui, &x, 'R');
-    assert(px_battle_ui_input(&ui, &x, '.') == 1 && !strcmp(ui.pages[0], "Got away safely!"));
+    px_battle_ui_input(&ui, &x, 'R'); px_battle_ui_input(&ui, &x, 'R'); px_battle_ui_input(&ui, &x, 'R');
+    assert(ui.cursor == 2 && px_battle_ui_input(&ui, &x, '.') == 1 && !strcmp(ui.pages[0], "Got away safely!"));
     px_battle_ui_input(&ui, &x, '.');
     assert(ui.phase == PX_UI_DONE && x.state == PX_BATTLE_ESCAPED);
+    /* BALL without balls: a message, back to the menu, no turn. */
+    px_battle_start(&x, &data, &a, &b, 11);
+    px_battle_ui_start(&ui, &x, species, 4, names, 6, NULL);
+    px_battle_ui_input(&ui, &x, '.'); px_battle_ui_input(&ui, &x, '.'); px_battle_ui_input(&ui, &x, 'R');
+    assert(ui.cursor == 1 && px_battle_ui_input(&ui, &x, '.') == 0 && x.turn == 0 &&
+           !strcmp(ui.pages[0], "You have no Poké Balls left!"));
+    px_battle_ui_input(&ui, &x, '.');
+    assert(ui.phase == PX_UI_COMMAND);
     static uint8_t rgba[400 * 240 * 4];
     px_battle_ui_draw(rgba, 400, 240, &ui, &x); /* draws without a page or menu */
+    /* Experience and levels: growth group 0 is level^3 (a/2/1/7 layout). */
+    static uint32_t growth[1][101];
+    for (unsigned l = 0; l <= 100; ++l) growth[0][l] = l * l * l;
+    static struct px_learnset learnsets[4];
+    learnsets[1].count = 2; learnsets[1].move[0] = 1; learnsets[1].level[0] = 1;
+    learnsets[1].move[1] = 5; learnsets[1].level[1] = 8;
+    personal[2].base_exp = 255; personal[2].catch_rate = 255;
+    const struct px_battle_data grown = {personal, 4, moves, 6, (const uint8_t (*)[PX_TYPE_COUNT])chart, NULL,
+                                         (const uint32_t (*)[101])growth, 1, learnsets, 4};
+    assert(px_battle_level_for(&grown, 1, 124) == 4 && px_battle_level_for(&grown, 1, 125) == 5 &&
+           px_battle_level_for(&grown, 1, 1000000) == 100 && px_battle_level_for(&grown, 1, 0) == 1);
+    const uint16_t two[4] = {1, 0, 0, 0};
+    struct px_battler weak, foe;
+    assert(px_battler_make(&grown, 1, 5, iv, 0, two, &weak) && weak.exp == 125);
+    assert(px_battler_make(&grown, 2, 30, low, 0, two, &foe));
+    assert(px_battle_exp_gain(&grown, &foe) == 255 * 30 / 7);
+    foe.hp = 1; /* one Pound faints it */
+    px_battle_start(&x, &grown, &weak, &foe, 3);
+    x.side[1].stats[3] = 1; /* slower: the partner moves first */
+    px_battle_turn(&x, 0, species, 4, names, 6);
+    assert(x.state == PX_BATTLE_WON && x.side[0].exp == 125 + 1092 && x.side[0].level == 10);
+    assert(x.side[0].moves[1] == 5 && x.side[0].pp[1] == 20); /* learnt at level 8 */
+    struct px_battler ten;
+    px_battler_make(&grown, 1, 10, iv, 0, two, &ten);
+    assert(x.side[0].stats[0] == ten.stats[0] && x.side[0].hp == ten.stats[0] - (weak.stats[0] - weak.hp));
+    int grew = 0, learnt = 0;
+    for (uint32_t i = 0; i < x.log_count; ++i) {
+        grew += !strncmp(x.log[i], "Froakie grew to Lv. ", 20);
+        learnt |= !strcmp(x.log[i], "Froakie learned Strike!");
+    }
+    assert(grew == 5 && learnt && !strcmp(x.log[x.log_count - 7], "Froakie gained 1092 Exp. Points!"));
+    /* Catching: a = floor((3M - 2H) x rate x ball / 3M); 255 or more catches at once. */
+    struct px_battler full = foe;
+    full.hp = full.stats[0];
+    assert(px_battle_catch_threshold(&grown, &full, 10) == 53335); /* a = 85 */
+    assert(px_battle_catch_threshold(&grown, &full, 30) == 65536);
+    personal[2].catch_rate = 0;
+    assert(px_battle_catch_threshold(&grown, &full, 10) == 0);
+    personal[2].catch_rate = 255;
+    px_battle_start(&x, &grown, &weak, &full, 21);
+    x.balls = 50;
+    while (x.state == PX_BATTLE_CHOOSING && x.balls) px_battle_turn(&x, -2, species, 4, names, 6);
+    assert(x.state == PX_BATTLE_CAUGHT && x.balls < 50 && !strcmp(x.log[x.log_count - 1], "Gotcha! Bunnelby was caught!"));
+    x.state = PX_BATTLE_CHOOSING; x.balls = 0;
+    assert(!px_battle_turn(&x, -2, NULL, 0, NULL, 0)); /* no balls */
     struct px_rng r = {0};
     const uint32_t first = px_rng_next(&r);
     assert(first && px_rng_below(&r, 1) == 0 && px_rng_below(&r, 0) == 0);

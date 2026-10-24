@@ -43,8 +43,8 @@ struct options {
     /* --zone wild encounters: the partner Pokémon, the random seed, the
      * percent chance per grass step and the code.bin holding the nature
      * table (natures are neutral without it). */
-    uint32_t partner, partner_level, seed, encounter_rate;
-    int have_partner, have_partner_level, have_seed, have_encounter_rate;
+    uint32_t partner, partner_level, seed, encounter_rate, balls;
+    int have_partner, have_partner_level, have_seed, have_encounter_rate, have_balls;
     const char *code_bin;
     const char *play; /* --zone: scripted input during display */
     int silly; /* --silly: 0 none, 1 giant, 2 moonwalk (for fun; not game behaviour) */
@@ -366,6 +366,7 @@ static void usage(FILE *stream, const char *program)
         "  --seed N           Random seed for encounters and battles (default 1)\n"
         "  --encounter-rate N Percent chance per grass step, 0..100 (default 10)\n"
         "  --code-bin PATH    code.bin for the nature table (else natures are neutral)\n"
+        "  --balls N          Poke Balls to start with, 0..999 (default 10)\n"
         "  --silly MODE       With --zone, for fun: giant (a three-times player) or\n"
         "                     moonwalk (walks facing backwards, cycle reversed)\n"
         "  --self-test-input  Exercise orbit/zoom/reset/exit; default 3 frames\n"
@@ -428,7 +429,7 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--zone") && strcmp(arg, "--arrive") && strcmp(arg, "--play") &&
             strcmp(arg, "--capture-at") && strcmp(arg, "--threads") && strcmp(arg, "--silly") &&
             strcmp(arg, "--partner") && strcmp(arg, "--partner-level") && strcmp(arg, "--seed") &&
-            strcmp(arg, "--encounter-rate") && strcmp(arg, "--code-bin")) return 0;
+            strcmp(arg, "--encounter-rate") && strcmp(arg, "--code-bin") && strcmp(arg, "--balls")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -493,6 +494,9 @@ static int parse(int argc, char **argv, struct options *o)
             } else if (!strcmp(arg, "--seed")) {
                 if (o->have_seed) return 0;
                 o->seed = n; o->have_seed = 1;
+            } else if (!strcmp(arg, "--balls")) {
+                if (o->have_balls || n > 999) return 0;
+                o->balls = n; o->have_balls = 1;
             } else if (!strcmp(arg, "--encounter-rate")) {
                 if (o->have_encounter_rate || n > 100) return 0;
                 o->encounter_rate = n; o->have_encounter_rate = 1;
@@ -1682,9 +1686,12 @@ struct game_session {
     int have_natures;
     char **species_names, **move_names, **type_names;
     uint32_t species_name_count, move_name_count, type_name_count;
+    uint32_t growth[8][101]; uint32_t growth_count;
+    struct px_learnset *learnsets; uint32_t learnset_count;
     struct px_battle_data data;
     struct px_rng rng;
-    struct px_battler partner;
+    struct px_battler partner;      /* the lead: party[0] while a battle is not running */
+    struct px_battler party[6]; uint32_t party_count, balls;
     int have_partner, pending, active;
     struct px_battler wild;
     struct px_battle battle;
@@ -1761,19 +1768,50 @@ static int game_load(const struct options *o)
         g->have_natures = !fseek(f, 0x470f6c, SEEK_SET) && fread(g->natures, 1, 125, f) == 125;
         fclose(f);
     }
+    /* Growth tables (a/2/1/7, 101 u32 per group) and every learnset (a/2/1/4). */
+    for (unsigned table = 0; table < 2; ++table) {
+        snprintf(path, sizeof path, "%s/%s", o->romfs, table ? "a/2/1/4" : "a/2/1/7");
+        struct px_garc *archive = NULL;
+        if (!px_garc_open(path, &archive, error, sizeof error)) {
+            fprintf(stderr, "[model-viewer] battle data: %s\n", error); return 0;
+        }
+        uint32_t count = (uint32_t)px_garc_count(archive);
+        if (!table && count > 8) count = 8;
+        if (table && !(g->learnsets = calloc(count ? count : 1, sizeof *g->learnsets))) { px_garc_close(archive); return 0; }
+        int ok = 1;
+        for (uint32_t i = 0; ok && i < count; ++i) {
+            uint8_t *member = NULL; size_t size = 0;
+            ok = px_garc_read(archive, i, 0, 1u << 20, &member, &size, error, sizeof error);
+            if (ok && table) ok = px_learnset_decode(member, size, &g->learnsets[i]) == PX_POKEDATA_OK;
+            else if (ok) {
+                ok = size >= 404;
+                for (unsigned l = 0; ok && l <= 100; ++l)
+                    g->growth[i][l] = (uint32_t)member[4 * l] | (uint32_t)member[4 * l + 1] << 8 |
+                                      (uint32_t)member[4 * l + 2] << 16 | (uint32_t)member[4 * l + 3] << 24;
+            }
+            free(member);
+        }
+        px_garc_close(archive);
+        if (!ok) { fprintf(stderr, "[model-viewer] battle data: %s entries do not decode\n", path); return 0; }
+        if (table) g->learnset_count = count; else g->growth_count = count;
+    }
+    g->balls = o->have_balls ? o->balls : 10;
     g->species_names = text_lines(o, 80, &g->species_name_count);
     g->move_names = text_lines(o, 14, &g->move_name_count);
     g->type_names = text_lines(o, 17, &g->type_name_count);
     g->data = (struct px_battle_data){g->personal, g->personal_count, g->moves, g->move_count,
                                       (const uint8_t (*)[PX_TYPE_COUNT])g->chart,
-                                      g->have_natures ? g->natures : NULL};
+                                      g->have_natures ? g->natures : NULL, (const uint32_t (*)[101])g->growth,
+                                      g->growth_count, g->learnsets, g->learnset_count};
     g->rng.state = o->have_seed ? (o->seed ? o->seed : 1) : 1;
     g->loaded = 1; g->failed = 0;
     if (!o->silent)
         printf("battle_data personal=%" PRIu32 " moves=%" PRIu32 " chart=DllBattle.cro:0xD12A8 natures=%s "
-               "names=%" PRIu32 ",%" PRIu32 ",%" PRIu32 " formulas=reconstructed-stats,community-damage\n",
+               "names=%" PRIu32 ",%" PRIu32 ",%" PRIu32 " growth=a/2/1/7:%" PRIu32 " learnsets=%" PRIu32 " balls=%" PRIu32
+               " formulas=reconstructed-stats-and-levels,community-damage-and-catch\n",
                g->personal_count, g->move_count, g->have_natures ? "code.bin:0x00570f6c" : "neutral",
-               g->species_name_count, g->move_name_count, g->type_name_count);
+               g->species_name_count, g->move_name_count, g->type_name_count, g->growth_count, g->learnset_count,
+               g->balls);
     return 1;
 }
 
@@ -1834,6 +1872,7 @@ static int maybe_encounter(const struct options *o, struct model_asset *asset)
         if (!game_pokemon(o, (uint16_t)(o->have_partner ? o->partner : 656),
                           (uint8_t)(o->have_partner_level ? o->partner_level : 5), &g_game.partner)) return 0;
         g_game.have_partner = 1;
+        g_game.party[0] = g_game.partner; g_game.party_count = 1;
         print_battler("partner", &g_game.partner);
     }
     ++g_game.encounters;
@@ -1849,6 +1888,7 @@ static void battle_begin(void)
     struct game_session *g = &g_game;
     g->pending = 0; g->active = 1; ++g->battles;
     px_battle_start(&g->battle, &g->data, &g->partner, &g->wild, px_rng_next(&g->rng));
+    g->battle.balls = g->balls;
     px_battle_ui_start(&g->ui, &g->battle, (const char *const *)g->species_names, g->species_name_count,
                        (const char *const *)g->move_names, g->move_name_count, (const char *const *)g->type_names);
 }
@@ -1857,17 +1897,34 @@ static void battle_begin(void)
 static void battle_input(char key)
 {
     struct game_session *g = &g_game;
-    const uint32_t before = g->ui.page_count;
-    if (px_battle_ui_input(&g->ui, &g->battle, key))
+    const uint32_t before = g->ui.phase == PX_UI_MESSAGES ? g->ui.page_count : 0;
+    px_battle_ui_input(&g->ui, &g->battle, key);
+    if (g->ui.phase == PX_UI_MESSAGES && g->ui.page_count > before)
         for (uint32_t i = before; i < g->ui.page_count; ++i)
             printf("battle turn=%" PRIu32 " message=\"%s\"\n", g->battle.turn, g->ui.pages[i]);
     if (g->ui.phase != PX_UI_DONE) return;
-    static const char *const result[] = {"choosing", "won", "lost", "escaped"};
+    static const char *const result[] = {"choosing", "won", "lost", "escaped", "caught"};
     g->partner = g->battle.side[0];
-    if (g->battle.state == PX_BATTLE_LOST) { g->partner.hp = g->partner.stats[0]; memset(g->partner.stages, 0, 8); }
+    if (g->battle.state == PX_BATTLE_LOST) g->partner.hp = g->partner.stats[0];
     memset(g->partner.stages, 0, sizeof g->partner.stages);
-    printf("battle_end result=%s turns=%" PRIu32 " partner_hp=%u/%u wild_hp=%u/%u\n", result[g->battle.state],
-           g->battle.turn, g->partner.hp, g->partner.stats[0], g->battle.side[1].hp, g->battle.side[1].stats[0]);
+    g->party[0] = g->partner;
+    g->balls = g->battle.balls;
+    printf("battle_end result=%s turns=%" PRIu32 " partner_hp=%u/%u level=%u exp=%u wild_hp=%u/%u balls=%u\n",
+           result[g->battle.state], g->battle.turn, g->partner.hp, g->partner.stats[0], g->partner.level,
+           (unsigned)g->partner.exp, g->battle.side[1].hp, g->battle.side[1].stats[0], (unsigned)g->balls);
+    if (g->battle.state == PX_BATTLE_CAUGHT) {
+        /* The catch joins the party (a full party keeps it out: no PC boxes yet). */
+        if (g->party_count < 6) {
+            g->party[g->party_count] = g->battle.side[1];
+            memset(g->party[g->party_count].stages, 0, sizeof g->party[0].stages);
+            ++g->party_count;
+        }
+        printf("party count=%u", (unsigned)g->party_count);
+        for (uint32_t i = 0; i < g->party_count; ++i)
+            printf(" %u:%s:Lv%u:%u/%u", (unsigned)i, g->party[i].species < g->species_name_count ?
+                   g->species_names[g->party[i].species] : "?", g->party[i].level, g->party[i].hp, g->party[i].stats[0]);
+        putchar('\n');
+    }
     g->active = 0;
 }
 

@@ -32,6 +32,16 @@
  *   running:  always when faster, else floor(speed x 128 / wild speed) +
  *            30 x earlier attempts, compared with a byte roll.
  *   wild AI:  a random move with PP.
+ *   experience: a won battle gives floor(base experience x level / 7) of
+ *            the fainted Pokémon (Generation VI, wild, one participant);
+ *            levels follow the game's growth tables (a/2/1/7, by the
+ *            species' growth group) through the reconstructed level-from-
+ *            growth routine (0x00168b3c); each new level recomputes the
+ *            stats (keeping the HP lost) and teaches the learnset's moves of
+ *            that level into a free slot (with four moves, none is learnt).
+ *   catching: a = floor((3 max HP - 2 HP) x catch rate x ball / (3 max HP))
+ *            with the Poké Ball's x1; caught at a >= 255, else four checks of
+ *            a 16-bit roll below floor(65536 / (255 / a)^(3/16)).
  *
  * Every random number comes from the battle's xorshift32 generator. */
 struct px_rng { uint32_t state; };
@@ -43,6 +53,8 @@ struct px_battle_data {
     const struct px_move *moves; uint32_t move_count;
     const uint8_t (*chart)[PX_TYPE_COUNT];
     const uint8_t *natures; /* 25 x 5 signed bytes from code.bin, or NULL: neutral */
+    const uint32_t (*growth)[101]; uint32_t growth_count; /* a/2/1/7: experience at levels 0..100 */
+    const struct px_learnset *learnsets; uint32_t learnset_count; /* by species, or NULL */
 };
 
 /* Stats in personal order: HP, Attack, Defense, Speed, Sp. Atk, Sp. Def.
@@ -52,6 +64,7 @@ struct px_battler {
     uint16_t species;
     uint8_t level, nature, types[2], iv[6];
     uint16_t stats[6], hp;
+    uint32_t exp;      /* total experience (the growth table's value at the level) */
     uint16_t moves[4];
     uint8_t pp[4];
     int8_t stages[8];
@@ -61,19 +74,21 @@ struct px_battler {
 int px_battler_make(const struct px_battle_data *data, uint16_t species, uint8_t level, const uint8_t iv[6],
                     uint8_t nature, const uint16_t moves[4], struct px_battler *out);
 
-enum px_battle_state { PX_BATTLE_CHOOSING = 0, PX_BATTLE_WON, PX_BATTLE_LOST, PX_BATTLE_ESCAPED };
+enum px_battle_state { PX_BATTLE_CHOOSING = 0, PX_BATTLE_WON, PX_BATTLE_LOST, PX_BATTLE_ESCAPED, PX_BATTLE_CAUGHT };
 struct px_battle {
     const struct px_battle_data *data;
     struct px_battler side[2]; /* 0 the player's, 1 the wild Pokémon */
     struct px_rng rng;
     uint32_t turn, escape_attempts;
+    uint32_t balls;            /* Poké Balls left; set by the caller after start */
     enum px_battle_state state;
     char log[16][96];          /* this turn's messages, in order */
     uint32_t log_count;
 };
 void px_battle_start(struct px_battle *battle, const struct px_battle_data *data, const struct px_battler *player,
                      const struct px_battler *wild, uint32_t seed);
-/* One turn: the player's move slot 0..3, or -1 to run. A move without PP
+/* One turn: the player's move slot 0..3, -1 to run or -2 to throw a Poké
+ * Ball (needs balls). A move without PP
  * or a finished battle does nothing and returns 0. Names: species and move
  * name tables (may be NULL; numbers are printed instead). */
 int px_battle_turn(struct px_battle *battle, int player_move, const char *const *species_names,
@@ -84,6 +99,13 @@ int px_battle_turn(struct px_battle *battle, int player_move, const char *const 
 uint32_t px_battle_damage(const struct px_battle_data *data, const struct px_battler *attacker,
                           const struct px_battler *defender, uint16_t move, int critical, uint32_t roll,
                           uint32_t *effectiveness);
+/* Experience for defeating `fainted`; the level the experience gives the
+ * species (1..100; the battler's own level when there are no growth tables). */
+uint32_t px_battle_exp_gain(const struct px_battle_data *data, const struct px_battler *fainted);
+uint8_t px_battle_level_for(const struct px_battle_data *data, uint16_t species, uint32_t exp);
+/* Catch: the shake threshold for the wild battler (65536 means caught at
+ * once), with a ball factor in tenths (10 for a Poké Ball). */
+uint32_t px_battle_catch_threshold(const struct px_battle_data *data, const struct px_battler *wild, uint32_t ball10);
 /* Stat with its stage, as used above (index in personal order 1..5). */
 uint32_t px_battle_stat(const struct px_battler *b, unsigned personal_index, int ignore);
 #endif

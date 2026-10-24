@@ -27,6 +27,7 @@ project owner's request. No generated artwork or mockups are used.
 | [Moonwalk](native-bch-moonwalk.png) | `outputs/new-route-check/route-moonwalk.bmp` (lossless PNG conversion) | The same run's frame 300 with `--silly moonwalk` (a joke mode, not game behaviour). |
 | [Route 2](native-bch-route2.png) | `outputs/new-battle-check` run, frame 200 (lossless PNG conversion) | `--zone 259 --play RDDDDDDDDD…. --encounter-rate 100 --code-bin … --frames 520 --capture-at 200`: walking into Route 2's tall grass. Real archive paths. |
 | [Wild battle](native-bch-battle.png) | The same run, frame 228 | The battle screen with the move menu: a wild Scatterbug against Froakie. Placeholders, not battle models. |
+| [Catch](native-bch-catch.png) | `outputs/new-catch-check` run: the catch play of `../native/reproduction/bch-catch/verify_catch.py` with three rounds, frame 247 (lossless PNG conversion) | The second Poké Ball holds: "Gotcha! Scatterbug was caught!". Placeholders, not battle models. |
 | [Textured CGFX model](native-textured-model.png) | `outputs/native-textured-model/model-frame.png` | Archive `a/1/0/2`, entry 0: six materials and textures in an unlit software preview. Lighting, complete shaders and original-game visual equivalence are not reproduced. |
 | [Terrain/collision inspector](native-field-inspector.png) | `outputs/native-field-scene/field-collision-frame.png` | Zone 5 → matrix 12 → region 165, with collision edges and a restricted inspection marker. This earlier capture's footer predates the separate BCH wireframe milestone; it is not the current status of BCH decoding. |
 
@@ -49,6 +50,7 @@ Evidence and reproduction instructions:
 - [Town comparison](../../native/reproduction/bch-town/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-town/README.txt).
 - [Route comparison](../../native/reproduction/bch-route/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-route/README.txt).
 - [Battle comparison](../../native/reproduction/bch-battle/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-battle/README.txt).
+- [Catch comparison](../../native/reproduction/bch-catch/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-catch/README.txt).
 - [Textured CGFX capture record](../../native/reproduction/textured-model/rendered-sample.json).
 - [Field inspector scope and reproduction](../../native/reproduction/field-scene/README.txt).
 
@@ -76,6 +78,7 @@ ee43af0523a4aec799c6f1cb9fa5034e9f8f0e829837ba3af349a7eca81b6ee8  native-bch-aqu
 a6d50709637b89aba1d671d5e1735c7fc18f0a6f82395dfabd6d55a09fd91acf  native-bch-moonwalk.png
 9c090058933ff09515ef3a29e2bd25c29269387c6db9f417c5bcdb6962c13835  native-bch-route2.png
 454c5c3e336f947d2ce1c0954ec78e00a7a4d7ae01464eedde7153501f212085  native-bch-battle.png
+e92763a8b528b0845707e9eed493ddd828636a680e129fe2ca99c005d433808c  native-bch-catch.png
 b987693a363ff84bf009c6d537b7e2937e9e8d4fdba4d4855bcb2f11ae0a0f45  native-textured-model.png
 2335afaea29641d0c037bd082ec54963cdb2ea3099030a5d5a1e7a24862032de  native-field-inspector.png
 ```

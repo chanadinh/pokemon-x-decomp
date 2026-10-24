@@ -25,7 +25,7 @@ account of what remains unknown.
 **The destination is a native PC game. Today you can walk out of the player's
 house into Vaniville Town, open doors and talk to the townspeople with the game's
 own lines, and fight wild Pokémon in the tall grass of Route 2. Menus, story
-events, catching and saving are not there yet, so this is not yet a playable
+events and saving are not there yet, so this is not yet a playable
 port.**
 
 | Zones that load | Townspeople who speak | Wild battles | Preserved checkpoints |
@@ -37,13 +37,13 @@ port.**
 <table>
   <tr>
     <td width="50%"><a href="docs/native-bch.md#vaniville-town"><img src="docs/images/native-bch-town-talk.png" alt="The player talking to a boy in Vaniville Town, with his line in a message window" width="440"></a></td>
-    <td width="50%"><a href="docs/native-bch.md#a-first-wild-battle"><img src="docs/images/native-bch-battle.png" alt="A battle screen: a wild Scatterbug against Froakie, with the move menu open" width="440"></a></td>
+    <td width="50%"><a href="docs/native-bch.md#catching-and-levelling-up"><img src="docs/images/native-bch-catch.png" alt="A battle screen: Gotcha! Scatterbug was caught!" width="440"></a></td>
   </tr>
 </table>
 
 Start in the bedroom, walk downstairs, talk to the NPC there and step out of the
 front door into Vaniville Town, then north up Route 1 into Aquacorde Town and
-on to Route 2, where the tall grass hides wild Pokémon.
+on to Route 2, where the tall grass hides wild Pokémon to battle and catch.
 Every person, door, lamp and piece of furniture comes from the game files on
 your machine. On Linux or WSL, with SDL2
 development files installed:
@@ -68,8 +68,9 @@ What works: walking and running with the game's motions, collision with the
 terrain and NPCs, doors and stairs between zones, walking from one zone into
 the next (Vaniville, Route 1, Aquacorde, Route 2), NPC dialogue from each
 zone's compiled script, region props, and wild battles in tall grass with the
-game's species, moves and type chart. What is missing: battle models and
-animations, catching, experience, menus, story events, saving and sound. See the
+game's species, moves and type chart, with experience, level-ups and Poké Balls
+that add the catch to your party. What is missing: battle models and
+animations, items, switching, menus, story events, saving and sound. See the
 [town record](native/reproduction/bch-town/README.txt) for exactly what was
 checked.
 
@@ -240,7 +241,7 @@ recovered original source or builds that match the original machine code.
 
 - The latest native milestone passes **21 C suites and 110 Python tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the viewer's zone, town and dialogue runs.
 - For all **360 zones**, an independent reader re-derives each scene from the map matrix and agrees with the viewer on every region placement, **2,864** props, **2,217** NPC tiles and **593** warp tiles in the **328** zones that load; an independent walk predicts the zone crossings from Vaniville to Aquacorde. **1,459** prop records and **3,063** prop-registry entries match the native decoders.
-- Battle data: all **799** personal entries, **618** moves, **799** learnsets, **53** encounter tables and the type chart match an independent parser; the reconstructed HP and stat routines agree with the published formulas on **9,576** cases, **20,000** damage cases agree, and an independent model predicts every message of a recorded Route 2 battle.
+- Battle data: all **799** personal entries, **618** moves, **799** learnsets, **53** encounter tables and the type chart match an independent parser; the reconstructed HP and stat routines agree with the published formulas on **9,576** cases, **20,000** damage cases agree, and an independent model predicts every message of a recorded Route 2 battle. All eight growth tables match the published formulas, and **266,514** level, experience and catch cases agree with an independent implementation.
 - All **2,524** NPC script runs and all **7,607** story-text lines match a separately written Pawn interpreter and text decoder.
 - The field's **16 environment lights, 12 light sets and 7,068 normal components** match an independent parser. The lighting evaluator matches an independent float32 oracle of the pinned emulator behavior on **20,970** evaluations, and **44** original-code words back its sign and color conventions.
 - The six-stage combiner evaluator matches an independent oracle of the pinned emulator behavior on **116,000** evaluations, and **2,356** decoded vertex colors match bit for bit.
@@ -264,7 +265,7 @@ The next step is to connect these tested pieces into a game scene:
 - **Open the world:** stream map regions instead of reloading on each zone crossing, run zone-entry scripts, and honor the story flags that decide which NPCs appear.
 - **Complete the field renderer:** add the vertex shader's outputs, bump maps, point lights and the day/night selection, fog and projected textures; establish original culling and the game camera.
 - **Ground the player in the game's code:** reconstruct the game's own controller (spawn, speeds, terrain flags, collision response) and the remaining script natives.
-- **Finish the gameplay loop:** load the Pokémon's battle models, trace the damage and move effects in the game's battle module, add experience, catching and the party, and implement save/load.
+- **Finish the gameplay loop:** load the Pokémon's battle models, trace the damage, experience, catch and move effects in the game's battle module, add items, switching and evolution, and implement save/load.
 - **Compare against the original:** capture a repeatable reference scenario and check behavior at each boundary.
 
 The [roadmap](ROADMAP.md) tracks dependencies. The

@@ -45,8 +45,9 @@ Since then the native model viewer has grown into a walkable field slice:
 Vaniville Town in real time, walks on up Route 1 into Aquacorde Town, doors and
 stairs change zones, region props are drawn, and NPCs answer with lines chosen
 by their zone's own Pawn script. Tall grass on Route 2 starts wild battles on
-the game's data, with stats from the reconstructed routines. 328 of 360 zones
-load. Battles, menus, story state, saving and audio are not
+the game's data, with stats from the reconstructed routines; wins give
+experience and level-ups, and Poké Balls add the catch to the party. 328 of 360
+zones load. Battle models, items, menus, story state, saving and audio are not
 implemented. See [the field slice](README.md#play-the-field-slice).
 Per-milestone validation records document the actual tests. Game-logic tests
 use synthetic memory; native asset tests also compare original-data decoding

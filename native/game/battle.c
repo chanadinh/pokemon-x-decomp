@@ -1,5 +1,6 @@
 #include "battle.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -24,25 +25,81 @@ static uint8_t nature_load8(void *user, uint32_t address)
     return table && at < 125 ? table[at] : 0;
 }
 
+/* Stats of the battler's species, level, IVs and nature through the
+ * reconstructed formulas (EVs 0). */
+static void compute_stats(const struct px_battle_data *d, struct px_battler *out)
+{
+    const struct px_personal *p = &d->personal[out->species];
+    struct px_pokemon_api memory;
+    memset(&memory, 0, sizeof memory);
+    memory.user = (void *)d->natures;
+    memory.load8 = nature_load8;
+    out->stats[0] = (uint16_t)px_pokemon_hp_value(out->species, out->level, p->base[0], out->iv[0], 0);
+    static const enum px_stat stat[6] = {PX_STAT_HP, PX_STAT_ATTACK, PX_STAT_DEFENSE, PX_STAT_SPEED,
+                                         PX_STAT_SPECIAL_ATTACK, PX_STAT_SPECIAL_DEFENSE};
+    for (unsigned k = 1; k < 6; ++k)
+        out->stats[k] = (uint16_t)px_pokemon_stat_value(out->level, p->base[k], out->iv[k], 0, out->nature, stat[k],
+                                                        &memory);
+}
+
+/* The reconstructed level-from-growth routine reads the selected growth
+ * table through 0x005d17ac (a pointer) and table + 8 + 4 x level; this
+ * adapter serves the a/2/1/7 member of the selected group there. */
+struct growth_view { const struct px_battle_data *data; uint32_t group; };
+enum { GROWTH_POINTER = 0x005d17ac, GROWTH_TABLE = 0x10000000 };
+static uint32_t growth_load32(void *user, uint32_t address)
+{
+    const struct growth_view *g = user;
+    if (address == GROWTH_POINTER) return GROWTH_TABLE;
+    const uint32_t at = address - GROWTH_TABLE - 8;
+    if (address < GROWTH_TABLE + 8 || at % 4 || at / 4 > 100 || g->group >= g->data->growth_count) return 0;
+    return g->data->growth[g->group][at / 4];
+}
+static void growth_select(void *user, uint32_t species, uint32_t form)
+{
+    (void)form;
+    struct growth_view *g = user;
+    g->group = species < g->data->personal_count ? g->data->personal[species].growth : UINT32_MAX;
+}
+
+uint8_t px_battle_level_for(const struct px_battle_data *d, uint16_t species, uint32_t exp)
+{
+    if (!d->growth || species >= d->personal_count) return 1;
+    struct growth_view view = {d, 0};
+    struct px_pokemon_api memory;
+    memset(&memory, 0, sizeof memory);
+    memory.user = &view;
+    memory.load32 = growth_load32;
+    struct px_data_api api = {&memory, &view, growth_select};
+    return (uint8_t)px_pokemon_level_from_growth(species, 0, exp, &api);
+}
+
+uint32_t px_battle_exp_gain(const struct px_battle_data *d, const struct px_battler *fainted)
+{
+    return (uint32_t)d->personal[fainted->species].base_exp * fainted->level / 7;
+}
+
+uint32_t px_battle_catch_threshold(const struct px_battle_data *d, const struct px_battler *w, uint32_t ball10)
+{
+    const uint32_t max = w->stats[0], rate = d->personal[w->species].catch_rate;
+    const uint32_t a = max ? (3 * max - 2 * w->hp) * rate * ball10 / (30 * max) : 0;
+    if (a >= 255) return 65536;
+    if (!a) return 0;
+    return (uint32_t)floor(65536.0 / pow(255.0 / a, 0.1875));
+}
+
 int px_battler_make(const struct px_battle_data *d, uint16_t species, uint8_t level, const uint8_t iv[6],
                     uint8_t nature, const uint16_t moves[4], struct px_battler *out)
 {
     memset(out, 0, sizeof *out);
     if (!d || species == 0 || species >= d->personal_count || level < 1 || level > 100 || nature >= 25) return 0;
     const struct px_personal *p = &d->personal[species];
-    struct px_pokemon_api memory;
-    memset(&memory, 0, sizeof memory);
-    memory.user = (void *)d->natures;
-    memory.load8 = nature_load8;
     out->species = species; out->level = level; out->nature = nature;
     out->types[0] = p->types[0]; out->types[1] = p->types[1];
     memcpy(out->iv, iv, 6);
-    out->stats[0] = (uint16_t)px_pokemon_hp_value(species, level, p->base[0], iv[0], 0);
-    static const enum px_stat stat[6] = {PX_STAT_HP, PX_STAT_ATTACK, PX_STAT_DEFENSE, PX_STAT_SPEED,
-                                         PX_STAT_SPECIAL_ATTACK, PX_STAT_SPECIAL_DEFENSE};
-    for (unsigned k = 1; k < 6; ++k)
-        out->stats[k] = (uint16_t)px_pokemon_stat_value(level, p->base[k], iv[k], 0, nature, stat[k], &memory);
+    compute_stats(d, out);
     out->hp = out->stats[0];
+    if (d->growth && p->growth < d->growth_count) out->exp = d->growth[p->growth][level];
     for (unsigned k = 0; k < 4; ++k) {
         if (moves[k] >= d->move_count) { memset(out, 0, sizeof *out); return 0; }
         out->moves[k] = moves[k];
@@ -199,14 +256,86 @@ static int wild_choice(struct px_battle *b)
     return n ? (int)usable[px_rng_below(&b->rng, n)] : -1;
 }
 
+/* Experience, level-ups and new moves after the wild Pokémon fainted. */
+static void award(struct px_battle *b, const char *const *species_names, uint32_t species_count,
+                  const char *const *move_names, uint32_t move_count)
+{
+    struct px_battler *me = &b->side[0];
+    char name[64], line[96];
+    species_name(b, 0, species_names, species_count, name, sizeof name);
+    const uint32_t gain = px_battle_exp_gain(b->data, &b->side[1]);
+    if (!b->data->growth || !gain) return;
+    me->exp += gain;
+    snprintf(line, sizeof line, "%s gained %u Exp. Points!", name, (unsigned)gain);
+    say(b, line);
+    const uint8_t target = px_battle_level_for(b->data, me->species, me->exp);
+    while (me->level < target && me->level < 100) {
+        const uint16_t old_max = me->stats[0];
+        ++me->level;
+        compute_stats(b->data, me);
+        me->hp = (uint16_t)(me->hp + (me->stats[0] - old_max));
+        snprintf(line, sizeof line, "%s grew to Lv. %u!", name, me->level);
+        say(b, line);
+        const struct px_learnset *l = b->data->learnsets && me->species < b->data->learnset_count ?
+                                      &b->data->learnsets[me->species] : NULL;
+        for (uint32_t i = 0; l && i < l->count; ++i) {
+            if (l->level[i] != me->level) continue;
+            const uint16_t id = l->move[i];
+            int known = 0, free_slot = -1;
+            for (int k = 0; k < 4; ++k) {
+                known |= me->moves[k] == id;
+                if (!me->moves[k] && free_slot < 0) free_slot = k;
+            }
+            if (known || id >= b->data->move_count) continue;
+            const char *move = move_names && id < move_count ? move_names[id] : "a new move";
+            if (free_slot >= 0) {
+                me->moves[free_slot] = id; me->pp[free_slot] = b->data->moves[id].pp;
+                snprintf(line, sizeof line, "%s learned %s!", name, move);
+            } else snprintf(line, sizeof line, "%s did not learn %s.", name, move);
+            say(b, line);
+        }
+    }
+}
+
+/* A Poké Ball: 1 when caught. */
+static int throw_ball(struct px_battle *b, const char *const *species_names, uint32_t species_count)
+{
+    char name[64], line[96];
+    --b->balls;
+    say(b, "You threw a Poké Ball!");
+    const uint32_t threshold = px_battle_catch_threshold(b->data, &b->side[1], 10);
+    unsigned shakes = 0;
+    while (shakes < 4 && (threshold >= 65536 || px_rng_below(&b->rng, 65536) < threshold)) ++shakes;
+    const uint16_t s = b->side[1].species;
+    if (species_names && s < species_count) snprintf(name, sizeof name, "%s", species_names[s]);
+    else snprintf(name, sizeof name, "#%u", s);
+    if (shakes == 4) {
+        snprintf(line, sizeof line, "Gotcha! %s was caught!", name);
+        say(b, line);
+        return 1;
+    }
+    static const char *const free[4] = {"Oh no! The Pokémon broke free!", "Aww! It appeared to be caught!",
+                                        "Aargh! Almost had it!", "Gah! It was so close, too!"};
+    say(b, free[shakes]);
+    return 0;
+}
+
 int px_battle_turn(struct px_battle *b, int player_move, const char *const *species_names, uint32_t species_count,
                    const char *const *move_names, uint32_t move_count)
 {
     if (b->state != PX_BATTLE_CHOOSING) return 0;
-    if (player_move >= 4 || (player_move >= 0 && (!b->side[0].moves[player_move] || !b->side[0].pp[player_move])))
+    if (player_move >= 4 || player_move < -2 || (player_move == -2 && !b->balls) ||
+        (player_move >= 0 && (!b->side[0].moves[player_move] || !b->side[0].pp[player_move])))
         return 0;
     b->log_count = 0;
     ++b->turn;
+    if (player_move == -2) {
+        if (throw_ball(b, species_names, species_count)) { b->state = PX_BATTLE_CAUGHT; return 1; }
+        const int w = wild_choice(b);
+        if (w >= 0 && use_move(b, 1, (unsigned)w, species_names, species_count, move_names, move_count))
+            b->state = PX_BATTLE_LOST;
+        return 1;
+    }
     if (player_move < 0) {
         const uint32_t mine = px_battle_stat(&b->side[0], 3, 0), theirs = px_battle_stat(&b->side[1], 3, 0);
         ++b->escape_attempts;
@@ -237,6 +366,7 @@ int px_battle_turn(struct px_battle *b, int player_move, const char *const *spec
         const unsigned slot = side ? (unsigned)w : (unsigned)player_move;
         if (use_move(b, side, slot, species_names, species_count, move_names, move_count)) {
             b->state = side == 0 ? PX_BATTLE_WON : PX_BATTLE_LOST;
+            if (side == 0) award(b, species_names, species_count, move_names, move_count);
             break;
         }
     }

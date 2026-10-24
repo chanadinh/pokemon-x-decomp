@@ -1,0 +1,29 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "9ef1144f8d8312a54390fe476a000caf67e1da36",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "Makefile": "0532e42b02dd837f3d18c9ef0349283411b2f0e02db81e0c116933b641017812",
+  "model_app.c": "7b0441bc247531418fcf9c82559f166fd7c7b52c32c31a363b187685647ce754",
+  "game/battle.c": "9b7da42a14cad951e51c57e9c505d758c81f075da425e28a0fd41314b2b05397",
+  "game/battle.h": "e3aecfa2c7cd24df1122bd7dde9b9f5b355ee55027aa793211974f3429e98f33",
+  "game/battle_ui.c": "ee2ae505c2e304da8e74823e97e338ed2b894e32f707a3821f1ebc111b2f395a",
+  "game/battle_ui.h": "f5e4dcd7095170ba3165eacf168bb059da51c5094572d839c03a390218a2880f",
+  "game/test_battle.c": "53c2792d985e1f7d5228c07b062ae6adeca249c471eb713029acc9155a76ba63",
+  "tests/test_bch_battle_viewer.py": "c09c58d8e6ab70a3781d8ab6bbb1f60b5adbc6780f327688ddfdaa07b041ed8e",
+  "reproduction/bch-catch/dump_catch.c": "408d60a542d05e61980069150fc2e8dfef5c8bd189b11f4665b59599b9e827e1",
+  "reproduction/bch-catch/verify_catch.py": "e5ac7f372ebf745f88edef7489d18df920b5790700f21ceec19533aa5d6a9ee5"
+ },
+ "checks": [
+  "make -C native clean; make -C native all test test-runtime",
+  "make -C reconstructed test",
+  "python3 -m unittest discover -s tests",
+  "ASan/UBSan with leak detection (dummy video): test_battle, the battle viewer suite, a Route 2 run with three catches",
+  "verify_catch.py",
+  "../bch-battle/verify_battle.py steps 1-3"
+ ],
+ "image": {
+  "docs/images/native-bch-catch.png": "e92763a8b528b0845707e9eed493ddd828636a680e129fe2ca99c005d433808c"
+ }
+}

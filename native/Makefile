@@ -73,7 +73,7 @@ build/test_pokedata: assets/pokedata.c assets/pokedata.h assets/test_pokedata.c 
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/pokedata.c assets/test_pokedata.c $(LDFLAGS) $(LDLIBS) -o $@
 
 build/test_battle: game/battle.c game/battle.h game/battle_ui.c game/battle_ui.h game/test_battle.c assets/pokedata.c render/text.c $(STATS_SOURCES) | build
-	$(CC) $(CPPFLAGS) $(CFLAGS) game/battle.c game/battle_ui.c game/test_battle.c assets/pokedata.c render/text.c $(STATS_SOURCES) $(LDFLAGS) $(LDLIBS) -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) game/battle.c game/battle_ui.c game/test_battle.c assets/pokedata.c render/text.c $(STATS_SOURCES) $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/test_zone: assets/zone.c assets/zone.h assets/test_zone.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/zone.c assets/test_zone.c $(LDFLAGS) $(LDLIBS) -lm -o $@

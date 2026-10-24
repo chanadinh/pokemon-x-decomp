@@ -1,0 +1,20 @@
+Experience and catching validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video with the software renderer. Not run on the local
+WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (extended: test_battle, BCH battle viewer).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection under dummy video:
+   test_battle, the battle viewer suite and a Route 2 run with three catches
+   in a row: no diagnostics.
+4. Earlier records unchanged. ../bch-battle/verify_battle.py steps 1-3
+   pass; step 4 differs only by the new experience line and battle_end
+   fields (README.txt).
+5. verify_catch.py: growth tables identical to an independent reader and to
+   the published formulas; 266,514 level, experience and catch cases
+   identical; the Route 2 win and catch runs consistent with the tables.
+
+Not established: the game's own experience, catch and shake code
+(DllBattle.cro), and any running-game comparison.

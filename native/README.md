@@ -487,3 +487,8 @@ reconstructed routines, and published damage formulas (`--partner`,
 `--partner-level`, `--seed`, `--encounter-rate`, `--code-bin`). See the
 [battle record](reproduction/bch-battle/README.txt).
 
+Wins give experience from the game's growth tables (`a/2/1/7`); the level comes
+from the reconstructed level-from-experience routine and new moves from the
+learnset. BALL throws a Poké Ball (`--balls N`, default 10) and a catch joins a
+party of up to six. See the [catch record](reproduction/bch-catch/README.txt).
+

@@ -517,3 +517,27 @@ calculations and 20,000 damage calculations, and predicts every message of
 the recorded battle. See the
 [battle record](../native/reproduction/bch-battle/README.txt).
 
+## Catching and levelling up
+
+<img src="images/native-bch-catch.png" alt="A battle screen: Gotcha! Scatterbug was caught!" width="440">
+
+Battles now pay out. Winning gives the partner experience (the defeated
+Pokémon's base experience times its level, over seven), counted against the
+game's own growth tables: eight tables of 101 totals, one per growth group.
+The level that follows is worked out by the reconstructed
+level-from-experience routine of the stats milestone, and on a level-up the
+partner learns whatever its learnset lists at the new level, if a move slot
+is free.
+
+The command menu is now FIGHT, BALL and RUN. BALL throws a Poké Ball (ten to
+start with, or `--balls N`): the catch chance uses the Pokémon's catch rate
+and remaining HP with the published Generation VI formula and four shake
+checks, and a failed throw costs the turn. A caught Pokémon joins the party,
+up to six. The experience and catch formulas are published ones until they
+can be traced in the game's battle module; items, other balls, switching,
+evolution and PC boxes are not there yet.
+
+An independent check agrees with all eight growth tables and with the
+published experience formulas at every level, and on 266,514 level,
+experience and catch calculations. See the
+[catch record](../native/reproduction/bch-catch/README.txt).

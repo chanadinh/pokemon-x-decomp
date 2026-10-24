@@ -7,7 +7,7 @@
 /* The viewer's battle screen and menu (self-authored, not the game's battle
  * scene or UI art; Pokémon are drawn as type-coloured placeholders until
  * their battle models are loaded). Phases: messages (paged with confirm),
- * the command menu (FIGHT / RUN), the move menu (four moves; cancel goes
+ * the command menu (FIGHT / BALL / RUN), the move menu (four moves; cancel goes
  * back), then the turn's messages; the battle ends after its last page. */
 enum px_battle_phase { PX_UI_MESSAGES = 0, PX_UI_COMMAND, PX_UI_MOVES, PX_UI_DONE };
 enum { PX_UI_MAX_PAGES = 24 };

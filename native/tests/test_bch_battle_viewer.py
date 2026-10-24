@@ -37,10 +37,12 @@ def encounters(species=2, level=(3, 3)):
     return bytes([1] + [0] * 15) + bytes(slots)
 
 
-def personal(stats, kind):
+def personal(stats, kind, catch_rate=0, base_exp=0):
     entry = bytearray(0x40)
     entry[0:6] = bytes(stats)
     entry[6] = entry[7] = kind
+    entry[8] = catch_rate
+    entry[0x22:0x24] = struct.pack('<H', base_exp)
     return bytes(entry)
 
 
@@ -67,11 +69,14 @@ def write_battle_romfs(root, rate_zone=True):
     (root / 'a/0/4/1').write_bytes(garc([field, field]))
     # Species 1 (the partner, Water), 2 (wild, Normal); move 1 Pound-like,
     # 2 Growl-like (foe Attack -1).
-    people = [personal([1] * 6, 0), personal([41, 56, 40, 71, 62, 44], 10), personal([38, 36, 38, 57, 32, 36], 0)]
+    people = [personal([1] * 6, 0), personal([41, 56, 40, 71, 62, 44], 10), personal([38, 36, 38, 57, 32, 36], 0, 255, 255)]
     (root / 'a/2/1').mkdir(parents=True, exist_ok=True)
     (root / 'a/2/1/8').write_bytes(garc(people + [b''.join(people)]))
     (root / 'a/2/1/2').write_bytes(garc([move(0, 0, 0, 0, 0), move(0, 1, 40, 100, 35),
                                          move(0, 0, 0, 100, 40, target=5, stat=1, stage=-1)]))
+    # Growth group 0 (every species here): exp = level cubed.
+    cubes = struct.pack('<101I', *(l ** 3 for l in range(101)))
+    (root / 'a/2/1/7').write_bytes(garc([cubes] + [bytes(404)] * 7))
     (root / 'a/2/1/4').write_bytes(garc([learnset(), learnset((1, 1)), learnset((2, 1), (1, 3))]))
     cro = bytearray(0xD12A8 + 324)
     cro[0x80:0x84] = b'CRO0'
@@ -104,7 +109,8 @@ class BCHBattleViewerTests(unittest.TestCase):
             self.assertNotIn('encounter ', out)  # not grass
             out = self.run_viewer(root, *common, '--steps', 'RRRR', '--inspect').stdout
             self.assertIn('battle_data personal=3 moves=3 chart=DllBattle.cro:0xD12A8 natures=neutral '
-                          'names=3,3,2 formulas=reconstructed-stats,community-damage\n', out)
+                          'names=3,3,2 growth=a/2/1/7:8 learnsets=3 balls=10 '
+                          'formulas=reconstructed-stats-and-levels,community-damage-and-catch\n', out)
             # Every completed grass step encounters at rate 100: cells 22, 23, 24.
             self.assertEqual([l.split(' slot=')[0] for l in self.lines(out, 'encounter ')],
                              ['encounter zone=0 cell=22,21', 'encounter zone=0 cell=23,21', 'encounter zone=0 cell=24,21'])
@@ -145,13 +151,33 @@ class BCHBattleViewerTests(unittest.TestCase):
             end = self.lines(result.stdout, 'battle_end ')
             self.assertEqual(len(end), 1, result.stdout)
             self.assertIn('battle_end result=won ', end[0])
+            # Lv5 (125 exp) beats a Lv3 foe with base exp 255: +109, Lv6 at 216.
+            self.assertIn('Froakie gained 109 Exp. Points!', result.stdout)
+            self.assertIn('battle turn=', result.stdout)
+            self.assertIn('Froakie grew to Lv. 6!', result.stdout)
+            self.assertIn(' level=6 exp=234 ', end[0])
             # Running from the command menu (cursor right): the faster partner escapes.
-            run = self.run_viewer(root, *common, '--play', 'RR..R..', '--frames', 200).stdout
+            run = self.run_viewer(root, *common, '--play', 'RR..RR..', '--frames', 200).stdout
             self.assertIn('battle turn=1 message="Got away safely!"\n', run)
             self.assertIn('battle_end result=escaped turns=1 ', run)
             # The moves menu cancels back to the command menu ('x').
-            cancel = self.run_viewer(root, *common, '--play', 'RR...xR..', '--frames', 200).stdout
+            cancel = self.run_viewer(root, *common, '--play', 'RR...xRR..', '--frames', 200).stdout
             self.assertIn('battle_end result=escaped turns=1 ', cancel)
+            # Throwing balls (cursor on BALL) until one holds; '.x' pads safely:
+            # 'x' is ignored by pages and the command menu and cancels FIGHT.
+            throw = 'RR' + '..' + ('R.' + '.x' * 10) * 10
+            caught = self.run_viewer(root, *common, '--balls', 5, '--play', throw, '--frames', 600).stdout
+            self.assertIn('You threw a Poké Ball!', caught)
+            # Leftover 'R's walk on into more grass; the first battle is checked.
+            end = self.lines(caught, 'battle_end ')
+            self.assertGreaterEqual(len(end), 1, caught)
+            self.assertIn('result=caught', end[0])
+            self.assertIn('party count=2 0:Froakie:Lv5:', caught)
+            self.assertIn(' 1:Bunnelby:Lv3:', caught)
+            self.assertNotIn('party count=7', caught)  # six at most
+            empty = self.run_viewer(root, *common, '--balls', 0, '--play', 'RR..R.' + '.x' * 4, '--frames', 200)
+            self.assertIn('You have no Poké Balls left!', empty.stdout)
+            self.run_viewer(root, *common, '--balls', 1000, '--steps', 'R', '--inspect', success=False)
             # The battle screen replaces the field while it lasts.
             shots = {}
             for name, frame in (('field', 5), ('battle', 60)):

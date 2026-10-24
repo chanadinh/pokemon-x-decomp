@@ -44,11 +44,17 @@ int px_battle_ui_input(struct px_battle_ui *ui, struct px_battle *b, char key)
         ui->cursor = 0;
         return 0;
     case PX_UI_COMMAND:
-        if (key == 'L' || key == 'U') ui->cursor = 0;
-        else if (key == 'R' || key == 'D') ui->cursor = 1;
+        if ((key == 'L' || key == 'U') && ui->cursor > 0) --ui->cursor;
+        else if ((key == 'R' || key == 'D') && ui->cursor < 2) ++ui->cursor;
         else if (key == '.') {
             if (ui->cursor == 0) { ui->phase = PX_UI_MOVES; ui->cursor = 0; return 0; }
-            px_battle_turn(b, -1, ui->species_names, ui->species_count, ui->move_names, ui->move_count);
+            if (ui->cursor == 1 && !b->balls) {
+                add_page(ui, "You have no Poké Balls left!");
+                ui->phase = PX_UI_MESSAGES;
+                return 0;
+            }
+            px_battle_turn(b, ui->cursor == 1 ? -2 : -1, ui->species_names, ui->species_count, ui->move_names,
+                           ui->move_count);
             for (uint32_t i = 0; i < b->log_count; ++i) add_page(ui, b->log[i]);
             ui->phase = PX_UI_MESSAGES;
             return 1;
@@ -130,7 +136,7 @@ void px_battle_ui_draw(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_ba
     ellipse(rgba, w, h, (int)w / 4, (int)h * 3 / 4 - 8, 90, 20, pad);
     for (unsigned s = 0; s < 2; ++s) {
         const struct px_battler *p = &b->side[s];
-        if (!p->hp) continue;
+        if (!p->hp || (s && b->state == PX_BATTLE_CAUGHT)) continue; /* fainted, or in the ball */
         const uint8_t *t = type_colors[p->types[0] < PX_TYPE_COUNT ? p->types[0] : 0];
         const uint8_t body[4] = {t[0], t[1], t[2], 255};
         const uint8_t shade[4] = {(uint8_t)(t[0] * 3 / 4), (uint8_t)(t[1] * 3 / 4), (uint8_t)(t[2] * 3 / 4), 255};
@@ -153,9 +159,13 @@ void px_battle_ui_draw(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_ba
             char line[96];
             snprintf(line, sizeof line, "What will %s do?", mine);
             px_text_draw(rgba, w, h, 18, y0 + 9, line, ink, 1);
-            px_text_draw(rgba, w, h, (int)w - 150, y0 + 25, "FIGHT", ui->cursor == 0 ? pick : ink, 1);
-            px_text_draw(rgba, w, h, (int)w - 80, y0 + 25, "RUN", ui->cursor == 1 ? pick : ink, 1);
-            px_text_draw(rgba, w, h, (int)w - (ui->cursor == 0 ? 160 : 90), y0 + 25, ">", pick, 1);
+            char ball[32];
+            snprintf(ball, sizeof ball, "BALL x%u", (unsigned)b->balls);
+            const int x[3] = {(int)w - 230, (int)w - 160, (int)w - 70};
+            px_text_draw(rgba, w, h, x[0], y0 + 25, "FIGHT", ui->cursor == 0 ? pick : ink, 1);
+            px_text_draw(rgba, w, h, x[1], y0 + 25, ball, ui->cursor == 1 ? pick : ink, 1);
+            px_text_draw(rgba, w, h, x[2], y0 + 25, "RUN", ui->cursor == 2 ? pick : ink, 1);
+            px_text_draw(rgba, w, h, x[ui->cursor >= 0 && ui->cursor < 3 ? ui->cursor : 0] - 10, y0 + 25, ">", pick, 1);
         } else {
             for (unsigned k = 0; k < 4; ++k) {
                 const uint16_t id = b->side[0].moves[k];
