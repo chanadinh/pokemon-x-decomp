@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-23",
+  "baseline_commit": "ce9498533ea11dceaaf0bb71190eaf330b198fbb",
+  "previous_native_sha256sums": {
+    "entries": 129,
+    "sha256": "2a86e47d95ee70f9bd647e98a49109e8f382005da88d089d4aa341a1920c8810"
+  },
+  "immutable_reproduction_records": "All 71 reproduction/ entries of the previous native/SHA256SUMS were rechecked unchanged.",
+  "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+  "stage0_regression": "The ../bch-textured stage-0 capture command still produces sha256 2d9052489e155fb0ce60e7c75a2fb810682e3d0a8dae319d94284355f5ef0951.",
+  "changed_native_sources": [
+    "Makefile",
+    "README.md",
+    "assets/bch_material.c",
+    "assets/bch_material.h",
+    "assets/bch_model.c",
+    "assets/bch_model.h",
+    "assets/test_bch_material.c",
+    "assets/test_bch_model.c",
+    "model_app.c",
+    "render/raster.c",
+    "render/raster.h",
+    "render/test_raster.c"
+  ],
+  "added_native_files": [
+    "render/tev.c",
+    "render/tev.h",
+    "render/test_tev.c",
+    "tests/test_bch_combiner_viewer.py",
+    "reproduction/bch-combiners/README.txt",
+    "reproduction/bch-combiners/baseline.json",
+    "reproduction/bch-combiners/dump_combiners.c",
+    "reproduction/bch-combiners/reference-comparison.json",
+    "reproduction/bch-combiners/validation.json",
+    "reproduction/bch-combiners/validation.txt",
+    "reproduction/bch-combiners/verify_combiners.py"
+  ]
+}

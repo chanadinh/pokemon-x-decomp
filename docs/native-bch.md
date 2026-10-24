@@ -214,3 +214,34 @@ the full RomFS; the synthetic runtime tests cover the archive and section paths.
 Combiner stages 1–5, projection, lighting, fog, vertex colors, primitive state and
 the game camera remain open, so the capture is not the game's final appearance. See
 the [textured-preview record](../native/reproduction/bch-textured/README.txt).
+
+## Full combiner chain
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured --combiners \
+  --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11
+```
+
+<img src="images/native-bch-combiners.png" alt="Field 165 drawn with all six combiner stages and baked vertex colors" width="720">
+
+`--combiners` evaluates all six TEV stages with 8-bit integer arithmetic that
+follows the pinned Azahar software rasterizer: ten operations, operands, scales,
+constants and the delayed combiner buffer. The reader now also decodes vertex
+colors, both stored attributes and fixed float24 attributes, so baked shading
+appears. Four meshes use fixed colors; for example, the grayscale curtain texture
+receives a green tint and the gray shadow texture a brown one.
+
+Unexecuted inputs are declared rather than guessed silently: the vertex color
+stands in for the vertex shader's primary output, fragment lighting is white with
+a black secondary, projection-mapped units read a white texel, and disabled units
+read zero. The viewer measures whether the projected substitute or the secondary
+color can change each material's result. For this field neither can: the stage-4
+projected term is multiplied by a zero constant. Every chain does multiply by the
+lighting color, which makes fragment lighting the main remaining input.
+
+An independent table-driven oracle matched the native evaluator on 80,000 random
+evaluations and 36,000 evaluations of the field's twelve chains, and all 2,356
+vertex colors match an independent decode. This is equivalence to an emulator's
+documented behavior, not a hardware measurement or a game capture. See the
+[combiner record](../native/reproduction/bch-combiners/README.txt).

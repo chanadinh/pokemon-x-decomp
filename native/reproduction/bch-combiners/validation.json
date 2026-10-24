@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-23",
+  "baseline_commit": "ce9498533ea11dceaaf0bb71190eaf330b198fbb",
+  "result": "passed",
+  "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; local WSL host and native Windows untested",
+  "tested_source_sha256": {
+    "Makefile": "0f5eef30e74478a658e1b24f45d31990c8320bf3d46226da52d9ee5e2f21d2c4",
+    "model_app.c": "a73376baaba29167ddf1728b0615923a907d9642a731ff44120e05176743f207",
+    "assets/bch_model.c": "7a046310a01ab0172d9e1e3c7ed412a619a87242cb1b5f54aefa343d76d4191d",
+    "assets/bch_model.h": "a62fea5e694571307c78047ba67025c74b7cdffe0d627ef333245d0fda147c1c",
+    "assets/bch_material.c": "53fc91a3e73d1bc87800815b7840102a0d1d29f3e0c526e0479cb4af6890e420",
+    "assets/bch_material.h": "21d42641868394945ce8dc2e7884907d18e2b7093faf3803e1165685e29c2b72",
+    "assets/test_bch_model.c": "838b025cbda28d9986765c9377cfc5ff03ab981883b1cee55a7fc2a09caf1e61",
+    "assets/test_bch_material.c": "9e6e31d54ca79601aee68aea41879e00b4cef877a9ece2afbd64bf58414ee22c",
+    "render/raster.c": "8c5609699b95fb06273dd002eeebb27c03a95778aba3ec3bf74ffd0660abf024",
+    "render/raster.h": "30168a21f55214baea0076c4ed9dd853caa95aa34424e72e80378325d762fd99",
+    "render/test_raster.c": "63c306e71e5c82c6ae198684e95a5b3a1efa3e87417a68baf82c64e61e3c9648",
+    "render/tev.c": "5465a3407722e8319746a0851e9e1c38f1c915cd4d055f6b1f70a45e195e536d",
+    "render/tev.h": "b98d5966e71d303fcbb29791f6ab4eb7008a4ccd26814ddc818ac6c5643c05dd",
+    "render/test_tev.c": "12ee65abc7c0167d607d05a5354f2d8ecd46f874d195a0294e8690fec53c2949",
+    "tests/test_bch_combiner_viewer.py": "b161a08e125fcb952c56aa0ee2718ed192fc2e25638c6d7ca626921c4833f60c",
+    "reproduction/bch-combiners/dump_combiners.c": "4358eafea31ad2e68de39593c2fc11bd20b4f4a86aa37edd270707c62eba9881",
+    "reproduction/bch-combiners/verify_combiners.py": "e1d96e8a7d5a9244337185d82c2a4c37600142838aea9d0bdaa8f7297b369d77"
+  },
+  "checks": [
+    {
+      "command": "make -C native clean && make -C native all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 14,
+      "python_core_tests": {"container": 8, "bch_index_and_gr": 12, "pica_commands": 12, "bch_model": 11},
+      "python_runtime_tests": {
+        "texture_viewer": 7, "bch_texture_viewer": 6, "model_viewer": 10, "bch_model_viewer": 9,
+        "bch_textured_viewer": 5, "bch_combiner_viewer": 4, "field_viewer": 9
+      }
+    },
+    {"command": "make -C reconstructed test", "result": "passed"},
+    {"command": "python3 -m unittest discover -s tests", "result": "passed", "tests": 38, "skipped": 2},
+    {
+      "command": "ASan/UBSan (-fno-sanitize-recover=all), ASAN_OPTIONS=detect_leaks=1: BCH model, material, raster and TEV C suites; sanitized model viewer under the combiner, textured, BCH-model and model viewer suites; a real-input --combiners run; the bridge",
+      "result": "passed; no sanitizer or leak diagnostics"
+    },
+    {
+      "command": "SHA-256 comparison against reconstructed/*/SHA256SUMS and the previous native reproduction/ entries; stage-0 capture regression",
+      "result": "all 539 checkpoint files and all 71 earlier native reproduction files unchanged; stage-0 capture byte-identical"
+    },
+    {
+      "command": "native/reproduction/bch-combiners/verify_combiners.py with the hash-pinned field payload",
+      "result": "passed",
+      "random_evaluations": 80000,
+      "random_valid_evaluations": 57724,
+      "field_evaluations": 36000,
+      "field_chains": 12,
+      "vertex_colors": 2356,
+      "projected_or_secondary_sensitive_field_outputs": 0,
+      "runtime_capture_sha256": "bb9e433dcd1467bb2de978c28236b88590f324560310aa602c569bfc4ec6f0c4",
+      "input_path": "single-member GARC wrappers around the exact payloads; the full local RomFS was not readable from this session",
+      "report": "reference-comparison.json",
+      "report_sha256": "fd1395404c29677b2caf2e747705cc0aa85daa663490f1fddaa67ff5bce9db0c"
+    }
+  ],
+  "scope": [
+    "Six-stage PICA TEV evaluation following pinned emulator behavior",
+    "Stored and fixed (float24) vertex colors and the combiner buffer color",
+    "Per-fragment shader hook in the software rasterizer",
+    "--combiners viewer mode with a declared input policy and sensitivity counts"
+  ],
+  "limitations": [
+    "Arithmetic matches an emulator reference, not measured hardware",
+    "Fragment lighting not executed (fragment primary white, secondary black)",
+    "Vertex shader not executed; primary color assumed to be the vertex color",
+    "Projected textures substituted, not executed; their zero-constant no-op holds only for the stored constants",
+    "Culling, fog, primitive state, camera and depth mapping not executed",
+    "Real RomFS archive path not exercised by the recorded capture",
+    "No running-game visual comparison; native Windows build not verified"
+  ],
+  "logs_sha256": "a69581e63518843d6078441930407245960298d2af0b09a8e7abeebbe659abc4"
+}

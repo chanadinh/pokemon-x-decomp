@@ -34,8 +34,9 @@ unskinned model with orbit/zoom controls, wireframes, and an opt-in unlit
 textured mode. A field inspector now follows an original-code-backed zone/matrix
 selection and loads region terrain/collision data, with an explicitly restricted
 inspection marker. The field's BCH environment model now has a native wireframe
-and an unlit, combiner-stage-0 textured preview; full material execution and
-scene integration are still missing.
+an unlit stage-0 textured preview and a six-stage combiner preview with vertex
+colors; lighting, the vertex shader, projection and scene integration are still
+missing.
 Game-runtime integration, full material/scene rendering,
 player movement/collision, the interactive
 battle loop, and playable save/load are still missing.
@@ -119,9 +120,15 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    comes from the material's command registers. An independent parser matches
    all 12 bindings and 432 register observations; see
    [textured evidence](native/reproduction/bch-textured/README.txt).
-   Next execute the remaining combiner stages, projected textures and lighting,
-   establish the original primitive state, culling and camera conventions, and
-   integrate the field scene. Establish actual player entry and terrain collision consumers.
+   `--combiners` now runs all six TEV stages with decoded stored/fixed vertex
+   colors, matching an independent oracle of the pinned emulator behavior on
+   116,000 evaluations; see [combiner evidence](native/reproduction/bch-combiners/README.txt).
+   For this field the projected term and fragment secondary cannot change the
+   output under the stored constants, so fragment lighting and the vertex
+   shader's primary color are the remaining material inputs.
+   Next establish the light sets and fragment lighting, the vertex shader output,
+   projected textures with a camera, the original primitive state, culling and
+   camera conventions, and integrate the field scene. Establish actual player entry and terrain collision consumers.
    Capture the corresponding reference scenario.
 5. Connect explicit game-state/platform interfaces to the native application,
    then implement movement/collision, interaction, battle, return to the field,

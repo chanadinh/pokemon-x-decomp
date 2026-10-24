@@ -1,0 +1,212 @@
+{
+  "field_bch_sha256": "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+  "verifier_sha256": "e1d96e8a7d5a9244337185d82c2a4c37600142838aea9d0bdaa8f7297b369d77",
+  "bridge_source_sha256": "4358eafea31ad2e68de39593c2fc11bd20b4f4a86aa37edd270707c62eba9881",
+  "behavior_reference": {
+    "repository": "https://github.com/azahar-emu/azahar",
+    "commit": "1b5fd00964115d9959cbc2ca395c89f0b590d03a",
+    "src/video_core/renderer_software/sw_rasterizer.cpp": "efc36cddb32bc1f2ad79e0e3fb8b6d41ac66331538498cedaea2446f0f97ebdf",
+    "src/video_core/renderer_software/sw_texturing.cpp": "89b14ef9d4b0db7a47c9a5c44d1cc22bff8b57245c2a00447cb4fe9a76e4a26b",
+    "src/video_core/pica/regs_texturing.h": "5ee378220fe92d9e3ee1dc1ce0e6a212d8513460a5371d75e11cd7c707608b66",
+    "src/video_core/pica/packed_attribute.h": "7550c38549022dd965125050d9fab2b94be2d5aae33b657c649c22a95bdf0edd",
+    "src/video_core/pica/pica_core.cpp": "27d4d6616a9ca68bac5ad89d40c37b942a72eb42bd39d67c95c65d15b05fbfe7",
+    "src/video_core/pica_types.h": "b741b44b803fde734bf12f3e1be58ca56966a9bd5eb92aceca93536928c75593",
+    "hashes_checked": true
+  },
+  "random": {
+    "configurations": 20000,
+    "evaluations": 80000,
+    "valid_evaluations": 57724,
+    "mismatches": 0,
+    "seed": "0x5eed"
+  },
+  "field_materials": [
+    {
+      "index": 0,
+      "sources": "0xc00b",
+      "sampled_units": 1,
+      "projected_units": 0,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 1,
+      "sources": "0xc00b",
+      "sampled_units": 1,
+      "projected_units": 0,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 2,
+      "sources": "0xc00b",
+      "sampled_units": 1,
+      "projected_units": 0,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 3,
+      "sources": "0xc00b",
+      "sampled_units": 1,
+      "projected_units": 0,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 4,
+      "sources": "0xc00b",
+      "sampled_units": 1,
+      "projected_units": 0,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 5,
+      "sources": "0xc00b",
+      "sampled_units": 1,
+      "projected_units": 0,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 6,
+      "sources": "0xe01b",
+      "sampled_units": 2,
+      "projected_units": 1,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 7,
+      "sources": "0xe01b",
+      "sampled_units": 2,
+      "projected_units": 1,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 8,
+      "sources": "0xc00b",
+      "sampled_units": 1,
+      "projected_units": 0,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 9,
+      "sources": "0xe01f",
+      "sampled_units": 1,
+      "projected_units": 0,
+      "disabled_units": 2,
+      "buffer_update": "0x0a00",
+      "buffer_color": "0xff000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 10,
+      "sources": "0xe01b",
+      "sampled_units": 2,
+      "projected_units": 1,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    },
+    {
+      "index": 11,
+      "sources": "0xe01b",
+      "sampled_units": 2,
+      "projected_units": 1,
+      "disabled_units": 0,
+      "buffer_update": "0x0800",
+      "buffer_color": "0x00000000",
+      "random_trials": 3000,
+      "projected_substitute_changes_output": 0,
+      "fragment_secondary_changes_output": 0
+    }
+  ],
+  "field_evaluations": 36000,
+  "vertex_colors": {
+    "meshes": 12,
+    "vertices": 2356,
+    "sources": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2,
+      2
+    ],
+    "mismatches": 0
+  },
+  "runtime": {
+    "backend": "SDL dummy, software renderer",
+    "frames": 3,
+    "input_self_test": "passed",
+    "model_arguments": "--archive field.garc --entry 0",
+    "texture_arguments": "--texture-archive area.garc --texture-entry 0",
+    "capture_sha256": "bb9e433dcd1467bb2de978c28236b88590f324560310aa602c569bfc4ec6f0c4",
+    "sensitivity": [
+      "combiner_sensitivity material=0 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=1 frame=1 fragments=150 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=2 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=3 frame=1 fragments=107 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=4 frame=1 fragments=3957 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=5 frame=1 fragments=2454 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=6 frame=1 fragments=8463 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=7 frame=1 fragments=21118 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=8 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=9 frame=1 fragments=11599 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=10 frame=1 fragments=55313 projected_substitute_sensitive=0 secondary_sensitive=0",
+      "combiner_sensitivity material=11 frame=1 fragments=44125 projected_substitute_sensitive=0 secondary_sensitive=0"
+    ]
+  },
+  "result": "passed"
+}

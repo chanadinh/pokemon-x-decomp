@@ -1,0 +1,50 @@
+BCH six-stage combiner preview validation, 2026-10-23
+Baseline commit ce9498533ea11dceaaf0bb71190eaf330b198fbb.
+Environment: Ubuntu 24.04 x86_64 cloud container, cc 13.3.0, Python 3.13,
+SDL 2.30.0+dfsg-1ubuntu3.1, SDL dummy video with the software renderer. Not run
+on the local WSL host or native Windows. Source was frozen before the final
+runs; tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime
+   Passed. 14 native C suites (new: test_tev; extended: test_bch_model,
+   test_bch_material, test_raster). Python core: container 8, BCH index/GR 12,
+   PICA commands 12, BCH model 11. Python runtime: texture viewer 7, BCH
+   texture viewer 6, model viewer 10, BCH model viewer 9, BCH textured viewer 5,
+   BCH combiner viewer 4 (new), field viewer 9. 93 Python tests in total.
+
+2. make -C reconstructed test
+   Passed.
+
+3. python3 -m unittest discover -s tests
+   Passed: 38 tests, 2 optional-dependency skips.
+
+4. Sanitizers: -fsanitize=address,undefined -fno-sanitize-recover=all,
+   ASAN_OPTIONS=detect_leaks=1.
+   Passed without diagnostics: test_bch_model, test_bch_material, test_raster,
+   test_tev; the sanitized viewer under the combiner (4), textured (5),
+   BCH-model (9) and model (10) viewer suites; a real-input --combiners run
+   (3 frames, input self-test, capture identical to the unsanitized build);
+   and the dump_combiners bridge on the field.
+
+5. Checkpoint integrity
+   All 539 reconstructed/*/SHA256SUMS entries match. All 71 earlier native
+   reproduction/ entries match. The stage-0 textured capture command still
+   reproduces sha256 2d905248...0951.
+
+6. python3 -I native/reproduction/bch-combiners/verify_combiners.py
+   --field field165.bch (cb131a95...) --bridge native/build/dump_combiners
+   --viewer native/build/pokemon_model_viewer --romfs <wrapper directory>
+   --model-args "--archive field.garc --entry 0"
+   --texture-args "--texture-archive area.garc --texture-entry 0"
+   --azahar <Azahar 1b5fd009 checkout>
+   Passed. Azahar reference files hash-checked. 80,000 random evaluations
+   (57,724 valid), 36,000 field evaluations, 12 field chains and unit classes,
+   2,356 vertex colors: zero mismatches. The projected-unit substitute and the
+   fragment secondary changed no field output in 3,000 oracle trials each per
+   material, and the viewer counted zero sensitive fragments. Capture 960x640,
+   sha256 bb9e433dcd1467bb2de978c28236b88590f324560310aa602c569bfc4ec6f0c4.
+   The wrapper directory held single-member GARCs around the exact payloads.
+
+Not established: fragment lighting, the vertex shader's primary color,
+projected textures with a camera, fog, culling, primitive state, the game
+camera and depth mapping, and any running-game visual comparison.
