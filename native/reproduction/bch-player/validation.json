@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "622102d444d5cf768f7be6b79aaa7864f28bf9aa",
+  "result": "passed",
+  "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; local WSL host and native Windows untested",
+  "tested_source_sha256": {
+    "Makefile": "b053e7ded8e18159e57054f7b32eaf2a21bc52353351bf558823091ac14ad37c",
+    "model_app.c": "5d3a3b7907cc5ae577745430c46bc653200b0d3544d458748b23a6d1bdb2a4f2",
+    "assets/bch_model.c": "97b02327dc5bca4d4a6cdf33d584718c33c522e58e43feaaf2daad5248206f3c",
+    "assets/bch_model.h": "4e3cb6f5eb345a49f5079cc68e8a086c315e402c872e4a18dde43c42796ca340",
+    "assets/bch_texture.c": "4e1c0a1ef5e627ba56954e8093998ce47c10643eb17688fb16a12cc15ad7f435",
+    "assets/bch_texture.h": "6daab259b68251c49b9676238e401b22c9177a3c022966eb0d14d350c776ccc3",
+    "assets/test_bch_model.c": "d94e7586f5e00557d7b3086b4064bf3f3b9002507f2290e09345765251258165",
+    "assets/test_bch_texture.c": "78199de6bee24a1be1e11faa7e7492539e9b12ad44e63030b00c0680ef4ca9cd",
+    "tests/test_bch_lighting_viewer.py": "5fe9a83bd1d6a1fe6cf99b22f780bc6ffb21e055bf46ba806a0c2ca2451cae7c",
+    "tests/test_bch_walk_viewer.py": "e6507bb3d00d8bf06edfc40bb8d85b4711c8981162a07b49bc3bfd1e96b3b06c",
+    "render/skin.c": "48445200b61353b7c1baa70b25ede5dd5e9a8450ed19255b12bf8c427f99e392",
+    "render/skin.h": "302cace9279dfd40ded75a8d36ce96804549ec2b92553fbf495452da71b4ff01",
+    "render/test_skin.c": "696e42cd3168d1080a30994c2276fe47318dd852a61276ac6b2aa33c341e9a4f",
+    "tests/test_bch_player_viewer.py": "1d018edd15654a8aa2e5b40d76723898051fa834c45520ace05078c3d528c67a",
+    "reproduction/bch-player/dump_player.c": "5827d79c41e9f2e6a83d324401dbb5e19c7c165164d4e7ffc42aaf8470038400",
+    "reproduction/bch-player/verify_player.py": "84c72aff28885cfab99780fb5e3cfecaf770ada052d25e267d9da45337836cc9"
+  },
+  "checks": [
+    {
+      "command": "make -C native clean && make -C native all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 17,
+      "python_core_tests": {
+        "container": 8,
+        "bch_index_and_gr": 12,
+        "pica_commands": 12,
+        "bch_model": 11
+      },
+      "python_runtime_tests": {
+        "texture_viewer": 7,
+        "bch_texture_viewer": 6,
+        "model_viewer": 10,
+        "bch_model_viewer": 9,
+        "bch_textured_viewer": 5,
+        "bch_combiner_viewer": 4,
+        "bch_lighting_viewer": 2,
+        "bch_walk_viewer": 2,
+        "bch_player_viewer": 3,
+        "field_viewer": 9
+      }
+    },
+    {
+      "command": "make -C reconstructed test",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "result": "passed",
+      "tests": 38,
+      "skipped": 2
+    },
+    {
+      "command": "ASan/UBSan (-fno-sanitize-recover=all), ASAN_OPTIONS=detect_leaks=1: test_skin, test_bch_model, test_bch_texture, dump_player on the player model; sanitized viewer under the player, walk, lighting, combiner, textured, BCH-model and model viewer suites; a real-input player walk run",
+      "result": "passed; no diagnostics; sanitized capture byte-identical"
+    },
+    {
+      "command": "SHA-256 comparison against reconstructed/*/SHA256SUMS and previous native reproduction/ entries; capture regressions; earlier verifiers rerun",
+      "result": "all unchanged except the documented ../bch-walk camera capture"
+    },
+    {
+      "command": "native/reproduction/bch-player/verify_player.py on the real archive paths",
+      "result": "passed",
+      "bones": 45,
+      "meshes": 9,
+      "vertices_with_bone_attributes": 1990,
+      "posed_indices": 6099,
+      "indices_by_skinning": {
+        "none": 0,
+        "smooth": 5463,
+        "rigid": 636
+      },
+      "max_rest_world_times_inverse_minus_identity": 5.815147520293884e-06,
+      "max_position_difference": 0.0,
+      "max_normal_difference": 0.0,
+      "model_sha256": "aeea9ef813b3b82520cb461691295606f43891e32f85cc35b36d07faa4c2394f",
+      "walk_capture_sha256": "460e940f429a2f50de6fb95256494d970a122c798373bdd9e83816c353764b8e",
+      "standalone_capture_sha256": "1bb52546452933850bfaef1701401ba7d6ca1e09c28bac810a71c76e27f95cef",
+      "report": "reference-comparison.json",
+      "report_sha256": "6432e7eb45bf3f0d20df2164555cfb931473f3d4593444052f1f0b629e11d1ee"
+    }
+  ],
+  "scope": [
+    "Skinned BCH decoding: skeleton, submesh palettes and modes, bone index/weight attributes",
+    "Rest-pose skinning per the pinned vertex-shader translation, baked to triangle lists",
+    "Mixed BCH texture packs and raw formats",
+    "--skinned and --player-archive viewer options; executed fragment secondary (0,0,0,255) for zero-specular lighting",
+    "Walk camera above the model and following the marker"
+  ],
+  "limitations": [
+    "Rest (T) pose only; skeletal animation not decoded",
+    "Male player part assembly and outfit tables not decoded; the game's player-model choice not traced",
+    "Specular lighting not executed (zero specular registers required)",
+    "Vertex shader normal quaternion, culling, projection and the field camera not executed",
+    "No running-game comparison"
+  ],
+  "logs_sha256": "eecf5c44616a5fd476e4761a7b265430b7e78b57aa8c422542226e16d95a6f44"
+}

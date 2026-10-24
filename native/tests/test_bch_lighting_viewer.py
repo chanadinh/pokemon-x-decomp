@@ -130,7 +130,7 @@ class BCHLightingViewerTests(unittest.TestCase):
             inspect = self.run_viewer(root, '--inspect').stdout
             self.assertIn('environment_archive=env.garc environment_entry=0 environment_subentry=0 '
                           'environment_compression=none environment_section=1', inspect)
-            self.assertIn('fragment_primary=directional-lit fragment_secondary=black lighting=day '
+            self.assertIn('fragment_primary=directional-lit fragment_secondary=zero-rgb-alpha-255 lighting=day '
                           'point_spot=bounded normals=interpolated-renormalized', inspect)
             self.assertIn('environment scene="scene" lights=3 light_sets=1', inspect)
             self.assertIn('mesh_normal mesh=0 source=fixed', inspect)

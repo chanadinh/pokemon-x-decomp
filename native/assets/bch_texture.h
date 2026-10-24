@@ -32,6 +32,12 @@ struct px_bch_texture {
  * Errors leave *out NULL. Arbitrary-byte names are borrowed until close. */
 enum px_bch_result px_bch_open(const uint8_t *data, size_t size,
                               struct px_bch **out);
+/* As px_bch_open, for a BCH that also holds other resources (models,
+ * materials, lookup tables...): only category 3 is indexed, and relocation
+ * tags 03 and 25..28 are additionally accepted (bounded, not interpreted).
+ * Raw formats 0..11 also decode when flags == 0x100 | format. */
+enum px_bch_result px_bch_open_mixed(const uint8_t *data, size_t size,
+                                    struct px_bch **out);
 size_t px_bch_texture_count(const struct px_bch *bch);
 const struct px_bch_texture *px_bch_texture(const struct px_bch *bch,
                                            size_t index);

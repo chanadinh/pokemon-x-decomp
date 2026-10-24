@@ -25,6 +25,7 @@ struct reader {
     uint32_t counts[15];
     size_t tables[15], trees[15];
     enum px_bch_model_result error;
+    int skinned; /* px_bch_model_decode_skinned */
 };
 struct commands {
     uint32_t values[1024], known[1024], sources[1024];
@@ -450,7 +451,12 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
     uint32_t largest_index = 0;
     for (uint32_t i = 0; i < subcount; ++i) {
         const size_t sub = subs + (size_t)i * 52;
-        if (u16(r->data + sub) || u16(r->data + sub + 2)) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+        const unsigned sub_skinning = r->data[sub], palette = u16(r->data + sub + 2);
+        if (!r->skinned ? (u16(r->data + sub) || palette) :
+            (sub_skinning > 2 || r->data[sub + 1] || palette > 20))
+            return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+        for (unsigned j = 0; j < palette; ++j)
+            if (u16(r->data + sub + 4 + j * 2) >= out->bone_count) return 0;
         if (!read_commands(r, sub + 44, &other)) return 0;
         uint32_t count;
         if (!value(&other, 0x228, UINT32_MAX, &count)) return 0;
@@ -465,6 +471,9 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
         if (allocation == NULL) return 0;
         out->indices = allocation;
         struct px_bch_submesh *record = out->submeshes + mesh->first_submesh + i;
+        record->skinning = sub_skinning;
+        record->bone_count = palette;
+        for (unsigned j = 0; j < palette; ++j) record->bone_indices[j] = u16(r->data + sub + 4 + j * 2);
         record->first_index = out->index_count;
         record->index_count = count;
         record->index_width = width;
@@ -512,7 +521,8 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
         if (slot >= total || (fixed & (1u << slot)) || (slots & (1u << slot))) return 0;
         slots |= 1u << slot;
         const unsigned semantic = (unsigned)(permutation >> (slot * 4)) & 15;
-        if (semantic > 6 || (semantics & (1u << semantic))) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+        if (semantic > (r->skinned ? 8u : 6u) || (semantics & (1u << semantic)))
+            return fail(r, PX_BCH_MODEL_UNSUPPORTED);
         semantics |= 1u << semantic;
         const unsigned fmt = (unsigned)(formats >> (slot * 4)) & 15;
         const unsigned kind = fmt & 3, elements = (fmt >> 2) + 1;
@@ -520,18 +530,22 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
         if (byte % width || stride % width) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
         struct attribute *attr = attributes + j;
         attr->semantic = semantic; attr->kind = kind; attr->elements = elements; attr->offset = byte;
-        attr->scale = enable.uniforms[1 + semantic / 4][semantic % 4];
+        /* SPICA H3DMesh: weights scale by uniform 8.w; indices are unscaled. */
+        attr->scale = semantic == 7 ? 1.0f : semantic == 8 ? enable.uniforms[2][3] :
+                      enable.uniforms[1 + semantic / 4][semantic % 4];
         if ((semantic == 0 && elements != 3) || (semantic == 4 && elements != 2)) return 0;
+        if (semantic == 7 && kind != 1) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
         byte += width * elements;
     }
     if (byte > stride || !(semantics & 1)) return 0;
     double fixed_color[4] = {1, 1, 1, 1}, fixed_normal[4] = {0, 0, 0, 0};
+    double fixed_index[4] = {0, 0, 0, 1}, fixed_weight[4] = {0, 0, 0, 0};
     for (unsigned slot = 0; slot < total; ++slot) if (fixed & (1u << slot)) {
         const unsigned semantic = (unsigned)(permutation >> (slot * 4)) & 15;
-        if (semantic > 6 || semantic == 0 || semantic == 4 || (semantics & (1u << semantic)))
-            return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+        if (semantic > (r->skinned ? 8u : 6u) || semantic == 0 || semantic == 4 ||
+            (semantics & (1u << semantic))) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
         semantics |= 1u << semantic;
-        if (semantic != 3 && semantic != 1) continue;
+        if (semantic != 3 && semantic != 1 && semantic != 7 && semantic != 8) continue;
         if (!(enable.fixed_known & (1u << slot))) return 0;
         const uint32_t *w = enable.fixed_words[slot];
         const uint32_t components[4] = {
@@ -540,10 +554,18 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
             ((w[0] & 0xff) << 16) | (w[1] >> 16),          /* z */
             w[0] >> 8                                      /* w */
         };
-        double *target = semantic == 3 ? fixed_color : fixed_normal;
+        double *target = semantic == 3 ? fixed_color : semantic == 1 ? fixed_normal :
+                         semantic == 7 ? fixed_index : fixed_weight;
         for (unsigned c = 0; c < 4; ++c)
             if (!float24(components[c], &target[c]) || !bounded(target[c])) return 0;
-        if (semantic == 3) mesh->color_source = 2; else mesh->normal_source = 2;
+        if (semantic == 7)
+            for (unsigned c = 0; c < 4; ++c)
+                if (target[c] < 0 || target[c] > 255 || target[c] != floor(target[c]))
+                    return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+        if (semantic == 3) mesh->color_source = 2;
+        else if (semantic == 1) mesh->normal_source = 2;
+        else if (semantic == 7) mesh->bone_index_source = 2;
+        else mesh->bone_weight_source = 2;
     }
     if (!(semantics & (1u << 4))) return 0;
     size_t start;
@@ -561,10 +583,37 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
     allocation = grow(r, out->normals, (size_t)new_count * 3, sizeof *out->normals);
     if (allocation == NULL) return 0;
     out->normals = allocation;
+    if (r->skinned) {
+        allocation = grow(r, out->bone_indices, (size_t)new_count * 4, sizeof *out->bone_indices);
+        if (allocation == NULL) return 0;
+        out->bone_indices = allocation;
+        allocation = grow(r, out->bone_weights, (size_t)new_count * 4, sizeof *out->bone_weights);
+        if (allocation == NULL) return 0;
+        out->bone_weights = allocation;
+    }
     if (semantics_stored_color(attributes, stored)) mesh->color_source = 1;
     for (unsigned j = 0; j < stored; ++j) if (attributes[j].semantic == 1) {
         if (attributes[j].elements != 3) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
         mesh->normal_source = 1;
+    }
+    /* Weight scale applies to every weight component the shader reads,
+     * including fixed values and the default fill. */
+    const double weight_scale = enable.uniforms[2][3];
+    for (unsigned j = 0; j < stored; ++j) {
+        if (attributes[j].semantic == 7) mesh->bone_index_source = 1;
+        if (attributes[j].semantic == 8) {
+            mesh->bone_weight_source = 1;
+            mesh->bone_weight_elements = attributes[j].elements;
+        }
+    }
+    for (uint32_t vertex = 0; r->skinned && vertex < mesh->vertex_count; ++vertex) {
+        const size_t base = ((size_t)mesh->first_vertex + vertex) * 4;
+        for (unsigned c = 0; c < 4; ++c) {
+            out->bone_indices[base + c] = mesh->bone_index_source == 1 ? (c == 3) : (uint8_t)fixed_index[c];
+            const double w = mesh->bone_weight_source == 1 ? (c == 3) :
+                             mesh->bone_weight_source == 2 ? fixed_weight[c] : 0;
+            out->bone_weights[base + c] = (float)(w * weight_scale);
+        }
     }
     for (uint32_t vertex = 0; vertex < mesh->vertex_count; ++vertex) {
         for (unsigned c = 0; c < 4; ++c)
@@ -600,11 +649,49 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
                     out->colors[((size_t)mesh->first_vertex + vertex) * 4 + component] = (float)decoded;
                 } else if (attr->semantic == 1) {
                     out->normals[((size_t)mesh->first_vertex + vertex) * 3 + component] = (float)decoded;
+                } else if (attr->semantic == 7) {
+                    if (decoded < 0 || decoded > 255) return 0;
+                    out->bone_indices[((size_t)mesh->first_vertex + vertex) * 4 + component] = (uint8_t)decoded;
+                } else if (attr->semantic == 8) {
+                    out->bone_weights[((size_t)mesh->first_vertex + vertex) * 4 + component] = (float)decoded;
                 }
             }
         }
     }
     out->vertex_count = new_count;
+    return 1;
+}
+/* SPICA bd29a78 H3DBone, 100 bytes: flags +0, parent s16 +4, scale +8,
+ * rotation +20, translation +32, inverse 3x4 +44, name +92, metadata +96. */
+static int read_skeleton(struct reader *r, size_t model, struct px_bch_model *out)
+{
+    const uint32_t count = u32(r->data + model + 0x74);
+    if (count > MAX_ITEMS) return fail(r, PX_BCH_MODEL_LIMIT_EXCEEDED);
+    if (!count) return 1;
+    size_t bones, names;
+    if (!pointer(r, model + 0x70, CONTENTS, (size_t)count * 100, &bones) ||
+        !tree(r, model + 0x78, count, &names)) return 0;
+    out->bones = calloc(count, sizeof *out->bones);
+    if (out->bones == NULL) return fail(r, PX_BCH_MODEL_NO_MEMORY);
+    out->bone_count = count;
+    for (uint32_t i = 0; i < count; ++i) {
+        const size_t at = bones + (size_t)i * 100;
+        struct px_bch_bone *bone = out->bones + i;
+        struct px_bch_name indexed;
+        bone->flags = u32(r->data + at);
+        bone->parent = (int16_t)u16(r->data + at + 4);
+        if (u16(r->data + at + 6) || bone->parent < -1 || bone->parent >= (int32_t)i) return 0;
+        float *fields[4] = {bone->scale, bone->rotation, bone->translation, bone->inverse};
+        static const unsigned offsets[4] = {8, 20, 32, 44}, lengths[4] = {3, 3, 3, 12};
+        for (unsigned f = 0; f < 4; ++f)
+            for (unsigned j = 0; j < lengths[f]; ++j) {
+                fields[f][j] = f32(r->data + at + offsets[f] + j * 4);
+                if (!bounded(fields[f][j])) return 0;
+            }
+        if (!name(r, at + 92, 0, &bone->name) ||
+            !name(r, names + ((size_t)i + 1) * 12 + 8, 0, &indexed) ||
+            !same_name(&bone->name, &indexed)) return 0;
+    }
     return 1;
 }
 static int read_model(struct reader *r, uint32_t index, struct px_bch_model *out)
@@ -613,8 +700,14 @@ static int read_model(struct reader *r, uint32_t index, struct px_bch_model *out
     size_t at;
     if (!pointer(r, r->tables[0] + (size_t)index * 4, CONTENTS, 0x98, &at)) return 0;
     static const float identity[12] = {1,0,0,0,0,1,0,0,0,0,1,0};
-    if (u32(r->data + at) || u32(r->data + at + 0x6c) || u32(r->data + at + 0x74))
+    if ((r->skinned ? u16(r->data + at + 2) : u32(r->data + at)) || u32(r->data + at + 0x6c) ||
+        (!r->skinned && u32(r->data + at + 0x74)))
         return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+    if (r->skinned) {
+        out->model_flags = r->data[at];
+        out->bone_scaling = r->data[at + 1];
+        if (!read_skeleton(r, at, out)) return 0;
+    }
     for (unsigned j = 0; j < 12; ++j)
         if (f32(r->data + at + 4 + j * 4) != identity[j]) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
     struct px_bch_name indexed;
@@ -643,8 +736,8 @@ static int read_model(struct reader *r, uint32_t index, struct px_bch_model *out
     return 1;
 }
 
-enum px_bch_model_result px_bch_model_decode(const uint8_t *data, size_t size,
-    uint32_t model_index, struct px_bch_model *out)
+static enum px_bch_model_result decode(const uint8_t *data, size_t size,
+    uint32_t model_index, struct px_bch_model *out, int skinned)
 {
     if (out == NULL) return PX_BCH_MODEL_INVALID_ARGUMENT;
     memset(out, 0, sizeof *out);
@@ -656,6 +749,7 @@ enum px_bch_model_result px_bch_model_decode(const uint8_t *data, size_t size,
     struct reader r = {0};
     r.data = data;
     r.error = PX_BCH_MODEL_INVALID_HEADER;
+    r.skinned = skinned;
     for (unsigned i = 0; i < SECTION_COUNT; ++i) {
         const size_t start = u32(data + 8 + i * 4), length = u32(data + 28 + i * 4);
         if (start > size || length > size - start) return PX_BCH_MODEL_TRUNCATED;
@@ -671,6 +765,16 @@ enum px_bch_model_result px_bch_model_decode(const uint8_t *data, size_t size,
     free(r.relocations);
     if (!ok) { px_bch_model_free(out); return r.error; }
     return PX_BCH_MODEL_OK;
+}
+enum px_bch_model_result px_bch_model_decode(const uint8_t *data, size_t size,
+    uint32_t model_index, struct px_bch_model *out)
+{
+    return decode(data, size, model_index, out, 0);
+}
+enum px_bch_model_result px_bch_model_decode_skinned(const uint8_t *data, size_t size,
+    uint32_t model_index, struct px_bch_model *out)
+{
+    return decode(data, size, model_index, out, 1);
 }
 /* ---------------------------------------------------------------- scenes */
 enum { MAX_LIGHTS = 256, MAX_SETS = 256, MAX_SET_ENTRIES = 4096 };
@@ -812,7 +916,7 @@ const struct px_bch_light_set *px_bch_environment_set(const struct px_bch_enviro
 void px_bch_model_free(struct px_bch_model *model)
 {
     if (model == NULL) return;
-    free(model->positions); free(model->uvs); free(model->colors); free(model->normals); free(model->indices);
+    free(model->positions); free(model->uvs); free(model->colors); free(model->normals); free(model->bone_indices); free(model->bone_weights); free(model->bones); free(model->indices);
     free(model->meshes); free(model->submeshes); free(model->materials);
     memset(model, 0, sizeof *model);
 }

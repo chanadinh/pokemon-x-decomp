@@ -57,6 +57,10 @@ class BCHWalkViewerTests(unittest.TestCase):
             root = Path(directory)
             self.write(root)
             start = self.run_viewer(root, '--walk', '--inspect').stdout
+            # Exactly one shading summary: the walk block must not detach the
+            # CGFX branch from the BCH one (regression in the first walk commit).
+            self.assertEqual(start.count('\nmode='), 1)
+            self.assertEqual(self.run_viewer(root, '--inspect').stdout.count('\nmode='), 1)
             self.assertIn('walk policy=exact-cell-0x00000020 movement=inspection-not-game-rules grid=40x40 '
                           'standard_cells=4 collision_vertices=3 marker=cell:20,21 local=9,27 height=-14 '
                           'moves=0 blocked=0\n', start)

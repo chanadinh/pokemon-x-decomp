@@ -6,11 +6,11 @@ SDL_LIBS ?= $(shell $(PKG_CONFIG) --libs sdl2 2>/dev/null)
 
 ASSET_SOURCES = assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/texture.c assets/cgfx.c assets/bch_texture.c assets/field.c
 ASSET_HEADERS = assets/garc.h assets/lz.h assets/bclim.h assets/etc1.h assets/texture.h assets/cgfx.h assets/bch_texture.h assets/field.h
-MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c assets/bch_texture.c assets/field.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c render/tev.c render/light.c
-MODEL_HEADERS = assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h assets/bch_scene.h
+MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c assets/bch_texture.c assets/field.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c render/tev.c render/light.c render/skin.c
+MODEL_HEADERS = assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h render/skin.h assets/bch_scene.h
 FIELD_SOURCES = assets/field.c assets/garc.c assets/lz.c
 FIELD_HEADERS = assets/field.h assets/garc.h assets/lz.h
-CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light
+CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin
 
 .PHONY: all test test-core test-runtime clean check-sdl
 all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer
@@ -57,6 +57,9 @@ build/test_bch_model: assets/bch_model.c assets/bch_model.h assets/test_bch_mode
 build/test_bch_scene: assets/bch_model.c assets/bch_model.h assets/bch_scene.h assets/test_bch_scene.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/bch_model.c assets/test_bch_scene.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
+build/test_skin: render/skin.c render/skin.h assets/bch_model.h render/test_skin.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) -D_DEFAULT_SOURCE render/skin.c render/test_skin.c $(LDFLAGS) $(LDLIBS) -lm -o $@
+
 build/test_light: render/light.c render/light.h render/test_light.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) render/light.c render/test_light.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
@@ -95,6 +98,7 @@ test test-core: $(CORE_TESTS)
 	./build/test_tev
 	./build/test_bch_scene
 	./build/test_light
+	./build/test_skin
 	python3 -m unittest discover -s tests -p test_container.py -v
 	python3 -m unittest discover -s tests -p test_bch.py -v
 	python3 -m unittest discover -s tests -p test_pica_commands.py -v
@@ -113,6 +117,7 @@ test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemo
 	python3 -m unittest discover -s tests -p test_bch_combiner_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_lighting_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_walk_viewer.py -v
+	python3 -m unittest discover -s tests -p test_bch_player_viewer.py -v
 	SDL_VIDEODRIVER=dummy ./build/pokemon_field_viewer --demo --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_field_viewer.py -v
 

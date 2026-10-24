@@ -11,7 +11,7 @@ enum { CONTENT = 56, STRING = 2104, COMMAND = 2360, RAW = 3384, RELOC = 3640,
        MODEL = 248, MATERIAL = 400, MESH = 488, SUB = 544, PARAMS = 596,
        VISIBILITY = 600, MODEL_TREE = 604, PARAM_TREE = 628,
        MATERIAL_TREE = 652, NODE_TREE = 676, MODEL_TABLE = 700, PARAM_TABLE = 704,
-       FULL_PARAMS = 1200 };
+       FULL_PARAMS = 1200, BONES = 1500, BONE_TREE = 1720 };
 struct fixture {
     uint8_t data[4096];
     size_t size, cursor, enable, face, vertex_relocation, index_relocation;
@@ -81,6 +81,7 @@ static struct fixture fixture_with(unsigned width, int parameters)
     for (unsigned i = 0; i < 5; ++i) word(f.data + 8 + i * 4, starts[i]);
     for (unsigned i = 0; i < 4; ++i) word(f.data + 28 + i * 4, lengths[i]);
     memcpy(f.data + STRING, "pattern\0triangle\0surface\0node\xff\0", 30);
+    memcpy(f.data + STRING + 40, "root\0arm\0", 9);
     dictionary(&f, 0, MODEL_TABLE, MODEL_TREE, MODEL, STRING + 8);
     dictionary(&f, 1, PARAM_TABLE, PARAM_TREE, params, STRING + 17);
     for (unsigned i = 0; i < 12; ++i) word(f.data + MODEL + 4 + i * 4,
@@ -138,19 +139,25 @@ static struct fixture fixture_with(unsigned width, int parameters)
      * int8 normal as slot 2 (stride 24, three bytes after UV0). */
     const int fixed_color = parameters & 2, fixed_normal = parameters & 4;
     const int stored_normal = parameters & 8, fixed = fixed_color || fixed_normal;
-    const uint32_t config[] = {0x03000000, stored_normal ? 0x87b : 0x7b,
-                               fixed ? 0x20040000 : stored_normal ? 0x20000000 : 0x10000000,
-                               0, stored_normal ? 0x210 : 0x10,
-                               stored_normal ? 0x30180000 : 0x20140000};
+    /* parameters bit 4: skinned. Two bones, a smooth submesh with palette
+     * (0, 1), and stored u8 x2 bone indices (slot 2) and weights (slot 3). */
+    const int skinned = parameters & 16;
+    const uint32_t config[] = {0x03000000, skinned ? 0x557b : stored_normal ? 0x87b : 0x7b,
+                               skinned ? 0x30000000 : fixed ? 0x20040000 : stored_normal ? 0x20000000 : 0x10000000,
+                               0, skinned ? 0x3210 : stored_normal ? 0x210 : 0x10,
+                               skinned ? 0x40180000 : stored_normal ? 0x30180000 : 0x20140000};
     packet(&f, 0x200, 15, 1, 6, config);
-    const uint32_t permutation[] = {fixed_color ? 0x340 : (fixed_normal || stored_normal) ? 0x140 : 0x40, 0};
+    const uint32_t permutation[] = {skinned ? 0x8740 : fixed_color ? 0x340 :
+                                    (fixed_normal || stored_normal) ? 0x140 : 0x40, 0};
     packet(&f, 0x2bb, 15, 1, 2, permutation);
-    single(&f, 0x242, 1, fixed || stored_normal ? 2 : 1);
+    single(&f, 0x242, 1, skinned ? 3 : fixed || stored_normal ? 2 : 1);
     const uint32_t offset[] = {0x80000006, 0, float_bits(30), float_bits(-20), float_bits(10)};
     packet(&f, 0x2c0, 15, 1, 5, offset);
     single(&f, 0x2c0, 15, 0x80000007);
+    /* Streamed w, z, y, x: uniform 7 = (2, 1, 1, 1), uniform 8 = (.25, 1, 1, w)
+     * with w (the weight scale) 0.5 when skinned. */
     const uint32_t scales[] = {float_bits(1), float_bits(1), float_bits(1), float_bits(2),
-                              float_bits(1), float_bits(1), float_bits(1), float_bits(.25f)};
+                              float_bits(skinned ? .5f : 1), float_bits(1), float_bits(1), float_bits(.25f)};
     packet(&f, 0x2c1, 15, 0, 8, scales);
     if (fixed) {
         /* float24 (x,y,z,w) = (0.5, 0.25, 1.0, 0.75), packed w-first. An
@@ -170,7 +177,7 @@ static struct fixture fixture_with(unsigned width, int parameters)
     single(&f, 0x25e, 8, 0);
     stream(&f, SUB + 44, f.face);
     f.index_relocation = f.size;
-    const size_t indices = stored_normal ? RAW + 80 : RAW + 60;
+    const size_t indices = stored_normal || skinned ? RAW + 80 : RAW + 60;
     pointer(&f, f.face, indices, width == 2 ? 0x27 : 0x28);
     const float positions_uv[] = {-2,3,5,.5f,-1, 7,-4,2,2,3, -1,9,-6,-2,4};
     if (stored_normal) {
@@ -180,10 +187,42 @@ static struct fixture fixture_with(unsigned width, int parameters)
                 word(f.data + RAW + v * 24 + i * 4, float_bits(positions_uv[v * 5 + i]));
             for (unsigned i = 0; i < 3; ++i) f.data[RAW + v * 24 + 20 + i] = (uint8_t)normals[v * 3 + i];
         }
+    } else if (skinned) {
+        static const uint8_t skin[3][4] = {{1, 0, 2, 0}, {0, 1, 1, 1}, {0, 0, 2, 0}};
+        for (unsigned v = 0; v < 3; ++v) {
+            for (unsigned i = 0; i < 5; ++i)
+                word(f.data + RAW + v * 24 + i * 4, float_bits(positions_uv[v * 5 + i]));
+            memcpy(f.data + RAW + v * 24 + 20, skin[v], 4);
+        }
     } else
         for (unsigned i = 0; i < 15; ++i) word(f.data + RAW + i * 4, float_bits(positions_uv[i]));
     f.data[indices] = 2;
     f.data[indices + 2 * width] = 1;
+    if (skinned) {
+        f.data[MODEL] = 2;     /* model flags */
+        f.data[MODEL + 1] = 1; /* bone scaling */
+        pointer(&f, MODEL + 0x70, BONES, 0);
+        word(f.data + MODEL + 0x74, 2);
+        pointer(&f, MODEL + 0x78, BONE_TREE, 0);
+        for (unsigned b = 0; b < 2; ++b) {
+            const size_t at = BONES + b * 100;
+            word(f.data + at, 0x2800000);
+            word(f.data + at + 4, b ? 0 : 0xffff); /* parent -1 for the root */
+            for (unsigned j = 0; j < 3; ++j) {
+                word(f.data + at + 8 + j * 4, float_bits(1));
+                word(f.data + at + 32 + j * 4, float_bits(b ? (float)(j + 1) : 0));
+            }
+            for (unsigned r = 0; r < 3; ++r) {
+                word(f.data + at + 44 + (r * 4 + r) * 4, float_bits(1));
+                word(f.data + at + 44 + (r * 4 + 3) * 4, float_bits(b ? -(float)(r + 1) : 0));
+            }
+            pointer(&f, at + 92, STRING + 40 + b * 5, 1);
+            pointer(&f, BONE_TREE + (b + 1) * 12 + 8, STRING + 40 + b * 5, 1);
+        }
+        f.data[SUB] = 1;  /* smooth */
+        f.data[SUB + 2] = 2;
+        f.data[SUB + 6] = 1; /* palette (0, 1) */
+    }
     finish(&f);
     return f;
 }
@@ -375,6 +414,58 @@ static void test_normals(void)
     word(f.data + f.enable + 8, 0x47b);
     assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_UNSUPPORTED);
 }
+static void test_skinned(void)
+{
+    struct px_bch_model model;
+    struct fixture f = fixture_with(1, 16);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_UNSUPPORTED);
+    assert(px_bch_model_decode_skinned(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.model_flags == 2 && model.bone_scaling == 1 && model.bone_count == 2);
+    assert(strcmp(model.bones[0].name.bytes, "root") == 0 && strcmp(model.bones[1].name.bytes, "arm") == 0);
+    assert(model.bones[0].parent == -1 && model.bones[1].parent == 0);
+    assert(model.bones[1].translation[2] == 3 && model.bones[1].inverse[11] == -3 && model.bones[0].inverse[0] == 1);
+    assert(model.bones[1].flags == 0x2800000 && model.bones[1].scale[1] == 1);
+    const struct px_bch_submesh *sub = model.submeshes;
+    assert(sub->skinning == 1 && sub->bone_count == 2 && sub->bone_indices[0] == 0 && sub->bone_indices[1] == 1);
+    const struct px_bch_mesh *mesh = model.meshes;
+    assert(mesh->bone_index_source == 1 && mesh->bone_weight_source == 1 && mesh->bone_weight_elements == 2);
+    /* Two stored elements; z/w take the default (0, 1), weights times 0.5. */
+    static const uint8_t indices[12] = {1, 0, 0, 1,  0, 1, 0, 1,  0, 0, 0, 1};
+    static const float weights[12] = {1, 0, 0, .5f,  .5f, .5f, 0, .5f,  1, 0, 0, .5f};
+    assert(memcmp(model.bone_indices, indices, sizeof indices) == 0);
+    assert(memcmp(model.bone_weights, weights, sizeof weights) == 0);
+    assert(model.positions[0] == 6 && model.uvs[0] == .125f); /* other attributes unchanged */
+    px_bch_model_free(&model);
+    assert(model.bones == NULL && model.bone_weights == NULL);
+    /* Unskinned models decode identically through the skinned entry point. */
+    f = fixture(1);
+    assert(px_bch_model_decode_skinned(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.bone_count == 0 && model.bones == NULL && model.submeshes[0].skinning == 0);
+    px_bch_model_free(&model);
+    f = fixture_with(1, 16);
+    struct fixture bad = f;
+    bad.data[SUB + 6] = 2; /* palette names bone 2 of 2 */
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) != PX_BCH_MODEL_OK);
+    assert(model.bones == NULL && model.meshes == NULL);
+    bad = f; bad.data[SUB] = 3;
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) == PX_BCH_MODEL_UNSUPPORTED);
+    bad = f; bad.data[SUB + 2] = 21;
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) == PX_BCH_MODEL_UNSUPPORTED);
+    bad = f; word(bad.data + BONES + 100 + 4, 1); /* bone 1 is its own parent */
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) != PX_BCH_MODEL_OK);
+    bad = f; word(bad.data + BONES + 4, 0xfffe); /* parent -2 */
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) != PX_BCH_MODEL_OK);
+    bad = f; word(bad.data + BONES + 100 + 32, 0x7fc00000);
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) != PX_BCH_MODEL_OK);
+    bad = f; word(bad.data + MODEL + 0x74, 1025);
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) == PX_BCH_MODEL_LIMIT_EXCEEDED);
+    bad = f; word(bad.data + f.enable + 8, 0x547b); /* signed-byte bone indices */
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) == PX_BCH_MODEL_UNSUPPORTED);
+    bad = f; bad.data[MODEL + 2] = 1; /* silhouette materials */
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) == PX_BCH_MODEL_UNSUPPORTED);
+    bad = f; bad.data[BONE_TREE + 2 * 12 + 8] ^= 1; /* tree names another string */
+    assert(px_bch_model_decode_skinned(bad.data, bad.size, 0, &model) != PX_BCH_MODEL_OK);
+}
 static void test_material_lighting(void)
 {
     struct fixture f = fixture_with(1, 1);
@@ -467,6 +558,7 @@ int main(void)
     test_material_lighting();
     test_fixed_color();
     test_normals();
+    test_skinned();
 
     test_geometry_and_ownership();
     test_integer_attributes_and_no_topology_guess();

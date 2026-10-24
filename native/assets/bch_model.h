@@ -71,6 +71,19 @@ struct px_bch_submesh {
      * bits stay unknown: no state is inherited from other command streams. */
     uint32_t draw_primitive_value, draw_primitive_known_mask, draw_count;
     uint32_t draw_source_offset, index_source_offset;
+    /* Skinned decode only (SPICA bd29a78 H3DSubMesh): skinning 0 none,
+     * 1 smooth, 2 rigid; bone palette of up to 20 skeleton indices. */
+    uint32_t skinning, bone_count;
+    uint16_t bone_indices[20];
+};
+/* Skinned decode only: one H3DBone record (100 bytes) in skeleton order.
+ * parent is -1 for a root, otherwise an earlier index. inverse is the stored
+ * 3x4 inverse bind matrix, rows of four. Transforms are not composed here. */
+struct px_bch_bone {
+    struct px_bch_name name;
+    uint32_t flags;
+    int32_t parent;
+    float scale[3], rotation[3], translation[3], inverse[12];
 };
 struct px_bch_mesh {
     struct px_bch_name name;
@@ -84,6 +97,10 @@ struct px_bch_mesh {
     /* Normal input (semantic 1): 0 absent (normals hold 0,0,0), 1 stored
      * after its uniform scale, 2 fixed float24 x,y,z. Not normalized. */
     uint32_t normal_source;
+    /* Skinned decode only: bone index (semantic 7) and weight (semantic 8)
+     * sources as for colors; weight_elements is the stored weight element
+     * count (0 when fixed or absent), which gates the fourth weight. */
+    uint32_t bone_index_source, bone_weight_source, bone_weight_elements;
     float bounds_min[3], bounds_max[3];
 };
 struct px_bch_model {
@@ -93,6 +110,13 @@ struct px_bch_model {
     float *colors;    /* Owned RGBA quads per vertex; see mesh color_source.
                        * Values are not clamped; the shader is not executed. */
     float *normals;   /* Owned XYZ triples per vertex; see mesh normal_source. */
+    /* Skinned decode only (NULL otherwise): four bone indices and four
+     * weights per vertex. Missing components take the PICA default
+     * (0, 0, 0, 1) before the weight scale (uniform 8.w) is applied. */
+    uint8_t *bone_indices;
+    float *bone_weights;
+    struct px_bch_bone *bones;
+    uint32_t bone_count, model_flags, bone_scaling;
     uint32_t *indices; /* Owned indices into the complete positions array. */
     struct px_bch_mesh *meshes;
     struct px_bch_submesh *submeshes;
@@ -119,6 +143,13 @@ struct px_bch_model {
  * Output owns every array and name; it outlives the unmodified input. Pass a
  * fresh or freed output. On any failure the output is zeroed. */
 enum px_bch_model_result px_bch_model_decode(const uint8_t *data, size_t size,
+    uint32_t model_index, struct px_bch_model *out);
+/* As px_bch_model_decode, but also accepts skinned models: model flags and
+ * bone scaling bytes, a skeleton of up to 1,024 bones (parents before
+ * children), submesh skinning modes and palettes, and bone index/weight
+ * attributes (stored unsigned-byte indices, any weight format, or fixed).
+ * Every palette entry must name a bone. Nothing is posed here. */
+enum px_bch_model_result px_bch_model_decode_skinned(const uint8_t *data, size_t size,
     uint32_t model_index, struct px_bch_model *out);
 void px_bch_model_free(struct px_bch_model *model);
 const char *px_bch_model_result_string(enum px_bch_model_result result);

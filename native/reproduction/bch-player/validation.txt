@@ -1,0 +1,31 @@
+Player character validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container, cc 13.3.0, Python 3.13,
+SDL 2.30.0, dummy video with the software renderer. Not run on the local WSL
+host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime
+   Passed. 17 native C suites (new: test_skin; extended: test_bch_model,
+   test_bch_texture). Python core 43; runtime: texture viewer 7, BCH texture
+   viewer 6, model viewer 10, BCH model viewer 9, BCH textured 5, BCH
+   combiner 4, BCH lighting 2, BCH walk 2, BCH player 3 (new), field viewer 9.
+   100 Python tests in total.
+2. make -C reconstructed test: passed.
+3. python3 -m unittest discover -s tests: 38 tests, 2 optional skips.
+4. ASan/UBSan with leak detection: test_skin, test_bch_model,
+   test_bch_texture, dump_player; the sanitized viewer under seven viewer
+   suites and a real-input player walk run: no diagnostics; capture identical.
+5. All 539 reconstructed and 92 earlier native reproduction entries match.
+   Stage-0, combiner and lit day/night captures are byte-identical; the
+   lighting and walk verifiers reproduce their reports exactly. The earlier
+   walk capture changes with the corrected walk camera (documented).
+6. python3 -I -B native/reproduction/bch-player/verify_player.py --romfs <RomFS>
+   --bridge native/build/dump_player --viewer native/build/pokemon_model_viewer
+   Passed: 45 bones, 9 meshes, 1,990 vertices' bone attributes and every
+   palette match; world x inverse bind within 5.8e-6 of identity; 6,099 posed
+   positions and normals identical. Walk capture sha256
+   460e940f429a2f50de6fb95256494d970a122c798373bdd9e83816c353764b8e;
+   standalone 1bb52546452933850bfaef1701401ba7d6ca1e09c28bac810a71c76e27f95cef.
+
+Not established: skeletal animation, the male player's part assembly, the
+game's player-model choice, specular lighting, the vertex shader's normal
+quaternion, culling, the field camera and any running-game comparison.

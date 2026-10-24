@@ -408,3 +408,22 @@ starts looking down, because culling is not executed. `--inspect` prints the
 marker's cell, local position and collision height. See the
 [walk record](reproduction/bch-walk/README.txt).
 
+## Draw the player character
+
+`--player-archive`/`--player-entry` (and optional `--player-section`) add a skinned
+BCH at the `--walk` marker in place of the box. The model uses its own textures,
+the room's environment and the same shading mode, and turns toward each step.
+`--skinned` decodes a model with a skeleton by itself and draws its rest pose:
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs --archive a/0/2/1 --entry 2 --section 0 \
+  --skinned --triangle-list --textured --combiners \
+  --texture-archive a/0/2/1 --texture-entry 2 --texture-section 0
+```
+
+Skeletons, bone palettes and bone attributes are decoded. The rest pose follows the
+pinned vertex-shader translation. A BCH that also holds models can serve as its own
+texture pack. Animations are not decoded, so the model holds its T-pose. In walk
+mode the camera looks from above and follows the marker. See the
+[player record](reproduction/bch-player/README.txt).
+

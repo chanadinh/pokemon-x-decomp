@@ -20,6 +20,7 @@ struct px_bch {
     size_t count, relocation_count;
     struct relocation *relocations;
     struct px_bch_texture *textures;
+    int mixed; /* px_bch_open_mixed: other resources present and ignored */
 };
 
 static uint16_t u16(const uint8_t *p)
@@ -97,7 +98,11 @@ static enum px_bch_result read_relocations(struct px_bch *bch)
         case 0: target_section = SECTION_CONTENTS; offset *= 4; break;
         case 1: target_section = SECTION_STRINGS; break;
         case 2: target_section = SECTION_COMMANDS; offset *= 4; break;
-        case 0x24:
+        case 3:
+            if (!bch->mixed) return PX_BCH_UNSUPPORTED;
+            target_section = SECTION_COMMANDS; offset *= 4; break;
+        case 0x24: case 0x25: case 0x26: case 0x27: case 0x28:
+            if (tag != 0x24 && !bch->mixed) return PX_BCH_UNSUPPORTED;
             source_section = SECTION_COMMANDS;
             target_section = SECTION_RAW;
             offset *= 4;
@@ -235,7 +240,10 @@ static enum px_bch_result read_texture(const struct px_bch *bch, size_t object,
             return PX_BCH_INVALID_HEADER;
         texture->data_size = (uint32_t)bytes;
     }
-    if ((texture->format != PX_TEXTURE_ETC1 && texture->format != PX_TEXTURE_ETC1A4) ||
+    /* Mixed packs also admit the raw formats, under the same observed
+     * descriptor rule flags == 0x100 | format (single level). */
+    const int raw_format = bch->mixed && bits != 0 && texture->format <= PX_TEXTURE_A4;
+    if ((texture->format != PX_TEXTURE_ETC1 && texture->format != PX_TEXTURE_ETC1A4 && !raw_format) ||
         texture->flags != (UINT32_C(0x100) | texture->format) ||
         !power_of_two(texture->width) || !power_of_two(texture->height) ||
         commands[0].unsupported || commands[1].unsupported || commands[2].unsupported)
@@ -254,7 +262,8 @@ static enum px_bch_result read_index(struct px_bch *bch)
         const uint32_t count = u32(bch->data + field + 4);
         if (count > MAX_ENTRIES - total) return PX_BCH_LIMIT_EXCEEDED;
         total += count;
-        if (category != 3 && count != 0) return PX_BCH_UNSUPPORTED;
+        if (category != 3 && count != 0 && !bch->mixed) return PX_BCH_UNSUPPORTED;
+        if (category != 3 && bch->mixed) continue;
         if (category == 3) {
             bch->count = count;
             if (count != 0) {
@@ -291,7 +300,8 @@ static enum px_bch_result read_index(struct px_bch *bch)
     return PX_BCH_OK;
 }
 
-enum px_bch_result px_bch_open(const uint8_t *data, size_t size, struct px_bch **out)
+static enum px_bch_result open_pack(const uint8_t *data, size_t size, struct px_bch **out,
+                                    int mixed)
 {
     if (out == NULL) return PX_BCH_INVALID_ARGUMENT;
     *out = NULL;
@@ -302,6 +312,7 @@ enum px_bch_result px_bch_open(const uint8_t *data, size_t size, struct px_bch *
     if (data[4] != 7 || data[5] != 7) return PX_BCH_UNSUPPORTED;
     struct px_bch parsed = {0};
     parsed.data = data;
+    parsed.mixed = mixed;
     for (unsigned i = 0; i < SECTION_COUNT; ++i) {
         const size_t offset = u32(data + 8 + 4 * i), length = u32(data + 28 + 4 * i);
         if (offset > size || length > size - offset) return PX_BCH_TRUNCATED;
@@ -334,6 +345,14 @@ enum px_bch_result px_bch_open(const uint8_t *data, size_t size, struct px_bch *
     *bch = parsed;
     *out = bch;
     return PX_BCH_OK;
+}
+enum px_bch_result px_bch_open(const uint8_t *data, size_t size, struct px_bch **out)
+{
+    return open_pack(data, size, out, 0);
+}
+enum px_bch_result px_bch_open_mixed(const uint8_t *data, size_t size, struct px_bch **out)
+{
+    return open_pack(data, size, out, 1);
 }
 size_t px_bch_texture_count(const struct px_bch *bch)
 {

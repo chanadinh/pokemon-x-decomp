@@ -130,9 +130,48 @@ static void test_unsupported_is_listable(void)
     assert(px_bch_decode_texture(bch, 0, &image) == PX_BCH_UNSUPPORTED && !image.rgba);
     px_bch_close(bch);
 }
+static void test_mixed(void)
+{
+    struct px_bch *bch = NULL;
+    struct px_texture_image image = {0};
+    /* A model category and a tag-03 relocation: refused by the texture-only
+     * reader, accepted (and not interpreted) by the mixed one. */
+    struct fixture f = fixture(0);
+    word(f.data + CONTENT + 4, 1);
+    assert(px_bch_open(f.data, f.size, &bch) == PX_BCH_UNSUPPORTED && !bch);
+    assert(px_bch_open_mixed(f.data, f.size, &bch) == PX_BCH_OK);
+    assert(px_bch_texture_count(bch) == 1 && px_bch_texture(bch, 0)->decode_status == PX_BCH_OK);
+    px_bch_close(bch);
+    f = fixture(0);
+    word(f.data + 220, 0); /* tag 03: contents field -> commands section start */
+    word(f.data + f.size, (uint32_t)(3u << 25) | (uint32_t)((220 - CONTENT) / 4));
+    f.size += 4;
+    word(f.data + 44, (uint32_t)(f.size - RELOC));
+    assert(px_bch_open(f.data, f.size, &bch) == PX_BCH_UNSUPPORTED && !bch);
+    assert(px_bch_open_mixed(f.data, f.size, &bch) == PX_BCH_OK);
+    px_bch_close(bch);
+    /* Raw L4 (format 10) under flags 0x10a decodes only in a mixed pack. */
+    f = fixture(0);
+    word(f.data + 296, 0x10a);
+    for (unsigned unit = 0; unit < 3; ++unit) word(f.data + COMMAND + unit * 32 + 16, 10);
+    assert(px_bch_open(f.data, f.size, &bch) == PX_BCH_OK);
+    assert(px_bch_texture(bch, 0)->decode_status == PX_BCH_UNSUPPORTED);
+    px_bch_close(bch);
+    assert(px_bch_open_mixed(f.data, f.size, &bch) == PX_BCH_OK);
+    assert(px_bch_texture(bch, 0)->decode_status == PX_BCH_OK && px_bch_texture(bch, 0)->data_size == 32);
+    assert(px_bch_decode_texture(bch, 0, &image) == PX_BCH_OK && image.width == 8);
+    px_texture_free(&image);
+    px_bch_close(bch);
+    /* The descriptor rule still applies to raw formats. */
+    word(f.data + 296, 0x10b);
+    assert(px_bch_open_mixed(f.data, f.size, &bch) == PX_BCH_OK);
+    assert(px_bch_texture(bch, 0)->decode_status == PX_BCH_UNSUPPORTED);
+    px_bch_close(bch);
+    assert(px_bch_open_mixed(NULL, 0, &bch) == PX_BCH_INVALID_ARGUMENT);
+}
 int main(void)
 {
-    test_pixels_and_ownership(); test_invalid(); test_unsupported_is_listable();
+    test_pixels_and_ownership(); test_invalid(); test_unsupported_is_listable(); test_mixed();
     puts("PASS: BCH texture relocation, section and command bounds; ETC1/A4 pixels; unsupported descriptors; immutable input and owned output");
     return 0;
 }

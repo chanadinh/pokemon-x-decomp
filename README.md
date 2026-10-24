@@ -77,8 +77,13 @@ conventions come from the original executable: the sign of the light direction,
 and how light and material colors combine. The lighting matches an independent
 oracle on 20,970 evaluations.
 [See day and night lighting →](docs/native-bch.md#directional-fragment-lighting)
-With `--walk`, an inspection marker walks the lit room on its terrain grid and
-collision floor; all 52 walkable cells line up with the model's floor.
+With `--walk`, the game's player-character model walks the lit room on its terrain
+grid and collision floor; all 52 walkable cells line up with the model's floor.
+The player is skinned in its rest pose, and an independent pose matches all
+6,099 vertices exactly.
+
+<p align="center"><a href="docs/native-bch.md#the-player-character"><img src="docs/images/native-bch-player-walk.png" alt="The player character standing on the rug of the lit room, seen from above" width="720"></a></p>
+
 [What remains before the first playable →](docs/PLAYABLE_SLICE.md#what-remains-before-the-first-playable)
 
 The previews do not reproduce the game's complete shaders: the vertex shader,
@@ -182,7 +187,7 @@ recovered original source or builds that match the original machine code.
 <details>
 <summary><strong>What the validation establishes</strong></summary>
 
-- The latest native milestone passes **16 C suites, 43 inspector tests and 54 viewer runtime tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the lighting and combiner evaluators, BCH readers and viewer.
+- The latest native milestone passes **17 C suites, 43 inspector tests and 57 viewer runtime tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the lighting and combiner evaluators, BCH readers and viewer.
 - The field's **16 environment lights, 12 light sets and 7,068 normal components** match an independent parser. The lighting evaluator matches an independent float32 oracle of the pinned emulator behavior on **20,970** evaluations, and **44** original-code words back its sign and color conventions.
 - The six-stage combiner evaluator matches an independent oracle of the pinned emulator behavior on **116,000** evaluations, and **2,356** decoded vertex colors match bit for bit.
 - The selected field's **12 material bindings and 432 register observations** match an independent parser that follows pinned CTRMap register layouts.

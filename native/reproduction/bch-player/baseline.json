@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "622102d444d5cf768f7be6b79aaa7864f28bf9aa",
+  "previous_native_sha256sums": {
+    "entries": 160,
+    "sha256": "dbf480996cf4c842ac6f755f2fed71b7bd24bfcbf6be152da32c170033491ab8"
+  },
+  "immutable_reproduction_records": "All 92 reproduction/ entries of the previous native/SHA256SUMS were rechecked unchanged.",
+  "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+  "capture_regressions": "From the real archive paths the stage-0 (2d905248...0951), combiner (bb9e433d...f0c4), lit day (1dc1e452...243a) and lit night (640c936a...00fe) captures are byte-identical. ../bch-lighting/verify_lighting.py and ../bch-walk/verify_walk.py reproduce their recorded reports exactly. The ../bch-walk walk capture (55f1b9b2...) changes because walk mode now looks from above; it reproduces at commit 622102d.",
+  "changed_native_sources": [
+    "Makefile",
+    "README.md",
+    "model_app.c",
+    "assets/bch_model.c",
+    "assets/bch_model.h",
+    "assets/bch_texture.c",
+    "assets/bch_texture.h",
+    "assets/test_bch_model.c",
+    "assets/test_bch_texture.c",
+    "tests/test_bch_lighting_viewer.py",
+    "tests/test_bch_walk_viewer.py"
+  ],
+  "added_native_files": [
+    "render/skin.c",
+    "render/skin.h",
+    "render/test_skin.c",
+    "tests/test_bch_player_viewer.py",
+    "reproduction/bch-player/README.txt",
+    "reproduction/bch-player/baseline.json",
+    "reproduction/bch-player/dump_player.c",
+    "reproduction/bch-player/reference-comparison.json",
+    "reproduction/bch-player/validation.json",
+    "reproduction/bch-player/validation.txt",
+    "reproduction/bch-player/verify_player.py"
+  ]
+}

@@ -9,6 +9,7 @@
 #include "assets/lz.h"
 #include "render/light.h"
 #include "render/raster.h"
+#include "render/skin.h"
 
 #include <SDL.h>
 #include <errno.h>
@@ -23,8 +24,10 @@ struct options {
     uint32_t environment_entry, environment_subentry, environment_section, scene;
     int have_environment_entry, have_environment_subentry, have_environment_section, have_scene;
     int lighting; /* 0 none, 1 day, 2 night */
-    int walk;
-    const char *steps;
+    int walk, skinned, quiet;
+    const char *steps, *player_archive;
+    uint32_t player_entry, player_section;
+    int have_player_entry, have_player_section;
     uint32_t entry, subentry, model, frames, section;
     uint32_t texture_entry, texture_subentry, texture_section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
@@ -38,6 +41,7 @@ struct options {
 struct walker {
     const struct px_field_grid *grid;
     int active, x, z;
+    int facing; /* quarter turns about +Y: 0 +Z (D), 1 +X (R), 2 -Z (U), 3 -X (L) */
     uint32_t moves, blocked;
 };
 struct camera { double yaw, pitch, zoom; int running; struct walker *walk; };
@@ -60,6 +64,8 @@ static void walk_step(struct walker *w, char direction)
     if (!w->active) return;
     const int dx = direction == 'L' ? -1 : direction == 'R' ? 1 : 0;
     const int dz = direction == 'U' ? -1 : direction == 'D' ? 1 : 0;
+    /* The marker turns toward every attempted step, blocked or not. */
+    w->facing = direction == 'D' ? 0 : direction == 'R' ? 1 : direction == 'U' ? 2 : 3;
     if (walkable(w, w->x + dx, w->z + dz)) { w->x += dx; w->z += dz; ++w->moves; }
     else ++w->blocked;
 }
@@ -85,6 +91,10 @@ struct model_asset {
     struct px_bch_environment environment;
     struct px_light_setup *bch_light;
     uint32_t *point_bound;
+    /* Per material and RGB channel: summed specular0 + specular1 registers
+     * of unexecuted point/spot lights (an upper bound on fragment secondary
+     * RGB if LUT, attenuation and dot factors stay within 0..1). */
+    uint32_t *secondary_bound;
     uint32_t *light_index; /* 8 per material: environment light per setup slot */
     int lighting;
     /* --walk only: the GR member's terrain grid and collision triangles. */
@@ -92,11 +102,13 @@ struct model_asset {
     struct px_field_collision collision;
     struct walker walker;
     int walk;
+    struct model_asset *player; /* --player-archive: drawn at the marker */
     int bch_textured;
 };
 
 static void asset_free(struct model_asset *asset)
 {
+    if (asset->player) { asset_free(asset->player); free(asset->player); }
     if (asset->textures)
         for (uint32_t i = 0; i < asset->texture_count; ++i) px_texture_free(&asset->textures[i]);
     free(asset->textures);
@@ -106,6 +118,7 @@ static void asset_free(struct model_asset *asset)
     free(asset->bch_texture);
     free(asset->bch_light);
     free(asset->point_bound);
+    free(asset->secondary_bound);
     free(asset->light_index);
     px_bch_environment_free(&asset->environment);
     px_field_grid_free(&asset->grid);
@@ -160,10 +173,14 @@ static void usage(FILE *stream, const char *program)
         "  --lighting day|night  With --combiners and an environment: execute the\n"
         "                     material light set's directional lights (default day;\n"
         "                     day omits light_night, night omits light_sun)\n"
+        "  --skinned          BCH: accept a skeleton and draw its rest (bind) pose\n"
         "  --walk             BCH from a GR section: load that GR's terrain grid and\n"
         "                     collision and add an inspection marker (WASD moves it\n"
         "                     one cell; only exact standard cells 0x00000020 admit it)\n"
         "  --steps UDLR...    Apply marker moves before inspection or display (--walk)\n"
+        "  --player-archive RELATIVE/PATH  With --walk: draw this skinned BCH (rest\n"
+        "                     pose, its own textures) at the marker instead of a box;\n"
+        "                     --player-entry N, --player-section N select it\n"
         "  --inspect          Print decoded mesh metadata without a window\n"
         "  --capture-frame F  Save first viewport to a new BMP file\n"
         "  --frames N         Exit after a positive number of frames\n"
@@ -212,6 +229,7 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--triangle-list")) { o->triangle_list = 1; continue; }
         if (!strcmp(arg, "--combiners")) { o->combiners = 1; continue; }
         if (!strcmp(arg, "--walk")) { o->walk = 1; continue; }
+        if (!strcmp(arg, "--skinned")) { o->skinned = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
             strcmp(arg, "--subentry") && strcmp(arg, "--model") && strcmp(arg, "--frames") &&
             strcmp(arg, "--capture-frame") && strcmp(arg, "--section") &&
@@ -219,7 +237,9 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--texture-subentry") && strcmp(arg, "--texture-section") &&
             strcmp(arg, "--environment-archive") && strcmp(arg, "--environment-entry") &&
             strcmp(arg, "--environment-subentry") && strcmp(arg, "--environment-section") &&
-            strcmp(arg, "--scene") && strcmp(arg, "--lighting") && strcmp(arg, "--steps")) return 0;
+            strcmp(arg, "--scene") && strcmp(arg, "--lighting") && strcmp(arg, "--steps") &&
+            strcmp(arg, "--player-archive") && strcmp(arg, "--player-entry") &&
+            strcmp(arg, "--player-section")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -227,6 +247,7 @@ static int parse(int argc, char **argv, struct options *o)
         else if (!strcmp(arg, "--capture-frame")) o->capture = value;
         else if (!strcmp(arg, "--texture-archive")) o->texture_archive = value;
         else if (!strcmp(arg, "--environment-archive")) o->environment_archive = value;
+        else if (!strcmp(arg, "--player-archive")) o->player_archive = value;
         else if (!strcmp(arg, "--steps")) {
             if (o->steps || strspn(value, "UDLR") != strlen(value) || strlen(value) > 4096) return 0;
             o->steps = value;
@@ -253,6 +274,11 @@ static int parse(int argc, char **argv, struct options *o)
                 if (n > 255) return 0;
                 o->environment_section = n; o->have_environment_section = 1;
             } else if (!strcmp(arg, "--scene")) { o->scene = n; o->have_scene = 1; }
+            else if (!strcmp(arg, "--player-entry")) { o->player_entry = n; o->have_player_entry = 1; }
+            else if (!strcmp(arg, "--player-section")) {
+                if (n > 255) return 0;
+                o->player_section = n; o->have_player_section = 1;
+            }
             else if (!strcmp(arg, "--texture-subentry")) {
                 if (n > 31) return 0;
                 o->texture_subentry = n; o->have_texture_subentry = 1;
@@ -279,6 +305,9 @@ static int parse(int argc, char **argv, struct options *o)
         !o->have_environment_entry || !relative_path(o->environment_archive))) return 0;
     if (o->environment_archive && !o->lighting) o->lighting = 1;
     if ((o->steps && !o->walk) || (o->walk && (o->demo || !o->have_section || !o->triangle_list || !o->textured)))
+        return 0;
+    if ((o->player_archive || o->have_player_entry || o->have_player_section) &&
+        (!o->walk || !o->player_archive || !o->have_player_entry || !relative_path(o->player_archive)))
         return 0;
     if (o->inspect && (o->capture || o->frames || o->self_test)) return 0;
     if (o->self_test && !o->frames) o->frames = 3;
@@ -396,8 +425,8 @@ static int read_resource(const char *romfs, const char *archive_path, uint32_t e
     out->size = out->decoded ? out->decoded_size : size;
     if (have_section) {
         if (out->size < 2 || (memcmp(out->data, "AD", 2) && memcmp(out->data, "GR", 2) &&
-                              memcmp(out->data, "BM", 2))) {
-            snprintf(error, sizeof error, "--section requires an AD, GR or BM minipack");
+                              memcmp(out->data, "BM", 2) && memcmp(out->data, "MM", 2))) {
+            snprintf(error, sizeof error, "--section requires an AD, GR, BM or MM minipack");
             goto failed;
         }
         struct px_field_span selected;
@@ -500,10 +529,10 @@ static int prepare_bch_materials(struct model_asset *asset, int combiners)
 /* Resolve each material's stage-0 texture name against the external BCH by
  * exact bytes. A name occurring more than once there is ambiguous and fails.
  * Only referenced textures are decoded; their RGBA total is capped at 64 MiB. */
-static int bind_bch_textures(const uint8_t *data, size_t size, struct model_asset *asset)
+static int bind_bch_textures(const uint8_t *data, size_t size, struct model_asset *asset, int mixed)
 {
     struct px_bch *pack = NULL;
-    enum px_bch_result result = px_bch_open(data, size, &pack);
+    enum px_bch_result result = mixed ? px_bch_open_mixed(data, size, &pack) : px_bch_open(data, size, &pack);
     if (result != PX_BCH_OK) goto failed;
     const size_t count = px_bch_texture_count(pack);
     if (count > UINT32_MAX) { result = PX_BCH_LIMIT_EXCEEDED; goto failed; }
@@ -567,7 +596,8 @@ static int prepare_bch_lighting(struct model_asset *asset, int lighting)
     asset->bch_light = calloc(bch->material_count, sizeof *asset->bch_light);
     asset->point_bound = calloc((size_t)bch->material_count * 3, sizeof *asset->point_bound);
     asset->light_index = calloc((size_t)bch->material_count * 8, sizeof *asset->light_index);
-    if (!asset->bch_light || !asset->point_bound || !asset->light_index) return 0;
+    asset->secondary_bound = calloc((size_t)bch->material_count * 3, sizeof *asset->secondary_bound);
+    if (!asset->bch_light || !asset->point_bound || !asset->light_index || !asset->secondary_bound) return 0;
     asset->lighting = lighting;
     for (uint32_t i = 0; i < bch->material_count; ++i) {
         const struct px_bch_material *m = &bch->materials[i];
@@ -588,10 +618,14 @@ static int prepare_bch_lighting(struct model_asset *asset, int lighting)
             const struct px_bch_light *light = &env->lights[index];
             if (!light->enabled) continue;
             if (light->type == PX_BCH_LIGHT_FRAGMENT_POINT || light->type == PX_BCH_LIGHT_FRAGMENT_SPOT) {
-                for (unsigned c = 0; c < 3; ++c)
+                for (unsigned c = 0; c < 3; ++c) {
                     asset->point_bound[(size_t)i * 3 + c] +=
                         px_light_register_channel(light->ambient[c], m->colors[1][c]) +
                         px_light_register_channel(light->diffuse[c], m->colors[2][c]);
+                    asset->secondary_bound[(size_t)i * 3 + c] +=
+                        px_light_register_channel(light->specular0[c], m->colors[3][c]) +
+                        px_light_register_channel(light->specular1[c], m->colors[4][c]);
+                }
                 continue;
             }
             if (light->type != PX_BCH_LIGHT_FRAGMENT_DIRECTIONAL || (light->flags & 2)) {
@@ -600,6 +634,16 @@ static int prepare_bch_lighting(struct model_asset *asset, int lighting)
             }
             if ((lighting == 1 && name_is(&light->name, "light_night")) ||
                 (lighting == 2 && name_is(&light->name, "light_sun"))) continue;
+            /* Specular is not executed: an executed light must contribute a
+             * zero specular register, so fragment secondary RGB is exactly 0
+             * whatever the LUTs do; its alpha is 1 (Azahar specular_sum
+             * starts at (0, 0, 0, 1); Fresnel is excluded above). */
+            for (unsigned c = 0; c < 3; ++c)
+                if (px_light_register_channel(light->specular0[c], m->colors[3][c]) ||
+                    px_light_register_channel(light->specular1[c], m->colors[4][c])) {
+                    fprintf(stderr, "[model-viewer] Material %" PRIu32 " needs specular lighting (not executed).\n", i);
+                    return 0;
+                }
             if (setup->count == 8) return 0;
             struct px_light_source *source = &setup->lights[setup->count];
             asset->light_index[(size_t)i * 8 + setup->count++] = index;
@@ -632,9 +676,15 @@ static int decode_model(const struct options *o, const uint8_t *data, size_t siz
             return 0;
         }
         struct px_bch_model *bch = &asset->bch;
-        enum px_bch_model_result status = px_bch_model_decode(data, size, o->model, bch);
+        enum px_bch_model_result status = o->skinned ?
+            px_bch_model_decode_skinned(data, size, o->model, bch) :
+            px_bch_model_decode(data, size, o->model, bch);
         if (status != PX_BCH_MODEL_OK) {
             fprintf(stderr, "[model-viewer] BCH model: %s\n", px_bch_model_result_string(status));
+            return 0;
+        }
+        if (o->skinned && bch->bones && !px_skin_bake_rest(bch)) {
+            fprintf(stderr, "[model-viewer] BCH skinning: rest pose failed\n");
             return 0;
         }
         for (uint32_t i = 0; i < bch->submesh_count; ++i) {
@@ -709,15 +759,15 @@ static int load(const struct options *o, struct model_asset *asset)
             for (const char *p = o->steps; p && *p; ++p) walk_step(&asset->walker, *p);
         }
     }
-    if (ok) print_resource("", o->archive, o->entry, o->subentry, o->model,
-                           o->have_section, o->section, &model);
+    if (ok && !o->quiet) print_resource("", o->archive, o->entry, o->subentry, o->model,
+                                        o->have_section, o->section, &model);
     resource_free(&model);
     if (ok && asset->bch_textured) {
         struct resource textures = {0};
         ok = read_resource(o->romfs, o->texture_archive, o->texture_entry, o->texture_subentry,
                            o->have_texture_section, o->texture_section, "texture", &textures) &&
-             bind_bch_textures(textures.data, textures.size, asset);
-        if (ok) print_resource("texture_", o->texture_archive, o->texture_entry,
+             bind_bch_textures(textures.data, textures.size, asset, o->skinned);
+        if (ok && !o->quiet) print_resource("texture_", o->texture_archive, o->texture_entry,
                                o->texture_subentry, 0, o->have_texture_section,
                                o->texture_section, &textures);
         resource_free(&textures);
@@ -736,19 +786,36 @@ static int load(const struct options *o, struct model_asset *asset)
             }
         }
         if (ok) ok = prepare_bch_lighting(asset, o->lighting);
-        if (ok) print_resource("environment_", o->environment_archive, o->environment_entry,
+        if (ok && !o->quiet) print_resource("environment_", o->environment_archive, o->environment_entry,
                                o->environment_subentry, o->scene, o->have_environment_section,
                                o->environment_section, &environment);
         resource_free(&environment);
     }
+    if (ok && o->player_archive) {
+        /* The player: skinned, rest pose, textures from its own BCH, the
+         * room's environment for lighting, the same shading mode. */
+        struct options po = *o;
+        po.archive = o->player_archive; po.entry = o->player_entry; po.subentry = 0; po.model = 0;
+        po.have_section = o->have_player_section; po.section = o->player_section;
+        po.texture_archive = po.archive; po.texture_entry = po.entry; po.texture_subentry = 0;
+        po.have_texture_section = po.have_section; po.texture_section = po.section;
+        po.skinned = 1; po.walk = 0; po.steps = NULL; po.player_archive = NULL; po.quiet = 1;
+        asset->player = calloc(1, sizeof *asset->player);
+        ok = asset->player && load(&po, asset->player);
+        if (ok) printf("player_archive=%s player_entry=%" PRIu32 " player_section=%s%" PRIu32 "\n",
+                       po.archive, po.entry, po.have_section ? "" : "none:", po.section);
+    }
     return ok;
 }
 
-/* Walk mode starts looking steeply down so the room's walls (culling is not
- * executed) do not hide the floor; both are inspection choices. */
+/* Camera convention: depth is -(sin(pitch) y + cos(pitch) z'), so a negative
+ * pitch places the eye below the model (the default inspection view) and a
+ * positive one above it. Walk mode starts above, looking down at 0.9 rad and
+ * zoomed 2.5x, and follows the marker; all are inspection choices. */
 static void reset(struct camera *c)
 {
-    c->yaw = c->walk ? 0 : 0.55; c->pitch = c->walk ? -1.2 : -0.35; c->zoom = 1; c->running = 1;
+    c->yaw = c->walk ? 0 : 0.55; c->pitch = c->walk ? 0.9 : -0.35;
+    c->zoom = c->walk ? 2.5 : 1; c->running = 1;
 }
 static void event(struct camera *c, const SDL_Event *e)
 {
@@ -788,8 +855,8 @@ static int input_test(struct camera *c)
     reset(c);
     const struct camera initial = *c;
     if (!inject(c, SDLK_RIGHT) || c->yaw <= initial.yaw || !inject(c, SDLK_UP) || c->pitch >= initial.pitch ||
-        !inject(c, SDLK_PLUS) || c->zoom <= 1 || !inject(c, SDLK_HOME) ||
-        c->yaw != initial.yaw || c->pitch != initial.pitch || c->zoom != 1 ||
+        !inject(c, SDLK_PLUS) || c->zoom <= initial.zoom || !inject(c, SDLK_HOME) ||
+        c->yaw != initial.yaw || c->pitch != initial.pitch || c->zoom != initial.zoom ||
         !inject(c, SDLK_ESCAPE) || c->running) return 0;
     struct walker *w = c->walk;
     reset(c);
@@ -1036,6 +1103,9 @@ static void combiner_fragment(void *context, double u, double v, const double rg
         in.fragment_primary[c] = 255;
     }
     if (s->light) {
+        /* Executed lighting: secondary RGB is exactly zero (see
+         * prepare_bch_lighting) and its alpha is 255. */
+        in.fragment_secondary[3] = 255;
         /* Interpolated model-space normal, renormalized by px_light_primary.
          * A zero interpolated normal gives a black fragment primary. */
         const float normal[3] = {(float)varying[0], (float)varying[1], (float)varying[2]};
@@ -1119,55 +1189,50 @@ static int fragment_state(const struct px_bch_fragment_preview *m, struct px_ras
     return bch_state(&flat, &ignored, state);
 }
 
-static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *asset,
-                             const struct camera *camera, struct px_raster_vertex *points,
-                             double (*normals)[4],
-                             struct px_raster_target *target, SDL_Texture **frame,
-                             const char *path, struct combiner_counts *counts)
+/* Shared inspection camera: orthographic, fitted to the room's bounds. */
+struct view { double center[3], radius, scale, cy, sy, cp, sp; int w, h; };
+/* Placement of a model in the room's frame: rotation about +Y by yaw (radians),
+ * then translation. The room itself uses the identity placement. */
+struct placement { double x, y, z, yaw; };
+
+static void project_bch(const struct model_asset *asset, const struct view *v, const struct placement *at,
+                        struct px_raster_vertex *points, double (*normals)[4])
 {
     const struct px_cgfx_model *mesh = &asset->wire;
     const struct px_bch_model *bch = &asset->bch;
-    int w, h;
-    if (SDL_GetRendererOutputSize(renderer, &w, &h) != 0 || w <= 0 || h <= 0) return 0;
-    enum px_raster_result result;
-    if (target->width != (uint32_t)w || target->height != (uint32_t)h) {
-        px_raster_free(target);
-        if (*frame) { SDL_DestroyTexture(*frame); *frame = NULL; }
-        result = px_raster_create((uint32_t)w, (uint32_t)h, target);
-        if (result != PX_RASTER_OK) goto raster_error;
-        *frame = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32,
-                                   SDL_TEXTUREACCESS_STREAMING, w, h);
-        if (!*frame || SDL_SetTextureBlendMode(*frame, SDL_BLENDMODE_NONE)) return 0;
-    }
-    const uint8_t background[4] = {22, 27, 36, 255};
-    result = px_raster_clear(target, background, INFINITY);
-    if (result != PX_RASTER_OK) goto raster_error;
-    double center[3], radius = 0;
-    for (unsigned j = 0; j < 3; ++j) {
-        center[j] = ((double)mesh->bounds_min[j] + mesh->bounds_max[j]) / 2;
-        double half = ((double)mesh->bounds_max[j] - mesh->bounds_min[j]) / 2;
-        radius += half * half;
-    }
-    radius = sqrt(radius); if (radius < 1e-20) radius = 1;
-    double scale = (w < h ? w : h) * 0.42 * camera->zoom;
-    double cy = cos(camera->yaw), sy = sin(camera->yaw);
-    double cp = cos(camera->pitch), sp = sin(camera->pitch);
+    const double c = at ? cos(at->yaw) : 1, s = at ? sin(at->yaw) : 0;
     for (uint32_t i = 0; i < mesh->vertex_count; ++i) {
-        double x = (mesh->positions[3 * (size_t)i] - center[0]) / radius;
-        double y = (mesh->positions[3 * (size_t)i + 1] - center[1]) / radius;
-        double z = (mesh->positions[3 * (size_t)i + 2] - center[2]) / radius;
-        double rx = cy * x + sy * z, rz = -sy * x + cy * z;
-        points[i].x = w * 0.5 + rx * scale;
-        points[i].y = h * 0.5 - (cp * y - sp * rz) * scale;
-        points[i].z = -(sp * y + cp * rz);
+        const double px = mesh->positions[3 * (size_t)i], py = mesh->positions[3 * (size_t)i + 1];
+        const double pz = mesh->positions[3 * (size_t)i + 2];
+        const double wx = c * px + s * pz + (at ? at->x : 0), wy = py + (at ? at->y : 0);
+        const double wz = -s * px + c * pz + (at ? at->z : 0);
+        double x = (wx - v->center[0]) / v->radius;
+        double y = (wy - v->center[1]) / v->radius;
+        double z = (wz - v->center[2]) / v->radius;
+        double rx = v->cy * x + v->sy * z, rz = -v->sy * x + v->cy * z;
+        points[i].x = v->w * 0.5 + rx * v->scale;
+        points[i].y = v->h * 0.5 - (v->cp * y - v->sp * rz) * v->scale;
+        points[i].z = -(v->sp * y + v->cp * rz);
         /* Stored BCH UV0 has V up; decoded images are top-down. */
         points[i].u = bch->uvs[2 * (size_t)i];
         points[i].v = 1.0 - bch->uvs[2 * (size_t)i + 1];
         for (unsigned j = 0; j < 4; ++j)
             points[i].rgba[j] = asset->bch_combiner ? bch->colors[4 * (size_t)i + j] : 1;
-        for (unsigned j = 0; normals && j < 4; ++j)
-            normals[i][j] = j < 3 ? bch->normals[3 * (size_t)i + j] : 0;
+        if (normals) {
+            const double nx = bch->normals[3 * (size_t)i], ny = bch->normals[3 * (size_t)i + 1];
+            const double nz = bch->normals[3 * (size_t)i + 2];
+            normals[i][0] = c * nx + s * nz; normals[i][1] = ny; normals[i][2] = -s * nx + c * nz; normals[i][3] = 0;
+        }
     }
+}
+
+static int draw_bch_meshes(const struct model_asset *asset, const struct px_raster_vertex *points,
+                           double (*normals)[4], struct px_raster_target *target,
+                           struct combiner_counts *counts)
+{
+    const struct px_cgfx_model *mesh = &asset->wire;
+    const struct px_bch_model *bch = &asset->bch;
+    enum px_raster_result result;
     for (uint32_t i = 0; i < bch->mesh_count; ++i) {
         const struct px_bch_mesh *m = &bch->meshes[asset->draw_order[i]];
         if (asset->bch_combiner) {
@@ -1209,7 +1274,7 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
                 for (unsigned k = 0; k < 3; ++k)
                     memcpy(varyings + 4 * k, normals[mesh->indices[first + k]], 4 * sizeof *varyings);
                 result = px_raster_draw_varying(target, triangle, varyings, combiner_fragment, &shader, &state);
-                if (result != PX_RASTER_OK) goto raster_error;
+                if (result != PX_RASTER_OK) { SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0; }
             }
             continue;
         }
@@ -1229,10 +1294,69 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
                 points[mesh->indices[first]], points[mesh->indices[first + 1]], points[mesh->indices[first + 2]]
             };
             result = px_raster_draw(target, triangle, &texture, &sampler, &state);
-            if (result != PX_RASTER_OK) goto raster_error;
+            if (result != PX_RASTER_OK) { SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0; }
         }
     }
+    return 1;
+}
+
+static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *asset,
+                             const struct camera *camera, struct px_raster_vertex *points,
+                             double (*normals)[4],
+                             struct px_raster_target *target, SDL_Texture **frame,
+                             const char *path, struct combiner_counts *counts,
+                             struct px_raster_vertex *player_points, double (*player_normals)[4])
+{
+    const struct px_cgfx_model *mesh = &asset->wire;
+    int w, h;
+    if (SDL_GetRendererOutputSize(renderer, &w, &h) != 0 || w <= 0 || h <= 0) return 0;
+    enum px_raster_result result;
+    if (target->width != (uint32_t)w || target->height != (uint32_t)h) {
+        px_raster_free(target);
+        if (*frame) { SDL_DestroyTexture(*frame); *frame = NULL; }
+        result = px_raster_create((uint32_t)w, (uint32_t)h, target);
+        if (result != PX_RASTER_OK) goto raster_error;
+        *frame = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32,
+                                   SDL_TEXTUREACCESS_STREAMING, w, h);
+        if (!*frame || SDL_SetTextureBlendMode(*frame, SDL_BLENDMODE_NONE)) return 0;
+    }
+    const uint8_t background[4] = {22, 27, 36, 255};
+    result = px_raster_clear(target, background, INFINITY);
+    if (result != PX_RASTER_OK) goto raster_error;
+    struct view v;
+    v.radius = 0;
+    for (unsigned j = 0; j < 3; ++j) {
+        v.center[j] = ((double)mesh->bounds_min[j] + mesh->bounds_max[j]) / 2;
+        double half = ((double)mesh->bounds_max[j] - mesh->bounds_min[j]) / 2;
+        v.radius += half * half;
+    }
+    v.radius = sqrt(v.radius); if (v.radius < 1e-20) v.radius = 1;
     if (asset->walk && asset->walker.active) {
+        /* Follow the marker: center on its cell, 18 units above the floor. */
+        double floor_y = 0;
+        if (px_field_collision_first_height(&asset->collision, cell_center(asset->walker.x),
+                                            cell_center(asset->walker.z), &floor_y) != PX_FIELD_OK) floor_y = 0;
+        v.center[0] = cell_center(asset->walker.x);
+        v.center[1] = floor_y + 18;
+        v.center[2] = cell_center(asset->walker.z);
+    }
+    v.w = w; v.h = h;
+    v.scale = (w < h ? w : h) * 0.42 * camera->zoom;
+    v.cy = cos(camera->yaw); v.sy = sin(camera->yaw);
+    v.cp = cos(camera->pitch); v.sp = sin(camera->pitch);
+    project_bch(asset, &v, NULL, points, normals);
+    if (!draw_bch_meshes(asset, points, normals, target, counts)) return 0;
+    const double center[3] = {v.center[0], v.center[1], v.center[2]}, radius = v.radius, scale = v.scale;
+    const double cy = v.cy, sy = v.sy, cp = v.cp, sp = v.sp;
+    if (asset->walk && asset->walker.active && asset->player) {
+        /* Player: rest pose standing on the first stored collision triangle
+         * under the marker's cell center, facing its last step direction. */
+        struct placement at = {cell_center(asset->walker.x), 0, cell_center(asset->walker.z),
+                               asset->walker.facing * 1.5707963267948966};
+        if (px_field_collision_first_height(&asset->collision, at.x, at.z, &at.y) != PX_FIELD_OK) at.y = 0;
+        project_bch(asset->player, &v, &at, player_points, player_normals);
+        if (!draw_bch_meshes(asset->player, player_points, player_normals, target, NULL)) return 0;
+    } else if (asset->walk && asset->walker.active) {
         /* Marker: a 14 x 28 x 14 box standing on the first stored collision
          * triangle under the cell center (height 0 if none). Depth tested. */
         const double mx = cell_center(asset->walker.x), mz = cell_center(asset->walker.z);
@@ -1283,7 +1407,8 @@ static int window(const struct options *o, struct model_asset *asset)
     SDL_Renderer *renderer = NULL; SDL_FPoint *points = NULL; int ok = 0;
     SDL_Texture *frame = NULL; struct px_raster_target target = {0};
     struct px_raster_vertex *vertices = NULL;
-    double (*normals)[4] = NULL;
+    double (*normals)[4] = NULL, (*player_normals)[4] = NULL;
+    struct px_raster_vertex *player_points = NULL;
     struct combiner_counts *counts = NULL;
     if (!win) goto done;
     if (!o->software) renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -1293,6 +1418,12 @@ static int window(const struct options *o, struct model_asset *asset)
     else points = malloc((size_t)mesh->vertex_count * sizeof *points);
     if (o->textured ? !vertices : !points) goto done;
     if (asset->bch_combiner && !(normals = calloc(mesh->vertex_count, sizeof *normals))) goto done;
+    if (asset->player) {
+        const uint32_t count = asset->player->wire.vertex_count;
+        player_points = calloc(count ? count : 1, sizeof *player_points);
+        player_normals = calloc(count ? count : 1, sizeof *player_normals);
+        if (!player_points || !player_normals) goto done;
+    }
     struct camera c;
     memset(&c, 0, sizeof c);
     c.walk = asset->walk ? &asset->walker : NULL;
@@ -1315,7 +1446,7 @@ static int window(const struct options *o, struct model_asset *asset)
         if (!c.running) break;
         const char *path = frames == 0 ? o->capture : NULL;
         if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, vertices, normals, &target, &frame, path,
-                                                     frames == 0 ? counts : NULL) :
+                                                     frames == 0 ? counts : NULL, player_points, player_normals) :
             o->textured ? !draw_textured(renderer, asset, &c, vertices, &target, &frame, path) :
                           !draw(renderer, mesh, &c, points, path)) goto done;
         if (frames == 0 && counts)
@@ -1337,7 +1468,7 @@ static int window(const struct options *o, struct model_asset *asset)
 done:
     if (!ok) fprintf(stderr, "[model-viewer] Runtime: %s\n", SDL_GetError());
     free(counts);
-    free(normals);
+    free(normals); free(player_points); free(player_normals);
     free(vertices); px_raster_free(&target); if (frame) SDL_DestroyTexture(frame);
     free(points); if (renderer) SDL_DestroyRenderer(renderer); if (win) SDL_DestroyWindow(win); SDL_Quit();
     return ok;
@@ -1397,7 +1528,7 @@ static void print_bch_bindings(const struct model_asset *asset)
     if (asset->bch_combiner) {
         if (asset->bch_light)
             printf("mode=textured shading=tev-six-stage primary=vertex-color fragment_primary=directional-lit "
-                   "fragment_secondary=black lighting=%s point_spot=bounded normals=interpolated-renormalized "
+                   "fragment_secondary=zero-rgb-alpha-255 lighting=%s point_spot=bounded normals=interpolated-renormalized "
                    "vertex_shader=not-executed ", asset->lighting == 2 ? "night" : "day");
         else
             printf("mode=textured shading=tev-six-stage primary=vertex-color fragment_primary=white "
@@ -1432,6 +1563,11 @@ static void print_bch_bindings(const struct model_asset *asset)
                            l->diffuse[2], l->vector[0], l->vector[1], l->vector[2]);
                 }
                 putchar('\n');
+            }
+            for (uint32_t i = 0; i < bch->material_count; ++i) {
+                const uint32_t *secondary = &asset->secondary_bound[(size_t)i * 3];
+                printf("light_secondary material=%" PRIu32 " value=0,0,0,255 point_specular_bound=%" PRIu32
+                       ",%" PRIu32 ",%" PRIu32 "\n", i, secondary[0], secondary[1], secondary[2]);
             }
         }
         for (uint32_t i = 0; i < bch->material_count; ++i) {
@@ -1511,23 +1647,6 @@ int main(int argc, char **argv)
            mesh.bounds_max[0], mesh.bounds_max[1], mesh.bounds_max[2]);
     if (asset.bch.mesh_count) print_bch_metadata(&asset.bch, asset.bch_textured);
     if (asset.bch_textured) print_bch_bindings(&asset);
-    if (asset.walk) {
-        const struct walker *w = &asset.walker;
-        uint32_t standard = 0;
-        for (size_t i = 0; i < (size_t)asset.grid.width * asset.grid.height; ++i)
-            standard += asset.grid.tiles[i] == UINT32_C(0x00000020);
-        printf("walk policy=exact-cell-0x00000020 movement=inspection-not-game-rules grid=%ux%u "
-               "standard_cells=%" PRIu32 " collision_vertices=%" PRIu32,
-               asset.grid.width, asset.grid.height, standard, asset.collision.vertex_count);
-        if (!w->active) printf(" marker=none\n");
-        else {
-            double y = 0;
-            const int hit = px_field_collision_first_height(&asset.collision, cell_center(w->x),
-                                                             cell_center(w->z), &y) == PX_FIELD_OK;
-            printf(" marker=cell:%d,%d local=%.9g,%.9g height=%s%.9g moves=%" PRIu32 " blocked=%" PRIu32 "\n",
-                   w->x, w->z, cell_center(w->x), cell_center(w->z), hit ? "" : "none:", y, w->moves, w->blocked);
-        }
-    }
     else if (o.textured) {
         uint32_t decoded = 0;
         for (uint32_t i = 0; i < asset.texture_count; ++i) decoded += asset.textures[i].rgba != NULL;
@@ -1552,6 +1671,23 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < asset.scene.draw_count; ++i)
             printf("%s%" PRIu32, i ? "," : "", asset.draw_order[i]);
         putchar('\n');
+    }
+    if (asset.walk) {
+        const struct walker *w = &asset.walker;
+        uint32_t standard = 0;
+        for (size_t i = 0; i < (size_t)asset.grid.width * asset.grid.height; ++i)
+            standard += asset.grid.tiles[i] == UINT32_C(0x00000020);
+        printf("walk policy=exact-cell-0x00000020 movement=inspection-not-game-rules grid=%ux%u "
+               "standard_cells=%" PRIu32 " collision_vertices=%" PRIu32,
+               asset.grid.width, asset.grid.height, standard, asset.collision.vertex_count);
+        if (!w->active) printf(" marker=none\n");
+        else {
+            double y = 0;
+            const int hit = px_field_collision_first_height(&asset.collision, cell_center(w->x),
+                                                             cell_center(w->z), &y) == PX_FIELD_OK;
+            printf(" marker=cell:%d,%d local=%.9g,%.9g height=%s%.9g moves=%" PRIu32 " blocked=%" PRIu32 "\n",
+                   w->x, w->z, cell_center(w->x), cell_center(w->z), hit ? "" : "none:", y, w->moves, w->blocked);
+        }
     }
     int ok = o.inspect || window(&o, &asset); asset_free(&asset); return ok ? 0 : 1;
 }

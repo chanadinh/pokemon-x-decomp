@@ -301,3 +301,38 @@ each one the collision height matches a floor surface of the room model. The
 marker uses the field inspector's exact-cell policy, not the game's movement
 rules. See the [walk record](../native/reproduction/bch-walk/README.txt).
 
+## The player character
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured --combiners \
+  --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11 \
+  --environment-archive a/0/0/3 --environment-entry 137 --environment-section 0 \
+  --walk --player-archive a/0/2/1 --player-entry 2 --player-section 0
+```
+
+<table>
+  <tr>
+    <td><img src="images/native-bch-player-walk.png" alt="The player character standing on the rug of the lit room, seen from above" width="440"></td>
+    <td><img src="images/native-bch-player.png" alt="The skinned player-character model in its rest pose with all nine textured parts" width="440"></td>
+  </tr>
+</table>
+
+The marker is now the game's player-character model, `tr0002_00_fi` from the
+field character archive `a/0/2/1`. It is a complete model with nine textured
+parts. The male player model in the same archive is assembled from outfit parts
+at run time and is not supported yet.
+
+The decoder now reads skeletons, per-submesh bone palettes, and bone indices and
+weights. The model is posed at rest using the arithmetic of the
+pinned vertex-shader translation. Its world transform times its inverse bind
+matrix is the identity for all 45 bones, and an independent pose of all 6,099
+vertices matches exactly.
+
+The player is lit by the environment's character light set. The rest pose is a
+T-pose because animations are not decoded yet.
+
+The walk camera now looks from above. The inspection camera's earlier negative
+pitch had put the eye below the floor. See the
+[player record](../native/reproduction/bch-player/README.txt).
+
