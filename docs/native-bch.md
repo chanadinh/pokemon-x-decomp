@@ -245,3 +245,44 @@ evaluations and 36,000 evaluations of the field's twelve chains, and all 2,356
 vertex colors match an independent decode. This is equivalence to an emulator's
 documented behavior, not a hardware measurement or a game capture. See the
 [combiner record](../native/reproduction/bch-combiners/README.txt).
+
+## Directional fragment lighting
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured --combiners \
+  --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11 \
+  --environment-archive a/0/0/3 --environment-entry 137 --environment-section 0 \
+  --lighting day   # or night
+```
+
+<table>
+  <tr>
+    <td><img src="images/native-bch-lighting-day.png" alt="Field 165 lit by the environment's daytime sun light" width="440"></td>
+    <td><img src="images/native-bch-lighting-night.png" alt="Field 165 lit by the environment's night light" width="440"></td>
+  </tr>
+</table>
+
+The field's lights are not in its model or area pack. A scan of the RomFS found
+lights and scenes in one place: archive `a/0/0/3` entry 137, a BM pack whose first
+section is a BCH environment with 16 lights and a scene of 12 light sets. Every
+material's light-set index resolves there (set 1 for the window chip, set 0 for
+the rest); the game's binding of this entry to the field is inferred, not traced.
+
+The original code fixes two conventions. The light upload negates the
+view-space direction before writing the light-position registers, so the light
+vector is `-direction`. Each light color register is the product of the light
+and material colors, `((2l+1)(2m+1)) >> 10` per channel. Global ambient is the
+material emission, because no ambient light is bound.
+
+The viewer executes directional diffuse and ambient lighting per fragment,
+following the pinned emulator's arithmetic, with interpolated, renormalized
+normals. Point and spot lights are not executed; their largest possible
+contribution is reported, and in this field it is 3/255 in green. Light set 0
+enables both the sun and the night light, so `--lighting` chooses between them;
+the game's own selection is not traced.
+
+An independent oracle matched all lights, sets, material parameters and 7,068
+normal components, all 65,536 color products and 20,970 lighting evaluations.
+It also bounded the untraced float16 rounding of the light vector at one level.
+See the [lighting record](../native/reproduction/bch-lighting/README.txt).

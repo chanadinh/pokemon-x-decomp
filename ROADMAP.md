@@ -35,8 +35,8 @@ textured mode. A field inspector now follows an original-code-backed zone/matrix
 selection and loads region terrain/collision data, with an explicitly restricted
 inspection marker. The field's BCH environment model now has a native wireframe
 an unlit stage-0 textured preview and a six-stage combiner preview with vertex
-colors; lighting, the vertex shader, projection and scene integration are still
-missing.
+colors, and directional fragment lighting from the scene environment; the
+vertex shader, point lights, projection and scene integration are still missing.
 Game-runtime integration, full material/scene rendering,
 player movement/collision, the interactive
 battle loop, and playable save/load are still missing.
@@ -124,11 +124,16 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    colors, matching an independent oracle of the pinned emulator behavior on
    116,000 evaluations; see [combiner evidence](native/reproduction/bch-combiners/README.txt).
    For this field the projected term and fragment secondary cannot change the
-   output under the stored constants, so fragment lighting and the vertex
-   shader's primary color are the remaining material inputs.
-   Next establish the light sets and fragment lighting, the vertex shader output,
-   projected textures with a camera, the original primitive state, culling and
-   camera conventions, and integrate the field scene. Establish actual player entry and terrain collision consumers.
+   output under the stored constants.
+   The field's lights come from the scene environment in `a/0/0/3` entry 137.
+   The viewer applies each material's light set as directional diffuse and
+   ambient lighting, using the light-vector sign and color products traced in
+   the original code; an independent oracle matches it. See
+   [lighting evidence](native/reproduction/bch-lighting/README.txt).
+   Next trace the environment's binding to the field and the day/night
+   selection, then execute the vertex shader (normal quaternion, primary color),
+   point lights, projected textures with a camera, fog, the original primitive
+   state, culling and camera conventions, and integrate the field scene. Establish actual player entry and terrain collision consumers.
    Capture the corresponding reference scenario.
 5. Connect explicit game-state/platform interfaces to the native application,
    then implement movement/collision, interaction, battle, return to the field,

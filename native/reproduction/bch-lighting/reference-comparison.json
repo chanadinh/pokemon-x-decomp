@@ -1,0 +1,935 @@
+{
+  "field_bch_sha256": "cb131a9590850d604b30aa558b7c55fba6fff654b2f6dd05c823af5ecbc16ccd",
+  "environment_bch_sha256": "fdd7377e833eb3a61db353e800ffb72c79594f5f71118f5beb7915d235f7d303",
+  "code_bin_sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a",
+  "verifier_sha256": "f3b7373eca07afe4fadb09052429d7f90ea2689fccb44c5bc9705d5e98e3fb4b",
+  "bridge_source_sha256": "8176c3946893054a29426d8ec310067393253316d014de3a49ecb4df39b49661",
+  "references": {
+    "spica": {
+      "repository": "https://github.com/gdkchan/SPICA",
+      "commit": "bd29a7828595d7839cda2ac61c76bb63f9071250",
+      "files": {
+        "SPICA/Formats/CtrH3D/Light/H3DLight.cs": "671b41659edaf0e5338952028661610ed151319cbbd7845b274ae3cf4a561d5b",
+        "SPICA/Formats/CtrH3D/Light/H3DFragmentLight.cs": "469128cd7dcd00996977ba398e10704023460b3db0663a35631709fd3299feb7",
+        "SPICA/Formats/CtrH3D/Light/H3DLightFlags.cs": "97d49f52e8b2031720b8d80fb7976964ac5ce898fa17637a66b9cc2df0968bf2",
+        "SPICA/Formats/CtrH3D/Light/H3DLightType.cs": "56860f1fdea63ea0b4d84c7cddfcb1144a2656d89c7d84a14113a26ba654aebe",
+        "SPICA/Formats/CtrH3D/Model/Material/H3DMaterialParams.cs": "1952ab4144a57702a793124ebdf29e2b4fd38f68bacdfe70083251ad997a5b04",
+        "SPICA/Formats/CtrH3D/Model/Material/H3DMaterialFlags.cs": "b83d2d981c22343bbd0a7a352afebcfe1f8522a0d94a3c353580df9b65425848",
+        "SPICA.Rendering/Light.cs": "e3a92317e1dd07d11cd535a2c5a98916a0716b739334a55e53a77bd15b672135"
+      },
+      "hash_checked": true
+    },
+    "ohana": {
+      "repository": "https://github.com/gdkchan/Ohana3DS-Rebirth",
+      "commit": "c50635e82763fad9d1bcc30a905523a1b92d7d1f",
+      "files": {
+        "Ohana3DS Rebirth/Ohana/Models/BCH.cs": "92b40467a01c9d1fde9d0809760d962378906da0ee9bbb166b39c1b8c3c3ae66"
+      },
+      "hash_checked": true
+    },
+    "azahar": {
+      "repository": "https://github.com/azahar-emu/azahar",
+      "commit": "1b5fd00964115d9959cbc2ca395c89f0b590d03a",
+      "files": {
+        "src/video_core/renderer_software/sw_lighting.cpp": "afaad68f3e6ed5d1524f45621cd634c64267085ebc340c6cb112cc76b66fdbb3",
+        "src/video_core/pica/regs_lighting.h": "fa7f2e05af15fd74f313e6223ef742cc112fd702f6762353bbe4fa9bdcd4e8ce"
+      },
+      "hash_checked": true
+    }
+  },
+  "environment": {
+    "scene": "scene_environment_field",
+    "lights": 16,
+    "sets": 12,
+    "set_entries": 20,
+    "ohana_8_byte_reading_valid": false,
+    "light_summary": [
+      {
+        "name": "light_night",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          61,
+          71,
+          107,
+          255
+        ],
+        "diffuse": [
+          89,
+          158,
+          112,
+          255
+        ],
+        "direction": [
+          0.0,
+          -0.996815,
+          0.079745
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_sun",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          199,
+          208,
+          226,
+          255
+        ],
+        "diffuse": [
+          79,
+          104,
+          98,
+          255
+        ],
+        "direction": [
+          0.0,
+          -0.996815,
+          0.079745
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_cloud_point_a",
+        "type": 10,
+        "enabled": 1,
+        "flags": 2,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_cloud_point_b",
+        "type": 10,
+        "enabled": 1,
+        "flags": 2,
+        "ambient": [
+          178,
+          178,
+          178,
+          255
+        ],
+        "diffuse": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_point_a",
+        "type": 10,
+        "enabled": 1,
+        "flags": 2,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_window",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          255,
+          229,
+          128,
+          255
+        ],
+        "diffuse": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_character",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "diffuse": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_point_b",
+        "type": 10,
+        "enabled": 1,
+        "flags": 2,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          0,
+          3,
+          0,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_particle",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_poke_1",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_poke_2",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_poke_3",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_poke_4",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_poke_5",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_poke_6",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      },
+      {
+        "name": "light_eff_obj",
+        "type": 9,
+        "enabled": 1,
+        "flags": 0,
+        "ambient": [
+          0,
+          0,
+          0,
+          255
+        ],
+        "diffuse": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "direction": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "identity_transform": true
+      }
+    ],
+    "set_names": {
+      "0": [
+        "light_sun",
+        "light_night",
+        "light_point_a",
+        "light_point_b"
+      ],
+      "1": [
+        "light_window"
+      ],
+      "2": [
+        "light_character",
+        "light_point_a",
+        "light_point_b"
+      ],
+      "3": [
+        "light_particle",
+        "light_point_a",
+        "light_point_b"
+      ],
+      "4": [
+        "light_cloud_point_a",
+        "light_cloud_point_b"
+      ],
+      "5": [
+        "light_poke_1"
+      ],
+      "6": [
+        "light_poke_2"
+      ],
+      "7": [
+        "light_poke_3"
+      ],
+      "8": [
+        "light_poke_4"
+      ],
+      "9": [
+        "light_poke_5"
+      ],
+      "10": [
+        "light_poke_6"
+      ],
+      "11": [
+        "light_eff_obj"
+      ]
+    }
+  },
+  "field": {
+    "materials": 12,
+    "normal_components": 7068,
+    "normal_sources": [
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2
+    ],
+    "material_lighting": [
+      {
+        "flags": 1,
+        "fragment_flags": 0,
+        "light_set": 1,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 1,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 1,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 1,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 1,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 1,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 17,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 17,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 1,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 17,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 17,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      },
+      {
+        "flags": 17,
+        "fragment_flags": 0,
+        "light_set": 0,
+        "fog": 0,
+        "lut_samplers": 0,
+        "fresnel": 0,
+        "bump": 0,
+        "emission_ambient_diffuse": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255,
+            255
+          ]
+        ]
+      }
+    ]
+  },
+  "code_words_checked": 44,
+  "register_products": 65536,
+  "lighting_oracle": {
+    "random_cases": 20000,
+    "field_cases": 970,
+    "invalid_cases": 394,
+    "all_match": true
+  },
+  "float16_bound": {
+    "day": {
+      "rotations": 200,
+      "comparisons": 97000,
+      "max_byte_difference": 1
+    },
+    "night": {
+      "rotations": 200,
+      "comparisons": 97000,
+      "max_byte_difference": 1
+    }
+  },
+  "viewer": {
+    "day": {
+      "capture_sha256": "1dc1e452a7af26ed4b78f76e2a59870921a0370f6a5a24947626f023145a243a",
+      "sensitivity": [
+        "combiner_sensitivity material=0 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=1 frame=1 fragments=150 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=2 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=3 frame=1 fragments=107 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=74 point_bound_max_delta=3 degenerate_normals=0",
+        "combiner_sensitivity material=4 frame=1 fragments=3957 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=2759 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=5 frame=1 fragments=2454 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=1395 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=6 frame=1 fragments=8463 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=7 frame=1 fragments=21118 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=8 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=9 frame=1 fragments=11599 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=3171 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=10 frame=1 fragments=55313 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=51406 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=11 frame=1 fragments=44125 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=7089 point_bound_max_delta=2 degenerate_normals=0"
+      ],
+      "light_setups_match_oracle": true
+    },
+    "night": {
+      "capture_sha256": "640c936ad1020f50559e6d03eeaf90867db7a770ce68f7f3fe735701594400fe",
+      "sensitivity": [
+        "combiner_sensitivity material=0 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=1 frame=1 fragments=150 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=150 point_bound_max_delta=1 degenerate_normals=0",
+        "combiner_sensitivity material=2 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=3 frame=1 fragments=107 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=105 point_bound_max_delta=3 degenerate_normals=0",
+        "combiner_sensitivity material=4 frame=1 fragments=3957 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=3957 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=5 frame=1 fragments=2454 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=2386 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=6 frame=1 fragments=8463 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=8463 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=7 frame=1 fragments=21118 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=21077 point_bound_max_delta=3 degenerate_normals=0",
+        "combiner_sensitivity material=8 frame=1 fragments=0 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=0 point_bound_max_delta=0 degenerate_normals=0",
+        "combiner_sensitivity material=9 frame=1 fragments=11599 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=3871 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=10 frame=1 fragments=55313 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=51321 point_bound_max_delta=4 degenerate_normals=0",
+        "combiner_sensitivity material=11 frame=1 fragments=44125 projected_substitute_sensitive=0 secondary_sensitive=0 point_bound_sensitive=12333 point_bound_max_delta=2 degenerate_normals=0"
+      ],
+      "light_setups_match_oracle": true
+    }
+  },
+  "light_setups": {
+    "day": [
+      "light_setup material=0 set=1 global_ambient=0,0,0 point_bound=0,0,0 light=\"light_window\":ambient=255,229,128:diffuse=0,0,0:vector=0,1,0",
+      "light_setup material=1 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=2 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=3 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=4 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=5 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=6 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=7 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=8 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=9 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=10 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=11 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_sun\":ambient=199,208,226:diffuse=79,104,98:vector=0,0.996815264,-0.0797452182"
+    ],
+    "night": [
+      "light_setup material=0 set=1 global_ambient=0,0,0 point_bound=0,0,0 light=\"light_window\":ambient=255,229,128:diffuse=0,0,0:vector=0,1,0",
+      "light_setup material=1 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=2 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=3 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=4 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=5 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=6 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=7 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=8 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=9 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=10 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182",
+      "light_setup material=11 set=0 global_ambient=0,0,0 point_bound=0,3,0 light=\"light_night\":ambient=61,71,107:diffuse=89,158,112:vector=0,0.996815264,-0.0797452182"
+    ]
+  }
+}

@@ -370,3 +370,30 @@ shaded fragments would change if the projected substitute or the fragment
 secondary color took its other extreme. For field 165 both counts are zero; every
 chain still multiplies by the unexecuted lighting color. See the
 [combiner record](reproduction/bch-combiners/README.txt).
+
+## Light the BCH field
+
+Add the environment options to the `--combiners` command to execute directional
+fragment lighting:
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured --combiners \
+  --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11 \
+  --environment-archive a/0/0/3 --environment-entry 137 --environment-section 0 \
+  --lighting day
+```
+
+`--environment-archive`/`--environment-entry` (with optional
+`--environment-subentry`, `--environment-section` and `--scene`) load a BCH
+environment through the same bounded path; `--section` options also accept BM
+minipacks. Each material's light set is resolved by index. Its enabled
+directional lights are evaluated per fragment, with the model's normals
+interpolated and renormalized; the light vector is the negated direction and
+each light color is multiplied by the material color, both as the original code
+does. Point and spot lights are not executed: `--inspect` prints their per-channel
+bound, and the sensitivity line reports how much the final color could change.
+`--lighting day` (the default) omits `light_night`; `night` omits `light_sun`.
+Materials without fragment lighting, Fresnel/bump use, ambient lights, missing
+normals or light sets fail before a window opens. See the
+[lighting record](reproduction/bch-lighting/README.txt).

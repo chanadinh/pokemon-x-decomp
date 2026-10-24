@@ -1,0 +1,104 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "102a317c446c294a30f4228acf01fe267ebf9e98",
+  "result": "passed",
+  "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; local WSL host and native Windows untested",
+  "tested_source_sha256": {
+    "Makefile": "a643007b51c380aff492d7a72ca476e4766dac2bed0a0718cb8fbd05c63e4109",
+    "assets/bch_model.c": "c2c41ee48648a2e622f5d51ab8c375e9b756928fb0890bb58c73ee84d44dc35c",
+    "assets/bch_model.h": "b7fbb136118d078c32b257388ac7a0dd0b1e96552d4d03de71843d5aab5f2ea0",
+    "assets/test_bch_model.c": "acda30521dd0a7c182628014eaa1db3459d2445f448b1369c1dd70f3bfea4599",
+    "model_app.c": "6791d2b52851bde73e76854deeeaf08a811a1752cd7e0afc69789a80d1fbc4fe",
+    "render/raster.c": "ef238560a56bfc7b32b426ee18d78ab32968c0ce3560e4ae867cf883cf4cb9bf",
+    "render/raster.h": "9968f676276df85e38cde1275b415cb896d89cced4de10895076f9e8657b8797",
+    "render/test_raster.c": "4d51e7b6f4a654af4096512c5495ef6e17df1e3a2602276262c9bf49231131d2",
+    "assets/bch_scene.h": "67bc21862c282b13dc81a73f5d0fdf4863ba97790247c275357d1e456958e1a4",
+    "assets/test_bch_scene.c": "ba50cff3b72cb38589999628b0f15d4f4eda01881b5cdbd62b418b84b27e4cfa",
+    "render/light.c": "631282ddbd970ff4236ef4e4988e5fd2cb20c4038035df89f9c13893fb12ca03",
+    "render/light.h": "d92263fe9c9e888860d1fe15a2e91076cbc2b0fc01ba291d94f779b5fa4cc743",
+    "render/test_light.c": "12b9ec5e736be6a0febb7965869861d6a9cf94b8c6365d82cf5b35ff7fe00847",
+    "tests/test_bch_lighting_viewer.py": "5bb074432fa6a7637071ca7e30eefe2a8dfc5f749954841cf8123642aab5b736",
+    "reproduction/bch-lighting/dump_lighting.c": "8176c3946893054a29426d8ec310067393253316d014de3a49ecb4df39b49661",
+    "reproduction/bch-lighting/verify_lighting.py": "f3b7373eca07afe4fadb09052429d7f90ea2689fccb44c5bc9705d5e98e3fb4b"
+  },
+  "checks": [
+    {
+      "command": "make -C native clean && make -C native all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 16,
+      "python_core_tests": {
+        "container": 8,
+        "bch_index_and_gr": 12,
+        "pica_commands": 12,
+        "bch_model": 11
+      },
+      "python_runtime_tests": {
+        "texture_viewer": 7,
+        "bch_texture_viewer": 6,
+        "model_viewer": 10,
+        "bch_model_viewer": 9,
+        "bch_textured_viewer": 5,
+        "bch_combiner_viewer": 4,
+        "bch_lighting_viewer": 2,
+        "field_viewer": 9
+      }
+    },
+    {
+      "command": "make -C reconstructed test",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "result": "passed",
+      "tests": 38,
+      "skipped": 2
+    },
+    {
+      "command": "ASan/UBSan (-fno-sanitize-recover=all), ASAN_OPTIONS=detect_leaks=1: BCH scene, BCH model, light and raster C suites; the bridge on both environment sections and the field; sanitized model viewer under the lighting, combiner, textured, BCH-model and model viewer suites; real-input day and night runs",
+      "result": "passed; no sanitizer or leak diagnostics; sanitized captures byte-identical"
+    },
+    {
+      "command": "SHA-256 comparison against reconstructed/*/SHA256SUMS and the previous native reproduction/ entries; stage-0 and combiner capture regressions",
+      "result": "all 539 checkpoint files and all 78 earlier native reproduction files unchanged; both earlier captures byte-identical from the real archives"
+    },
+    {
+      "command": "native/reproduction/bch-lighting/verify_lighting.py with hash-pinned field, environment section and code.bin, and hash-checked SPICA, Ohana3DS and Azahar references",
+      "result": "passed",
+      "lights": 16,
+      "light_sets": 12,
+      "set_entries": 20,
+      "materials": 12,
+      "normal_components": 7068,
+      "code_words": 44,
+      "register_products": 65536,
+      "random_lighting_cases": 20000,
+      "field_lighting_cases": 970,
+      "invalid_cases_agreeing": 394,
+      "float16_bound_max_levels": 1,
+      "float16_comparisons": 194000,
+      "runtime_capture_sha256": {
+        "day": "1dc1e452a7af26ed4b78f76e2a59870921a0370f6a5a24947626f023145a243a",
+        "night": "640c936ad1020f50559e6d03eeaf90867db7a770ce68f7f3fe735701594400fe"
+      },
+      "input_path": "real RomFS archive paths a/0/4/1, a/0/1/3 and a/0/0/3 staged from the local extraction",
+      "report": "reference-comparison.json",
+      "report_sha256": "2421408ac818d12d9339a68b17138b2956eb7267149e432dcce162e88e557301"
+    }
+  ],
+  "scope": [
+    "BCH environment lights (category 5) and scene light sets (category 14)",
+    "Stored and fixed normals; material lighting parameters",
+    "Directional diffuse and ambient fragment lighting following pinned emulator behavior, with the light-vector sign and color products traced in code.bin",
+    "Rasterizer varyings; --environment/--lighting viewer options; point/spot bounds; BM minipack sections"
+  ],
+  "limitations": [
+    "Arithmetic matches an emulator reference, not measured hardware",
+    "Vertex shader not executed; normals interpolated and renormalized instead of a normal quaternion",
+    "Point and spot lights bounded, not executed; specular and fragment secondary not computed",
+    "Runtime day/night selection and the environment-to-field binding not traced; the light object's +0x17c direction derivation not traced (identity transforms make it immaterial here)",
+    "Float16 rounding of the view-space light vector not modeled (bounded at one level)",
+    "Fog, projected textures, culling, primitive state, camera and depth mapping not executed",
+    "No running-game visual comparison; native Windows build not verified"
+  ],
+  "logs_sha256": "46d477cb7d445e35a433ef848c96a9c51d203fae2bc8c7f5f0214f3a2c5e1562"
+}

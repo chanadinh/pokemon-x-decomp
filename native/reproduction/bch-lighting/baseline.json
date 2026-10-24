@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "102a317c446c294a30f4228acf01fe267ebf9e98",
+  "previous_native_sha256sums": {
+    "entries": 140,
+    "sha256": "0356e44da865b7621fc443787988b152dc4ca99112f208517580f623f5d50a45"
+  },
+  "immutable_reproduction_records": "All 78 reproduction/ entries of the previous native/SHA256SUMS were rechecked unchanged.",
+  "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+  "capture_regressions": "From the real archive paths, the ../bch-textured stage-0 command still produces sha256 2d9052489e155fb0ce60e7c75a2fb810682e3d0a8dae319d94284355f5ef0951 and the ../bch-combiners command bb9e433dcd1467bb2de978c28236b88590f324560310aa602c569bfc4ec6f0c4 (both recorded earlier from single-member wrappers).",
+  "changed_native_sources": [
+    "Makefile",
+    "README.md",
+    "assets/bch_model.c",
+    "assets/bch_model.h",
+    "assets/test_bch_model.c",
+    "model_app.c",
+    "render/raster.c",
+    "render/raster.h",
+    "render/test_raster.c"
+  ],
+  "added_native_files": [
+    "assets/bch_scene.h",
+    "assets/test_bch_scene.c",
+    "render/light.c",
+    "render/light.h",
+    "render/test_light.c",
+    "tests/test_bch_lighting_viewer.py",
+    "reproduction/bch-lighting/README.txt",
+    "reproduction/bch-lighting/baseline.json",
+    "reproduction/bch-lighting/dump_lighting.c",
+    "reproduction/bch-lighting/reference-comparison.json",
+    "reproduction/bch-lighting/validation.json",
+    "reproduction/bch-lighting/validation.txt",
+    "reproduction/bch-lighting/verify_lighting.py"
+  ]
+}

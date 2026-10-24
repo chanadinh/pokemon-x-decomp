@@ -64,7 +64,22 @@ preview reads. With `--combiners` the viewer runs all six combiner stages and th
 model's baked vertex colors, checked against an independent oracle on 116,000
 evaluations. [See the textured field preview →](docs/native-bch.md#native-textured-preview)
 
-The textured previews do not reproduce the game's complete shaders or lighting.
+<table>
+  <tr>
+    <td width="50%"><a href="docs/native-bch.md#directional-fragment-lighting"><img src="docs/images/native-bch-lighting-day.png" alt="Field 165 lit by the game's daytime sun light" width="440"></a></td>
+    <td width="50%"><a href="docs/native-bch.md#directional-fragment-lighting"><img src="docs/images/native-bch-lighting-night.png" alt="Field 165 lit by the game's night light" width="440"></a></td>
+  </tr>
+</table>
+
+**The room is lit by its own lights.** The field's sun and night lights live in a
+separate scene environment, which the viewer now decodes and applies. Two
+conventions come from the original executable: the sign of the light direction,
+and how light and material colors combine. The lighting matches an independent
+oracle on 20,970 evaluations.
+[See day and night lighting →](docs/native-bch.md#directional-fragment-lighting)
+
+The previews do not reproduce the game's complete shaders: the vertex shader,
+point lights, fog and projected textures are still missing.
 The terrain image records an earlier milestone; its footer predates the separate
 BCH wireframe viewer shown above. The marker is an inspection tool, not a player
 character. [Capture provenance and validation](docs/images/README.md) identify the
@@ -127,7 +142,9 @@ native/build/pokemon_model_viewer --romfs /path/to/romfs \
 native/build/pokemon_model_viewer --romfs /path/to/romfs \
   --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured \
   --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11
-# Add --combiners for all six combiner stages with baked vertex colors
+# Add --combiners for all six combiner stages with baked vertex colors, then
+# --environment-archive a/0/0/3 --environment-entry 137 --environment-section 0
+# for directional lighting (--lighting day|night)
 
 # List the selected area's 19 BCH textures
 native/build/pokemon_asset_viewer --romfs /path/to/romfs \
@@ -162,7 +179,8 @@ recovered original source or builds that match the original machine code.
 <details>
 <summary><strong>What the validation establishes</strong></summary>
 
-- The latest native milestone passes **14 C suites, 43 inspector tests and 50 viewer runtime tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the combiner evaluator, BCH readers and textured viewer.
+- The latest native milestone passes **16 C suites, 43 inspector tests and 52 viewer runtime tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the lighting and combiner evaluators, BCH readers and viewer.
+- The field's **16 environment lights, 12 light sets and 7,068 normal components** match an independent parser. The lighting evaluator matches an independent float32 oracle of the pinned emulator behavior on **20,970** evaluations, and **44** original-code words back its sign and color conventions.
 - The six-stage combiner evaluator matches an independent oracle of the pinned emulator behavior on **116,000** evaluations, and **2,356** decoded vertex colors match bit for bit.
 - The selected field's **12 material bindings and 432 register observations** match an independent parser that follows pinned CTRMap register layouts.
 - The selected area's **100,608 texture pixels** match an independent decoder and separately implemented alpha/tile reconstruction.
@@ -181,7 +199,7 @@ not a completion percentage.
 
 The next step is to connect these tested pieces into a game scene:
 
-- **Complete the field renderer:** add fragment lighting, the vertex shader's color output and projected textures; establish original primitive state, culling and camera; integrate the scene.
+- **Complete the field renderer:** add the vertex shader's outputs, point lights and the day/night selection, fog and projected textures; establish original primitive state, culling and camera; integrate the scene.
 - **Connect the player:** reconstruct entry, movement, collision and interaction behavior.
 - **Finish the gameplay loop:** replace remaining resource stand-ins, connect battle and return-to-field behavior, and implement save/load.
 - **Compare against the original:** capture a repeatable reference scenario and check behavior at each boundary.
