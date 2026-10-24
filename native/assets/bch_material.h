@@ -2,6 +2,7 @@
 #define PX_BCH_MATERIAL_H
 
 #include "bch_model.h"
+#include "../render/tev.h"
 
 /* A bounded, unlit preview interpretation of one decoded BCH material.
  *
@@ -45,6 +46,33 @@ struct px_bch_preview_material {
     enum px_bch_preview_blend blend;
     uint32_t unexecuted_units; /* enabled units other than the sampled unit */
 };
+
+/* Fragment-operation state shared by both interpretations. */
+struct px_bch_fragment_preview {
+    uint32_t alpha_test, alpha_compare, alpha_reference;
+    uint32_t depth_test, depth_compare, depth_write, color_write_mask;
+    uint32_t cull; /* register 0x40 bits 0..1, metadata only */
+    enum px_bch_preview_blend blend;
+};
+
+/* Full six-stage combiner interpretation (tev.h arithmetic). Every stage
+ * register, the buffer color 0xfd and update bits 8..15 of 0xe0 must be
+ * fully known and px_tev_valid. A unit the chain reads while it is disabled
+ * in register 0x80 becomes disabled_units: its input is (0,0,0,0), as in the
+ * pinned emulator reference. Enabled units the chain reads must be named;
+ * ordinary identity-UV units become sampled_units (with
+ * the same sampler subset as below); projection-mapped units (mode 3) become
+ * projected_units, which are NOT executed: the caller must supply a declared
+ * substitute and should measure sensitivity. Texture 3 and other mapping
+ * modes reject. sources is px_tev_sources of the chain. */
+struct px_bch_combiner_material {
+    struct px_tev_config tev;
+    uint32_t sources, sampled_units, projected_units, disabled_units;
+    uint32_t wrap_u[3], wrap_v[3], mag_linear[3], min_linear[3];
+    struct px_bch_fragment_preview fragment;
+};
+enum px_bch_material_result px_bch_material_combiners(
+    const struct px_bch_material *material, struct px_bch_combiner_material *out);
 
 /* Fails without partial output when any required register byte is unknown or
  * any state lies outside the subset above. The selected unit must be enabled,

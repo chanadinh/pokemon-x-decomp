@@ -31,6 +31,11 @@ struct commands {
     unsigned uniform_mask, primitive_writes;
     uint32_t draw_primitive_value, draw_primitive_known_mask;
     uint32_t draw_count, last_draw_offset;
+    /* Fixed (default) attribute uploads: index register 0x232, then three
+     * data words per attribute through 0x233..0x235; the index advances
+     * after each complete attribute, as in the pinned emulator reference. */
+    uint32_t fixed_words[12][3];
+    unsigned fixed_known, fixed_index, fixed_count, fixed_index_set;
 };
 static uint16_t u16(const uint8_t *p)
 {
@@ -234,6 +239,21 @@ static int read_commands(struct reader *r, size_t field, struct commands *out)
                 out->draw_primitive_known_mask = out->known[0x25e];
                 out->last_draw_offset = (uint32_t)source;
             }
+            if (target == 0x232) {
+                if (mask != UINT32_MAX || (value & 15) >= 12) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+                out->fixed_index = value & 15;
+                out->fixed_count = 0;
+                out->fixed_index_set = 1;
+            } else if (target >= 0x233 && target <= 0x235) {
+                if (mask != UINT32_MAX || !out->fixed_index_set || out->fixed_index >= 12)
+                    return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+                out->fixed_words[out->fixed_index][out->fixed_count++] = value;
+                if (out->fixed_count == 3) {
+                    out->fixed_known |= 1u << out->fixed_index;
+                    ++out->fixed_index;
+                    out->fixed_count = 0;
+                }
+            }
             if (target == 0x2c0) {
                 if (mask != UINT32_MAX || !(value & UINT32_C(0x80000000)))
                     return fail(r, PX_BCH_MODEL_UNSUPPORTED);
@@ -317,6 +337,7 @@ static int read_parameters(struct reader *r, size_t params, struct px_bch_materi
     observe(&fragment, 0x104, &f->alpha_test);
     observe(&fragment, 0x107, &f->depth_color);
     observe(&fragment, 0xe0, &f->tev_buffer);
+    observe(&fragment, 0xfd, &f->buffer_color);
     static const unsigned stages[6] = {0xc0, 0xc8, 0xd0, 0xd8, 0xf0, 0xf8};
     for (unsigned stage = 0; stage < 6; ++stage)
         for (unsigned j = 0; j < 5; ++j) observe(&fragment, stages[stage] + j, &f->tev[stage][j]);
@@ -362,7 +383,24 @@ static int read_materials(struct reader *r, size_t model, struct px_bch_model *o
     }
     return 1;
 }
+/* PICA float24: sign bit 23, exponent bits 16..22 (bias 63), mantissa 0..15.
+ * Exponent 127 (infinity/NaN) is rejected; subnormals keep their exact value. */
+static int float24(uint32_t bits, double *out)
+{
+    const unsigned exponent = (bits >> 16) & 127;
+    const double mantissa = bits & 0xffff;
+    if (exponent == 127) return 0;
+    const double magnitude = exponent ? ldexp(1 + mantissa / 65536, (int)exponent - 63)
+                                      : ldexp(mantissa / 65536, -62);
+    *out = (bits & 0x800000) ? -magnitude : magnitude;
+    return 1;
+}
 struct attribute { unsigned semantic, kind, elements, offset; float scale; };
+static int semantics_stored_color(const struct attribute *attributes, unsigned stored)
+{
+    for (unsigned j = 0; j < stored; ++j) if (attributes[j].semantic == 3) return 1;
+    return 0;
+}
 static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
                      size_t visibility, struct px_bch_model *out, struct px_bch_mesh *mesh)
 {
@@ -475,11 +513,24 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
         byte += width * elements;
     }
     if (byte > stride || !(semantics & 1)) return 0;
+    double fixed_color[4] = {1, 1, 1, 1};
     for (unsigned slot = 0; slot < total; ++slot) if (fixed & (1u << slot)) {
         const unsigned semantic = (unsigned)(permutation >> (slot * 4)) & 15;
         if (semantic > 6 || semantic == 0 || semantic == 4 || (semantics & (1u << semantic)))
             return fail(r, PX_BCH_MODEL_UNSUPPORTED);
         semantics |= 1u << semantic;
+        if (semantic != 3) continue;
+        if (!(enable.fixed_known & (1u << slot))) return 0;
+        const uint32_t *w = enable.fixed_words[slot];
+        const uint32_t components[4] = {
+            w[2] & 0xffffff,                               /* x: red */
+            ((w[1] & 0xffff) << 8) | (w[2] >> 24),         /* y: green */
+            ((w[0] & 0xff) << 16) | (w[1] >> 16),          /* z: blue */
+            w[0] >> 8                                      /* w: alpha */
+        };
+        for (unsigned c = 0; c < 4; ++c)
+            if (!float24(components[c], &fixed_color[c]) || !bounded(fixed_color[c])) return 0;
+        mesh->color_source = 2;
     }
     if (!(semantics & (1u << 4))) return 0;
     size_t start;
@@ -491,6 +542,13 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
     allocation = grow(r, out->uvs, (size_t)new_count * 2, sizeof *out->uvs);
     if (allocation == NULL) return 0;
     out->uvs = allocation;
+    allocation = grow(r, out->colors, (size_t)new_count * 4, sizeof *out->colors);
+    if (allocation == NULL) return 0;
+    out->colors = allocation;
+    if (semantics_stored_color(attributes, stored)) mesh->color_source = 1;
+    for (uint32_t vertex = 0; vertex < mesh->vertex_count; ++vertex)
+        for (unsigned c = 0; c < 4; ++c)
+            out->colors[((size_t)mesh->first_vertex + vertex) * 4 + c] = (float)fixed_color[c];
     for (uint32_t vertex = 0; vertex < mesh->vertex_count; ++vertex) {
         for (unsigned j = 0; j < stored; ++j) {
             const struct attribute *attr = attributes + j;
@@ -515,6 +573,8 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
                     if (!vertex || number > mesh->bounds_max[component]) mesh->bounds_max[component] = number;
                 } else if (attr->semantic == 4) {
                     out->uvs[((size_t)mesh->first_vertex + vertex) * 2 + component] = (float)decoded;
+                } else if (attr->semantic == 3) {
+                    out->colors[((size_t)mesh->first_vertex + vertex) * 4 + component] = (float)decoded;
                 }
             }
         }
@@ -590,7 +650,7 @@ enum px_bch_model_result px_bch_model_decode(const uint8_t *data, size_t size,
 void px_bch_model_free(struct px_bch_model *model)
 {
     if (model == NULL) return;
-    free(model->positions); free(model->uvs); free(model->indices);
+    free(model->positions); free(model->uvs); free(model->colors); free(model->indices);
     free(model->meshes); free(model->submeshes); free(model->materials);
     memset(model, 0, sizeof *model);
 }

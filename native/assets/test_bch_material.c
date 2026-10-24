@@ -145,8 +145,64 @@ static void test_rejections(void)
     assert(strcmp(px_bch_material_result_string((enum px_bch_material_result)99),
                   "unknown BCH material result") == 0);
 }
+static struct px_bch_material full_chain(void)
+{
+    struct px_bch_material m = projected();
+    for (unsigned i = 1; i < 6; ++i) {
+        m.fragment.tev[i][0] = full(0x0fff0fff);
+        for (unsigned j = 1; j < 5; ++j) m.fragment.tev[i][j] = full(0);
+    }
+    m.fragment.tev[0][3] = full(0xff000000);
+    /* Stage 1 also reads texture 0 (projected) and texture 2 (disabled). */
+    m.fragment.tev[1][0] = full(0x0f530f53);
+    m.fragment.tev[1][2] = full(0x00020002);
+    m.fragment.tev_buffer = full(0x00000800);
+    m.fragment.buffer_color = full(0x11223344);
+    return m;
+}
+static void test_combiner_chain(void)
+{
+    struct px_bch_material m = full_chain();
+    struct px_bch_combiner_material out;
+    assert(px_bch_material_combiners(&m, &out) == PX_BCH_MATERIAL_OK);
+    assert(out.sampled_units == 2 && out.projected_units == 1 && out.disabled_units == 4);
+    assert(out.wrap_u[1] == 2 && out.wrap_v[1] == 2 && !out.mag_linear[1]);
+    assert(out.tev.buffer_update == 0x800 && out.tev.buffer_color == 0x11223344);
+    assert(out.tev.stages[1].source == 0x0f530f53 && out.tev.stages[0].combine == 0x00010001);
+    assert(out.sources & (1u << PX_TEV_TEXTURE2));
+    assert(out.fragment.blend == PX_BCH_BLEND_REPLACE && out.fragment.cull == 2);
+    struct px_bch_combiner_material empty;
+    memset(&empty, 0, sizeof empty);
+#define REJECT(mutation, code) do { struct px_bch_material x = full_chain(); mutation; \
+        memset(&out, 0xff, sizeof out); \
+        assert(px_bch_material_combiners(&x, &out) == (code)); \
+        assert(memcmp(&out, &empty, sizeof out) == 0); } while (0)
+    REJECT(x.parameters_present = 0, PX_BCH_MATERIAL_NO_PARAMETERS);
+    REJECT(x.fragment.tev[5][4].known_mask = 0, PX_BCH_MATERIAL_UNKNOWN_STATE);
+    REJECT(x.fragment.tev[2][3].known_mask = 0xffffff, PX_BCH_MATERIAL_UNKNOWN_STATE);
+    REJECT(x.fragment.buffer_color.known_mask = 0, PX_BCH_MATERIAL_UNKNOWN_STATE);
+    REJECT(x.fragment.tev_buffer.known_mask = 0xff, PX_BCH_MATERIAL_UNKNOWN_STATE);
+    REJECT(x.fragment.tev[3][0] = full(0x0fff0ff7), PX_BCH_MATERIAL_UNSUPPORTED_COMBINER);
+    REJECT(x.fragment.tev[3][0] = full(0x0fff0ff6), PX_BCH_MATERIAL_UNSUPPORTED_COMBINER);
+    REJECT(x.texture_names[1].present = 0, PX_BCH_MATERIAL_UNSUPPORTED_COMBINER);
+    REJECT(x.coordinators[0].packed = 0x00010001, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);
+    REJECT(x.coordinators[1].translation[0] = .5f, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);
+    REJECT(x.unit_parameters[1] = full(0x1220), PX_BCH_MATERIAL_UNSUPPORTED_SAMPLER);
+    REJECT(x.unit_parameters[1].known_mask = 0, PX_BCH_MATERIAL_UNKNOWN_STATE);
+    REJECT(x.fragment.color_operation = full(0), PX_BCH_MATERIAL_UNSUPPORTED_FRAGMENT);
+    REJECT(x.fragment.depth_color.known_mask = 0xff, PX_BCH_MATERIAL_UNKNOWN_STATE);
+#undef REJECT
+    /* A projected unit needs no sampler of its own; unread units are ignored. */
+    m = full_chain();
+    m.unit_parameters[0].known_mask = 0;
+    m.unit_parameters[2] = full(0x1000);
+    assert(px_bch_material_combiners(&m, &out) == PX_BCH_MATERIAL_OK);
+    assert(px_bch_material_combiners(NULL, &out) == PX_BCH_MATERIAL_INVALID_ARGUMENT);
+    assert(px_bch_material_combiners(&m, NULL) == PX_BCH_MATERIAL_INVALID_ARGUMENT);
+}
 int main(void)
 {
+    test_combiner_chain();
     test_ordinary_state();
     test_stage_zero_selects_projected_base_unit();
     test_rejections();

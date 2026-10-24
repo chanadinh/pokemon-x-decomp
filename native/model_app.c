@@ -21,7 +21,7 @@ struct options {
     uint32_t entry, subentry, model, frames, section;
     uint32_t texture_entry, texture_subentry, texture_section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
-    int have_section, triangle_list;
+    int have_section, triangle_list, combiners;
     int have_texture_entry, have_texture_subentry, have_texture_section;
 };
 struct camera { double yaw, pitch, zoom; int running; };
@@ -35,7 +35,8 @@ struct model_asset {
     /* BCH textured preview: per-material interpretation and the external
      * texture index (into textures) resolved by exact name bytes. */
     struct px_bch_preview_material *bch_preview;
-    uint32_t *bch_texture;
+    struct px_bch_combiner_material *bch_combiner; /* --combiners only */
+    uint32_t *bch_texture; /* 3 per material: textures index or UINT32_MAX */
     int bch_textured;
 };
 
@@ -46,6 +47,7 @@ static void asset_free(struct model_asset *asset)
     free(asset->textures);
     free(asset->draw_order);
     free(asset->bch_preview);
+    free(asset->bch_combiner);
     free(asset->bch_texture);
     px_cgfx_scene_free(&asset->scene);
     px_cgfx_model_free(&asset->wire);
@@ -90,6 +92,7 @@ static void usage(FILE *stream, const char *program)
         "  --texture-archive RELATIVE/PATH  GARC holding the external BCH textures\n"
         "  --texture-entry N  Texture GARC entry; --texture-subentry N (default 0)\n"
         "  --texture-section N  Select an AD/GR minipack section of that entry\n"
+        "  --combiners        BCH: run all six TEV stages with declared unlit inputs\n"
         "  --inspect          Print decoded mesh metadata without a window\n"
         "  --capture-frame F  Save first viewport to a new BMP file\n"
         "  --frames N         Exit after a positive number of frames\n"
@@ -136,6 +139,7 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--self-test-input")) { o->self_test = 1; continue; }
         if (!strcmp(arg, "--textured")) { o->textured = 1; continue; }
         if (!strcmp(arg, "--triangle-list")) { o->triangle_list = 1; continue; }
+        if (!strcmp(arg, "--combiners")) { o->combiners = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
             strcmp(arg, "--subentry") && strcmp(arg, "--model") && strcmp(arg, "--frames") &&
             strcmp(arg, "--capture-frame") && strcmp(arg, "--section") &&
@@ -171,6 +175,7 @@ static int parse(int argc, char **argv, struct options *o)
     } else if (!o->romfs || !o->archive || !o->have_entry || !relative_path(o->archive)) return 0;
     const int texture_options = o->texture_archive || o->have_texture_entry ||
         o->have_texture_subentry || o->have_texture_section;
+    if (o->combiners && !texture_options) return 0;
     if (texture_options && (o->demo || !o->textured || !o->triangle_list ||
         !o->texture_archive || !o->have_texture_entry ||
         !relative_path(o->texture_archive))) return 0;
@@ -336,24 +341,40 @@ static void print_resource(const char *prefix, const char *archive, uint32_t ent
     putchar('\n');
 }
 
-static int prepare_bch_materials(struct model_asset *asset)
+/* Units whose images a material needs: the stage-0 unit, or every sampled
+ * unit of the full combiner chain. */
+static uint32_t wanted_units(const struct model_asset *asset, uint32_t material)
+{
+    return asset->bch_combiner ? asset->bch_combiner[material].sampled_units
+                               : UINT32_C(1) << asset->bch_preview[material].unit;
+}
+
+static int prepare_bch_materials(struct model_asset *asset, int combiners)
 {
     const struct px_bch_model *bch = &asset->bch;
     asset->bch_preview = calloc(bch->material_count, sizeof *asset->bch_preview);
-    asset->bch_texture = calloc(bch->material_count, sizeof *asset->bch_texture);
-    if (!asset->bch_preview || !asset->bch_texture) return 0;
+    asset->bch_texture = malloc((size_t)bch->material_count * 3 * sizeof *asset->bch_texture);
+    if (combiners) asset->bch_combiner = calloc(bch->material_count, sizeof *asset->bch_combiner);
+    if (!asset->bch_preview || !asset->bch_texture || (combiners && !asset->bch_combiner)) return 0;
+    for (size_t i = 0; i < (size_t)bch->material_count * 3; ++i) asset->bch_texture[i] = UINT32_MAX;
     for (uint32_t i = 0; i < bch->material_count; ++i) {
-        const enum px_bch_material_result status =
+        const enum px_bch_material_result status = combiners ?
+            px_bch_material_combiners(&bch->materials[i], &asset->bch_combiner[i]) :
             px_bch_material_preview(&bch->materials[i], &asset->bch_preview[i]);
         if (status != PX_BCH_MATERIAL_OK) {
             fprintf(stderr, "[model-viewer] BCH material %" PRIu32 ": %s\n", i,
                     px_bch_material_result_string(status));
             return 0;
         }
-        if (asset->bch_preview[i].mag_linear != asset->bch_preview[i].min_linear) {
+        if (!combiners && asset->bch_preview[i].mag_linear != asset->bch_preview[i].min_linear) {
             fprintf(stderr, "[model-viewer] BCH material %" PRIu32 ": distinct min/mag filters are unsupported\n", i);
             return 0;
         }
+        for (unsigned unit = 0; combiners && unit < 3; ++unit)
+            if (asset->bch_combiner[i].mag_linear[unit] != asset->bch_combiner[i].min_linear[unit]) {
+                fprintf(stderr, "[model-viewer] BCH material %" PRIu32 ": distinct min/mag filters are unsupported\n", i);
+                return 0;
+            }
     }
     /* Preview policy: ascending mesh layer, then priority; equal keys keep
      * resource order. This is not recovered game draw sorting. */
@@ -389,9 +410,10 @@ static int bind_bch_textures(const uint8_t *data, size_t size, struct model_asse
     if (!asset->textures) { result = PX_BCH_NO_MEMORY; goto failed; }
     uint64_t bytes = 0;
     const struct px_bch_model *bch = &asset->bch;
-    for (uint32_t i = 0; i < bch->material_count; ++i) {
-        const struct px_bch_name *wanted =
-            &bch->materials[i].texture_names[asset->bch_preview[i].unit];
+    for (uint32_t i = 0; i < bch->material_count; ++i)
+    for (unsigned unit = 0; unit < 3; ++unit) {
+        if (!((wanted_units(asset, i) >> unit) & 1)) continue;
+        const struct px_bch_name *wanted = &bch->materials[i].texture_names[unit];
         size_t found = SIZE_MAX;
         for (size_t j = 0; j < count; ++j) {
             const struct px_bch_texture *t = px_bch_texture(pack, j);
@@ -403,7 +425,7 @@ static int bind_bch_textures(const uint8_t *data, size_t size, struct model_asse
             found = j;
         }
         if (found == SIZE_MAX) { result = PX_BCH_NOT_FOUND; goto failed; }
-        asset->bch_texture[i] = (uint32_t)found;
+        asset->bch_texture[(size_t)i * 3 + unit] = (uint32_t)found;
         if (asset->textures[found].rgba) continue;
         const struct px_bch_texture *t = px_bch_texture(pack, found);
         result = t->decode_status;
@@ -455,7 +477,7 @@ static int decode_model(const struct options *o, const uint8_t *data, size_t siz
         memcpy(mesh->bounds_min, bch->bounds_min, sizeof mesh->bounds_min);
         memcpy(mesh->bounds_max, bch->bounds_max, sizeof mesh->bounds_max);
         memcpy(mesh->name, bch->name.bytes, bch->name.size + 1);
-        return !o->textured || prepare_bch_materials(asset);
+        return !o->textured || prepare_bch_materials(asset, o->combiners);
     }
     if (o->texture_archive) {
         fprintf(stderr, "[model-viewer] --texture-archive requires BCH model input.\n");
@@ -744,10 +766,81 @@ static int bch_state(const struct px_bch_preview_material *m, struct px_raster_s
     return 1;
 }
 
+/* Declared --combiners input policy. Primary color: the decoded vertex
+ * color (stored or fixed attribute, clamped), because the vertex shader is
+ * not executed. Fragment lighting is not executed: fragment primary is white
+ * and fragment secondary black. Projection-mapped units are not executed: a
+ * white texel substitutes. Ordinary units sample UV0 with their sampler. */
+struct combiner_counts { uint64_t fragments, projected_sensitive, secondary_sensitive; };
+struct combiner_shader {
+    const struct px_bch_combiner_material *material;
+    struct px_raster_image images[3];
+    struct px_raster_sampler samplers[3];
+    struct combiner_counts *counts; /* NULL except on a counted frame */
+};
+
+static uint8_t quantize(double value)
+{
+    return (uint8_t)floor((value < 0 ? 0 : value > 1 ? 1 : value) * 255.0 + 0.5);
+}
+
+static void combiner_fragment(void *context, double u, double v, const double rgba[4], double out[4])
+{
+    const struct combiner_shader *s = context;
+    const struct px_bch_combiner_material *m = s->material;
+    struct px_tev_inputs in;
+    memset(&in, 0, sizeof in);
+    for (unsigned c = 0; c < 4; ++c) {
+        in.primary[c] = quantize(rgba[c]);
+        in.fragment_primary[c] = 255;
+    }
+    for (unsigned unit = 0; unit < 3; ++unit) {
+        if ((m->sampled_units >> unit) & 1) {
+            double texel[4];
+            px_raster_sample(&s->images[unit], &s->samplers[unit], u, v, texel);
+            for (unsigned c = 0; c < 4; ++c) in.texture[unit][c] = quantize(texel[c]);
+        } else if ((m->projected_units >> unit) & 1) {
+            memset(in.texture[unit], 255, 4);
+        }
+    }
+    uint8_t result[4];
+    px_tev_evaluate(&m->tev, &in, result);
+    for (unsigned c = 0; c < 4; ++c) out[c] = result[c] / 255.0;
+    if (!s->counts) return;
+    /* Sensitivity: does the final RGBA change when an unexecuted input takes
+     * its other extreme? Counted over shaded fragments of one frame. */
+    struct px_tev_inputs alternative = in;
+    uint8_t other[4];
+    ++s->counts->fragments;
+    for (unsigned unit = 0; unit < 3; ++unit)
+        if ((m->projected_units >> unit) & 1) memset(alternative.texture[unit], 0, 4);
+    if (m->projected_units) {
+        px_tev_evaluate(&m->tev, &alternative, other);
+        if (memcmp(result, other, 4)) ++s->counts->projected_sensitive;
+    }
+    alternative = in;
+    memset(alternative.fragment_secondary, 255, 4);
+    px_tev_evaluate(&m->tev, &alternative, other);
+    if (memcmp(result, other, 4)) ++s->counts->secondary_sensitive;
+}
+
+static int fragment_state(const struct px_bch_fragment_preview *m, struct px_raster_state *state)
+{
+    struct px_bch_preview_material flat;
+    struct px_raster_sampler ignored;
+    memset(&flat, 0, sizeof flat);
+    flat.wrap_u = flat.wrap_v = 2;
+    flat.alpha_test = m->alpha_test; flat.alpha_compare = m->alpha_compare;
+    flat.alpha_reference = m->alpha_reference; flat.depth_test = m->depth_test;
+    flat.depth_compare = m->depth_compare; flat.depth_write = m->depth_write;
+    flat.color_write_mask = m->color_write_mask; flat.cull = m->cull; flat.blend = m->blend;
+    return bch_state(&flat, &ignored, state);
+}
+
 static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *asset,
                              const struct camera *camera, struct px_raster_vertex *points,
                              struct px_raster_target *target, SDL_Texture **frame,
-                             const char *path)
+                             const char *path, struct combiner_counts *counts)
 {
     const struct px_cgfx_model *mesh = &asset->wire;
     const struct px_bch_model *bch = &asset->bch;
@@ -787,16 +880,54 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
         /* Stored BCH UV0 has V up; decoded images are top-down. */
         points[i].u = bch->uvs[2 * (size_t)i];
         points[i].v = 1.0 - bch->uvs[2 * (size_t)i + 1];
-        for (unsigned j = 0; j < 4; ++j) points[i].rgba[j] = 1; /* unlit: white */
+        for (unsigned j = 0; j < 4; ++j)
+            points[i].rgba[j] = asset->bch_combiner ? bch->colors[4 * (size_t)i + j] : 1;
     }
     for (uint32_t i = 0; i < bch->mesh_count; ++i) {
         const struct px_bch_mesh *m = &bch->meshes[asset->draw_order[i]];
+        if (asset->bch_combiner) {
+            struct combiner_shader shader;
+            struct px_raster_state state;
+            memset(&shader, 0, sizeof shader);
+            shader.material = &asset->bch_combiner[m->material_index];
+            shader.counts = counts ? &counts[m->material_index] : NULL;
+            static const enum px_raster_wrap wrap[] = {
+                PX_RASTER_CLAMP, PX_RASTER_CLAMP, PX_RASTER_REPEAT, PX_RASTER_MIRROR
+            };
+            for (unsigned unit = 0; unit < 3; ++unit) {
+                if (!((shader.material->sampled_units >> unit) & 1)) continue;
+                const struct px_texture_image *image =
+                    &asset->textures[asset->bch_texture[(size_t)m->material_index * 3 + unit]];
+                shader.images[unit] = (struct px_raster_image){
+                    image->width, image->height, image->rgba, (size_t)image->width * image->height * 4};
+                shader.samplers[unit].wrap_u = wrap[shader.material->wrap_u[unit] & 3];
+                shader.samplers[unit].wrap_v = wrap[shader.material->wrap_v[unit] & 3];
+                shader.samplers[unit].filter = shader.material->mag_linear[unit] ?
+                    PX_RASTER_LINEAR : PX_RASTER_NEAREST;
+                if (!px_raster_image_valid(&shader.images[unit], &shader.samplers[unit])) {
+                    SDL_SetError("Invalid bound texture"); return 0;
+                }
+            }
+            if (!fragment_state(&shader.material->fragment, &state)) {
+                SDL_SetError("Material uses unsupported preview state"); return 0;
+            }
+            for (uint32_t j = 0; j < m->index_count; j += 3) {
+                size_t first = (size_t)m->first_index + j;
+                struct px_raster_vertex triangle[3] = {
+                    points[mesh->indices[first]], points[mesh->indices[first + 1]], points[mesh->indices[first + 2]]
+                };
+                result = px_raster_draw_shaded(target, triangle, combiner_fragment, &shader, &state);
+                if (result != PX_RASTER_OK) goto raster_error;
+            }
+            continue;
+        }
         const struct px_bch_preview_material *material = &asset->bch_preview[m->material_index];
         struct px_raster_sampler sampler; struct px_raster_state state;
         if (!bch_state(material, &sampler, &state)) {
             SDL_SetError("Material uses unsupported preview state"); return 0;
         }
-        const struct px_texture_image *image = &asset->textures[asset->bch_texture[m->material_index]];
+        const struct px_texture_image *image =
+            &asset->textures[asset->bch_texture[(size_t)m->material_index * 3 + material->unit]];
         const struct px_raster_image texture = {
             image->width, image->height, image->rgba, (size_t)image->width * image->height * 4
         };
@@ -829,6 +960,7 @@ static int window(const struct options *o, const struct model_asset *asset)
     SDL_Renderer *renderer = NULL; SDL_FPoint *points = NULL; int ok = 0;
     SDL_Texture *frame = NULL; struct px_raster_target target = {0};
     struct px_raster_vertex *vertices = NULL;
+    struct combiner_counts *counts = NULL;
     if (!win) goto done;
     if (!o->software) renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer) renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_SOFTWARE);
@@ -841,22 +973,34 @@ static int window(const struct options *o, const struct model_asset *asset)
     SDL_RendererInfo info; if (SDL_GetRendererInfo(renderer, &info)) goto done;
     fprintf(stderr, "[model-viewer] Video=%s renderer=%s; orthographic %s.\n",
             SDL_GetCurrentVideoDriver(), info.name, o->textured ?
+            asset->bch_combiner ? "BCH six-stage combiner software preview; declared unlit inputs; layer/priority/resource draw order" :
             asset->bch_textured ? "unlit BCH TEV-stage-0 software preview; layer/priority/resource draw order" :
             "unlit textured software preview; translucency/priority/resource draw order" : "wireframe");
     uint32_t frames = 0;
+    if (asset->bch_combiner) {
+        counts = calloc(asset->bch.material_count, sizeof *counts);
+        if (!counts) goto done;
+    }
     while (c.running) {
         SDL_Event e; while (SDL_PollEvent(&e)) event(&c, &e);
         if (!c.running) break;
         const char *path = frames == 0 ? o->capture : NULL;
-        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, vertices, &target, &frame, path) :
+        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, vertices, &target, &frame, path,
+                                                     frames == 0 ? counts : NULL) :
             o->textured ? !draw_textured(renderer, asset, &c, vertices, &target, &frame, path) :
                           !draw(renderer, mesh, &c, points, path)) goto done;
+        if (frames == 0 && counts)
+            for (uint32_t i = 0; i < asset->bch.material_count; ++i)
+                printf("combiner_sensitivity material=%" PRIu32 " frame=1 fragments=%" PRIu64
+                       " projected_substitute_sensitive=%" PRIu64 " secondary_sensitive=%" PRIu64 "\n",
+                       i, counts[i].fragments, counts[i].projected_sensitive, counts[i].secondary_sensitive);
         if (++frames == o->frames) break;
         SDL_Delay(16);
     }
     fprintf(stderr, "[model-viewer] Exit after %" PRIu32 " frames.\n", frames); ok = 1;
 done:
     if (!ok) fprintf(stderr, "[model-viewer] Runtime: %s\n", SDL_GetError());
+    free(counts);
     free(vertices); px_raster_free(&target); if (frame) SDL_DestroyTexture(frame);
     free(points); if (renderer) SDL_DestroyRenderer(renderer); if (win) SDL_DestroyWindow(win); SDL_Quit();
     return ok;
@@ -913,12 +1057,54 @@ static void print_bch_bindings(const struct model_asset *asset)
     const struct px_bch_model *bch = &asset->bch;
     uint32_t decoded = 0;
     for (uint32_t i = 0; i < asset->texture_count; ++i) decoded += asset->textures[i].rgba != NULL;
+    if (asset->bch_combiner) {
+        printf("mode=textured shading=tev-six-stage primary=vertex-color fragment_primary=white "
+               "fragment_secondary=black lighting=not-executed vertex_shader=not-executed "
+               "projected_units=white-substitute disabled_units=zero culling=not-executed draw_order=layer-priority-resource "
+               "external_textures=%" PRIu32 " decoded_textures=%" PRIu32 "\n", asset->texture_count, decoded);
+        for (uint32_t i = 0; i < bch->mesh_count; ++i)
+            printf("mesh_color mesh=%" PRIu32 " source=%s\n", i,
+                   bch->meshes[i].color_source == 1 ? "stored" :
+                   bch->meshes[i].color_source == 2 ? "fixed" : "absent-white");
+        for (uint32_t i = 0; i < bch->material_count; ++i) {
+            const struct px_bch_combiner_material *m = &asset->bch_combiner[i];
+            printf("combiner material=%" PRIu32 " sources=0x%04" PRIx32 " sampled_units=0x%" PRIx32
+                   " projected_units=0x%" PRIx32 " disabled_units=0x%" PRIx32
+                   " buffer_update=0x%04" PRIx32 " buffer_color=0x%08" PRIx32,
+                   i, m->sources, m->sampled_units, m->projected_units, m->disabled_units, m->tev.buffer_update,
+                   m->tev.buffer_color);
+            for (unsigned unit = 0; unit < 3; ++unit) {
+                if (!((m->sampled_units >> unit) & 1)) continue;
+                printf(" unit%u=", unit); print_bch_name(&bch->materials[i].texture_names[unit]);
+                printf(":%" PRIu32 ":wrap%" PRIu32 ",%" PRIu32 ":%s", asset->bch_texture[(size_t)i * 3 + unit],
+                       m->wrap_u[unit], m->wrap_v[unit], m->mag_linear[unit] ? "linear" : "nearest");
+            }
+            const struct px_bch_fragment_preview *f = &m->fragment;
+            printf(" alpha_test=%" PRIu32 " alpha_compare=%" PRIu32 " alpha_reference=%" PRIu32
+                   " depth_test=%" PRIu32 " depth_compare=%" PRIu32 " depth_write=%" PRIu32
+                   " color_mask=0x%" PRIx32 " blend=%s cull_register=%" PRIu32 "\n",
+                   f->alpha_test, f->alpha_compare, f->alpha_reference, f->depth_test, f->depth_compare,
+                   f->depth_write, f->color_write_mask, blend[f->blend], f->cull);
+            for (unsigned stage = 0; stage < 6; ++stage) {
+                const struct px_tev_stage *t = &m->tev.stages[stage];
+                printf("tev material=%" PRIu32 " stage=%u source=0x%08" PRIx32 " operand=0x%08" PRIx32
+                       " combine=0x%08" PRIx32 " constant=0x%08" PRIx32 " scale=0x%08" PRIx32 "\n",
+                       i, stage, t->source, t->operand, t->combine, t->constant, t->scale);
+            }
+        }
+        printf("submission_order=");
+        for (uint32_t i = 0; i < bch->mesh_count; ++i)
+            printf("%s%" PRIu32, i ? "," : "", asset->draw_order[i]);
+        putchar('\n');
+        return;
+    }
     printf("mode=textured shading=unlit-tev-stage0 primary=white lighting=not-executed "
            "stages_executed=1 culling=not-executed draw_order=layer-priority-resource "
            "external_textures=%" PRIu32 " decoded_textures=%" PRIu32 "\n", asset->texture_count, decoded);
     for (uint32_t i = 0; i < bch->material_count; ++i) {
         const struct px_bch_preview_material *m = &asset->bch_preview[i];
-        const struct px_texture_image *image = &asset->textures[asset->bch_texture[i]];
+        const uint32_t bound = asset->bch_texture[(size_t)i * 3 + m->unit];
+        const struct px_texture_image *image = &asset->textures[bound];
         printf("binding material=%" PRIu32 " unit=%" PRIu32 " texture=", i, m->unit);
         print_bch_name(&bch->materials[i].texture_names[m->unit]);
         printf(" external_index=%" PRIu32 " size=%" PRIu32 "x%" PRIu32
@@ -926,7 +1112,7 @@ static void print_bch_bindings(const struct model_asset *asset)
                " alpha_reference=%" PRIu32 " depth_test=%" PRIu32 " depth_compare=%" PRIu32
                " depth_write=%" PRIu32 " color_mask=0x%" PRIx32 " blend=%s cull_register=%" PRIu32
                " unexecuted_units=0x%" PRIx32 "\n",
-               asset->bch_texture[i], image->width, image->height, m->wrap_u, m->wrap_v,
+               bound, image->width, image->height, m->wrap_u, m->wrap_v,
                m->mag_linear ? "linear" : "nearest", m->alpha_test, m->alpha_compare,
                m->alpha_reference, m->depth_test, m->depth_compare, m->depth_write,
                m->color_write_mask, blend[m->blend], m->cull, m->unexecuted_units);

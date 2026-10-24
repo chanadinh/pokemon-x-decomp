@@ -87,6 +87,25 @@ struct px_raster_state px_raster_default_state(void);
 enum px_raster_result px_raster_draw(struct px_raster_target *target,
     const struct px_raster_vertex vertices[3], const struct px_raster_image *image,
     const struct px_raster_sampler *sampler, const struct px_raster_state *state);
+/* Same coverage, depth, alpha-test and blend rules as px_raster_draw, but
+ * each covered fragment's straight RGBA comes from shader(context, u, v,
+ * rgba, out): u/v and rgba are the interpolated vertex attributes (rgba
+ * clamped to 0..1); out is clamped to 0..1 afterwards. The shader runs after
+ * the depth test and before the alpha test, once per surviving fragment, in
+ * row-major order. A NULL shader is invalid. */
+typedef void (*px_raster_shader)(void *context, double u, double v,
+                                 const double rgba[4], double out[4]);
+enum px_raster_result px_raster_draw_shaded(struct px_raster_target *target,
+    const struct px_raster_vertex vertices[3], px_raster_shader shader, void *context,
+    const struct px_raster_state *state);
+/* Sampling used by px_raster_draw, exposed for shaders. Check the image and
+ * sampler once with px_raster_image_valid; sampling an invalid image is
+ * undefined. Returns normalized straight RGBA. */
+int px_raster_image_valid(const struct px_raster_image *image,
+                          const struct px_raster_sampler *sampler);
+void px_raster_sample(const struct px_raster_image *image,
+                      const struct px_raster_sampler *sampler, double u, double v,
+                      double rgba[4]);
 const char *px_raster_result_string(enum px_raster_result result);
 
 #endif

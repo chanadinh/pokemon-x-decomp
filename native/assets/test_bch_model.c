@@ -15,7 +15,7 @@ enum { CONTENT = 56, STRING = 2104, COMMAND = 2360, RAW = 3384, RELOC = 3640,
 struct fixture {
     uint8_t data[4096];
     size_t size, cursor, enable, face, vertex_relocation, index_relocation;
-    size_t fragment, fragment_relocation, material_commands;
+    size_t fragment, fragment_relocation, material_commands, fixed_index, fixed_data;
 };
 static void word(uint8_t *p, uint32_t value)
 {
@@ -73,8 +73,8 @@ static void finish(struct fixture *f)
  * coordinators and a relocated fragment command stream at +0xc8. */
 static struct fixture fixture_with(unsigned width, int parameters)
 {
-    struct fixture f = {{0}, RELOC, COMMAND, 0, 0, 0, 0, 0, 0, 0};
-    const size_t params = parameters ? FULL_PARAMS : PARAMS;
+    struct fixture f = {{0}, RELOC, COMMAND, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    const size_t params = (parameters & 1) ? FULL_PARAMS : PARAMS;
     memcpy(f.data, "BCH\0\7\7", 6);
     const uint32_t starts[] = {CONTENT, STRING, COMMAND, RAW, RELOC};
     const uint32_t lengths[] = {2048, 256, 1024, 256};
@@ -102,12 +102,12 @@ static struct fixture fixture_with(unsigned width, int parameters)
     size_t start = f.cursor;
     f.material_commands = start;
     single(&f, 0x80, 15, 1);
-    if (parameters) {
+    if (parameters & 1) {
         single(&f, 0x83, 15, 0x2220);
         single(&f, 0x93, 1, 0x12345678); /* Partial: only bits 0..7 known. */
     }
     stream(&f, MATERIAL + 0x10, start);
-    if (parameters) {
+    if (parameters & 1) {
         const uint32_t packed[3] = {0xff000001, 0x00030001, 1};
         const float coordinates[3][5] = {{1, 1, 0, 0, 0}, {2, 3, .5f, -1, 4}, {0}};
         for (unsigned unit = 0; unit < 3; ++unit) {
@@ -133,17 +133,29 @@ static struct fixture fixture_with(unsigned width, int parameters)
     pointer(&f, MESH + 16, SUB, 0);
     word(f.data + MESH + 20, 1);
     f.enable = f.cursor;
-    const uint32_t config[] = {0x03000000, 0x7b, 0x10000000, 0, 0x10, 0x20140000};
+    /* parameters bit 1 adds a fixed color in loader slot 2 (semantic 3). */
+    const int fixed_color = parameters & 2;
+    const uint32_t config[] = {0x03000000, 0x7b, fixed_color ? 0x20040000 : 0x10000000,
+                               0, 0x10, 0x20140000};
     packet(&f, 0x200, 15, 1, 6, config);
-    const uint32_t permutation[] = {0x40, 0};
+    const uint32_t permutation[] = {fixed_color ? 0x340 : 0x40, 0};
     packet(&f, 0x2bb, 15, 1, 2, permutation);
-    single(&f, 0x242, 1, 1);
+    single(&f, 0x242, 1, fixed_color ? 2 : 1);
     const uint32_t offset[] = {0x80000006, 0, float_bits(30), float_bits(-20), float_bits(10)};
     packet(&f, 0x2c0, 15, 1, 5, offset);
     single(&f, 0x2c0, 15, 0x80000007);
     const uint32_t scales[] = {float_bits(1), float_bits(1), float_bits(1), float_bits(2),
                               float_bits(1), float_bits(1), float_bits(1), float_bits(.25f)};
     packet(&f, 0x2c1, 15, 0, 8, scales);
+    if (fixed_color) {
+        /* float24 (x,y,z,w) = (0.5, 0.25, 1.0, 0.75), packed w-first. An
+         * earlier slot-1 upload proves the index register and advance. */
+        const uint32_t ignored[] = {1, 0, 0, 0};
+        packet(&f, 0x232, 15, 1, 4, ignored);
+        f.fixed_index = single(&f, 0x232, 15, 2);
+        const uint32_t color[] = {0x3e80003f, 0x00003d00, 0x003e0000};
+        f.fixed_data = packet(&f, 0x233, 15, 1, 3, color);
+    }
     stream(&f, MESH + 8, f.enable);
     f.vertex_relocation = f.size;
     pointer(&f, f.enable + 16, RAW, 0x26);
@@ -160,6 +172,31 @@ static struct fixture fixture_with(unsigned width, int parameters)
     f.data[RAW + 60 + 2 * width] = 1;
     finish(&f);
     return f;
+}
+static struct fixture fixture(unsigned width);
+static void reject(struct fixture f, size_t at, uint32_t value);
+static void test_fixed_color(void)
+{
+    struct fixture f = fixture_with(1, 2);
+    struct px_bch_model model;
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.meshes[0].color_source == 2);
+    for (unsigned v = 0; v < 3; ++v) {
+        const float *c = model.colors + v * 4;
+        assert(c[0] == .5f && c[1] == .25f && c[2] == 1 && c[3] == .75f);
+    }
+    px_bch_model_free(&model);
+    assert(model.colors == NULL);
+    f = fixture(1);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.meshes[0].color_source == 0 && model.colors[0] == 1 && model.colors[11] == 1);
+    px_bch_model_free(&model);
+    f = fixture_with(1, 2);
+    reject(f, f.fixed_data, 0x7f00003f);      /* alpha exponent 127 */
+    reject(f, f.fixed_index, 12);             /* outside 12 loader slots */
+    reject(f, f.fixed_index, 3);              /* color slot never uploaded */
+    reject(f, f.fixed_index + 4, 0x00010232); /* partial index mask */
+    reject(f, f.fixed_data + 4, 0x80210233);  /* partial data mask */
 }
 static struct fixture fixture(unsigned width)
 {
@@ -350,6 +387,7 @@ static void test_material_parameters(void)
 int main(void)
 {
     test_material_parameters();
+    test_fixed_color();
 
     test_geometry_and_ownership();
     test_integer_attributes_and_no_topology_guess();

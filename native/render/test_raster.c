@@ -316,10 +316,57 @@ static void clipping_and_invalid(void)
     px_raster_free(&t);
 }
 
+struct shader_log { unsigned calls; double last_u, last_v, last_rgba[4]; };
+static void probe_shader(void *context, double u, double v, const double rgba[4], double out[4])
+{
+    struct shader_log *log = context;
+    ++log->calls;
+    log->last_u = u; log->last_v = v;
+    memcpy(log->last_rgba, rgba, sizeof log->last_rgba);
+    /* Red from u, green from interpolated blue, out-of-range blue clamps,
+     * alpha from v so the alpha test can reject a band. */
+    out[0] = u; out[1] = rgba[2]; out[2] = 7; out[3] = v;
+}
+
+static void shaded(void)
+{
+    struct px_raster_target t;
+    struct shader_log log = {0};
+    struct px_raster_state state = px_raster_default_state();
+    OK(px_raster_create(4, 4, &t)); OK(px_raster_clear(&t, black, INFINITY));
+    /* u = x/4 and v = y/4 across a 4x4 square drawn as two triangles. */
+    struct px_raster_vertex a[3] = {vertex(0, 0, 0, 0), vertex(4, 0, 1, 0), vertex(0, 4, 0, 1)};
+    struct px_raster_vertex b[3] = {vertex(4, 0, 1, 0), vertex(4, 4, 1, 1), vertex(0, 4, 0, 1)};
+    color(a, (const uint8_t[]){0, 0, 102, 255}, 0); color(b, (const uint8_t[]){0, 0, 102, 255}, 0);
+    state.alpha_compare = PX_RASTER_GEQUAL; state.alpha_reference = 64;
+    OK(px_raster_draw_shaded(&t, a, probe_shader, &log, &state));
+    OK(px_raster_draw_shaded(&t, b, probe_shader, &log, &state));
+    CHECK(log.calls == 16);
+    /* Row 0 has v = 1/8 -> alpha 32 < 64: rejected; rows 1..3 pass. */
+    pixel(&t, 0, 0, black);
+    pixel(&t, 1, 1, (const uint8_t[]){96, 102, 255, 96});
+    pixel(&t, 3, 3, (const uint8_t[]){223, 102, 255, 223});
+    /* Depth fails before shading: no calls for occluded fragments. */
+    log.calls = 0;
+    color(a, (const uint8_t[]){0, 0, 102, 255}, 1);
+    OK(px_raster_draw_shaded(&t, a, probe_shader, &log, &state));
+    CHECK(log.calls == 3); /* a covers 3 row-0 pixels, never depth-written (alpha-rejected) */
+    CHECK(px_raster_draw_shaded(&t, a, NULL, NULL, &state) == PX_RASTER_INVALID_ARGUMENT);
+    /* Exposed sampling matches the documented nearest/repeat convention. */
+    const uint8_t texels[16] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160};
+    const struct px_raster_image image = {2, 2, texels, sizeof texels};
+    const struct px_raster_sampler sampler = {PX_RASTER_REPEAT, PX_RASTER_REPEAT, PX_RASTER_NEAREST};
+    double rgba[4];
+    CHECK(px_raster_image_valid(&image, &sampler) && !px_raster_image_valid(NULL, &sampler));
+    px_raster_sample(&image, &sampler, 1.75, -0.25, rgba);
+    CHECK(fabs(rgba[0] - 130 / 255.0) < 1e-12 && fabs(rgba[3] - 160 / 255.0) < 1e-12);
+    px_raster_free(&t);
+}
+
 int main(void)
 {
     dimensions();uv_and_interpolation();sampling();alpha_blend();depth_and_comparisons();
-    winding_and_shared_edges();clipping_and_invalid();
+    winding_and_shared_edges();clipping_and_invalid();shaded();
     puts("raster fixed-pixel tests passed");
     return 0;
 }

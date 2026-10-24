@@ -356,3 +356,17 @@ fragment lighting, fog, vertex colors and the original primitive state remain
 unimplemented, so this is not the game's final appearance. `--inspect` prints
 every binding without a window. See the
 [textured-preview record](reproduction/bch-textured/README.txt).
+
+## Run the full BCH combiner chain
+
+Add `--combiners` to the textured command to evaluate all six TEV stages of each
+material (constants, scales, the combiner buffer and every texture unit the chain
+reads) instead of stage 0 only. Vertex colors become the primary color: stored
+color attributes after their scale, or fixed float24 attributes. Inputs that need
+unexecuted GPU work use declared values that `--inspect` prints: fragment lighting
+is white/black, projection-mapped units read a white texel, and disabled units read
+zero. After the first rendered frame the viewer prints, per material, how many
+shaded fragments would change if the projected substitute or the fragment
+secondary color took its other extreme. For field 165 both counts are zero; every
+chain still multiplies by the unexecuted lighting color. See the
+[combiner record](reproduction/bch-combiners/README.txt).

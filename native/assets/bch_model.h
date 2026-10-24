@@ -33,6 +33,7 @@ struct px_bch_fragment_state {
     struct px_bch_register alpha_test;      /* 0x104 */
     struct px_bch_register depth_color;     /* 0x107 */
     struct px_bch_register tev_buffer;      /* 0x0e0 */
+    struct px_bch_register buffer_color;    /* 0x0fd */
     /* Stages 0..3 at 0xc0+8n, stages 4..5 at 0xf0/0xf8; each holds the
      * source, operand, combine, constant and scale registers in order. */
     struct px_bch_register tev[6][5];
@@ -66,12 +67,18 @@ struct px_bch_mesh {
     uint32_t first_vertex, vertex_count, first_index, index_count;
     uint32_t first_submesh, submesh_count, material_index, node_index;
     uint32_t visible, layer, priority;
+    /* Vertex color input (semantic 3): 0 absent (colors hold 1,1,1,1),
+     * 1 stored attribute after its uniform scale, 2 fixed attribute decoded
+     * from float24 registers 0x232..0x235 (x,y,z,w = R,G,B,A), unscaled. */
+    uint32_t color_source;
     float bounds_min[3], bounds_max[3];
 };
 struct px_bch_model {
     struct px_bch_name name;
     float *positions; /* Owned XYZ triples, scales and position offset applied. */
     float *uvs;       /* Owned UV0 pairs after scale; stored BCH convention. */
+    float *colors;    /* Owned RGBA quads per vertex; see mesh color_source.
+                       * Values are not clamped; the shader is not executed. */
     uint32_t *indices; /* Owned indices into the complete positions array. */
     struct px_bch_mesh *meshes;
     struct px_bch_submesh *submeshes;

@@ -226,9 +226,23 @@ static void blend(uint8_t *dst, const double src[4], const struct px_raster_stat
         if (state->color_write_mask & (1u << c)) dst[c] = byte(result[c]);
 }
 
-enum px_raster_result px_raster_draw(struct px_raster_target *target,
+int px_raster_image_valid(const struct px_raster_image *image,
+                          const struct px_raster_sampler *sampler)
+{
+    return image && sample_valid(image, sampler);
+}
+
+void px_raster_sample(const struct px_raster_image *image,
+                      const struct px_raster_sampler *sampler, double u, double v,
+                      double rgba[4])
+{
+    sample(image, sampler, u, v, rgba);
+}
+
+static enum px_raster_result draw(struct px_raster_target *target,
     const struct px_raster_vertex vertices[3], const struct px_raster_image *image,
-    const struct px_raster_sampler *sampler, const struct px_raster_state *state)
+    const struct px_raster_sampler *sampler, px_raster_shader shader, void *context,
+    const struct px_raster_state *state)
 {
     struct point p[3];
     int64_t area, minx, miny, maxx, maxy;
@@ -309,12 +323,22 @@ enum px_raster_result px_raster_draw(struct px_raster_target *target,
             v = p[0].attr.v + w[1] * (p[1].attr.v - p[0].attr.v) +
                 w[2] * (p[2].attr.v - p[0].attr.v);
             if (state->depth_test && !compare(z, target->depth[pixel], state->depth_compare)) continue;
-            sample(image, sampler, u, v, color);
-            for (unsigned c = 0; c < 4; ++c) {
-                double modulation = p[0].attr.rgba[c] +
-                    w[1] * (p[1].attr.rgba[c] - p[0].attr.rgba[c]) +
-                    w[2] * (p[2].attr.rgba[c] - p[0].attr.rgba[c]);
-                color[c] = clamp(color[c] * modulation);
+            if (shader) {
+                double interpolated[4];
+                for (unsigned c = 0; c < 4; ++c)
+                    interpolated[c] = clamp(p[0].attr.rgba[c] +
+                        w[1] * (p[1].attr.rgba[c] - p[0].attr.rgba[c]) +
+                        w[2] * (p[2].attr.rgba[c] - p[0].attr.rgba[c]));
+                shader(context, u, v, interpolated, color);
+                for (unsigned c = 0; c < 4; ++c) color[c] = clamp(color[c]);
+            } else {
+                sample(image, sampler, u, v, color);
+                for (unsigned c = 0; c < 4; ++c) {
+                    double modulation = p[0].attr.rgba[c] +
+                        w[1] * (p[1].attr.rgba[c] - p[0].attr.rgba[c]) +
+                        w[2] * (p[2].attr.rgba[c] - p[0].attr.rgba[c]);
+                    color[c] = clamp(color[c] * modulation);
+                }
             }
             if (!compare(byte(color[3]), state->alpha_reference, state->alpha_compare)) continue;
             blend(target->rgba + pixel * 4, color, state);
@@ -322,6 +346,21 @@ enum px_raster_result px_raster_draw(struct px_raster_target *target,
         }
     }
     return PX_RASTER_OK;
+}
+
+enum px_raster_result px_raster_draw(struct px_raster_target *target,
+    const struct px_raster_vertex vertices[3], const struct px_raster_image *image,
+    const struct px_raster_sampler *sampler, const struct px_raster_state *state)
+{
+    return draw(target, vertices, image, sampler, NULL, NULL, state);
+}
+
+enum px_raster_result px_raster_draw_shaded(struct px_raster_target *target,
+    const struct px_raster_vertex vertices[3], px_raster_shader shader, void *context,
+    const struct px_raster_state *state)
+{
+    if (!shader) return PX_RASTER_INVALID_ARGUMENT;
+    return draw(target, vertices, NULL, NULL, shader, context, state);
 }
 
 const char *px_raster_result_string(enum px_raster_result result)
