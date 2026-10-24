@@ -1,11 +1,13 @@
 #include "assets/cgfx_model.h"
 #include "assets/bch_model.h"
 #include "assets/bch_material.h"
+#include "assets/bch_scene.h"
 #include "assets/bch_texture.h"
 #include "assets/cgfx.h"
 #include "assets/field.h"
 #include "assets/garc.h"
 #include "assets/lz.h"
+#include "render/light.h"
 #include "render/raster.h"
 
 #include <SDL.h>
@@ -17,7 +19,10 @@
 #include <string.h>
 
 struct options {
-    const char *romfs, *archive, *capture, *texture_archive;
+    const char *romfs, *archive, *capture, *texture_archive, *environment_archive;
+    uint32_t environment_entry, environment_subentry, environment_section, scene;
+    int have_environment_entry, have_environment_subentry, have_environment_section, have_scene;
+    int lighting; /* 0 none, 1 day, 2 night */
     uint32_t entry, subentry, model, frames, section;
     uint32_t texture_entry, texture_subentry, texture_section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
@@ -37,6 +42,15 @@ struct model_asset {
     struct px_bch_preview_material *bch_preview;
     struct px_bch_combiner_material *bch_combiner; /* --combiners only */
     uint32_t *bch_texture; /* 3 per material: textures index or UINT32_MAX */
+    /* --environment only: decoded lights and one light setup per material.
+     * point_bound holds, per material and RGB channel, the summed register
+     * ambient + diffuse of its unexecuted point/spot lights, in 1/255 units:
+     * their contribution if every attenuation factor and dot lies in 0..1. */
+    struct px_bch_environment environment;
+    struct px_light_setup *bch_light;
+    uint32_t *point_bound;
+    uint32_t *light_index; /* 8 per material: environment light per setup slot */
+    int lighting;
     int bch_textured;
 };
 
@@ -49,6 +63,10 @@ static void asset_free(struct model_asset *asset)
     free(asset->bch_preview);
     free(asset->bch_combiner);
     free(asset->bch_texture);
+    free(asset->bch_light);
+    free(asset->point_bound);
+    free(asset->light_index);
+    px_bch_environment_free(&asset->environment);
     px_cgfx_scene_free(&asset->scene);
     px_cgfx_model_free(&asset->wire);
     px_bch_model_free(&asset->bch);
@@ -84,15 +102,21 @@ static void usage(FILE *stream, const char *program)
         "Usage: %s (--demo | --romfs PATH --archive RELATIVE/PATH --entry N) [options]\n"
         "  --subentry N       GARC bitmap subentry 0..31 (default 0)\n"
         "  --model N          CGFX/BCH model index (default 0)\n"
-        "  --section N        Select an AD/GR minipack section, 0..255\n"
+        "  --section N        Select an AD/GR/BM minipack section, 0..255\n"
         "  --triangle-list    Explicit BCH wireframe index-triple interpretation\n"
         "  --textured         Preview supported material texture and vertex colors\n"
         "                     (BCH: unlit TEV stage 0 only; requires --triangle-list\n"
         "                     and --texture-archive/--texture-entry)\n"
         "  --texture-archive RELATIVE/PATH  GARC holding the external BCH textures\n"
         "  --texture-entry N  Texture GARC entry; --texture-subentry N (default 0)\n"
-        "  --texture-section N  Select an AD/GR minipack section of that entry\n"
+        "  --texture-section N  Select an AD/GR/BM minipack section of that entry\n"
         "  --combiners        BCH: run all six TEV stages with declared unlit inputs\n"
+        "  --environment-archive RELATIVE/PATH  GARC holding the scene environment BCH\n"
+        "  --environment-entry N  Environment entry; --environment-subentry N (default 0)\n"
+        "  --environment-section N  Its AD/GR/BM minipack section; --scene N (default 0)\n"
+        "  --lighting day|night  With --combiners and an environment: execute the\n"
+        "                     material light set's directional lights (default day;\n"
+        "                     day omits light_night, night omits light_sun)\n"
         "  --inspect          Print decoded mesh metadata without a window\n"
         "  --capture-frame F  Save first viewport to a new BMP file\n"
         "  --frames N         Exit after a positive number of frames\n"
@@ -100,7 +124,7 @@ static void usage(FILE *stream, const char *program)
         "  --self-test-input  Exercise orbit/zoom/reset/exit; default 3 frames\n"
         "Controls: arrows orbit, +/- zoom, R/Home reset, Escape exit.\n"
         "Orthographic wireframe by default; --textured uses a bounded software preview.\n"
-        "Inspection camera; no lighting, animation or gameplay.\n", program);
+        "Inspection camera; lighting only with --environment-archive; no animation or gameplay.\n", program);
 }
 
 static int number(const char *text, uint32_t *out)
@@ -144,13 +168,23 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--subentry") && strcmp(arg, "--model") && strcmp(arg, "--frames") &&
             strcmp(arg, "--capture-frame") && strcmp(arg, "--section") &&
             strcmp(arg, "--texture-archive") && strcmp(arg, "--texture-entry") &&
-            strcmp(arg, "--texture-subentry") && strcmp(arg, "--texture-section")) return 0;
+            strcmp(arg, "--texture-subentry") && strcmp(arg, "--texture-section") &&
+            strcmp(arg, "--environment-archive") && strcmp(arg, "--environment-entry") &&
+            strcmp(arg, "--environment-subentry") && strcmp(arg, "--environment-section") &&
+            strcmp(arg, "--scene") && strcmp(arg, "--lighting")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
         else if (!strcmp(arg, "--archive")) o->archive = value;
         else if (!strcmp(arg, "--capture-frame")) o->capture = value;
         else if (!strcmp(arg, "--texture-archive")) o->texture_archive = value;
+        else if (!strcmp(arg, "--environment-archive")) o->environment_archive = value;
+        else if (!strcmp(arg, "--lighting")) {
+            if (o->lighting) return 0;
+            if (!strcmp(value, "day")) o->lighting = 1;
+            else if (!strcmp(value, "night")) o->lighting = 2;
+            else return 0;
+        }
         else {
             uint32_t n;
             if (!number(value, &n)) return 0;
@@ -159,6 +193,14 @@ static int parse(int argc, char **argv, struct options *o)
             else if (!strcmp(arg, "--model")) { o->model = n; o->have_model = 1; }
             else if (!strcmp(arg, "--section")) { if (n > 255) return 0; o->section = n; o->have_section = 1; }
             else if (!strcmp(arg, "--texture-entry")) { o->texture_entry = n; o->have_texture_entry = 1; }
+            else if (!strcmp(arg, "--environment-entry")) { o->environment_entry = n; o->have_environment_entry = 1; }
+            else if (!strcmp(arg, "--environment-subentry")) {
+                if (n > 31) return 0;
+                o->environment_subentry = n; o->have_environment_subentry = 1;
+            } else if (!strcmp(arg, "--environment-section")) {
+                if (n > 255) return 0;
+                o->environment_section = n; o->have_environment_section = 1;
+            } else if (!strcmp(arg, "--scene")) { o->scene = n; o->have_scene = 1; }
             else if (!strcmp(arg, "--texture-subentry")) {
                 if (n > 31) return 0;
                 o->texture_subentry = n; o->have_texture_subentry = 1;
@@ -179,6 +221,11 @@ static int parse(int argc, char **argv, struct options *o)
     if (texture_options && (o->demo || !o->textured || !o->triangle_list ||
         !o->texture_archive || !o->have_texture_entry ||
         !relative_path(o->texture_archive))) return 0;
+    const int environment_options = o->environment_archive || o->have_environment_entry ||
+        o->have_environment_subentry || o->have_environment_section || o->have_scene || o->lighting;
+    if (environment_options && (!o->combiners || !o->environment_archive ||
+        !o->have_environment_entry || !relative_path(o->environment_archive))) return 0;
+    if (o->environment_archive && !o->lighting) o->lighting = 1;
     if (o->inspect && (o->capture || o->frames || o->self_test)) return 0;
     if (o->self_test && !o->frames) o->frames = 3;
     return 1;
@@ -246,7 +293,7 @@ static int demo_texture(struct model_asset *asset)
     return 1;
 }
 
-/* One GARC member after optional outer LZ, optional AD/GR section selection
+/* One GARC member after optional outer LZ, optional AD/GR/BM section selection
  * and optional inner LZ. Each resource has its own 64 MiB aggregate budget. */
 struct resource {
     uint8_t *member, *decoded, *section_decoded;
@@ -294,8 +341,9 @@ static int read_resource(const char *romfs, const char *archive_path, uint32_t e
     }
     out->size = out->decoded ? out->decoded_size : size;
     if (have_section) {
-        if (out->size < 2 || (memcmp(out->data, "AD", 2) && memcmp(out->data, "GR", 2))) {
-            snprintf(error, sizeof error, "--section requires an AD or GR minipack");
+        if (out->size < 2 || (memcmp(out->data, "AD", 2) && memcmp(out->data, "GR", 2) &&
+                              memcmp(out->data, "BM", 2))) {
+            snprintf(error, sizeof error, "--section requires an AD, GR or BM minipack");
             goto failed;
         }
         struct px_field_span selected;
@@ -443,6 +491,83 @@ failed:
     return 0;
 }
 
+static int name_is(const struct px_bch_name *name, const char *text)
+{
+    return name->present && name->size == strlen(text) && !memcmp(name->bytes, text, name->size);
+}
+
+/* Declared --lighting policy, from the runtime light upload (code.bin
+ * 0x2df3f0, 0x3030a8) and Azahar ComputeFragmentsColors: per material, the
+ * enabled lights of its light set. Directional lights execute with light
+ * vector -direction (the runtime negates the view-space direction; N.L is
+ * evaluated in model space, identical up to the untraced float16 rounding of
+ * the view-space vector) and register colors light x material per channel.
+ * Global ambient is the material emission: no ambient light is bound. Point
+ * and spot lights are not executed; their largest ambient+diffuse register
+ * sum is reported as a bound. Day omits light_night, night omits light_sun:
+ * the file enables both, and the runtime selection is not traced. */
+static int prepare_bch_lighting(struct model_asset *asset, int lighting)
+{
+    const struct px_bch_model *bch = &asset->bch;
+    const struct px_bch_environment *env = &asset->environment;
+    asset->bch_light = calloc(bch->material_count, sizeof *asset->bch_light);
+    asset->point_bound = calloc((size_t)bch->material_count * 3, sizeof *asset->point_bound);
+    asset->light_index = calloc((size_t)bch->material_count * 8, sizeof *asset->light_index);
+    if (!asset->bch_light || !asset->point_bound || !asset->light_index) return 0;
+    asset->lighting = lighting;
+    for (uint32_t i = 0; i < bch->material_count; ++i) {
+        const struct px_bch_material *m = &bch->materials[i];
+        if (!m->parameters_present || !(m->material_flags & 1) || m->fresnel_selector || m->bump_mode) {
+            fprintf(stderr, "[model-viewer] Material %" PRIu32 " uses unsupported fragment lighting state.\n", i);
+            return 0;
+        }
+        const struct px_bch_light_set *set = px_bch_environment_set(env, m->light_set_index);
+        if (!set) {
+            fprintf(stderr, "[model-viewer] Material %" PRIu32 " light set %" PRIu32 " is absent from the scene.\n",
+                    i, m->light_set_index);
+            return 0;
+        }
+        struct px_light_setup *setup = &asset->bch_light[i];
+        for (unsigned c = 0; c < 3; ++c) setup->global_ambient[c] = m->colors[0][c];
+        for (uint32_t k = 0; k < set->count; ++k) {
+            const uint32_t index = env->set_lights[set->first + k];
+            const struct px_bch_light *light = &env->lights[index];
+            if (!light->enabled) continue;
+            if (light->type == PX_BCH_LIGHT_FRAGMENT_POINT || light->type == PX_BCH_LIGHT_FRAGMENT_SPOT) {
+                for (unsigned c = 0; c < 3; ++c)
+                    asset->point_bound[(size_t)i * 3 + c] +=
+                        px_light_register_channel(light->ambient[c], m->colors[1][c]) +
+                        px_light_register_channel(light->diffuse[c], m->colors[2][c]);
+                continue;
+            }
+            if (light->type != PX_BCH_LIGHT_FRAGMENT_DIRECTIONAL || (light->flags & 2)) {
+                fprintf(stderr, "[model-viewer] Light set %" PRIu32 " uses an unsupported light.\n", set->index);
+                return 0;
+            }
+            if ((lighting == 1 && name_is(&light->name, "light_night")) ||
+                (lighting == 2 && name_is(&light->name, "light_sun"))) continue;
+            if (setup->count == 8) return 0;
+            struct px_light_source *source = &setup->lights[setup->count];
+            asset->light_index[(size_t)i * 8 + setup->count++] = index;
+            for (unsigned c = 0; c < 3; ++c) {
+                source->ambient[c] = px_light_register_channel(light->ambient[c], m->colors[1][c]);
+                source->diffuse[c] = px_light_register_channel(light->diffuse[c], m->colors[2][c]);
+                source->vector[c] = -light->direction[c] + 0.0f; /* no negative zero */
+            }
+            source->two_sided = light->flags & 1;
+            const float probe[3] = {0, 0, 1};
+            uint8_t ignored[4];
+            if (!px_light_primary(setup, probe, ignored)) return 0;
+        }
+    }
+    for (uint32_t i = 0; i < bch->mesh_count; ++i)
+        if (!bch->meshes[i].normal_source) {
+            fprintf(stderr, "[model-viewer] Mesh %" PRIu32 " has no normal for fragment lighting.\n", i);
+            return 0;
+        }
+    return 1;
+}
+
 static int decode_model(const struct options *o, const uint8_t *data, size_t size,
                         struct model_asset *asset)
 {
@@ -527,6 +652,25 @@ static int load(const struct options *o, struct model_asset *asset)
                                o->texture_subentry, 0, o->have_texture_section,
                                o->texture_section, &textures);
         resource_free(&textures);
+    }
+    if (ok && o->environment_archive) {
+        struct resource environment = {0};
+        ok = read_resource(o->romfs, o->environment_archive, o->environment_entry,
+                           o->environment_subentry, o->have_environment_section,
+                           o->environment_section, "environment", &environment);
+        if (ok) {
+            const enum px_bch_model_result status = px_bch_environment_decode(
+                environment.data, environment.size, o->scene, &asset->environment);
+            if (status != PX_BCH_MODEL_OK) {
+                fprintf(stderr, "[model-viewer] BCH environment: %s\n", px_bch_model_result_string(status));
+                ok = 0;
+            }
+        }
+        if (ok) ok = prepare_bch_lighting(asset, o->lighting);
+        if (ok) print_resource("environment_", o->environment_archive, o->environment_entry,
+                               o->environment_subentry, o->scene, o->have_environment_section,
+                               o->environment_section, &environment);
+        resource_free(&environment);
     }
     return ok;
 }
@@ -771,9 +915,14 @@ static int bch_state(const struct px_bch_preview_material *m, struct px_raster_s
  * not executed. Fragment lighting is not executed: fragment primary is white
  * and fragment secondary black. Projection-mapped units are not executed: a
  * white texel substitutes. Ordinary units sample UV0 with their sampler. */
-struct combiner_counts { uint64_t fragments, projected_sensitive, secondary_sensitive; };
+struct combiner_counts {
+    uint64_t fragments, projected_sensitive, secondary_sensitive, point_sensitive, degenerate_normals;
+    uint32_t point_max_delta; /* largest final-channel change at the bound */
+};
 struct combiner_shader {
     const struct px_bch_combiner_material *material;
+    const struct px_light_setup *light; /* NULL: fragment primary white */
+    const uint32_t *point_bound; /* 3 values, or NULL */
     struct px_raster_image images[3];
     struct px_raster_sampler samplers[3];
     struct combiner_counts *counts; /* NULL except on a counted frame */
@@ -784,15 +933,27 @@ static uint8_t quantize(double value)
     return (uint8_t)floor((value < 0 ? 0 : value > 1 ? 1 : value) * 255.0 + 0.5);
 }
 
-static void combiner_fragment(void *context, double u, double v, const double rgba[4], double out[4])
+static void combiner_fragment(void *context, double u, double v, const double rgba[4],
+                              const double varying[4], double out[4])
 {
     const struct combiner_shader *s = context;
     const struct px_bch_combiner_material *m = s->material;
     struct px_tev_inputs in;
+    int degenerate = 0;
     memset(&in, 0, sizeof in);
     for (unsigned c = 0; c < 4; ++c) {
         in.primary[c] = quantize(rgba[c]);
         in.fragment_primary[c] = 255;
+    }
+    if (s->light) {
+        /* Interpolated model-space normal, renormalized by px_light_primary.
+         * A zero interpolated normal gives a black fragment primary. */
+        const float normal[3] = {(float)varying[0], (float)varying[1], (float)varying[2]};
+        if (!px_light_primary(s->light, normal, in.fragment_primary)) {
+            memset(in.fragment_primary, 0, 3);
+            in.fragment_primary[3] = 255;
+            degenerate = 1;
+        }
     }
     for (unsigned unit = 0; unit < 3; ++unit) {
         if ((m->sampled_units >> unit) & 1) {
@@ -812,6 +973,37 @@ static void combiner_fragment(void *context, double u, double v, const double rg
     struct px_tev_inputs alternative = in;
     uint8_t other[4];
     ++s->counts->fragments;
+    s->counts->degenerate_normals += degenerate;
+    if (s->point_bound && (s->point_bound[0] || s->point_bound[1] || s->point_bound[2])) {
+        /* Unexecuted point/spot lights add at most point_bound[c]/255 to
+         * channel c before the clamp. Fragment primary is the sum truncated
+         * once, so channel c rises by 0..point_bound[c]+1 levels. Every
+         * combination is evaluated (TEV subtraction is not monotonic). */
+        if (!s->light) return;
+        uint32_t span[3], total = 1;
+        for (unsigned c = 0; c < 3; ++c) {
+            span[c] = s->point_bound[c] ? s->point_bound[c] + 2 : 1;
+            total *= span[c];
+            if (total > 4096) { s->counts->point_max_delta = UINT32_MAX; return; }
+        }
+        int changed = 0;
+        for (uint32_t k = 0; k < total; ++k) {
+            uint32_t rest = k;
+            for (unsigned c = 0; c < 3; ++c) {
+                const uint32_t raised = in.fragment_primary[c] + rest % span[c];
+                rest /= span[c];
+                alternative.fragment_primary[c] = (uint8_t)(raised > 255 ? 255 : raised);
+            }
+            px_tev_evaluate(&m->tev, &alternative, other);
+            changed |= memcmp(result, other, 4) != 0;
+            for (unsigned c = 0; c < 4; ++c) {
+                const uint32_t delta = other[c] > result[c] ? other[c] - result[c] : result[c] - other[c];
+                if (delta > s->counts->point_max_delta) s->counts->point_max_delta = delta;
+            }
+        }
+        s->counts->point_sensitive += changed;
+        alternative = in;
+    }
     for (unsigned unit = 0; unit < 3; ++unit)
         if ((m->projected_units >> unit) & 1) memset(alternative.texture[unit], 0, 4);
     if (m->projected_units) {
@@ -839,6 +1031,7 @@ static int fragment_state(const struct px_bch_fragment_preview *m, struct px_ras
 
 static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *asset,
                              const struct camera *camera, struct px_raster_vertex *points,
+                             double (*normals)[4],
                              struct px_raster_target *target, SDL_Texture **frame,
                              const char *path, struct combiner_counts *counts)
 {
@@ -882,6 +1075,8 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
         points[i].v = 1.0 - bch->uvs[2 * (size_t)i + 1];
         for (unsigned j = 0; j < 4; ++j)
             points[i].rgba[j] = asset->bch_combiner ? bch->colors[4 * (size_t)i + j] : 1;
+        for (unsigned j = 0; normals && j < 4; ++j)
+            normals[i][j] = j < 3 ? bch->normals[3 * (size_t)i + j] : 0;
     }
     for (uint32_t i = 0; i < bch->mesh_count; ++i) {
         const struct px_bch_mesh *m = &bch->meshes[asset->draw_order[i]];
@@ -891,6 +1086,10 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
             memset(&shader, 0, sizeof shader);
             shader.material = &asset->bch_combiner[m->material_index];
             shader.counts = counts ? &counts[m->material_index] : NULL;
+            if (asset->bch_light) {
+                shader.light = &asset->bch_light[m->material_index];
+                shader.point_bound = &asset->point_bound[(size_t)m->material_index * 3];
+            }
             static const enum px_raster_wrap wrap[] = {
                 PX_RASTER_CLAMP, PX_RASTER_CLAMP, PX_RASTER_REPEAT, PX_RASTER_MIRROR
             };
@@ -916,7 +1115,10 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
                 struct px_raster_vertex triangle[3] = {
                     points[mesh->indices[first]], points[mesh->indices[first + 1]], points[mesh->indices[first + 2]]
                 };
-                result = px_raster_draw_shaded(target, triangle, combiner_fragment, &shader, &state);
+                double varyings[12];
+                for (unsigned k = 0; k < 3; ++k)
+                    memcpy(varyings + 4 * k, normals[mesh->indices[first + k]], 4 * sizeof *varyings);
+                result = px_raster_draw_varying(target, triangle, varyings, combiner_fragment, &shader, &state);
                 if (result != PX_RASTER_OK) goto raster_error;
             }
             continue;
@@ -960,6 +1162,7 @@ static int window(const struct options *o, const struct model_asset *asset)
     SDL_Renderer *renderer = NULL; SDL_FPoint *points = NULL; int ok = 0;
     SDL_Texture *frame = NULL; struct px_raster_target target = {0};
     struct px_raster_vertex *vertices = NULL;
+    double (*normals)[4] = NULL;
     struct combiner_counts *counts = NULL;
     if (!win) goto done;
     if (!o->software) renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -968,11 +1171,13 @@ static int window(const struct options *o, const struct model_asset *asset)
     if (o->textured) vertices = malloc((size_t)mesh->vertex_count * sizeof *vertices);
     else points = malloc((size_t)mesh->vertex_count * sizeof *points);
     if (o->textured ? !vertices : !points) goto done;
+    if (asset->bch_combiner && !(normals = calloc(mesh->vertex_count, sizeof *normals))) goto done;
     struct camera c; reset(&c);
     if (o->self_test && !input_test(&c)) { SDL_SetError("Input self-test failed"); goto done; }
     SDL_RendererInfo info; if (SDL_GetRendererInfo(renderer, &info)) goto done;
     fprintf(stderr, "[model-viewer] Video=%s renderer=%s; orthographic %s.\n",
             SDL_GetCurrentVideoDriver(), info.name, o->textured ?
+            asset->bch_light ? "BCH six-stage combiner software preview; directional fragment lighting; layer/priority/resource draw order" :
             asset->bch_combiner ? "BCH six-stage combiner software preview; declared unlit inputs; layer/priority/resource draw order" :
             asset->bch_textured ? "unlit BCH TEV-stage-0 software preview; layer/priority/resource draw order" :
             "unlit textured software preview; translucency/priority/resource draw order" : "wireframe");
@@ -985,15 +1190,22 @@ static int window(const struct options *o, const struct model_asset *asset)
         SDL_Event e; while (SDL_PollEvent(&e)) event(&c, &e);
         if (!c.running) break;
         const char *path = frames == 0 ? o->capture : NULL;
-        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, vertices, &target, &frame, path,
+        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, vertices, normals, &target, &frame, path,
                                                      frames == 0 ? counts : NULL) :
             o->textured ? !draw_textured(renderer, asset, &c, vertices, &target, &frame, path) :
                           !draw(renderer, mesh, &c, points, path)) goto done;
         if (frames == 0 && counts)
             for (uint32_t i = 0; i < asset->bch.material_count; ++i)
+            {
                 printf("combiner_sensitivity material=%" PRIu32 " frame=1 fragments=%" PRIu64
-                       " projected_substitute_sensitive=%" PRIu64 " secondary_sensitive=%" PRIu64 "\n",
+                       " projected_substitute_sensitive=%" PRIu64 " secondary_sensitive=%" PRIu64,
                        i, counts[i].fragments, counts[i].projected_sensitive, counts[i].secondary_sensitive);
+                if (asset->bch_light)
+                    printf(" point_bound_sensitive=%" PRIu64 " point_bound_max_delta=%" PRIu32
+                           " degenerate_normals=%" PRIu64, counts[i].point_sensitive,
+                           counts[i].point_max_delta, counts[i].degenerate_normals);
+                putchar('\n');
+            }
         if (++frames == o->frames) break;
         SDL_Delay(16);
     }
@@ -1001,6 +1213,7 @@ static int window(const struct options *o, const struct model_asset *asset)
 done:
     if (!ok) fprintf(stderr, "[model-viewer] Runtime: %s\n", SDL_GetError());
     free(counts);
+    free(normals);
     free(vertices); px_raster_free(&target); if (frame) SDL_DestroyTexture(frame);
     free(points); if (renderer) SDL_DestroyRenderer(renderer); if (win) SDL_DestroyWindow(win); SDL_Quit();
     return ok;
@@ -1058,14 +1271,45 @@ static void print_bch_bindings(const struct model_asset *asset)
     uint32_t decoded = 0;
     for (uint32_t i = 0; i < asset->texture_count; ++i) decoded += asset->textures[i].rgba != NULL;
     if (asset->bch_combiner) {
-        printf("mode=textured shading=tev-six-stage primary=vertex-color fragment_primary=white "
-               "fragment_secondary=black lighting=not-executed vertex_shader=not-executed "
+        if (asset->bch_light)
+            printf("mode=textured shading=tev-six-stage primary=vertex-color fragment_primary=directional-lit "
+                   "fragment_secondary=black lighting=%s point_spot=bounded normals=interpolated-renormalized "
+                   "vertex_shader=not-executed ", asset->lighting == 2 ? "night" : "day");
+        else
+            printf("mode=textured shading=tev-six-stage primary=vertex-color fragment_primary=white "
+                   "fragment_secondary=black lighting=not-executed vertex_shader=not-executed ");
+        printf(
                "projected_units=white-substitute disabled_units=zero culling=not-executed draw_order=layer-priority-resource "
                "external_textures=%" PRIu32 " decoded_textures=%" PRIu32 "\n", asset->texture_count, decoded);
         for (uint32_t i = 0; i < bch->mesh_count; ++i)
             printf("mesh_color mesh=%" PRIu32 " source=%s\n", i,
                    bch->meshes[i].color_source == 1 ? "stored" :
                    bch->meshes[i].color_source == 2 ? "fixed" : "absent-white");
+        if (asset->bch_light) {
+            const struct px_bch_environment *env = &asset->environment;
+            printf("environment scene="); print_bch_name(&env->scene_name);
+            printf(" lights=%" PRIu32 " light_sets=%" PRIu32 " cameras=%" PRIu32 " fogs=%" PRIu32 "\n",
+                   env->light_count, env->set_count, env->camera_count, env->fog_count);
+            for (uint32_t i = 0; i < bch->mesh_count; ++i)
+                printf("mesh_normal mesh=%" PRIu32 " source=%s\n", i,
+                       bch->meshes[i].normal_source == 1 ? "stored" : "fixed");
+            for (uint32_t i = 0; i < bch->material_count; ++i) {
+                const struct px_light_setup *setup = &asset->bch_light[i];
+                const uint32_t *bound = &asset->point_bound[(size_t)i * 3];
+                printf("light_setup material=%" PRIu32 " set=%" PRIu32 " global_ambient=%u,%u,%u"
+                       " point_bound=%" PRIu32 ",%" PRIu32 ",%" PRIu32,
+                       i, bch->materials[i].light_set_index, setup->global_ambient[0], setup->global_ambient[1],
+                       setup->global_ambient[2], bound[0], bound[1], bound[2]);
+                for (uint32_t k = 0; k < setup->count; ++k) {
+                    const struct px_light_source *l = &setup->lights[k];
+                    printf(" light="); print_bch_name(&env->lights[asset->light_index[(size_t)i * 8 + k]].name);
+                    printf(":ambient=%u,%u,%u:diffuse=%u,%u,%u:vector=%.9g,%.9g,%.9g",
+                           l->ambient[0], l->ambient[1], l->ambient[2], l->diffuse[0], l->diffuse[1],
+                           l->diffuse[2], l->vector[0], l->vector[1], l->vector[2]);
+                }
+                putchar('\n');
+            }
+        }
         for (uint32_t i = 0; i < bch->material_count; ++i) {
             const struct px_bch_combiner_material *m = &asset->bch_combiner[i];
             printf("combiner material=%" PRIu32 " sources=0x%04" PRIx32 " sampled_units=0x%" PRIx32

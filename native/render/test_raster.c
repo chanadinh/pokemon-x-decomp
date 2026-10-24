@@ -363,10 +363,53 @@ static void shaded(void)
     px_raster_free(&t);
 }
 
+struct varying_log { unsigned calls; double at_1_1[4]; };
+static void varying_shader(void *context, double u, double v, const double rgba[4],
+                           const double varying[4], double out[4])
+{
+    struct varying_log *log = context;
+    (void)rgba;
+    ++log->calls;
+    if (fabs(u - 1.5 / 4) < 1e-12 && fabs(v - 1.5 / 4) < 1e-12) memcpy(log->at_1_1, varying, sizeof log->at_1_1);
+    out[0] = varying[0] / 4; out[1] = -varying[1] / 8; out[2] = varying[2]; out[3] = 1;
+}
+static void varyings(void)
+{
+    struct px_raster_target t;
+    struct px_raster_state state = px_raster_default_state();
+    OK(px_raster_create(4, 4, &t));
+    /* Unclamped varyings follow their vertices with the affine weights,
+     * independent of the winding swap the rasterizer performs. */
+    for (unsigned order = 0; order < 2; ++order) {
+        struct varying_log log = {0, {0}};
+        OK(px_raster_clear(&t, black, INFINITY));
+        struct px_raster_vertex p[3] = {vertex(0, 0, 0, 0), vertex(4, 0, 1, 0), vertex(0, 4, 0, 1)};
+        double values[12] = {0, -8, 100, 5,  4, -8, 100, 5,  0, 0, 100, 5};
+        if (order) {
+            const struct px_raster_vertex keep = p[1]; p[1] = p[2]; p[2] = keep;
+            for (unsigned c = 0; c < 4; ++c) {
+                const double t1 = values[4 + c]; values[4 + c] = values[8 + c]; values[8 + c] = t1;
+            }
+        }
+        OK(px_raster_draw_varying(&t, p, values, varying_shader, &log, &state));
+        CHECK(log.calls == 6); /* x+y<=2: the hypotenuse is not a top-left edge */
+        CHECK(log.at_1_1[0] == 1.5 && log.at_1_1[1] == -5 && log.at_1_1[2] == 100 && log.at_1_1[3] == 5);
+        pixel(&t, 1, 1, (const uint8_t[]){96, 159, 255, 255});
+        pixel(&t, 3, 3, black);
+        values[5] = NAN;
+        CHECK(px_raster_draw_varying(&t, p, values, varying_shader, &log, &state) == PX_RASTER_INVALID_ARGUMENT);
+        values[5] = 1e13;
+        CHECK(px_raster_draw_varying(&t, p, values, varying_shader, &log, &state) == PX_RASTER_LIMIT_EXCEEDED);
+        CHECK(px_raster_draw_varying(&t, p, NULL, varying_shader, &log, &state) == PX_RASTER_INVALID_ARGUMENT);
+        CHECK(px_raster_draw_varying(&t, p, values, NULL, &log, &state) == PX_RASTER_INVALID_ARGUMENT);
+    }
+    px_raster_free(&t);
+}
+
 int main(void)
 {
     dimensions();uv_and_interpolation();sampling();alpha_blend();depth_and_comparisons();
-    winding_and_shared_edges();clipping_and_invalid();shaded();
+    winding_and_shared_edges();clipping_and_invalid();shaded();varyings();
     puts("raster fixed-pixel tests passed");
     return 0;
 }

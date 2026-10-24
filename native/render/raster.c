@@ -10,7 +10,7 @@
  * https://registry.khronos.org/OpenGL/specs/gl/glspec14.pdf
  * These are explicit software preview rules, not an emulation of PICA. */
 
-struct point { int64_t x, y; struct px_raster_vertex attr; };
+struct point { int64_t x, y; struct px_raster_vertex attr; double varying[4]; };
 
 static int target_valid(const struct px_raster_target *target)
 {
@@ -241,7 +241,8 @@ void px_raster_sample(const struct px_raster_image *image,
 
 static enum px_raster_result draw(struct px_raster_target *target,
     const struct px_raster_vertex vertices[3], const struct px_raster_image *image,
-    const struct px_raster_sampler *sampler, px_raster_shader shader, void *context,
+    const struct px_raster_sampler *sampler, px_raster_shader shader,
+    px_raster_varying_shader varying_shader, const double *varyings, void *context,
     const struct px_raster_state *state)
 {
     struct point p[3];
@@ -262,6 +263,11 @@ static enum px_raster_result draw(struct px_raster_target *target,
         p[i].y = llround(v->y * 256);
         p[i].attr = *v;
         for (unsigned c = 0; c < 4; ++c) p[i].attr.rgba[c] = clamp(v->rgba[c]);
+        for (unsigned c = 0; c < 4; ++c) {
+            p[i].varying[c] = varyings ? varyings[i * 4 + c] : 0;
+            if (!isfinite(p[i].varying[c])) return PX_RASTER_INVALID_ARGUMENT;
+            if (fabs(p[i].varying[c]) > 1e12) return PX_RASTER_LIMIT_EXCEEDED;
+        }
     }
     area = edge(p, p + 1, p[2].x, p[2].y);
     if (!area || state->cull == PX_RASTER_CULL_BOTH) return PX_RASTER_OK;
@@ -323,13 +329,17 @@ static enum px_raster_result draw(struct px_raster_target *target,
             v = p[0].attr.v + w[1] * (p[1].attr.v - p[0].attr.v) +
                 w[2] * (p[2].attr.v - p[0].attr.v);
             if (state->depth_test && !compare(z, target->depth[pixel], state->depth_compare)) continue;
-            if (shader) {
-                double interpolated[4];
-                for (unsigned c = 0; c < 4; ++c)
+            if (shader || varying_shader) {
+                double interpolated[4], varying[4];
+                for (unsigned c = 0; c < 4; ++c) {
                     interpolated[c] = clamp(p[0].attr.rgba[c] +
                         w[1] * (p[1].attr.rgba[c] - p[0].attr.rgba[c]) +
                         w[2] * (p[2].attr.rgba[c] - p[0].attr.rgba[c]));
-                shader(context, u, v, interpolated, color);
+                    varying[c] = p[0].varying[c] + w[1] * (p[1].varying[c] - p[0].varying[c]) +
+                        w[2] * (p[2].varying[c] - p[0].varying[c]);
+                }
+                if (shader) shader(context, u, v, interpolated, color);
+                else varying_shader(context, u, v, interpolated, varying, color);
                 for (unsigned c = 0; c < 4; ++c) color[c] = clamp(color[c]);
             } else {
                 sample(image, sampler, u, v, color);
@@ -352,7 +362,7 @@ enum px_raster_result px_raster_draw(struct px_raster_target *target,
     const struct px_raster_vertex vertices[3], const struct px_raster_image *image,
     const struct px_raster_sampler *sampler, const struct px_raster_state *state)
 {
-    return draw(target, vertices, image, sampler, NULL, NULL, state);
+    return draw(target, vertices, image, sampler, NULL, NULL, NULL, NULL, state);
 }
 
 enum px_raster_result px_raster_draw_shaded(struct px_raster_target *target,
@@ -360,7 +370,14 @@ enum px_raster_result px_raster_draw_shaded(struct px_raster_target *target,
     const struct px_raster_state *state)
 {
     if (!shader) return PX_RASTER_INVALID_ARGUMENT;
-    return draw(target, vertices, NULL, NULL, shader, context, state);
+    return draw(target, vertices, NULL, NULL, shader, NULL, NULL, context, state);
+}
+enum px_raster_result px_raster_draw_varying(struct px_raster_target *target,
+    const struct px_raster_vertex vertices[3], const double *varyings,
+    px_raster_varying_shader shader, void *context, const struct px_raster_state *state)
+{
+    if (!shader || !varyings) return PX_RASTER_INVALID_ARGUMENT;
+    return draw(target, vertices, NULL, NULL, NULL, shader, varyings, context, state);
 }
 
 const char *px_raster_result_string(enum px_raster_result result)

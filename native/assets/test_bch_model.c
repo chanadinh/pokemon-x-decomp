@@ -133,21 +133,26 @@ static struct fixture fixture_with(unsigned width, int parameters)
     pointer(&f, MESH + 16, SUB, 0);
     word(f.data + MESH + 20, 1);
     f.enable = f.cursor;
-    /* parameters bit 1 adds a fixed color in loader slot 2 (semantic 3). */
-    const int fixed_color = parameters & 2;
-    const uint32_t config[] = {0x03000000, 0x7b, fixed_color ? 0x20040000 : 0x10000000,
-                               0, 0x10, 0x20140000};
+    /* parameters bit 1 adds a fixed color in loader slot 2 (semantic 3),
+     * bit 2 instead a fixed normal there (semantic 1), and bit 3 a stored
+     * int8 normal as slot 2 (stride 24, three bytes after UV0). */
+    const int fixed_color = parameters & 2, fixed_normal = parameters & 4;
+    const int stored_normal = parameters & 8, fixed = fixed_color || fixed_normal;
+    const uint32_t config[] = {0x03000000, stored_normal ? 0x87b : 0x7b,
+                               fixed ? 0x20040000 : stored_normal ? 0x20000000 : 0x10000000,
+                               0, stored_normal ? 0x210 : 0x10,
+                               stored_normal ? 0x30180000 : 0x20140000};
     packet(&f, 0x200, 15, 1, 6, config);
-    const uint32_t permutation[] = {fixed_color ? 0x340 : 0x40, 0};
+    const uint32_t permutation[] = {fixed_color ? 0x340 : (fixed_normal || stored_normal) ? 0x140 : 0x40, 0};
     packet(&f, 0x2bb, 15, 1, 2, permutation);
-    single(&f, 0x242, 1, fixed_color ? 2 : 1);
+    single(&f, 0x242, 1, fixed || stored_normal ? 2 : 1);
     const uint32_t offset[] = {0x80000006, 0, float_bits(30), float_bits(-20), float_bits(10)};
     packet(&f, 0x2c0, 15, 1, 5, offset);
     single(&f, 0x2c0, 15, 0x80000007);
     const uint32_t scales[] = {float_bits(1), float_bits(1), float_bits(1), float_bits(2),
                               float_bits(1), float_bits(1), float_bits(1), float_bits(.25f)};
     packet(&f, 0x2c1, 15, 0, 8, scales);
-    if (fixed_color) {
+    if (fixed) {
         /* float24 (x,y,z,w) = (0.5, 0.25, 1.0, 0.75), packed w-first. An
          * earlier slot-1 upload proves the index register and advance. */
         const uint32_t ignored[] = {1, 0, 0, 0};
@@ -165,11 +170,20 @@ static struct fixture fixture_with(unsigned width, int parameters)
     single(&f, 0x25e, 8, 0);
     stream(&f, SUB + 44, f.face);
     f.index_relocation = f.size;
-    pointer(&f, f.face, RAW + 60, width == 2 ? 0x27 : 0x28);
+    const size_t indices = stored_normal ? RAW + 80 : RAW + 60;
+    pointer(&f, f.face, indices, width == 2 ? 0x27 : 0x28);
     const float positions_uv[] = {-2,3,5,.5f,-1, 7,-4,2,2,3, -1,9,-6,-2,4};
-    for (unsigned i = 0; i < 15; ++i) word(f.data + RAW + i * 4, float_bits(positions_uv[i]));
-    f.data[RAW + 60] = 2;
-    f.data[RAW + 60 + 2 * width] = 1;
+    if (stored_normal) {
+        static const int8_t normals[9] = {0, 127, 0, -127, 0, 0, 1, -2, 64};
+        for (unsigned v = 0; v < 3; ++v) {
+            for (unsigned i = 0; i < 5; ++i)
+                word(f.data + RAW + v * 24 + i * 4, float_bits(positions_uv[v * 5 + i]));
+            for (unsigned i = 0; i < 3; ++i) f.data[RAW + v * 24 + 20 + i] = (uint8_t)normals[v * 3 + i];
+        }
+    } else
+        for (unsigned i = 0; i < 15; ++i) word(f.data + RAW + i * 4, float_bits(positions_uv[i]));
+    f.data[indices] = 2;
+    f.data[indices + 2 * width] = 1;
     finish(&f);
     return f;
 }
@@ -326,6 +340,69 @@ static void test_malformed_and_limits(void)
     finish(&f);
     assert(px_bch_model_decode(f.data, f.size, 0, &model) != PX_BCH_MODEL_OK);
 }
+static void test_normals(void)
+{
+    struct px_bch_model model;
+    struct fixture f = fixture(1);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.meshes[0].normal_source == 0 && model.normals[0] == 0 && model.normals[8] == 0);
+    px_bch_model_free(&model);
+    assert(model.normals == NULL);
+
+    f = fixture_with(1, 4);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.meshes[0].normal_source == 2 && model.meshes[0].color_source == 0);
+    for (unsigned v = 0; v < 3; ++v) {
+        const float *n = model.normals + v * 3;
+        assert(n[0] == .5f && n[1] == .25f && n[2] == 1);
+        assert(model.colors[v * 4] == 1);
+    }
+    px_bch_model_free(&model);
+    reject(f, f.fixed_index, 3);              /* normal slot never uploaded */
+    reject(f, f.fixed_data, 0x7f00003f);      /* exponent 127 */
+
+    /* Stored int8 normals use uniform 7's y scale: the fixture's second
+     * scale packet word (w,z,y,x order) gives y = 1. */
+    f = fixture_with(1, 8);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.meshes[0].normal_source == 1);
+    static const float expected[9] = {0, 127, 0, -127, 0, 0, 1, -2, 64};
+    assert(memcmp(model.normals, expected, sizeof expected) == 0);
+    assert(model.uvs[0] == .125f && model.positions[0] == 6); /* other attributes unchanged */
+    px_bch_model_free(&model);
+    /* A two-element stored normal is unsupported. */
+    f = fixture_with(1, 8);
+    word(f.data + f.enable + 8, 0x47b);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_UNSUPPORTED);
+}
+static void test_material_lighting(void)
+{
+    struct fixture f = fixture_with(1, 1);
+    const uint8_t colors[20] = {1,2,3,4, 255,229,128,7, 79,104,98,255, 9,10,11,12, 13,14,15,16};
+    word(f.data + FULL_PARAMS + 4, 0x00110011); /* flags 0x11, fragment flags 0x11 */
+    word(f.data + FULL_PARAMS + 84, 0x00020001);
+    memcpy(f.data + FULL_PARAMS + 88, colors, sizeof colors);
+    word(f.data + FULL_PARAMS + 136, float_bits(1.5f));
+    word(f.data + FULL_PARAMS + 144, 1);
+    word(f.data + FULL_PARAMS + 160, 9);
+    f.data[FULL_PARAMS + 165] = 2;
+    f.data[FULL_PARAMS + 166] = 1;
+    struct px_bch_model model;
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    const struct px_bch_material *m = model.materials;
+    assert(m->material_flags == 0x11 && m->fragment_flags == 0x11);
+    assert(m->light_set_index == 1 && m->fog_index == 2);
+    assert(memcmp(m->colors, colors, sizeof colors) == 0 && m->color_scale == 1.5f);
+    assert(m->lut_sampler_mask == 0x22 && m->fresnel_selector == 2 && m->bump_mode == 1);
+    px_bch_model_free(&model);
+    word(f.data + FULL_PARAMS + 136, 0x7f800000);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) != PX_BCH_MODEL_OK);
+    /* Without a parameter object nothing is read. */
+    f = fixture(1);
+    assert(px_bch_model_decode(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);
+    assert(model.materials[0].material_flags == 0 && model.materials[0].light_set_index == 0);
+    px_bch_model_free(&model);
+}
 static void test_material_parameters(void)
 {
     struct fixture f = fixture(1);
@@ -387,7 +464,9 @@ static void test_material_parameters(void)
 int main(void)
 {
     test_material_parameters();
+    test_material_lighting();
     test_fixed_color();
+    test_normals();
 
     test_geometry_and_ownership();
     test_integer_attributes_and_no_topology_guess();

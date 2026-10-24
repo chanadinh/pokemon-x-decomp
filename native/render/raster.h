@@ -98,6 +98,15 @@ typedef void (*px_raster_shader)(void *context, double u, double v,
 enum px_raster_result px_raster_draw_shaded(struct px_raster_target *target,
     const struct px_raster_vertex vertices[3], px_raster_shader shader, void *context,
     const struct px_raster_state *state);
+/* As px_raster_draw_shaded, plus four unclamped per-vertex varyings
+ * (varyings[4*vertex+c], 12 values; finite,
+ * |value|<=1e12) interpolated with the same affine weights and passed to the
+ * shader. Callers renormalize interpolated directions themselves. */
+typedef void (*px_raster_varying_shader)(void *context, double u, double v,
+    const double rgba[4], const double varying[4], double out[4]);
+enum px_raster_result px_raster_draw_varying(struct px_raster_target *target,
+    const struct px_raster_vertex vertices[3], const double *varyings,
+    px_raster_varying_shader shader, void *context, const struct px_raster_state *state);
 /* Sampling used by px_raster_draw, exposed for shaders. Check the image and
  * sampler once with px_raster_image_valid; sampling an invalid image is
  * undefined. Returns normalized straight RGBA. */

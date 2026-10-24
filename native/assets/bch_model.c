@@ -1,4 +1,5 @@
 #include "bch_model.h"
+#include "bch_scene.h"
 
 #include <float.h>
 #include <math.h>
@@ -338,6 +339,17 @@ static int read_parameters(struct reader *r, size_t params, struct px_bch_materi
     observe(&fragment, 0x107, &f->depth_color);
     observe(&fragment, 0xe0, &f->tev_buffer);
     observe(&fragment, 0xfd, &f->buffer_color);
+    out->material_flags = u16(r->data + params + 4);
+    out->fragment_flags = r->data[params + 6];
+    out->light_set_index = u16(r->data + params + 84);
+    out->fog_index = u16(r->data + params + 86);
+    memcpy(out->colors, r->data + params + 88, sizeof out->colors);
+    out->color_scale = f32(r->data + params + 136);
+    if (!bounded(out->color_scale)) return 0;
+    for (unsigned j = 0; j < 6; ++j)
+        if (u32(r->data + params + 140 + j * 4)) out->lut_sampler_mask |= 1u << j;
+    out->fresnel_selector = r->data[params + 165];
+    out->bump_mode = r->data[params + 166];
     static const unsigned stages[6] = {0xc0, 0xc8, 0xd0, 0xd8, 0xf0, 0xf8};
     for (unsigned stage = 0; stage < 6; ++stage)
         for (unsigned j = 0; j < 5; ++j) observe(&fragment, stages[stage] + j, &f->tev[stage][j]);
@@ -513,24 +525,25 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
         byte += width * elements;
     }
     if (byte > stride || !(semantics & 1)) return 0;
-    double fixed_color[4] = {1, 1, 1, 1};
+    double fixed_color[4] = {1, 1, 1, 1}, fixed_normal[4] = {0, 0, 0, 0};
     for (unsigned slot = 0; slot < total; ++slot) if (fixed & (1u << slot)) {
         const unsigned semantic = (unsigned)(permutation >> (slot * 4)) & 15;
         if (semantic > 6 || semantic == 0 || semantic == 4 || (semantics & (1u << semantic)))
             return fail(r, PX_BCH_MODEL_UNSUPPORTED);
         semantics |= 1u << semantic;
-        if (semantic != 3) continue;
+        if (semantic != 3 && semantic != 1) continue;
         if (!(enable.fixed_known & (1u << slot))) return 0;
         const uint32_t *w = enable.fixed_words[slot];
         const uint32_t components[4] = {
-            w[2] & 0xffffff,                               /* x: red */
-            ((w[1] & 0xffff) << 8) | (w[2] >> 24),         /* y: green */
-            ((w[0] & 0xff) << 16) | (w[1] >> 16),          /* z: blue */
-            w[0] >> 8                                      /* w: alpha */
+            w[2] & 0xffffff,                               /* x */
+            ((w[1] & 0xffff) << 8) | (w[2] >> 24),         /* y */
+            ((w[0] & 0xff) << 16) | (w[1] >> 16),          /* z */
+            w[0] >> 8                                      /* w */
         };
+        double *target = semantic == 3 ? fixed_color : fixed_normal;
         for (unsigned c = 0; c < 4; ++c)
-            if (!float24(components[c], &fixed_color[c]) || !bounded(fixed_color[c])) return 0;
-        mesh->color_source = 2;
+            if (!float24(components[c], &target[c]) || !bounded(target[c])) return 0;
+        if (semantic == 3) mesh->color_source = 2; else mesh->normal_source = 2;
     }
     if (!(semantics & (1u << 4))) return 0;
     size_t start;
@@ -545,10 +558,20 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
     allocation = grow(r, out->colors, (size_t)new_count * 4, sizeof *out->colors);
     if (allocation == NULL) return 0;
     out->colors = allocation;
+    allocation = grow(r, out->normals, (size_t)new_count * 3, sizeof *out->normals);
+    if (allocation == NULL) return 0;
+    out->normals = allocation;
     if (semantics_stored_color(attributes, stored)) mesh->color_source = 1;
-    for (uint32_t vertex = 0; vertex < mesh->vertex_count; ++vertex)
+    for (unsigned j = 0; j < stored; ++j) if (attributes[j].semantic == 1) {
+        if (attributes[j].elements != 3) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+        mesh->normal_source = 1;
+    }
+    for (uint32_t vertex = 0; vertex < mesh->vertex_count; ++vertex) {
         for (unsigned c = 0; c < 4; ++c)
             out->colors[((size_t)mesh->first_vertex + vertex) * 4 + c] = (float)fixed_color[c];
+        for (unsigned c = 0; c < 3; ++c)
+            out->normals[((size_t)mesh->first_vertex + vertex) * 3 + c] = (float)fixed_normal[c];
+    }
     for (uint32_t vertex = 0; vertex < mesh->vertex_count; ++vertex) {
         for (unsigned j = 0; j < stored; ++j) {
             const struct attribute *attr = attributes + j;
@@ -575,6 +598,8 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
                     out->uvs[((size_t)mesh->first_vertex + vertex) * 2 + component] = (float)decoded;
                 } else if (attr->semantic == 3) {
                     out->colors[((size_t)mesh->first_vertex + vertex) * 4 + component] = (float)decoded;
+                } else if (attr->semantic == 1) {
+                    out->normals[((size_t)mesh->first_vertex + vertex) * 3 + component] = (float)decoded;
                 }
             }
         }
@@ -647,10 +672,147 @@ enum px_bch_model_result px_bch_model_decode(const uint8_t *data, size_t size,
     if (!ok) { px_bch_model_free(out); return r.error; }
     return PX_BCH_MODEL_OK;
 }
+/* ---------------------------------------------------------------- scenes */
+enum { MAX_LIGHTS = 256, MAX_SETS = 256, MAX_SET_ENTRIES = 4096 };
+static void color(const uint8_t *p, uint8_t out[4]) { memcpy(out, p, 4); }
+static int vec3(struct reader *r, size_t at, float out[3])
+{
+    for (unsigned j = 0; j < 3; ++j) {
+        out[j] = f32(r->data + at + j * 4);
+        if (!bounded(out[j])) return 0;
+    }
+    return 1;
+}
+static int read_light(struct reader *r, size_t at, size_t tree_name, struct px_bch_light *l)
+{
+    if (!span(at, 0x6c, r->sections[CONTENTS])) return 0;
+    struct px_bch_name indexed;
+    if (!name(r, at, 0, &l->name) || !name(r, tree_name, 0, &indexed) ||
+        !same_name(&l->name, &indexed)) return 0;
+    if (!vec3(r, at + 4, l->scale) || !vec3(r, at + 16, l->rotation) ||
+        !vec3(r, at + 28, l->translation)) return 0;
+    l->type = r->data[at + 40];
+    l->enabled = r->data[at + 41];
+    l->flags = r->data[at + 42];
+    l->lut_config = r->data[at + 43];
+    if (l->enabled > 1 || (l->flags & ~3u)) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+    if (l->type == PX_BCH_LIGHT_AMBIENT) { color(r->data + at + 48, l->ambient); return 1; }
+    if (l->type < PX_BCH_LIGHT_FRAGMENT || l->type > PX_BCH_LIGHT_FRAGMENT_SPOT)
+        return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+    color(r->data + at + 48, l->ambient);
+    color(r->data + at + 52, l->diffuse);
+    color(r->data + at + 56, l->specular0);
+    color(r->data + at + 60, l->specular1);
+    if (!vec3(r, at + 64, l->direction)) return 0;
+    l->has_distance_sampler = relocation(r, at + 76) != NULL || u32(r->data + at + 76) != 0;
+    l->has_angle_sampler = relocation(r, at + 80) != NULL || u32(r->data + at + 80) != 0;
+    l->attenuation_start = f32(r->data + at + 84);
+    l->attenuation_end = f32(r->data + at + 88);
+    if (!bounded(l->attenuation_start) || !bounded(l->attenuation_end)) return 0;
+    return 1;
+}
+static int read_environment(struct reader *r, uint32_t scene_index, struct px_bch_environment *out)
+{
+    const uint32_t lights = r->counts[5];
+    if (lights > MAX_LIGHTS) return fail(r, PX_BCH_MODEL_LIMIT_EXCEEDED);
+    if (scene_index >= r->counts[14]) return 0;
+    out->lights = calloc(lights ? lights : 1, sizeof *out->lights);
+    if (!out->lights) return fail(r, PX_BCH_MODEL_NO_MEMORY);
+    out->light_count = lights;
+    for (uint32_t i = 0; i < lights; ++i) {
+        size_t at;
+        if (!pointer(r, r->tables[5] + (size_t)i * 4, CONTENTS, 0x6c, &at) ||
+            !read_light(r, at, r->trees[5] + ((size_t)i + 1) * 12 + 8, out->lights + i)) return 0;
+        for (uint32_t j = 0; j < i; ++j)
+            if (same_name(&out->lights[j].name, &out->lights[i].name)) return 0;
+    }
+    size_t scene;
+    if (!pointer(r, r->tables[14] + (size_t)scene_index * 4, CONTENTS, 0x1c, &scene)) return 0;
+    struct px_bch_name indexed;
+    if (!name(r, scene, 0, &out->scene_name) ||
+        !name(r, r->trees[14] + ((size_t)scene_index + 1) * 12 + 8, 0, &indexed) ||
+        !same_name(&out->scene_name, &indexed)) return 0;
+    out->camera_count = u32(r->data + scene + 8);
+    out->fog_count = u32(r->data + scene + 0x18);
+    const uint32_t sets = u32(r->data + scene + 0x10);
+    if (sets > MAX_SETS) return fail(r, PX_BCH_MODEL_LIMIT_EXCEEDED);
+    out->sets = calloc(sets ? sets : 1, sizeof *out->sets);
+    if (!out->sets) return fail(r, PX_BCH_MODEL_NO_MEMORY);
+    out->set_count = sets;
+    size_t table = 0;
+    if (sets && !pointer(r, scene + 0xc, CONTENTS, (size_t)sets * 12, &table)) return 0;
+    for (uint32_t i = 0; i < sets; ++i) {
+        const size_t at = table + (size_t)i * 12;
+        struct px_bch_light_set *set = out->sets + i;
+        set->index = u32(r->data + at);
+        set->count = u32(r->data + at + 8);
+        for (uint32_t j = 0; j < i; ++j) if (out->sets[j].index == set->index) return 0;
+        if (set->count > MAX_SET_ENTRIES - out->set_light_count)
+            return fail(r, PX_BCH_MODEL_LIMIT_EXCEEDED);
+        size_t names = 0;
+        if (set->count && !pointer(r, at + 4, CONTENTS, (size_t)set->count * 4, &names)) return 0;
+        void *grown = grow(r, out->set_lights, out->set_light_count + set->count, sizeof *out->set_lights);
+        if (!grown && set->count) return 0;
+        if (grown) out->set_lights = grown;
+        set->first = out->set_light_count;
+        for (uint32_t k = 0; k < set->count; ++k) {
+            struct px_bch_name wanted;
+            if (!name(r, names + (size_t)k * 4, 0, &wanted)) return 0;
+            uint32_t found = UINT32_MAX;
+            for (uint32_t l = 0; l < lights; ++l)
+                if (same_name(&out->lights[l].name, &wanted)) found = l;
+            if (found == UINT32_MAX) return 0;
+            out->set_lights[out->set_light_count++] = found;
+        }
+    }
+    return 1;
+}
+enum px_bch_model_result px_bch_environment_decode(const uint8_t *data, size_t size,
+    uint32_t scene_index, struct px_bch_environment *out)
+{
+    if (out == NULL) return PX_BCH_MODEL_INVALID_ARGUMENT;
+    memset(out, 0, sizeof *out);
+    if (data == NULL) return PX_BCH_MODEL_INVALID_ARGUMENT;
+    if (size > MAX_BYTES) return PX_BCH_MODEL_LIMIT_EXCEEDED;
+    if (size < 56) return PX_BCH_MODEL_TRUNCATED;
+    if (memcmp(data, "BCH\0", 4)) return PX_BCH_MODEL_INVALID_HEADER;
+    if (data[4] != 7 || data[5] != 7 || u32(data + 48) || u32(data + 52)) return PX_BCH_MODEL_UNSUPPORTED;
+    struct reader r = {0};
+    r.data = data;
+    r.error = PX_BCH_MODEL_INVALID_HEADER;
+    for (unsigned i = 0; i < SECTION_COUNT; ++i) {
+        const size_t start = u32(data + 8 + i * 4), length = u32(data + 28 + i * 4);
+        if (start > size || length > size - start) return PX_BCH_MODEL_TRUNCATED;
+        if (length && (start < 56 || (i != STRINGS && start % 4))) return PX_BCH_MODEL_INVALID_HEADER;
+        r.sections[i].start = start;
+        r.sections[i].end = start + length;
+        if (!length) continue;
+        for (unsigned j = 0; j < i; ++j)
+            if (r.sections[j].end != r.sections[j].start && start < r.sections[j].end &&
+                r.sections[j].start < start + length) return PX_BCH_MODEL_INVALID_HEADER;
+    }
+    const int ok = read_relocations(&r) && read_index(&r) && read_environment(&r, scene_index, out);
+    free(r.relocations);
+    if (!ok) { px_bch_environment_free(out); return r.error; }
+    return PX_BCH_MODEL_OK;
+}
+void px_bch_environment_free(struct px_bch_environment *e)
+{
+    if (e == NULL) return;
+    free(e->lights); free(e->sets); free(e->set_lights);
+    memset(e, 0, sizeof *e);
+}
+const struct px_bch_light_set *px_bch_environment_set(const struct px_bch_environment *e,
+                                                      uint32_t set_index)
+{
+    for (uint32_t i = 0; e && i < e->set_count; ++i)
+        if (e->sets[i].index == set_index) return e->sets + i;
+    return NULL;
+}
 void px_bch_model_free(struct px_bch_model *model)
 {
     if (model == NULL) return;
-    free(model->positions); free(model->uvs); free(model->colors); free(model->indices);
+    free(model->positions); free(model->uvs); free(model->colors); free(model->normals); free(model->indices);
     free(model->meshes); free(model->submeshes); free(model->materials);
     memset(model, 0, sizeof *model);
 }

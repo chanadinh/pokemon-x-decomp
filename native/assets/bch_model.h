@@ -50,6 +50,16 @@ struct px_bch_material {
     uint32_t parameters_present;
     struct px_bch_coordinator coordinators[3];
     struct px_bch_fragment_state fragment;
+    /* Lighting parameters (SPICA bd29a78 H3DMaterialParams order), also only
+     * with parameters_present: flags +4 (bit 0 fragment lighting), fragment
+     * flags +6 (LUT enables, clamp highlight), light set/fog index +84/+86,
+     * emission/ambient/diffuse/specular0/specular1 RGBA8 at +88..+107, color
+     * scale +136, nonzero LUT sampler pointers +140..+163 as bits 0..5,
+     * fresnel selector +165 and bump mode +166. Nothing here is executed. */
+    uint32_t material_flags, fragment_flags, light_set_index, fog_index;
+    uint32_t lut_sampler_mask, fresnel_selector, bump_mode;
+    uint8_t colors[5][4];
+    float color_scale;
 };
 struct px_bch_submesh {
     uint32_t first_index, index_count, index_width;
@@ -71,6 +81,9 @@ struct px_bch_mesh {
      * 1 stored attribute after its uniform scale, 2 fixed attribute decoded
      * from float24 registers 0x232..0x235 (x,y,z,w = R,G,B,A), unscaled. */
     uint32_t color_source;
+    /* Normal input (semantic 1): 0 absent (normals hold 0,0,0), 1 stored
+     * after its uniform scale, 2 fixed float24 x,y,z. Not normalized. */
+    uint32_t normal_source;
     float bounds_min[3], bounds_max[3];
 };
 struct px_bch_model {
@@ -79,6 +92,7 @@ struct px_bch_model {
     float *uvs;       /* Owned UV0 pairs after scale; stored BCH convention. */
     float *colors;    /* Owned RGBA quads per vertex; see mesh color_source.
                        * Values are not clamped; the shader is not executed. */
+    float *normals;   /* Owned XYZ triples per vertex; see mesh normal_source. */
     uint32_t *indices; /* Owned indices into the complete positions array. */
     struct px_bch_mesh *meshes;
     struct px_bch_submesh *submeshes;
