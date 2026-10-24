@@ -136,7 +136,9 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    the skinned player-character model
    ([player evidence](native/reproduction/bch-player/README.txt)), animated from its
    GF1 motion pack with a walk cycle per step
-   ([motion evidence](native/reproduction/bch-motion/README.txt)). The gap list to
+   ([motion evidence](native/reproduction/bch-motion/README.txt)). `--zone` loads
+   indoor zones from their own data with warps between them, NPCs and a real-time
+   walking controller ([zone evidence](native/reproduction/bch-zone/README.txt)). The gap list to
    the first playable is in [the slice document](docs/PLAYABLE_SLICE.md#what-remains-before-the-first-playable).
    Next trace the environment's binding to the field and the day/night
    selection, then execute the vertex shader (normal quaternion, primary color),

@@ -16,12 +16,14 @@ project owner's request. No generated artwork or mockups are used.
 | [Player model](native-bch-player.png) | `outputs/native-bch-player/player-standalone.bmp` (lossless PNG conversion) | `tr0002_00_fi` alone with `--skinned`, its own textures and the character light set, in its rest (T) pose. |
 | [Walking player](native-bch-motion-walk.png) | `outputs/native-bch-motion/walk-step-7.bmp` (lossless PNG conversion) | As the player capture with `--motion-section 1 --motion 1 --walk-motion 3 --motion-frame 7`: frame 7 of the walk cycle (slot 3) halfway through the last step, gliding between cells. Motion choice and glide are inspection choices, not the game's controller. Real archive paths. |
 | [Animated player model](native-bch-motion.png) | `outputs/native-bch-motion/motion-3-7.bmp` (lossless PNG conversion) | `tr0002_00_fi` alone posed by frame 7 of motion slot 3, unlit inputs declared (no environment). |
+| [Bedroom walk](native-bch-zone-walk.png) | `outputs/native-bch-zone/play-60.bmp` (lossless PNG conversion) | `--zone 5 --play DDDRDDLRRRRUUUURRUU. --frames 520 --capture-at 60`: the player walking in the bedroom at the 3DS top-screen resolution 400 × 240, scaled to 800 × 480. Real archive paths. |
+| [Downstairs, talking](native-bch-zone.png) | `outputs/native-bch-zone/play-519.bmp` (lossless PNG conversion) | The same run's last frame: after the stairs warp to zone 4, the player faces the NPC, who has turned toward the player. Dialogue is not executed. |
 | [Textured CGFX model](native-textured-model.png) | `outputs/native-textured-model/model-frame.png` | Archive `a/1/0/2`, entry 0: six materials and textures in an unlit software preview. Lighting, complete shaders and original-game visual equivalence are not reproduced. |
 | [Terrain/collision inspector](native-field-inspector.png) | `outputs/native-field-scene/field-collision-frame.png` | Zone 5 → matrix 12 → region 165, with collision edges and a restricted inspection marker. This earlier capture's footer predates the separate BCH wireframe milestone; it is not the current status of BCH decoding. |
 
 The source captures are dated October 23, 2026, except the lit-field and walk captures
-(October 24, 2026), and the player and motion captures (also October 24). PNG dimensions are 960 × 640 for
-the eleven model images and 1100 × 760 for the field inspector. They retain their
+(October 24, 2026), and the player, motion and zone captures (also October 24). PNG dimensions are 960 × 640 for
+the eleven model images, 800 × 480 for the two zone images and 1100 × 760 for the field inspector. They retain their
 original pixels and dimensions; the README scales their display size only.
 
 Evidence and reproduction instructions:
@@ -33,6 +35,7 @@ Evidence and reproduction instructions:
 - [Walk alignment comparison](../../native/reproduction/bch-walk/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-walk/README.txt).
 - [Player skinning comparison](../../native/reproduction/bch-player/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-player/README.txt).
 - [Motion comparison](../../native/reproduction/bch-motion/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-motion/README.txt).
+- [Zone comparison](../../native/reproduction/bch-zone/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-zone/README.txt).
 - [Textured CGFX capture record](../../native/reproduction/textured-model/rendered-sample.json).
 - [Field inspector scope and reproduction](../../native/reproduction/field-scene/README.txt).
 
@@ -49,6 +52,8 @@ c8c76b2e9f68859d2cc7af1ad2c7fb277d8d38496166ee36b99034890ed8b6ce  native-bch-tex
 5f2ceb3c1a96b738dacca747f6e27a888e0ecb2dd492d9a38a50a3c89e1fdb9e  native-bch-player.png
 bf53473c851c4ed09be977ce5580123fce5b8b170d82d3bfe523a23a2fb49a71  native-bch-motion-walk.png
 115541aa251477e563f8e461fe81040eb1c384e65e9641c0f5cd89c39e197834  native-bch-motion.png
+e617380d1a84d6d24b0240d5b94607ef908e3e1073865b0c3fe58143b0e73f8f  native-bch-zone-walk.png
+002c3f1869e9b9bd0cecb2ae9dcf14f04972bf4cecf44f0122c3a768370eb9d2  native-bch-zone.png
 b987693a363ff84bf009c6d537b7e2937e9e8d4fdba4d4855bcb2f11ae0a0f45  native-textured-model.png
 2335afaea29641d0c037bd082ec54963cdb2ea3099030a5d5a1e7a24862032de  native-field-inspector.png
 ```

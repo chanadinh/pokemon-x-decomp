@@ -1,0 +1,185 @@
+{
+ "archive_sha256": {
+  "a/0/1/2": "dc0b7a0dd2764480eaebd4c1c057d1fa8e268ccdf8953945713bb091925190d2",
+  "a/0/4/2": "37786d6473edc53d11eac8e60dfaf677895a402501242e4e920cc533cdf2eab3",
+  "a/1/4/9": "bd3924b48ac6a91354a5d6160931b677cd18d40b64b1ace33ddff1234bfbf50c"
+ },
+ "verifier_sha256": "7fbe8472f659432d093c2aae99108d1608ec794b5dcfde257a42c19e6f53e74d",
+ "bridge_source_sha256": "a58852959f5cac1ce8cd48729b55e1bd54dfbe7d14343aec49c28c685be763f8",
+ "zones": 360,
+ "zone_archive_entries": 361,
+ "last_entry": "concatenated 56-byte zone headers, zone order",
+ "entity_totals": {
+  "furniture": 733,
+  "npcs": 2524,
+  "warps": 871,
+  "trigger1": 381,
+  "trigger2": 117
+ },
+ "warp_coordinate_types": {
+  "0": 674,
+  "1": 197
+ },
+ "registries": 170,
+ "registry_entries": 1421,
+ "all_entities_and_registries_match": true,
+ "house": {
+  "4": {
+   "area": 75,
+   "matrix": 11,
+   "entities": {
+    "length": 104,
+    "counts": [
+     0,
+     1,
+     2,
+     0,
+     0
+    ],
+    "npcs": [
+     [
+      0,
+      47,
+      47,
+      0,
+      0,
+      1,
+      1,
+      0,
+      10,
+      4,
+      0
+     ]
+    ],
+    "warps": [
+     {
+      "supported": 1,
+      "fields": [
+       0,
+       1,
+       0,
+       2,
+       0,
+       153,
+       0,
+       225,
+       3,
+       1,
+       0,
+       8,
+       12
+      ],
+      "raw": "000001000002000099000000e10003000100000000000000"
+     },
+     {
+      "supported": 1,
+      "fields": [
+       5,
+       0,
+       1,
+       5,
+       0,
+       81,
+       9,
+       171,
+       2,
+       1,
+       0,
+       4,
+       9
+      ],
+      "raw": "050000000105000051000900ab0002000100000000000000"
+     }
+    ]
+   }
+  },
+  "5": {
+   "area": 75,
+   "matrix": 12,
+   "entities": {
+    "length": 32,
+    "counts": [
+     0,
+     0,
+     1,
+     0,
+     0
+    ],
+    "npcs": [],
+    "warps": [
+     {
+      "supported": 1,
+      "fields": [
+       4,
+       1,
+       3,
+       5,
+       0,
+       63,
+       -9,
+       279,
+       1,
+       2,
+       0,
+       3,
+       15
+      ],
+      "raw": "04000100030500003f00f7ff170101000200000000000000"
+     }
+    ]
+   }
+  }
+ },
+ "predicted_walks": [
+  {
+   "zone": 5,
+   "arrive": null,
+   "steps": "DDDRDDL",
+   "lines": [
+    "warp from_zone=5 warp=0 target_zone=4 target_warp=1 result=loaded arrival=cell:4,10 stepped=1",
+    "zone_walk zone=4 cell=4,10 facing=0 moves=7 blocked=0 warps=1 policy=standard-cells-npcs-block-warps-on-step"
+   ]
+  },
+  {
+   "zone": 4,
+   "arrive": 1,
+   "steps": "RRRRUUUURRUU",
+   "lines": [
+    "zone_walk zone=4 cell=10,5 facing=2 moves=12 blocked=1 warps=0 policy=standard-cells-npcs-block-warps-on-step"
+   ]
+  },
+  {
+   "zone": 4,
+   "arrive": 1,
+   "steps": "DRRRRD",
+   "lines": [
+    "warp from_zone=4 warp=0 target_zone=0 target_warp=1 result=not-loaded",
+    "zone_walk zone=4 cell=8,12 facing=0 moves=7 blocked=0 warps=1 policy=standard-cells-npcs-block-warps-on-step"
+   ]
+  },
+  {
+   "zone": 5,
+   "arrive": null,
+   "steps": "DDDRDDLUR",
+   "lines": [
+    "warp from_zone=5 warp=0 target_zone=4 target_warp=1 result=loaded arrival=cell:4,10 stepped=1",
+    "warp from_zone=4 warp=1 target_zone=5 target_warp=0 result=loaded arrival=cell:4,15 stepped=1",
+    "zone_walk zone=5 cell=5,15 facing=1 moves=9 blocked=0 warps=2 policy=standard-cells-npcs-block-warps-on-step"
+   ]
+  }
+ ],
+ "runtime": {
+  "play": "DDDRDDLRRRRUUUURRUU.",
+  "frames": 520,
+  "lines": [
+   "warp from_zone=5 warp=0 target_zone=4 target_warp=1 result=loaded arrival=cell:4,10 stepped=1",
+   "talk zone=4 npc=0 id=0 script=1"
+  ],
+  "capture_sha256": {
+   "0": "39dac8226ebeb9a727ee733a6eb6a1ebd034b7de76ee09e61c8abec170944d55",
+   "60": "0c42e3bae3a63d2ae7edaa4a96818cbef6aed87a602f16533a481355d9043e2e",
+   "200": "d34994de67b90d4b71d25a780f88d58e7e246ab47ba16d57b62a92aa3bc4b851",
+   "519": "6245c39c3b0e3299c9ff062926589443a9b0bffa5ff4284be39bfc2751fe9b6b"
+  }
+ }
+}

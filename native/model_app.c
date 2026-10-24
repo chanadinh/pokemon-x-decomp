@@ -7,6 +7,7 @@
 #include "assets/field.h"
 #include "assets/garc.h"
 #include "assets/lz.h"
+#include "assets/zone.h"
 #include "render/light.h"
 #include "render/raster.h"
 #include "render/skin.h"
@@ -30,6 +31,9 @@ struct options {
     int have_player_entry, have_player_section;
     uint32_t motion_section, motion_slot, motion_frame, walk_motion_slot;
     int have_motion_section, have_motion_slot, have_motion_frame, have_walk_motion;
+    uint32_t zone, arrive, run_motion_slot, capture_at;
+    int have_zone, have_arrive, silent, have_run_motion, have_capture_at;
+    const char *play; /* --zone: scripted input during display */
     uint32_t entry, subentry, model, frames, section;
     uint32_t texture_entry, texture_subentry, texture_section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
@@ -40,23 +44,56 @@ struct options {
  * field viewer: only the exact word 0x00000020 admits the marker, which starts
  * at the first such cell in row-major order and moves one cardinal cell per
  * key. This is not reconstructed player movement or game collision. */
+struct model_asset;
+/* --zone: one indoor zone resolved from game data (see load_zone). NPCs stand
+ * on their stored tiles and block them; warps fire on an attempted step into
+ * their rectangle. */
+struct zone_npc {
+    struct model_asset *model; /* NULL when its model could not be loaded */
+    int x, z, facing;
+    uint16_t id, script, registry_model, model_entry;
+};
+struct zone_state {
+    uint32_t zone, area, matrix, region;
+    struct px_zone_entities entities;
+    struct zone_npc *npcs;
+    uint32_t npc_count;
+    char message[192];
+};
 struct walker {
     const struct px_field_grid *grid;
+    const struct zone_state *zone; /* --zone only */
     int active, x, z;
     int facing; /* quarter turns about +Y: 0 +Z (D), 1 +X (R), 2 -Z (U), 3 -X (L) */
-    uint32_t moves, blocked;
+    uint32_t moves, blocked, warps;
     int last_moved; /* the latest attempted step moved */
+    int32_t warp_hit; /* --zone: warp index the latest step attempted, or -1 */
 };
-struct camera { double yaw, pitch, zoom; int running; struct walker *walk; };
+struct camera {
+    double yaw, pitch, zoom; int running; struct walker *walk;
+    int zone;       /* --zone: WASD queue a step for the controller, Space/Return talk */
+    char queued;    /* U, D, L, R or 0 */
+    int interact;
+    const char *play; /* --play cursor */
+    int internal_w, internal_h; /* --zone: fixed render size, scaled to the window */
+};
+static int npc_at(const struct zone_state *zone, int x, int z)
+{
+    for (uint32_t i = 0; zone && i < zone->npc_count; ++i)
+        if (zone->npcs[i].x == x && zone->npcs[i].z == z) return (int)i;
+    return -1;
+}
 static int walkable(const struct walker *w, int x, int z)
 {
     return x >= 0 && z >= 0 && x < w->grid->width && z < w->grid->height &&
-           w->grid->tiles[(size_t)z * w->grid->width + (size_t)x] == UINT32_C(0x00000020);
+           w->grid->tiles[(size_t)z * w->grid->width + (size_t)x] == UINT32_C(0x00000020) &&
+           npc_at(w->zone, x, z) < 0;
 }
 static void walk_start(struct walker *w, const struct px_field_grid *grid)
 {
     memset(w, 0, sizeof *w);
     w->grid = grid;
+    w->warp_hit = -1;
     for (int z = 0; z < grid->height && !w->active; ++z)
         for (int x = 0; x < grid->width && !w->active; ++x)
             if (walkable(w, x, z)) { w->active = 1; w->x = x; w->z = z; }
@@ -69,9 +106,29 @@ static void walk_step(struct walker *w, char direction)
     const int dz = direction == 'U' ? -1 : direction == 'D' ? 1 : 0;
     /* The marker turns toward every attempted step, blocked or not. */
     w->facing = direction == 'D' ? 0 : direction == 'R' ? 1 : direction == 'U' ? 2 : 3;
+    w->warp_hit = -1;
+    if (w->zone) {
+        /* --zone: a step into a warp that is not receive-only asks for it;
+         * the caller loads the target (and falls back to walk_move). */
+        const int32_t k = px_zone_warp_at(&w->zone->entities, w->x + dx, w->z + dz);
+        if (k >= 0 && w->zone->entities.warps[k].directionality != 2) {
+            w->warp_hit = k; w->last_moved = 0; ++w->warps;
+            return;
+        }
+    }
     if (walkable(w, w->x + dx, w->z + dz)) { w->x += dx; w->z += dz; ++w->moves; w->last_moved = 1; }
     else { ++w->blocked; w->last_moved = 0; }
 }
+/* The plain move of walk_step, for a warp whose target did not load. */
+static void walk_move(struct walker *w)
+{
+    const int dx = w->facing == 1 ? 1 : w->facing == 3 ? -1 : 0, dz = w->facing == 0 ? 1 : w->facing == 2 ? -1 : 0;
+    w->warp_hit = -1;
+    if (walkable(w, w->x + dx, w->z + dz)) { w->x += dx; w->z += dz; ++w->moves; w->last_moved = 1; }
+    else { ++w->blocked; w->last_moved = 0; }
+}
+/* Zone face direction (0 up, 1 down, 2 left, 3 right) as a walker facing. */
+static int zone_facing(unsigned face) { static const int map[4] = {2, 0, 3, 1}; return map[face & 3]; }
 /* Region-local cell center: (cell + 0.5) * 18 - 360, as the field viewer. */
 static double cell_center(int cell) { return (cell + 0.5) * 18 - 360; }
 
@@ -106,11 +163,12 @@ struct model_asset {
     struct walker walker;
     int walk;
     struct model_asset *player; /* --player-archive: drawn at the marker */
+    struct zone_state *zone;    /* --zone */
     /* --motion: an unbaked copy of the skinned model, the GF1 pack and the
      * per-frame buffers that pose the baked arrays in place. */
     struct px_bch_model skin_source;
     struct px_gf_motion_pack motion_pack;
-    const struct px_gf_motion *motion, *walk_motion, *posed_motion;
+    const struct px_gf_motion *motion, *walk_motion, *run_motion, *posed_motion;
     double glide[2]; /* player offset from its cell center while a step plays */
     float (*motion_locals)[9];
     double *motion_world, *motion_rest;
@@ -124,6 +182,13 @@ struct model_asset {
 static void asset_free(struct model_asset *asset)
 {
     if (asset->player) { asset_free(asset->player); free(asset->player); }
+    if (asset->zone) {
+        for (uint32_t i = 0; i < asset->zone->npc_count; ++i)
+            if (asset->zone->npcs[i].model) { asset_free(asset->zone->npcs[i].model); free(asset->zone->npcs[i].model); }
+        free(asset->zone->npcs);
+        px_zone_entities_free(&asset->zone->entities);
+        free(asset->zone);
+    }
     px_bch_model_free(&asset->skin_source);
     px_gf_motion_pack_free(&asset->motion_pack);
     free(asset->motion_locals); free(asset->motion_world); free(asset->motion_rest);
@@ -207,9 +272,19 @@ static void usage(FILE *stream, const char *program)
         "  --walk-motion N    With --player-archive and --motion: play slot N once\n"
         "                     per marker step while the player glides between cells;\n"
         "                     --motion loops otherwise\n"
+        "  --zone N           Game-data scene: zone N of a/0/1/2 with its area\n"
+        "                     textures, single-region matrix, GR terrain, collision,\n"
+        "                     warps and NPCs, the player and its motions; WASD walk,\n"
+        "                     Shift runs, Space talks; warps load their target zone.\n"
+        "                     Combines only with --romfs, --lighting, --steps,\n"
+        "                     --arrive N (start at warp N), --play UDLR (scripted\n"
+        "                     input during display; u/d/l/r run, . talks) and\n"
+        "                     run-time options\n"
         "  --inspect          Print decoded mesh metadata without a window\n"
         "  --capture-frame F  Save first viewport to a new BMP file\n"
         "  --frames N         Exit after a positive number of frames\n"
+        "  --capture-at N     With --frames and --capture-frame: capture rendered\n"
+        "                     frame N (0-based, default 0) instead of the first\n"
         "  --software         Force software rendering\n"
         "  --self-test-input  Exercise orbit/zoom/reset/exit; default 3 frames\n"
         "Controls: arrows orbit, +/- zoom, R/Home reset, Escape exit.\n"
@@ -266,7 +341,9 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--scene") && strcmp(arg, "--lighting") && strcmp(arg, "--steps") &&
             strcmp(arg, "--player-archive") && strcmp(arg, "--player-entry") &&
             strcmp(arg, "--player-section") && strcmp(arg, "--motion-section") &&
-            strcmp(arg, "--motion") && strcmp(arg, "--motion-frame") && strcmp(arg, "--walk-motion")) return 0;
+            strcmp(arg, "--motion") && strcmp(arg, "--motion-frame") && strcmp(arg, "--walk-motion") &&
+            strcmp(arg, "--zone") && strcmp(arg, "--arrive") && strcmp(arg, "--play") &&
+            strcmp(arg, "--capture-at")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -275,6 +352,10 @@ static int parse(int argc, char **argv, struct options *o)
         else if (!strcmp(arg, "--texture-archive")) o->texture_archive = value;
         else if (!strcmp(arg, "--environment-archive")) o->environment_archive = value;
         else if (!strcmp(arg, "--player-archive")) o->player_archive = value;
+        else if (!strcmp(arg, "--play")) {
+            if (o->play || strspn(value, "UDLRudlr.") != strlen(value) || strlen(value) > 4096) return 0;
+            o->play = value;
+        }
         else if (!strcmp(arg, "--steps")) {
             if (o->steps || strspn(value, "UDLR") != strlen(value) || strlen(value) > 4096) return 0;
             o->steps = value;
@@ -308,6 +389,15 @@ static int parse(int argc, char **argv, struct options *o)
             } else if (!strcmp(arg, "--motion")) {
                 if (!n || o->have_motion_slot) return 0;
                 o->motion_slot = n; o->have_motion_slot = 1;
+            } else if (!strcmp(arg, "--zone")) {
+                if (o->have_zone || n > 65535) return 0;
+                o->zone = n; o->have_zone = 1;
+            } else if (!strcmp(arg, "--capture-at")) {
+                if (o->have_capture_at) return 0;
+                o->capture_at = n; o->have_capture_at = 1;
+            } else if (!strcmp(arg, "--arrive")) {
+                if (o->have_arrive || n > 255) return 0;
+                o->arrive = n; o->have_arrive = 1;
             } else if (!strcmp(arg, "--walk-motion")) {
                 if (!n || o->have_walk_motion) return 0;
                 o->walk_motion_slot = n; o->have_walk_motion = 1;
@@ -328,6 +418,23 @@ static int parse(int argc, char **argv, struct options *o)
             }
             else { if (!n) return 0; o->frames = n; }
         }
+    }
+    if ((o->have_arrive || o->play) && !o->have_zone) return 0;
+    if (o->have_capture_at && (!o->capture || !o->frames || o->capture_at >= o->frames)) return 0;
+    if (o->have_zone) {
+        /* --zone resolves the whole scene itself; only run-time and lighting
+         * options combine with it. */
+        if (o->demo || !o->romfs || o->archive || o->have_entry || o->have_subentry || o->have_model ||
+            o->have_section || o->triangle_list || o->textured || o->combiners || o->texture_archive ||
+            o->have_texture_entry || o->have_texture_subentry || o->have_texture_section ||
+            o->environment_archive || o->have_environment_entry || o->have_environment_subentry ||
+            o->have_environment_section || o->have_scene || o->walk || o->skinned || o->player_archive ||
+            o->have_player_entry || o->have_player_section || o->have_motion_section || o->have_motion_slot ||
+            o->have_motion_frame || o->have_walk_motion) return 0;
+        if (o->inspect && (o->capture || o->frames || o->self_test || o->play)) return 0;
+        if (o->self_test && !o->frames) o->frames = 3;
+        if (!o->lighting) o->lighting = 1;
+        return 1;
     }
     if (o->demo) {
         if (o->romfs || o->archive || o->have_entry || o->have_subentry || o->have_model ||
@@ -874,7 +981,7 @@ static int load_motion(const struct options *o, const uint8_t *data, size_t size
             if (name_is(&asset->skin_source.bones[i].name, asset->motion_pack.bones[k].name)) {
                 ++matched; world_space += (asset->motion_pack.bones[k].flags & 8) != 0; break;
             }
-    printf("motion_section=%" PRIu32 " motion=%" PRIu32 " frames=%" PRIu32 " pack_slots=%" PRIu32
+    if (!o->silent) printf("motion_section=%" PRIu32 " motion=%" PRIu32 " frames=%" PRIu32 " pack_slots=%" PRIu32
            " pack_motions=%" PRIu32 " motion_bones=%" PRIu32 " model_bones=%" PRIu32 " matched=%" PRIu32
            " world_space=%" PRIu32 " start_frame=%" PRIu32 " bytes=%" PRIu32
            " posed_min=%.4f,%.4f,%.4f posed_max=%.4f,%.4f,%.4f attach=%s residual=%.3g\n",
@@ -882,7 +989,12 @@ static int load_motion(const struct options *o, const uint8_t *data, size_t size
            asset->motion_pack.motion_count, asset->motion_pack.bone_count, bones, matched, world_space,
            asset->motion_start, asset->motion->byte_length, low[0], low[1], low[2], high[0], high[1], high[2],
            asset->attach_child >= 0 ? "glass:loc_acchat" : "none", asset->attach_child >= 0 ? asset->attach_residual : 0.0);
-    if (asset->walk_motion)
+    if (o->have_run_motion &&
+        !(asset->run_motion = px_gf_motion_find(&asset->motion_pack, o->run_motion_slot))) {
+        fprintf(stderr, "[model-viewer] GF1 run motion slot %" PRIu32 " is absent or empty.\n", o->run_motion_slot);
+        return 0;
+    }
+    if (asset->walk_motion && !o->silent)
         printf("walk_motion=%" PRIu32 " frames=%" PRIu32 " playback=one-cycle-per-step glide=linear-over-cycle\n",
                o->walk_motion_slot, asset->walk_motion->frames);
     return 1;
@@ -966,10 +1078,209 @@ static int load(const struct options *o, struct model_asset *asset)
         po.skinned = 1; po.walk = 0; po.steps = NULL; po.player_archive = NULL; po.quiet = 1;
         asset->player = calloc(1, sizeof *asset->player);
         ok = asset->player && load(&po, asset->player);
-        if (ok) printf("player_archive=%s player_entry=%" PRIu32 " player_section=%s%" PRIu32 "\n",
+        if (ok && !o->silent) printf("player_archive=%s player_entry=%" PRIu32 " player_section=%s%" PRIu32 "\n",
                        po.archive, po.entry, po.have_section ? "" : "none:", po.section);
     }
     return ok;
+}
+
+/* --zone scene policy. Resolved from game data: zone header (a/0/1/2) area
+ * and matrix, the matrix's single region (a/0/4/2 -> a/0/4/1 GR section 1
+ * model, section 0 grid, section 2 collision), the area's world textures
+ * (a/0/1/3 AD section 11), zone entities (ZO section 1) and the area's NPC
+ * registry (a/1/4/9). Inspection choices, not traced: environment a/0/0/3
+ * entry 137 for every zone (the only one with lights), the player model
+ * a/0/2/1 entry 2 with motion slots 1 (idle), 3 (walk) and 4 (run), NPCs
+ * with their MM section 1 slot 1 when it poses, and the arrival rule. */
+static int load_character(const struct options *o, uint32_t entry, int motion, struct model_asset **out)
+{
+    struct options po = *o;
+    po.archive = "a/0/2/1"; po.entry = entry; po.subentry = 0; po.model = 0;
+    po.have_section = 1; po.section = 0;
+    po.texture_archive = po.archive; po.texture_entry = entry; po.texture_subentry = 0;
+    po.have_texture_section = 1; po.texture_section = 0;
+    po.skinned = 1; po.walk = 0; po.steps = NULL; po.player_archive = NULL; po.quiet = 1; po.silent = 1;
+    po.have_motion_section = po.have_motion_slot = motion; po.motion_section = 1; po.motion_slot = 1;
+    po.have_motion_frame = 0; po.have_walk_motion = 0; po.have_run_motion = 0;
+    *out = calloc(1, sizeof **out);
+    if (!*out) return 0;
+    if (load(&po, *out)) return 1;
+    asset_free(*out); free(*out); *out = NULL;
+    return 0;
+}
+
+static int load_zone(const struct options *o, uint32_t zone, struct model_asset *asset)
+{
+    struct zone_state *zs = calloc(1, sizeof *zs);
+    if (!zs) return 0;
+    zs->zone = zone;
+    asset->zone = zs; /* owned by asset from here; asset_free releases it */
+    struct resource r = {0};
+    struct px_field_zone header;
+    struct px_field_span span;
+    if (!read_resource(o->romfs, "a/0/1/2", zone, 0, 0, 0, "zone", &r)) return 0;
+    enum px_field_result fs = px_field_zone_decode(r.data, r.size, &header);
+    if (fs == PX_FIELD_OK) fs = px_field_section(r.data, r.size, "ZO", 1, &span);
+    if (fs != PX_FIELD_OK) {
+        fprintf(stderr, "[model-viewer] zone %" PRIu32 ": %s\n", zone, px_field_result_string(fs));
+        resource_free(&r); return 0;
+    }
+    const enum px_zone_result zr = px_zone_entities_decode(span.data, span.size, &zs->entities);
+    resource_free(&r);
+    if (zr != PX_ZONE_OK) {
+        fprintf(stderr, "[model-viewer] zone %" PRIu32 " entities: %s\n", zone, px_zone_result_string(zr));
+        return 0;
+    }
+    zs->area = header.area_id; zs->matrix = header.matrix_id;
+    struct px_field_matrix matrix = {0};
+    if (!read_resource(o->romfs, "a/0/4/2", zs->matrix, 0, 0, 0, "matrix", &r)) return 0;
+    fs = px_field_matrix_decode(r.data, r.size, &matrix);
+    resource_free(&r);
+    int ok = fs == PX_FIELD_OK;
+    if (!ok) fprintf(stderr, "[model-viewer] matrix %" PRIu32 ": %s\n", zs->matrix, px_field_result_string(fs));
+    else if (matrix.width != 1 || matrix.height != 1 || matrix.field_ids[0] < 0) {
+        fprintf(stderr, "[model-viewer] zone %" PRIu32 ": matrix %" PRIu32 " is %ux%u; only single-region "
+                "matrices are supported.\n", zone, zs->matrix, matrix.width, matrix.height);
+        ok = 0;
+    } else zs->region = (uint32_t)matrix.field_ids[0];
+    px_field_matrix_free(&matrix);
+    if (!ok) return 0;
+    struct options zo = *o;
+    zo.have_zone = 0; zo.have_arrive = 0;
+    zo.archive = "a/0/4/1"; zo.entry = zs->region; zo.have_entry = 1; zo.subentry = 0; zo.model = 0;
+    zo.have_section = 1; zo.section = 1;
+    zo.triangle_list = zo.textured = zo.combiners = 1;
+    zo.texture_archive = "a/0/1/3"; zo.texture_entry = zs->area; zo.have_texture_entry = 1;
+    zo.texture_subentry = 0; zo.have_texture_section = 1; zo.texture_section = 11;
+    zo.environment_archive = "a/0/0/3"; zo.environment_entry = 137; zo.have_environment_entry = 1;
+    zo.environment_subentry = 0; zo.have_environment_section = 1; zo.environment_section = 0; zo.scene = 0;
+    zo.walk = 1; zo.steps = NULL;
+    zo.player_archive = "a/0/2/1"; zo.player_entry = 2; zo.have_player_entry = 1;
+    zo.player_section = 0; zo.have_player_section = 1;
+    zo.have_motion_section = zo.have_motion_slot = 1; zo.motion_section = 1; zo.motion_slot = 1;
+    zo.have_motion_frame = 0; zo.have_walk_motion = 1; zo.walk_motion_slot = 3;
+    zo.have_run_motion = 1; zo.run_motion_slot = 4;
+    if (!load(&zo, asset)) return 0;
+    struct walker *w = &asset->walker;
+    w->zone = zs;
+    if (npc_at(zs, w->x, w->z) >= 0) { /* never start inside an NPC */
+        w->active = 0;
+        for (int z = 0; z < asset->grid.height && !w->active; ++z)
+            for (int x = 0; x < asset->grid.width && !w->active; ++x)
+                if (walkable(w, x, z)) { w->active = 1; w->x = x; w->z = z; }
+    }
+    /* NPCs: registry of the zone's area maps each NPC's model id to an
+     * a/0/2/1 entry. An NPC whose model is missing or fails to load still
+     * blocks its tile. */
+    struct px_npc_registry registry = {0};
+    if (zs->entities.npc_count) {
+        if (!read_resource(o->romfs, "a/1/4/9", zs->area, 0, 0, 0, "NPC registry", &r)) return 0;
+        const enum px_zone_result rr = px_npc_registry_decode(r.data, r.size, &registry);
+        resource_free(&r);
+        if (rr != PX_ZONE_OK) {
+            fprintf(stderr, "[model-viewer] NPC registry %" PRIu32 ": %s\n", zs->area, px_zone_result_string(rr));
+            return 0;
+        }
+        zs->npcs = calloc(zs->entities.npc_count, sizeof *zs->npcs);
+        if (!zs->npcs) { px_npc_registry_free(&registry); return 0; }
+    }
+    for (uint32_t i = 0; i < zs->entities.npc_count; ++i) {
+        const struct px_zone_npc *n = &zs->entities.npcs[i];
+        struct zone_npc *z = &zs->npcs[zs->npc_count++];
+        z->x = n->tile_x; z->z = n->tile_y; z->facing = zone_facing(n->face);
+        z->id = n->id; z->script = n->script; z->registry_model = n->model; z->model_entry = UINT16_MAX;
+        const struct px_npc_registry_entry *e = px_npc_registry_find(&registry, n->model);
+        if (e) {
+            z->model_entry = e->model;
+            if (!load_character(&zo, e->model, 1, &z->model)) load_character(&zo, e->model, 0, &z->model);
+        }
+        if (!o->silent)
+            printf("npc index=%" PRIu32 " id=%u registry_model=%u model_entry=%s%u tile=%d,%d face=%u script=%u "
+                   "stored_height=%.9g drawn=%s posed=%s\n", i, z->id, z->registry_model, e ? "" : "none:",
+                   e ? e->model : 0, z->x, z->z, n->face, z->script, n->height, z->model ? "yes" : "no",
+                   z->model && z->model->motion_ready ? "slot1" : "rest");
+    }
+    px_npc_registry_free(&registry);
+    if (!o->silent) {
+        printf("zone=%" PRIu32 " area=%" PRIu32 " matrix=%" PRIu32 " region=%" PRIu32 " furniture=%" PRIu32
+               " npcs=%" PRIu32 " warps=%" PRIu32 " triggers=%" PRIu32 ",%" PRIu32 " environment=a/0/0/3:137 "
+               "player=a/0/2/1:2 motions=idle:1,walk:3,run:4\n", zone, zs->area, zs->matrix, zs->region,
+               zs->entities.furniture_count, zs->entities.npc_count, zs->entities.warp_count,
+               zs->entities.trigger1_count, zs->entities.trigger2_count);
+        for (uint32_t i = 0; i < zs->entities.warp_count; ++i) {
+            const struct px_zone_warp *wp = &zs->entities.warps[i];
+            if (!wp->supported) {
+                printf("warp index=%" PRIu32 " target_zone=%u target_warp=%u coordinate_type=%u supported=no\n",
+                       i, wp->target_zone, wp->target_warp, wp->coordinate_type);
+                continue;
+            }
+            printf("warp index=%" PRIu32 " target_zone=%u target_warp=%u tiles=%d,%d+%dx%d face=%u transition=%u "
+                   "directionality=%u height=%d supported=yes\n", i, wp->target_zone, wp->target_warp,
+                   wp->tile_x, wp->tile_y, wp->width, wp->length, wp->face, wp->transition, wp->directionality,
+                   wp->height);
+        }
+    }
+    return 1;
+}
+
+/* Arrival policy (inspection, consistent with the three house warps): stand
+ * on the target warp's first tile facing its face direction, then step once
+ * that way when the cell is walkable and not itself a warp. */
+static int zone_arrive(struct model_asset *asset, uint32_t index)
+{
+    const struct zone_state *zs = asset->zone;
+    if (!zs || index >= zs->entities.warp_count || !zs->entities.warps[index].supported) return 0;
+    const struct px_zone_warp *t = &zs->entities.warps[index];
+    if (t->tile_x < 0 || t->tile_y < 0 || t->tile_x >= asset->grid.width || t->tile_y >= asset->grid.height) return 0;
+    struct walker *w = &asset->walker;
+    w->active = 1; w->x = t->tile_x; w->z = t->tile_y; w->facing = zone_facing(t->face); w->warp_hit = -1;
+    const int dx = w->facing == 1 ? 1 : w->facing == 3 ? -1 : 0, dz = w->facing == 0 ? 1 : w->facing == 2 ? -1 : 0;
+    if (walkable(w, w->x + dx, w->z + dz) && px_zone_warp_at(&zs->entities, w->x + dx, w->z + dz) < 0) {
+        w->x += dx; w->z += dz; ++w->moves; w->last_moved = 1;
+    } else w->last_moved = 0;
+    return 1;
+}
+
+/* Follow the warp the latest step asked for. On success the scene is
+ * replaced and 1 returned; otherwise the scene stays, the message says why
+ * and the step falls back to a plain move. */
+static int zone_warp(const struct options *o, struct model_asset *asset)
+{
+    struct zone_state *from = asset->zone;
+    const int32_t index = asset->walker.warp_hit;
+    if (!from || index < 0) return 0;
+    const struct px_zone_warp warp = from->entities.warps[index];
+    struct options so = *o;
+    so.silent = 1; so.quiet = 1;
+    struct model_asset next;
+    memset(&next, 0, sizeof next);
+    int ok = load_zone(&so, warp.target_zone, &next) && zone_arrive(&next, warp.target_warp);
+    printf("warp from_zone=%" PRIu32 " warp=%" PRId32 " target_zone=%u target_warp=%u result=%s",
+           from->zone, index, warp.target_zone, warp.target_warp, ok ? "loaded" : "not-loaded");
+    if (!ok) {
+        putchar('\n');
+        asset_free(&next);
+        snprintf(from->message, sizeof from->message, "warp to zone %u not supported here", warp.target_zone);
+        walk_move(&asset->walker);
+        return 0;
+    }
+    printf(" arrival=cell:%d,%d stepped=%d\n", next.walker.x, next.walker.z, next.walker.last_moved);
+    next.walker.moves += asset->walker.moves; next.walker.blocked += asset->walker.blocked;
+    next.walker.warps = asset->walker.warps;
+    snprintf(next.zone->message, sizeof next.zone->message, "entered zone %u", warp.target_zone);
+    asset_free(asset);
+    *asset = next;
+    asset->walker.grid = &asset->grid; /* re-point into the moved struct */
+    asset->walker.zone = asset->zone;
+    return 1;
+}
+
+static void zone_steps(const struct options *o, struct model_asset *asset, const char *steps)
+{
+    for (const char *p = steps; p && *p; ++p) {
+        walk_step(&asset->walker, *p);
+        if (asset->walker.warp_hit >= 0) zone_warp(o, asset);
+    }
 }
 
 /* Camera convention: depth is -(sin(pitch) y + cos(pitch) z'), so a negative
@@ -994,10 +1305,11 @@ static void event(struct camera *c, const SDL_Event *e)
     case SDLK_PLUS: case SDLK_EQUALS: case SDLK_KP_PLUS: c->zoom *= 1.25; break;
     case SDLK_MINUS: case SDLK_KP_MINUS: c->zoom /= 1.25; break;
     case SDLK_r: case SDLK_HOME: reset(c); break;
-    case SDLK_w: if (c->walk) walk_step(c->walk, 'U'); break;
-    case SDLK_s: if (c->walk) walk_step(c->walk, 'D'); break;
-    case SDLK_a: if (c->walk) walk_step(c->walk, 'L'); break;
-    case SDLK_d: if (c->walk) walk_step(c->walk, 'R'); break;
+    case SDLK_w: if (c->zone) c->queued = 'U'; else if (c->walk) walk_step(c->walk, 'U'); break;
+    case SDLK_s: if (c->zone) c->queued = 'D'; else if (c->walk) walk_step(c->walk, 'D'); break;
+    case SDLK_a: if (c->zone) c->queued = 'L'; else if (c->walk) walk_step(c->walk, 'L'); break;
+    case SDLK_d: if (c->zone) c->queued = 'R'; else if (c->walk) walk_step(c->walk, 'R'); break;
+    case SDLK_SPACE: case SDLK_RETURN: if (c->zone) c->interact = 1; break;
     default: break;
     }
     c->yaw = fmod(c->yaw, 6.283185307179586);
@@ -1024,6 +1336,14 @@ static int input_test(struct camera *c)
         !inject(c, SDLK_ESCAPE) || c->running) return 0;
     struct walker *w = c->walk;
     reset(c);
+    if (c->zone) {
+        /* Zone mode queues steps for the controller instead of moving. */
+        if (!inject(c, SDLK_d) || c->queued != 'R' || !inject(c, SDLK_w) || c->queued != 'U' ||
+            !inject(c, SDLK_SPACE) || !c->interact) return 0;
+        c->queued = 0; c->interact = 0;
+        fprintf(stderr, "[model-viewer] Input self-test passed: orbit, zoom, reset, Escape, WASD queue, talk.\n");
+        return 1;
+    }
     if (w && w->active) {
         /* A step and its reverse return to the start, or both are blocked. */
         const struct walker before = *w;
@@ -1472,8 +1792,10 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
                              struct px_raster_vertex *player_points, double (*player_normals)[4])
 {
     const struct px_cgfx_model *mesh = &asset->wire;
-    int w, h;
-    if (SDL_GetRendererOutputSize(renderer, &w, &h) != 0 || w <= 0 || h <= 0) return 0;
+    int out_w, out_h, w, h;
+    if (SDL_GetRendererOutputSize(renderer, &out_w, &out_h) != 0 || out_w <= 0 || out_h <= 0) return 0;
+    /* --zone renders at the 3DS top screen's 400 x 240 and scales to the window. */
+    w = camera->internal_w ? camera->internal_w : out_w; h = camera->internal_h ? camera->internal_h : out_h;
     enum px_raster_result result;
     if (target->width != (uint32_t)w || target->height != (uint32_t)h) {
         px_raster_free(target);
@@ -1503,6 +1825,9 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
         v.center[0] = cell_center(asset->walker.x);
         v.center[1] = floor_y + 18;
         v.center[2] = cell_center(asset->walker.z);
+        if (asset->zone && asset->player) { /* --zone: follow the gliding player */
+            v.center[0] += asset->player->glide[0]; v.center[2] += asset->player->glide[1];
+        }
     }
     v.w = w; v.h = h;
     v.scale = (w < h ? w : h) * 0.42 * camera->zoom;
@@ -1523,6 +1848,15 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
                                             cell_center(asset->walker.z), &at.y) != PX_FIELD_OK) at.y = 0;
         project_bch(asset->player, &v, &at, player_points, player_normals);
         if (!draw_bch_meshes(asset->player, player_points, player_normals, target, NULL)) return 0;
+        /* --zone NPCs on their tiles, same buffers (projected and drawn in turn). */
+        for (uint32_t i = 0; asset->zone && i < asset->zone->npc_count; ++i) {
+            const struct zone_npc *n = &asset->zone->npcs[i];
+            if (!n->model) continue;
+            struct placement np = {cell_center(n->x), 0, cell_center(n->z), n->facing * 1.5707963267948966};
+            if (px_field_collision_first_height(&asset->collision, np.x, np.z, &np.y) != PX_FIELD_OK) np.y = 0;
+            project_bch(n->model, &v, &np, player_points, player_normals);
+            if (!draw_bch_meshes(n->model, player_points, player_normals, target, NULL)) return 0;
+        }
     } else if (asset->walk && asset->walker.active) {
         /* Marker: a 14 x 28 x 14 box standing on the first stored collision
          * triangle under the cell center (height 0 if none). Depth tested. */
@@ -1556,10 +1890,142 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
     }
     if (SDL_UpdateTexture(*frame, NULL, target->rgba, w * 4) ||
         SDL_RenderClear(renderer) || SDL_RenderCopy(renderer, *frame, NULL, NULL)) return 0;
-    if (path && !capture(renderer, path, w, h)) return 0;
+    if (path && !capture(renderer, path, out_w, out_h)) return 0;
     SDL_RenderPresent(renderer); return 1;
 raster_error:
     SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0;
+}
+
+struct frame_buffers {
+    SDL_FPoint *points;
+    struct px_raster_vertex *vertices, *character_points;
+    double (*normals)[4], (*character_normals)[4];
+    struct combiner_counts *counts;
+};
+static void buffers_free(struct frame_buffers *b)
+{
+    free(b->points); free(b->vertices); free(b->character_points);
+    free(b->normals); free(b->character_normals); free(b->counts);
+    memset(b, 0, sizeof *b);
+}
+/* Per-scene buffers: the scene's vertices, and one shared buffer for the
+ * player and NPCs (each is projected and drawn in turn). */
+static int buffers_alloc(const struct options *o, const struct model_asset *asset, struct frame_buffers *b)
+{
+    buffers_free(b);
+    const struct px_cgfx_model *mesh = o->textured && !asset->bch_textured ? &asset->scene.mesh : &asset->wire;
+    const size_t n = mesh->vertex_count ? mesh->vertex_count : 1;
+    if (o->textured) b->vertices = malloc(n * sizeof *b->vertices);
+    else b->points = malloc(n * sizeof *b->points);
+    if (o->textured ? !b->vertices : !b->points) return 0;
+    if (asset->bch_combiner && !(b->normals = calloc(n, sizeof *b->normals))) return 0;
+    uint32_t characters = asset->player ? asset->player->wire.vertex_count : 0;
+    for (uint32_t i = 0; asset->zone && i < asset->zone->npc_count; ++i)
+        if (asset->zone->npcs[i].model && asset->zone->npcs[i].model->wire.vertex_count > characters)
+            characters = asset->zone->npcs[i].model->wire.vertex_count;
+    if (asset->player) {
+        b->character_points = calloc(characters ? characters : 1, sizeof *b->character_points);
+        b->character_normals = calloc(characters ? characters : 1, sizeof *b->character_normals);
+        if (!b->character_points || !b->character_normals) return 0;
+    }
+    if (asset->bch_combiner && !(b->counts = calloc(asset->bch.material_count ? asset->bch.material_count : 1,
+                                                    sizeof *b->counts))) return 0;
+    return 1;
+}
+
+/* --zone controller (inspection choices, not the game's player controller):
+ * a held or queued WASD direction starts a step when none is playing; a step
+ * lasts 11 walk-cycle frames (slot 3) or, with Shift, 5 run-cycle frames
+ * (slot 4), about the stride of the planted foot in each motion, and the
+ * cycle phase carries over consecutive steps. Motions run at 30 frames per
+ * second of a clock that is real time, or 60 rendered frames per second when
+ * --frames bounds the run (deterministic captures). Idle plays slot 1. Space
+ * or Return faces the NPC ahead toward the player and reports its script;
+ * the zone script VM is not executed. */
+struct zone_motion {
+    int stepping, run, dx, dz;
+    uint64_t start_ms;
+    uint32_t length, phase;
+};
+enum { WALK_STEP_FRAMES = 11, RUN_STEP_FRAMES = 5 };
+static void zone_title(SDL_Window *win, const struct model_asset *asset)
+{
+    char title[320];
+    snprintf(title, sizeof title, "Pokemon X — zone %" PRIu32 " | WASD walk, Shift run, Space talk, arrows orbit, "
+             "Esc exit%s%s", asset->zone->zone, asset->zone->message[0] ? " | " : "", asset->zone->message);
+    if (strcmp(title, SDL_GetWindowTitle(win))) SDL_SetWindowTitle(win, title);
+}
+static int zone_frame(const struct options *o, struct model_asset *asset, struct camera *c,
+                      struct zone_motion *zm, uint64_t now_ms, int *swapped)
+{
+    struct walker *w = &asset->walker;
+    const uint64_t motion_now = now_ms * 30 / 1000;
+    if (zm->stepping && motion_now - zm->start_ms * 30 / 1000 >= zm->length) {
+        zm->stepping = 0; zm->phase += zm->length;
+    }
+    if (!zm->stepping) {
+        const Uint8 *keys = SDL_GetKeyboardState(NULL);
+        char direction = keys[SDL_SCANCODE_W] ? 'U' : keys[SDL_SCANCODE_S] ? 'D' : keys[SDL_SCANCODE_A] ? 'L' :
+                         keys[SDL_SCANCODE_D] ? 'R' : c->queued;
+        c->queued = 0;
+        int run = (SDL_GetModState() & KMOD_SHIFT) != 0;
+        if (!direction && c->play && *c->play) {
+            /* --play: one scripted input per free controller frame. */
+            const char next = *c->play++;
+            if (next == '.') c->interact = 1;
+            else {
+                run = next >= 'a';
+                direction = (char)(next >= 'a' ? next - 'a' + 'A' : next);
+            }
+        }
+        int moved = 0;
+        if (direction && w->active) {
+            walk_step(w, direction);
+            if (w->warp_hit >= 0) {
+                if (zone_warp(o, asset)) { *swapped = 1; zm->phase = 0; }
+                w = &asset->walker;
+            }
+            moved = w->last_moved;
+            if (w->zone && asset->zone->message[0] && !*swapped && w->warp_hit < 0 && moved)
+                asset->zone->message[0] = 0;
+        }
+        if (moved) {
+            zm->stepping = 1; zm->run = run; zm->start_ms = now_ms;
+            zm->length = run ? RUN_STEP_FRAMES : WALK_STEP_FRAMES;
+            zm->dx = w->facing == 1 ? 1 : w->facing == 3 ? -1 : 0;
+            zm->dz = w->facing == 0 ? 1 : w->facing == 2 ? -1 : 0;
+        } else zm->phase = 0;
+    }
+    if (c->interact) {
+        c->interact = 0;
+        const int dx = w->facing == 1 ? 1 : w->facing == 3 ? -1 : 0, dz = w->facing == 0 ? 1 : w->facing == 2 ? -1 : 0;
+        const int k = npc_at(asset->zone, w->x + dx, w->z + dz);
+        if (k >= 0) {
+            struct zone_npc *n = &asset->zone->npcs[k];
+            n->facing = (w->facing + 2) & 3;
+            snprintf(asset->zone->message, sizeof asset->zone->message,
+                     "NPC %u: script %u (zone script VM not implemented)", n->id, n->script);
+            printf("talk zone=%" PRIu32 " npc=%d id=%u script=%u\n", asset->zone->zone, k, n->id, n->script);
+        } else snprintf(asset->zone->message, sizeof asset->zone->message, "nothing to talk to");
+    }
+    struct model_asset *p = asset->player;
+    p->glide[0] = p->glide[1] = 0;
+    const struct px_gf_motion *motion = p->motion;
+    uint64_t at = motion_now;
+    if (zm->stepping) {
+        const uint64_t t = motion_now - zm->start_ms * 30 / 1000;
+        motion = zm->run ? p->run_motion : p->walk_motion;
+        at = zm->phase + t;
+        const double remaining = 18.0 * (1.0 - (double)t / zm->length);
+        p->glide[0] = -zm->dx * remaining; p->glide[1] = -zm->dz * remaining;
+    }
+    if (!pose_motion(p, motion, motion->frames ? (uint32_t)(at % motion->frames) : 0)) return 0;
+    for (uint32_t i = 0; i < asset->zone->npc_count; ++i) {
+        struct model_asset *n = asset->zone->npcs[i].model;
+        if (n && n->motion_ready &&
+            !pose_motion(n, n->motion, n->motion->frames ? (uint32_t)(motion_now % n->motion->frames) : 0)) return 0;
+    }
+    return 1;
 }
 
 static int window(const struct options *o, struct model_asset *asset)
@@ -1570,30 +2036,23 @@ static int window(const struct options *o, struct model_asset *asset)
     SDL_Window *win = SDL_CreateWindow(o->textured ?
         "Pokemon X unlit textured preview — arrows: orbit | +/-: zoom | R: reset | Esc: exit" :
         "Pokemon X wireframe — arrows: orbit | +/-: zoom | R: reset | Esc: exit",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 640, SDL_WINDOW_RESIZABLE);
-    SDL_Renderer *renderer = NULL; SDL_FPoint *points = NULL; int ok = 0;
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, asset->zone ? 800 : 960, asset->zone ? 480 : 640,
+        SDL_WINDOW_RESIZABLE);
+    SDL_Renderer *renderer = NULL; int ok = 0;
     SDL_Texture *frame = NULL; struct px_raster_target target = {0};
-    struct px_raster_vertex *vertices = NULL;
-    double (*normals)[4] = NULL, (*player_normals)[4] = NULL;
-    struct px_raster_vertex *player_points = NULL;
-    struct combiner_counts *counts = NULL;
+    struct frame_buffers b;
+    memset(&b, 0, sizeof b);
     if (!win) goto done;
     if (!o->software) renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer) renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_SOFTWARE);
     if (!renderer) goto done;
-    if (o->textured) vertices = malloc((size_t)mesh->vertex_count * sizeof *vertices);
-    else points = malloc((size_t)mesh->vertex_count * sizeof *points);
-    if (o->textured ? !vertices : !points) goto done;
-    if (asset->bch_combiner && !(normals = calloc(mesh->vertex_count, sizeof *normals))) goto done;
-    if (asset->player) {
-        const uint32_t count = asset->player->wire.vertex_count;
-        player_points = calloc(count ? count : 1, sizeof *player_points);
-        player_normals = calloc(count ? count : 1, sizeof *player_normals);
-        if (!player_points || !player_normals) goto done;
-    }
+    if (!buffers_alloc(o, asset, &b)) goto done;
     struct camera c;
     memset(&c, 0, sizeof c);
     c.walk = asset->walk ? &asset->walker : NULL;
+    c.zone = asset->zone != NULL;
+    c.play = o->play;
+    if (asset->zone) { c.internal_w = 400; c.internal_h = 240; }
     reset(&c);
     if (o->self_test && !input_test(&c)) { SDL_SetError("Input self-test failed"); goto done; }
     SDL_RendererInfo info; if (SDL_GetRendererInfo(renderer, &info)) goto done;
@@ -1606,7 +2065,7 @@ static int window(const struct options *o, struct model_asset *asset)
     uint32_t frames = 0, last_moves = asset->walker.moves;
     int64_t step_frame = INT64_MIN; /* rendered frame where the playing step began */
     int step_dx = 0, step_dz = 0;
-    if (asset->walk && asset->player && asset->player->walk_motion && asset->walker.last_moved) {
+    if (!asset->zone && asset->walk && asset->player && asset->player->walk_motion && asset->walker.last_moved) {
         /* The last --steps move plays its cycle as display starts, from
          * --motion-frame, so captures can show any phase of a step. */
         const struct walker *w = &asset->walker;
@@ -1614,67 +2073,85 @@ static int window(const struct options *o, struct model_asset *asset)
         step_dx = w->facing == 1 ? 1 : w->facing == 3 ? -1 : 0;
         step_dz = w->facing == 0 ? 1 : w->facing == 2 ? -1 : 0;
     }
-    if (asset->bch_combiner) {
-        counts = calloc(asset->bch.material_count, sizeof *counts);
-        if (!counts) goto done;
-    }
+    struct zone_motion zm;
+    memset(&zm, 0, sizeof zm);
+    const uint64_t start_ticks = SDL_GetTicks64();
+    uint64_t frame_ticks = start_ticks;
+    if (asset->zone) zone_title(win, asset);
     while (c.running) {
         SDL_Event e; while (SDL_PollEvent(&e)) event(&c, &e);
         if (!c.running) break;
-        const char *path = frames == 0 ? o->capture : NULL;
-        /* One motion frame per two rendered frames (30 of 60 Hz), looping. */
-        struct model_asset *animated = asset->motion_ready ? asset : asset->player && asset->player->motion_ready ?
-                                       asset->player : NULL;
-        if (animated) {
-            const struct px_gf_motion *motion = animated->motion;
-            uint64_t at = (animated->walk_motion ? 0 : (uint64_t)animated->motion_start) + frames / 2;
-            animated->glide[0] = animated->glide[1] = 0;
-            if (asset->walk && asset->walker.moves != last_moves) {
-                /* A step happened: start the walk cycle from the previous cell. */
-                last_moves = asset->walker.moves; step_frame = frames;
-                step_dx = asset->walker.facing == 1 ? 1 : asset->walker.facing == 3 ? -1 : 0;
-                step_dz = asset->walker.facing == 0 ? 1 : asset->walker.facing == 2 ? -1 : 0;
-            }
-            if (animated->walk_motion && step_frame != INT64_MIN &&
-                ((int64_t)frames - step_frame) / 2 < (int64_t)animated->walk_motion->frames) {
-                motion = animated->walk_motion;
-                at = (uint64_t)(((int64_t)frames - step_frame) / 2);
-                /* Glide: the player covers the 18-unit cell linearly over the
-                 * cycle, by motion frame (an inspection choice). */
-                const double remaining = 18.0 * (1.0 - (double)at / motion->frames);
-                animated->glide[0] = -step_dx * remaining; animated->glide[1] = -step_dz * remaining;
-            } else step_frame = INT64_MIN;
-            const uint32_t length = motion->frames;
-            if (!pose_motion(animated, motion, length ? (uint32_t)(at % length) : 0)) {
-                SDL_SetError("GF1 motion pose failed"); goto done;
+        const char *path = frames == o->capture_at ? o->capture : NULL;
+        if (asset->zone) {
+            int swapped = 0;
+            const char before = asset->zone->message[0];
+            const uint64_t now = o->frames ? (uint64_t)frames * 1000 / 60 : SDL_GetTicks64() - start_ticks;
+            if (!zone_frame(o, asset, &c, &zm, now, &swapped)) { SDL_SetError("zone frame failed"); goto done; }
+            if (swapped && !buffers_alloc(o, asset, &b)) goto done;
+            (void)before;
+            zone_title(win, asset);
+        } else {
+            /* One motion frame per two rendered frames (30 of 60 Hz), looping. */
+            struct model_asset *animated = asset->motion_ready ? asset : asset->player && asset->player->motion_ready ?
+                                           asset->player : NULL;
+            if (animated) {
+                const struct px_gf_motion *motion = animated->motion;
+                uint64_t at = (animated->walk_motion ? 0 : (uint64_t)animated->motion_start) + frames / 2;
+                animated->glide[0] = animated->glide[1] = 0;
+                if (asset->walk && asset->walker.moves != last_moves) {
+                    /* A step happened: start the walk cycle from the previous cell. */
+                    last_moves = asset->walker.moves; step_frame = frames;
+                    step_dx = asset->walker.facing == 1 ? 1 : asset->walker.facing == 3 ? -1 : 0;
+                    step_dz = asset->walker.facing == 0 ? 1 : asset->walker.facing == 2 ? -1 : 0;
+                }
+                if (animated->walk_motion && step_frame != INT64_MIN &&
+                    ((int64_t)frames - step_frame) / 2 < (int64_t)animated->walk_motion->frames) {
+                    motion = animated->walk_motion;
+                    at = (uint64_t)(((int64_t)frames - step_frame) / 2);
+                    /* Glide: the player covers the 18-unit cell linearly over the
+                     * cycle, by motion frame (an inspection choice). */
+                    const double remaining = 18.0 * (1.0 - (double)at / motion->frames);
+                    animated->glide[0] = -step_dx * remaining; animated->glide[1] = -step_dz * remaining;
+                } else step_frame = INT64_MIN;
+                const uint32_t length = motion->frames;
+                if (!pose_motion(animated, motion, length ? (uint32_t)(at % length) : 0)) {
+                    SDL_SetError("GF1 motion pose failed"); goto done;
+                }
             }
         }
-        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, vertices, normals, &target, &frame, path,
-                                                     frames == 0 ? counts : NULL, player_points, player_normals) :
-            o->textured ? !draw_textured(renderer, asset, &c, vertices, &target, &frame, path) :
-                          !draw(renderer, mesh, &c, points, path)) goto done;
-        if (frames == 0 && counts)
+        if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, b.vertices, b.normals, &target, &frame, path,
+                                                     frames == 0 ? b.counts : NULL, b.character_points,
+                                                     b.character_normals) :
+            o->textured ? !draw_textured(renderer, asset, &c, b.vertices, &target, &frame, path) :
+                          !draw(renderer, mesh, &c, b.points, path)) goto done;
+        if (frames == 0 && b.counts)
             for (uint32_t i = 0; i < asset->bch.material_count; ++i)
             {
                 printf("combiner_sensitivity material=%" PRIu32 " frame=1 fragments=%" PRIu64
                        " projected_substitute_sensitive=%" PRIu64 " secondary_sensitive=%" PRIu64,
-                       i, counts[i].fragments, counts[i].projected_sensitive, counts[i].secondary_sensitive);
+                       i, b.counts[i].fragments, b.counts[i].projected_sensitive, b.counts[i].secondary_sensitive);
                 if (asset->bch_light)
                     printf(" point_bound_sensitive=%" PRIu64 " point_bound_max_delta=%" PRIu32
-                           " degenerate_normals=%" PRIu64, counts[i].point_sensitive,
-                           counts[i].point_max_delta, counts[i].degenerate_normals);
+                           " degenerate_normals=%" PRIu64, b.counts[i].point_sensitive,
+                           b.counts[i].point_max_delta, b.counts[i].degenerate_normals);
                 putchar('\n');
             }
         if (++frames == o->frames) break;
-        SDL_Delay(16);
+        if (asset->zone) {
+            /* --zone paces to about 60 Hz: wait only for what rendering left. */
+            const uint64_t spent = SDL_GetTicks64() - frame_ticks;
+            if (spent < 16) SDL_Delay((Uint32)(16 - spent));
+            frame_ticks = SDL_GetTicks64();
+        } else SDL_Delay(16);
     }
     fprintf(stderr, "[model-viewer] Exit after %" PRIu32 " frames.\n", frames); ok = 1;
 done:
     if (!ok) fprintf(stderr, "[model-viewer] Runtime: %s\n", SDL_GetError());
-    free(counts);
-    free(normals); free(player_points); free(player_normals);
-    free(vertices); px_raster_free(&target); if (frame) SDL_DestroyTexture(frame);
-    free(points); if (renderer) SDL_DestroyRenderer(renderer); if (win) SDL_DestroyWindow(win); SDL_Quit();
+    buffers_free(&b);
+    px_raster_free(&target); if (frame) SDL_DestroyTexture(frame);
+    if (renderer) SDL_DestroyRenderer(renderer);
+    if (win) SDL_DestroyWindow(win);
+    SDL_Quit();
     return ok;
 }
 
@@ -1836,7 +2313,16 @@ int main(int argc, char **argv)
     struct options o = {0}; int parsed = parse(argc, argv, &o);
     if (parsed != 1) { usage(parsed == 2 ? stdout : stderr, argv[0]); return parsed == 2 ? 0 : 1; }
     struct model_asset asset = {0};
-    if (!load(&o, &asset)) { asset_free(&asset); return 1; }
+    if (o.have_zone) {
+        if (!load_zone(&o, o.zone, &asset)) { asset_free(&asset); return 1; }
+        if (o.have_arrive && !zone_arrive(&asset, o.arrive)) {
+            fprintf(stderr, "[model-viewer] --arrive: zone %" PRIu32 " has no supported warp %" PRIu32 ".\n",
+                    o.zone, o.arrive);
+            asset_free(&asset); return 1;
+        }
+        zone_steps(&o, &asset, o.steps);
+        o.textured = 1; /* the window draws the zone's textured BCH */
+    } else if (!load(&o, &asset)) { asset_free(&asset); return 1; }
     if (o.textured && !asset.bch_textured && !prepare_draw_order(&asset)) { asset_free(&asset); return 1; }
     const struct px_cgfx_model mesh = o.textured && !asset.bch_textured ? asset.scene.mesh : asset.wire;
     printf("name=\"");
@@ -1892,6 +2378,10 @@ int main(int argc, char **argv)
             printf(" marker=cell:%d,%d local=%.9g,%.9g height=%s%.9g moves=%" PRIu32 " blocked=%" PRIu32 "\n",
                    w->x, w->z, cell_center(w->x), cell_center(w->z), hit ? "" : "none:", y, w->moves, w->blocked);
         }
+        if (asset.zone)
+            printf("zone_walk zone=%" PRIu32 " cell=%d,%d facing=%d moves=%" PRIu32 " blocked=%" PRIu32
+                   " warps=%" PRIu32 " policy=standard-cells-npcs-block-warps-on-step\n", asset.zone->zone,
+                   w->x, w->z, w->facing, w->moves, w->blocked, w->warps);
     }
     int ok = o.inspect || window(&o, &asset); asset_free(&asset); return ok ? 0 : 1;
 }

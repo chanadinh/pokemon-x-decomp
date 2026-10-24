@@ -1,0 +1,29 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "987aaebb25554d8e9ce67b88a8014e86433f7e24",
+ "previous_native_sha256sums": {
+  "entries": 182,
+  "sha256": "6122735f0edcbebf2989f6ca683fe4a6d2bbad872047d6e048bbcb7996c732ee"
+ },
+ "immutable_reproduction_records": "All 105 reproduction/ entries of the previous native/SHA256SUMS were rechecked unchanged.",
+ "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+ "capture_regressions": "Stage-0 (2d905248...), combiner (bb9e433d...), lit day (1dc1e452...) and night (640c936a...) captures byte-identical; ../bch-walk, ../bch-player and ../bch-motion verifiers reproduce their reports exactly.",
+ "changed_native_sources": [
+  "Makefile",
+  "README.md",
+  "model_app.c"
+ ],
+ "added_native_files": [
+  "assets/zone.c",
+  "assets/zone.h",
+  "assets/test_zone.c",
+  "tests/test_bch_zone_viewer.py",
+  "reproduction/bch-zone/README.txt",
+  "reproduction/bch-zone/baseline.json",
+  "reproduction/bch-zone/dump_zone.c",
+  "reproduction/bch-zone/reference-comparison.json",
+  "reproduction/bch-zone/validation.json",
+  "reproduction/bch-zone/validation.txt",
+  "reproduction/bch-zone/verify_zone.py"
+ ]
+}

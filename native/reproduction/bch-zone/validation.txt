@@ -1,0 +1,27 @@
+Zone scene validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container, cc 13.3.0, Python 3.13,
+SDL 2.30.0, dummy video with the software renderer. Not run on the local WSL
+host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime
+   Passed. 19 native C suites (new: test_zone). Python core 43; runtime:
+   texture viewer 7, BCH texture viewer 6, model viewer 10, BCH model viewer
+   9, BCH textured 5, BCH combiner 4, BCH lighting 2, BCH walk 2, BCH player 3,
+   BCH motion 3, BCH zone 3 (new), field viewer 9. 106 Python tests in total.
+2. ASan/UBSan with leak detection: test_zone, dump_zone on all 360 zones
+   (output identical), the sanitized viewer under the zone, motion, player,
+   walk and lighting suites, and a 520-frame real-data --play run: no
+   diagnostics; capture identical.
+3. All 539 reconstructed and 105 earlier native reproduction entries match.
+   Stage-0, combiner and lit day/night captures are byte-identical; the walk,
+   player and motion verifiers reproduce their reports exactly.
+4. python3 -I -B native/reproduction/bch-zone/verify_zone.py --romfs <RomFS>
+   --bridge native/build/dump_zone --viewer native/build/pokemon_model_viewer
+   Passed: 360 zones' entities and 170 registries identical; four predicted
+   house walks matched; runtime stairs warp and talk lines; frame 519
+   capture sha256
+   6245c39c3b0e3299c9ff062926589443a9b0bffa5ff4284be39bfc2751fe9b6b.
+
+Not established: the entity layout in the game's code, scripts and dialogue,
+triggers, NPC movement, outdoor zones, the game's spawn, controller,
+collision and transitions, and any running-game comparison.

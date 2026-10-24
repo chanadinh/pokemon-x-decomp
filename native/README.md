@@ -446,3 +446,20 @@ identified by rendering. World-space feet use SPICA's conversion, and the glasse
 follow a head locator by an explicit rule. See the
 [motion record](reproduction/bch-motion/README.txt).
 
+## Play a zone
+
+`--zone N` builds the scene from game data: the zone header's area and matrix, the
+matrix's single region, the area's textures, the zone's warps and NPCs and the NPC
+registry. The player walks in real time (WASD, Shift runs), Space talks to the NPC
+ahead, and warps load their target zone:
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs --zone 5
+```
+
+Zone 5 is the bedroom; its stairs lead to zone 4. Towns and routes (multi-region
+matrices) are not loaded yet, scripts and dialogue are not executed, and the
+controller timing and arrival rule are inspection choices. `--arrive`, `--steps`,
+`--play` and `--capture-at` support repeatable runs. See the
+[zone record](reproduction/bch-zone/README.txt).
+

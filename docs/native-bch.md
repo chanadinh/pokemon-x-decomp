@@ -373,3 +373,33 @@ bit-identical and all 6,099 vertices identical. The game's motion choice,
 playback rate and controller are not traced. See the
 [motion record](../native/reproduction/bch-motion/README.txt).
 
+## Playing the house
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs --zone 5
+```
+
+<table>
+  <tr>
+    <td><img src="images/native-bch-zone-walk.png" alt="The player walking past the bed toward the stairs in the bedroom" width="440"></td>
+    <td><img src="images/native-bch-zone.png" alt="The player downstairs, facing the NPC standing at the top of the room" width="440"></td>
+  </tr>
+</table>
+
+`--zone` loads everything from the zone's own data: its area and matrix, the
+region's model, terrain and collision, the area's textures, and the zone's
+warps and NPCs. The NPC's model comes from the area's NPC registry. The
+entity layout follows pk3DS and CTRMap; all 360 zones and 170 registries decode
+identically in an independent reader.
+
+The player walks in real time. Held keys keep walking, Shift runs, and each
+step plays part of the walk or run cycle while the player glides between cells.
+NPCs block their tiles. Space turns the NPC ahead toward the player and reports
+its script number; the script engine, and so the dialogue, is not executed yet.
+
+Walking into the bedroom stairs loads zone 4, the floor below, and the stairs
+there lead back up. The front door leads outside, which is not supported yet:
+towns span several map regions. An independent model of the walking rules
+predicts the viewer's walks through the house exactly. See the
+[zone record](../native/reproduction/bch-zone/README.txt).
+

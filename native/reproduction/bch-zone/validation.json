@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "987aaebb25554d8e9ce67b88a8014e86433f7e24",
+  "result": "passed",
+  "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; local WSL host and native Windows untested",
+  "tested_source_sha256": {
+    "Makefile": "d038beefcb0a265df59514cddcf07425789fd71e9cb4b73459e41529e78285d5",
+    "model_app.c": "9eb40120cbcfea485ad35fd83e95faa7622ad8fafeb072562f2a5a184cf09eff",
+    "assets/zone.c": "d193617f1c1be6e226939349e1116ea83807eac6d13c3f0d5ac8d3a8de5df0d7",
+    "assets/zone.h": "789b2d82e82f9e086f0b029e0dd37c8e657355413db973d3d78dcae16d7fd614",
+    "assets/test_zone.c": "22f93b1cacdf158ddf9b1bbf21c453514797a1cd58dd6f289de7353239927fb2",
+    "tests/test_bch_zone_viewer.py": "6ecdf8cb82870e1893295e2386b42c06ce4c651cbcae5a163082cd63eed1985a",
+    "reproduction/bch-zone/dump_zone.c": "a58852959f5cac1ce8cd48729b55e1bd54dfbe7d14343aec49c28c685be763f8",
+    "reproduction/bch-zone/verify_zone.py": "7fbe8472f659432d093c2aae99108d1608ec794b5dcfde257a42c19e6f53e74d"
+  },
+  "checks": [
+    {
+      "command": "make -C native clean && make -C native all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 19,
+      "python_tests": 106
+    },
+    {
+      "command": "ASan/UBSan with leak detection: test_zone, dump_zone on all zones, sanitized viewer under five suites and a 520-frame --play run",
+      "result": "passed; no diagnostics; outputs identical"
+    },
+    {
+      "command": "checksums of reconstructed and earlier reproduction records; earlier captures and verifiers",
+      "result": "all unchanged"
+    },
+    {
+      "command": "native/reproduction/bch-zone/verify_zone.py on the real archive paths",
+      "result": "passed",
+      "zones": 360,
+      "entity_totals": {
+        "furniture": 733,
+        "npcs": 2524,
+        "warps": 871,
+        "trigger1": 381,
+        "trigger2": 117
+      },
+      "warp_coordinate_types": {
+        "0": 674,
+        "1": 197
+      },
+      "registries": 170,
+      "registry_entries": 1421,
+      "predicted_walks": 4,
+      "runtime_lines": [
+        "warp from_zone=5 warp=0 target_zone=4 target_warp=1 result=loaded arrival=cell:4,10 stepped=1",
+        "talk zone=4 npc=0 id=0 script=1"
+      ],
+      "capture_sha256": {
+        "0": "39dac8226ebeb9a727ee733a6eb6a1ebd034b7de76ee09e61c8abec170944d55",
+        "60": "0c42e3bae3a63d2ae7edaa4a96818cbef6aed87a602f16533a481355d9043e2e",
+        "200": "d34994de67b90d4b71d25a780f88d58e7e246ab47ba16d57b62a92aa3bc4b851",
+        "519": "6245c39c3b0e3299c9ff062926589443a9b0bffa5ff4284be39bfc2751fe9b6b"
+      },
+      "report": "reference-comparison.json",
+      "report_sha256": "993a03271f82937653e28b654f118454b6b04d06512e8a69ff64517735662531"
+    }
+  ],
+  "limitations": [
+    "Entity layout from pk3DS/CTRMap, not traced in the game",
+    "Indoor single-region zones only; type-1 warps never fire",
+    "Scripts, dialogue, triggers, NPC movement and transitions not executed",
+    "Spawn, controller timing, arrival and environment binding are inspection choices",
+    "No running-game comparison"
+  ],
+  "logs_sha256": "7cccbf261c0cce06f3cdf773f3b3008a898fcda8ff3cb08829442e904e851352"
+}

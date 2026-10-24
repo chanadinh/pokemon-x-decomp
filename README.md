@@ -79,10 +79,12 @@ oracle on 20,970 evaluations.
 [See day and night lighting →](docs/native-bch.md#directional-fragment-lighting)
 With `--walk`, the game's player-character model walks the lit room on its terrain
 grid and collision floor; all 52 walkable cells line up with the model's floor.
-The player is skinned and animated from the game's own motion pack: each step
-plays its walk cycle. An independent decoder and pose match every checked frame.
+The player is skinned and animated from the game's own motion pack. With
+`--zone 5` the scene comes entirely from game data: the player walks the house in
+real time, takes the stairs between floors and talks to the NPC downstairs
+(dialogue itself is not executed yet).
 
-<p align="center"><a href="docs/native-bch.md#animating-the-player"><img src="docs/images/native-bch-motion-walk.png" alt="The player character mid-stride on the rug of the lit room, seen from above" width="720"></a></p>
+<p align="center"><a href="docs/native-bch.md#playing-the-house"><img src="docs/images/native-bch-zone.png" alt="The player downstairs in the house, facing the NPC" width="720"></a></p>
 
 [What remains before the first playable →](docs/PLAYABLE_SLICE.md#what-remains-before-the-first-playable)
 
