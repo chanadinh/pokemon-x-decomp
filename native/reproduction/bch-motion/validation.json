@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "1d5ee87caf360bc73890e3266ce92b4e45b1f7ee",
+  "result": "passed",
+  "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; local WSL host and native Windows untested",
+  "tested_source_sha256": {
+    "Makefile": "6c9828995238a04b6097a5504d27d12eff0295cd0b195547821ead7d58fef8d2",
+    "model_app.c": "0c66f555f47288c7bdca71061bf1fcdf9e379f4c973eab84df0657d29c69faff",
+    "assets/gf_motion.c": "620f5f2bab5d7c2614352c82d47b57c7f9b2fd4be15f431fd5dfb4b37d2d076c",
+    "assets/gf_motion.h": "bfe121fd6eff7e60fa2bb7ac481890d7bcdced4e98545c9e21eae185f209d24d",
+    "assets/test_gf_motion.c": "249a91ea07a30f29704e542615c3560c4d296db8ac2e354f4f4145f7efcf99a5",
+    "render/skin.c": "18555aab50db188c140dc5d84e730aed020a1f21c876d3febe25091ee3289b6c",
+    "render/skin.h": "760f37c810b466398cdd420ace53f9d664dbd2d7ae0628653073009f6971f5a4",
+    "render/test_skin.c": "2d3efb3c87d6f132e21daffc5fba0257c4374476f8fb8fe86984736b695c3aeb",
+    "tests/test_bch_motion_viewer.py": "e36107e56d6d967871a403d68d7872927dc6c19bec5abbb1f0d7db30725fbaa0",
+    "reproduction/bch-motion/dump_motion.c": "d6dd052915d0df4a8019ff16defe9f7f179e60c3f33bbaec10680aa2111e23a0",
+    "reproduction/bch-motion/verify_motion.py": "bd27a0e1d082a66782c8188dc518a9b944206d686521dff0437ab93b7fd07c92"
+  },
+  "checks": [
+    {
+      "command": "make -C native clean && make -C native all test test-runtime",
+      "result": "passed",
+      "native_c_suites": 18,
+      "python_core_tests": {
+        "container": 8,
+        "bch_index_and_gr": 12,
+        "pica_commands": 12,
+        "bch_model": 11
+      },
+      "python_runtime_tests": {
+        "texture_viewer": 7,
+        "bch_texture_viewer": 6,
+        "model_viewer": 10,
+        "bch_model_viewer": 9,
+        "bch_textured_viewer": 5,
+        "bch_combiner_viewer": 4,
+        "bch_lighting_viewer": 2,
+        "bch_walk_viewer": 2,
+        "bch_player_viewer": 3,
+        "bch_motion_viewer": 3,
+        "field_viewer": 9
+      }
+    },
+    {
+      "command": "make -C reconstructed test",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests",
+      "result": "passed",
+      "tests": 38,
+      "skipped": 2
+    },
+    {
+      "command": "ASan/UBSan (-fno-sanitize-recover=all), ASAN_OPTIONS=detect_leaks=1: test_skin, test_gf_motion, dump_motion on the real pack (slots 1, 3, 4); sanitized viewer under the motion, player, walk, lighting, combiner, textured, BCH-model and model viewer suites; 40-frame standalone run and 40-frame walk run with motions on real archive paths",
+      "result": "passed; no diagnostics; sanitized dump and walk capture byte-identical"
+    },
+    {
+      "command": "SHA-256 comparison against reconstructed/*/SHA256SUMS and the previous native reproduction/ entries; capture regressions; earlier verifiers rerun",
+      "result": "all unchanged"
+    },
+    {
+      "command": "native/reproduction/bch-motion/verify_motion.py on the real archive paths",
+      "result": "passed",
+      "slots": 173,
+      "motions": 118,
+      "motions_consumed_exactly": 118,
+      "keys": 95232,
+      "channels_by_kind": {
+        "absent": 30747,
+        "constant": 5636,
+        "linear": 15,
+        "hermite": 8206
+      },
+      "pose_frames_checked": {
+        "1": 2,
+        "3": 15,
+        "4": 17
+      },
+      "channel_values_identical": 4110,
+      "max_local_difference": 2.583220096163963e-15,
+      "max_position_difference": 0.0,
+      "max_normal_difference": 0.0,
+      "pack_sha256": "16e587c204ec1b0a27c4ec38a8d0c3da917bf2baae2adad3b3f7d6568bd0c8ab",
+      "model_sha256": "aeea9ef813b3b82520cb461691295606f43891e32f85cc35b36d07faa4c2394f",
+      "capture_sha256": {
+        "standalone 1:0": "b8048aae7fb1594b66f7252d27aa76a745fa2176cd724909bbd6420667d09ef9",
+        "standalone 3:0": "9ce452596d1b662e47017866f294dbe25548111cb484766b7cbcf00c3557a44f",
+        "standalone 3:7": "53d47dc8a88add25eb756be2bc6ef965ef113989859ac6560b787128c8492606",
+        "standalone 4:0": "82c2cb8a5281195f35a148647ad649c80f2433d008e78e7783ecc6b0f6de8e2d",
+        "standalone 4:8": "2dea62dd6796a970fad7d939af3cd334c5dac3408f592caf08f29d6652cdc0a1",
+        "walk phase 0": "11a3ed91fad2fc70d882350879688d273cb48cc2db386fdf23bea3ca4c202a0f",
+        "walk phase 3": "bad4d047df142babd17524cb52a7d83eabbbf515e154e487bc72600c9255c3b9",
+        "walk phase 7": "c0233193c0a91e3728d63aaffd70f8700ef2e7e2d2c75a29f0c5b648235363f9",
+        "walk phase 10": "047f20fc2a29e8712d50407fd9806a36f3a0d11b68cda19fa05b7f503f124803",
+        "walk phase 14": "dfb1202d425521c3356b0eb855e38dcf4d9d3df1fc5edb5fde98cb2e9899510e"
+      },
+      "report": "reference-comparison.json",
+      "report_sha256": "9e1c686e280dabdfe1e879ec401d4f0bd3163ef30e3edd5660c93377014bb709"
+    }
+  ],
+  "scope": [
+    "GF1 motion pack decoding (skeleton, 3-bit channel codes, key lists, values) with exact consumption",
+    "Channel evaluation per SPICA GetFrameValue/Herp, slopes / 30",
+    "Animated bone locals by name with H3D fallback and SPICA world-space conversion; per-frame posing into the viewer arrays",
+    "glass to loc_acchat attachment by rest-world equality",
+    "--motion-section, --motion, --motion-frame and --walk-motion viewer options; walk cycle with linear glide"
+  ],
+  "limitations": [
+    "Integer frames, advanced per rendered frame; no inter-frame interpolation",
+    "Motion slots identified by rendering; the game motion table, controller, blending, playback rate and root motion not traced",
+    "SPICA world-space foot conversion, not the game solver; the 1/30 slope scale is SPICA's trial value",
+    "Glasses attachment is an inspection rule; the game accessory attachment not traced",
+    "Male player, outfits, material animations, vertex shader normal quaternion, culling and the field camera not executed",
+    "No running-game comparison"
+  ],
+  "logs_sha256": "5128f8783d1c7350dcfcdbd95279396d6bd03868d1f3b0d03ba555b6c3abe4b6"
+}

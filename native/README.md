@@ -423,7 +423,26 @@ native/build/pokemon_model_viewer --romfs /path/to/romfs --archive a/0/2/1 --ent
 
 Skeletons, bone palettes and bone attributes are decoded. The rest pose follows the
 pinned vertex-shader translation. A BCH that also holds models can serve as its own
-texture pack. Animations are not decoded, so the model holds its T-pose. In walk
+texture pack. Without a motion the model holds its T-pose. In walk
 mode the camera looks from above and follows the marker. See the
 [player record](reproduction/bch-player/README.txt).
+
+## Animate the player character
+
+`--motion-section N --motion N` pose a skinned model (with `--skinned`, or the
+player with `--player-archive`) from the GF1 motion pack in that MM section of its
+entry. The motion loops at one frame per two rendered frames; `--motion-frame N`
+picks the start frame. In walk mode, `--walk-motion N` plays that slot once per
+step while the player glides between cells:
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs --archive a/0/2/1 --entry 2 --section 0 \
+  --skinned --triangle-list --textured --combiners \
+  --texture-archive a/0/2/1 --texture-entry 2 --texture-section 0 --motion-section 1 --motion 4
+```
+
+For the player, slot 1 is a standing pose, slot 3 a walk cycle and slot 4 a run,
+identified by rendering. World-space feet use SPICA's conversion, and the glasses
+follow a head locator by an explicit rule. See the
+[motion record](reproduction/bch-motion/README.txt).
 

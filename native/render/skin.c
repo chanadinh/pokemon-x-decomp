@@ -16,22 +16,26 @@ static void multiply(const double a[12], const double b[12], double c[12])
         }
     memcpy(c, out, sizeof out);
 }
-static void local(const struct px_bch_bone *bone, double m[12])
+static void local_srt(const float t[3], const float r[3], const float sc[3], double m[12])
 {
-    const double cx = cos(bone->rotation[0]), sx = sin(bone->rotation[0]);
-    const double cy = cos(bone->rotation[1]), sy = sin(bone->rotation[1]);
-    const double cz = cos(bone->rotation[2]), sz = sin(bone->rotation[2]);
+    const double cx = cos(r[0]), sx = sin(r[0]);
+    const double cy = cos(r[1]), sy = sin(r[1]);
+    const double cz = cos(r[2]), sz = sin(r[2]);
     /* Column-vector form of S * Rx * Ry * Rz * T (row vectors): T Rz Ry Rx S. */
     const double rx[12] = {1, 0, 0, 0,  0, cx, -sx, 0,  0, sx, cx, 0};
     const double ry[12] = {cy, 0, sy, 0,  0, 1, 0, 0,  -sy, 0, cy, 0};
     const double rz[12] = {cz, -sz, 0, 0,  sz, cz, 0, 0,  0, 0, 1, 0};
-    const double s[12] = {bone->scale[0], 0, 0, 0,  0, bone->scale[1], 0, 0,  0, 0, bone->scale[2], 0};
-    double t[12];
-    multiply(rz, ry, t);
-    multiply(t, rx, t);
-    multiply(t, s, t);
-    for (unsigned r = 0; r < 3; ++r) t[r * 4 + 3] = bone->translation[r];
-    memcpy(m, t, sizeof t);
+    const double s[12] = {sc[0], 0, 0, 0,  0, sc[1], 0, 0,  0, 0, sc[2], 0};
+    double out[12];
+    multiply(rz, ry, out);
+    multiply(out, rx, out);
+    multiply(out, s, out);
+    for (unsigned row = 0; row < 3; ++row) out[row * 4 + 3] = t[row];
+    memcpy(m, out, sizeof out);
+}
+static void local(const struct px_bch_bone *bone, double m[12])
+{
+    local_srt(bone->translation, bone->rotation, bone->scale, m);
 }
 int px_skin_rest_world(const struct px_bch_bone *bones, uint32_t count, double *world)
 {
@@ -171,5 +175,146 @@ int px_skin_bake_rest(struct px_bch_model *m)
             if (!i || mesh->bounds_max[c] > m->bounds_max[c]) m->bounds_max[c] = mesh->bounds_max[c];
         }
     }
+    return 1;
+}
+
+int px_skin_world_from_locals(const struct px_bch_bone *bones, uint32_t count,
+                              const float (*locals)[9], double *world)
+{
+    if (count && (!bones || !locals || !world)) return 0;
+    for (uint32_t i = 0; i < count; ++i) {
+        double m[12];
+        if (bones[i].parent < -1 || bones[i].parent >= (int32_t)i) return 0;
+        local_srt(locals[i], locals[i] + 3, locals[i] + 6, m);
+        if (bones[i].parent >= 0) multiply(world + (size_t)bones[i].parent * 12, m, m);
+        for (unsigned j = 0; j < 12; ++j) if (!isfinite(m[j])) return 0;
+        memcpy(world + (size_t)i * 12, m, sizeof m);
+    }
+    return 1;
+}
+
+static int name_equals(const struct px_bch_name *a, const char *b)
+{
+    return a->present && strlen(b) == a->size && !memcmp(a->bytes, b, a->size);
+}
+/* Rotation and translation only, column form T Rz Ry Rx (SPICA GetBoneRT
+ * chain without scale). */
+static void rt_matrix(const float *t, const float *r, double m[12])
+{
+    static const float one[3] = {1, 1, 1};
+    local_srt(t, r, one, m);
+}
+static void quat_rotate(const double q[4], const double v[3], double out[3])
+{
+    /* v' = v + 2 q.xyz x (q.xyz x v + w v) */
+    const double x = q[0], y = q[1], z = q[2], w = q[3];
+    const double c1[3] = {y * v[2] - z * v[1] + w * v[0], z * v[0] - x * v[2] + w * v[1], x * v[1] - y * v[0] + w * v[2]};
+    out[0] = v[0] + 2 * (y * c1[2] - z * c1[1]);
+    out[1] = v[1] + 2 * (z * c1[0] - x * c1[2]);
+    out[2] = v[2] + 2 * (x * c1[1] - y * c1[0]);
+}
+int px_skin_motion_locals(const struct px_bch_model *model, const struct px_gf_motion_pack *pack,
+                          const struct px_gf_motion *motion, uint32_t frame, float (*locals)[9])
+{
+    if (!model || !pack || !motion || !locals || (model->bone_count && !model->bones)) return 0;
+    if (frame > motion->frames) frame = motion->frames;
+    /* motion bone for each H3D bone, or -1 */
+    int32_t map[1024];
+    if (model->bone_count > 1024) return 0;
+    for (uint32_t i = 0; i < model->bone_count; ++i) {
+        const struct px_bch_bone *b = &model->bones[i];
+        for (unsigned j = 0; j < 3; ++j) {
+            locals[i][j] = b->translation[j]; locals[i][3 + j] = b->rotation[j]; locals[i][6 + j] = b->scale[j];
+        }
+        map[i] = -1;
+        for (uint32_t k = 0; k < pack->bone_count; ++k)
+            if (name_equals(&b->name, pack->bones[k].name)) { map[i] = (int32_t)k; break; }
+        if (map[i] < 0) continue;
+        const struct px_gf_channel *ch = motion->channels + (size_t)map[i] * 9;
+        /* Channel order TX TY TZ RX RY RZ SX SY SZ matches the local layout. */
+        for (unsigned c = 0; c < 9; ++c) locals[i][c] = px_gf_channel_value(pack, ch + c, (float)frame, locals[i][c]);
+        for (unsigned c = 0; c < 9; ++c) if (!isfinite(locals[i][c])) return 0;
+    }
+    /* World-space conversion, from the values before any conversion. */
+    float original[1024][9];
+    memcpy(original, locals, (size_t)model->bone_count * sizeof *original);
+    for (uint32_t i = 0; i < model->bone_count; ++i) {
+        if (map[i] < 0 || !(pack->bones[map[i]].flags & 8)) continue;
+        const int32_t parent = model->bones[i].parent;
+        if (parent < 0) return 0;
+        /* World of the parent from the rotation/translation chain. */
+        double chain[12] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0};
+        for (int32_t b = parent; b >= 0; b = model->bones[b].parent) {
+            double m[12];
+            rt_matrix(original[b], original[b] + 3, m);
+            multiply(m, chain, chain); /* ancestors apply after descendants */
+        }
+        double inverse[12];
+        if (!px_skin_affine_inverse(chain, inverse)) return 0;
+        const double target[3] = {original[i][0], original[i][1], original[i][2]};
+        double bt[3];
+        for (unsigned r = 0; r < 3; ++r)
+            bt[r] = inverse[r * 4] * target[0] + inverse[r * 4 + 1] * target[1] + inverse[r * 4 + 2] * target[2] + inverse[r * 4 + 3];
+        const double pt[3] = {original[parent][0], original[parent][1], original[parent][2]};
+        /* SPICA CreateRotationBetweenVectors(PT, BT): (PT x BT, PT.BT + |PT||BT|), normalized. */
+        double q[4] = {pt[1] * bt[2] - pt[2] * bt[1], pt[2] * bt[0] - pt[0] * bt[2], pt[0] * bt[1] - pt[1] * bt[0],
+                       pt[0] * bt[0] + pt[1] * bt[1] + pt[2] * bt[2] +
+                       sqrt((pt[0] * pt[0] + pt[1] * pt[1] + pt[2] * pt[2]) * (bt[0] * bt[0] + bt[1] * bt[1] + bt[2] * bt[2]))};
+        const double length = sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
+        if (!(length > 0)) return 0;
+        for (unsigned j = 0; j < 4; ++j) q[j] /= length;
+        const double qi[4] = {-q[0], -q[1], -q[2], q[3]};
+        double local_t[3];
+        quat_rotate(qi, bt, local_t);
+        for (unsigned j = 0; j < 3; ++j) locals[i][j] = (float)local_t[j];
+        const int32_t motion_parent = map[parent];
+        const int parent_rotation_animated = motion_parent >= 0 &&
+            (motion->channels[(size_t)motion_parent * 9 + 3].kind || motion->channels[(size_t)motion_parent * 9 + 4].kind ||
+             motion->channels[(size_t)motion_parent * 9 + 5].kind);
+        if (!parent_rotation_animated) {
+            const double x = q[0], y = q[1], z = q[2], w = q[3];
+            double s = 2 * (x * z - w * y);
+            if (s > 1) s = 1;
+            if (s < -1) s = -1;
+            locals[parent][3] = (float)atan2(2 * (x * w + y * z), 1 - 2 * (x * x + y * y));
+            locals[parent][4] = (float)-asin(s);
+            locals[parent][5] = (float)atan2(2 * (x * y + z * w), 1 - 2 * (y * y + z * z));
+        }
+    }
+    return 1;
+}
+
+int px_skin_pose_indices(const struct px_bch_model *m, const double *world, float *positions, float *normals)
+{
+    if (!m || !world || !positions || !normals || !m->bone_indices || !m->bone_weights) return 0;
+    for (uint32_t i = 0; i < m->mesh_count; ++i) {
+        const struct px_bch_mesh *mesh = m->meshes + i;
+        for (uint32_t s = 0; s < mesh->submesh_count; ++s) {
+            const struct px_bch_submesh *sub = m->submeshes + mesh->first_submesh + s;
+            for (uint32_t k = sub->first_index; k < sub->first_index + sub->index_count; ++k) {
+                const uint32_t source = m->indices[k];
+                double p[3], q[3];
+                if (source < mesh->first_vertex ||
+                    !px_skin_vertex(m, mesh, sub, world, source - mesh->first_vertex, p, q)) return 0;
+                const double length = sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2]);
+                for (unsigned c = 0; c < 3; ++c) {
+                    positions[(size_t)k * 3 + c] = (float)p[c];
+                    normals[(size_t)k * 3 + c] = (float)(length > 0 ? q[c] / length : 0);
+                }
+            }
+        }
+    }
+    return 1;
+}
+
+int px_skin_attach(const double *rest, uint32_t count, uint32_t child, uint32_t target, double *world)
+{
+    if (!rest || !world || child >= count || target >= count || child == target) return 0;
+    double inverse[12], m[12];
+    if (!px_skin_affine_inverse(rest + (size_t)target * 12, inverse)) return 0;
+    multiply(world + (size_t)target * 12, inverse, m);
+    multiply(m, rest + (size_t)child * 12, m);
+    for (unsigned j = 0; j < 12; ++j) if (!isfinite(m[j])) return 0;
+    memcpy(world + (size_t)child * 12, m, sizeof m);
     return 1;
 }

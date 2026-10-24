@@ -1,0 +1,35 @@
+Skeletal animation validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container, cc 13.3.0, Python 3.13,
+SDL 2.30.0, dummy video with the software renderer. Not run on the local WSL
+host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime
+   Passed. 18 native C suites (new: test_gf_motion; extended: test_skin).
+   Python core 43; runtime: texture viewer 7, BCH texture viewer 6, model
+   viewer 10, BCH model viewer 9, BCH textured 5, BCH combiner 4, BCH
+   lighting 2, BCH walk 2, BCH player 3, BCH motion 3 (new), field viewer 9.
+   103 Python tests in total.
+2. make -C reconstructed test: passed.
+3. python3 -m unittest discover -s tests: 38 tests, 2 optional skips.
+4. ASan/UBSan with leak detection: test_skin, test_gf_motion, dump_motion on
+   the real pack; the sanitized viewer under eight viewer suites, a 40-frame
+   looping standalone run and a 40-frame walk run with motions: no
+   diagnostics; sanitized dump output and walk capture identical.
+5. All 539 reconstructed and 98 earlier native reproduction entries match.
+   Stage-0, combiner and lit day/night captures are byte-identical; the
+   player and walk verifiers reproduce their reports exactly.
+6. python3 -I -B native/reproduction/bch-motion/verify_motion.py --romfs <RomFS>
+   --bridge native/build/dump_motion --viewer native/build/pokemon_model_viewer
+   Passed: 173 slots, 118 motions each consumed exactly, 95,232 keys and the
+   42-bone skeleton identical; 4,110 channel values bit-identical over 34
+   frames of slots 1, 3 and 4; locals within 2.6e-15; 6,099 posed positions
+   and normals identical at every checked frame. Walk phase 7 capture sha256
+   c0233193c0a91e3728d63aaffd70f8700ef2e7e2d2c75a29f0c5b648235363f9;
+   standalone slot 3 frame 7
+   53d47dc8a88add25eb756be2bc6ef965ef113989859ac6560b787128c8492606.
+
+Not established: the game's motion selection, controller, blending, playback
+rate and root motion; the foot solver (SPICA's conversion is used) and the
+slope scale (SPICA's trial value); the glasses attachment; the male player,
+outfits and material animations; the vertex shader's normal quaternion,
+culling, the field camera and any running-game comparison.

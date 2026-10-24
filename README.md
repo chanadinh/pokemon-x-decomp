@@ -79,10 +79,10 @@ oracle on 20,970 evaluations.
 [See day and night lighting →](docs/native-bch.md#directional-fragment-lighting)
 With `--walk`, the game's player-character model walks the lit room on its terrain
 grid and collision floor; all 52 walkable cells line up with the model's floor.
-The player is skinned in its rest pose, and an independent pose matches all
-6,099 vertices exactly.
+The player is skinned and animated from the game's own motion pack: each step
+plays its walk cycle. An independent decoder and pose match every checked frame.
 
-<p align="center"><a href="docs/native-bch.md#the-player-character"><img src="docs/images/native-bch-player-walk.png" alt="The player character standing on the rug of the lit room, seen from above" width="720"></a></p>
+<p align="center"><a href="docs/native-bch.md#animating-the-player"><img src="docs/images/native-bch-motion-walk.png" alt="The player character mid-stride on the rug of the lit room, seen from above" width="720"></a></p>
 
 [What remains before the first playable →](docs/PLAYABLE_SLICE.md#what-remains-before-the-first-playable)
 

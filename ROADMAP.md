@@ -133,8 +133,10 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    `--walk` adds the same GR's terrain grid and collision in the model's frame,
    checked at all 52 walkable cells, with an inspection marker
    ([walk evidence](native/reproduction/bch-walk/README.txt)). The marker is now
-   the skinned player-character model in its rest pose
-   ([player evidence](native/reproduction/bch-player/README.txt)). The gap list to
+   the skinned player-character model
+   ([player evidence](native/reproduction/bch-player/README.txt)), animated from its
+   GF1 motion pack with a walk cycle per step
+   ([motion evidence](native/reproduction/bch-motion/README.txt)). The gap list to
    the first playable is in [the slice document](docs/PLAYABLE_SLICE.md#what-remains-before-the-first-playable).
    Next trace the environment's binding to the field and the day/night
    selection, then execute the vertex shader (normal quaternion, primary color),

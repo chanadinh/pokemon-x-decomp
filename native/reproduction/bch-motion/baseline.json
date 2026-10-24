@@ -1,0 +1,32 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "1d5ee87caf360bc73890e3266ce92b4e45b1f7ee",
+ "previous_native_sha256sums": {
+  "entries": 171,
+  "sha256": "c6d836a1e61c31517e30551145ca455e58c8a9b3a1f4e722f64fd7d857bf68a1"
+ },
+ "immutable_reproduction_records": "All 98 reproduction/ entries of the previous native/SHA256SUMS were rechecked unchanged.",
+ "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+ "capture_regressions": "From the real archive paths the stage-0 (2d905248...), combiner (bb9e433d...), lit day (1dc1e452...243a) and lit night (640c936a...00fe) captures are byte-identical. ../bch-player/verify_player.py (bridge built with assets/gf_motion.c) reproduces its recorded report exactly, including the player walk (460e940f...) and standalone (1bb52546...) captures; ../bch-walk/verify_walk.py reproduces its report exactly.",
+ "changed_native_sources": [
+  "Makefile",
+  "README.md",
+  "model_app.c",
+  "render/skin.c",
+  "render/skin.h",
+  "render/test_skin.c"
+ ],
+ "added_native_files": [
+  "assets/gf_motion.c",
+  "assets/gf_motion.h",
+  "assets/test_gf_motion.c",
+  "tests/test_bch_motion_viewer.py",
+  "reproduction/bch-motion/README.txt",
+  "reproduction/bch-motion/baseline.json",
+  "reproduction/bch-motion/dump_motion.c",
+  "reproduction/bch-motion/reference-comparison.json",
+  "reproduction/bch-motion/validation.json",
+  "reproduction/bch-motion/validation.txt",
+  "reproduction/bch-motion/verify_motion.py"
+ ]
+}

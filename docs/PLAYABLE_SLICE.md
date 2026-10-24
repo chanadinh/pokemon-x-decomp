@@ -23,7 +23,7 @@ in the [source overview](../reconstructed/README.md) and
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 asset viewer with window/event loop, timing, pan/zoom, and image export; game runtime integration pending |
 | Renderer and game asset loading | BCLIM/CGFX/BCH textures; the selected field room renders with its textures, six combiner stages, vertex colors and directional lighting from its scene environment; verified terrain/collision loading in the same frame. Vertex shader, point lights, fog, projection, culling and the game camera remain missing |
-| Player controls, movement, and collision | The skinned player-character model (rest pose) walks the lit room on exact standard cells over the collision floor; animation, entry/spawn, and the game's movement and collision rules are not implemented |
+| Player controls, movement, and collision | The skinned player-character model walks the lit room on exact standard cells over the collision floor, playing its walk cycle from the game's motion pack; entry/spawn, the game's motion choice and its movement and collision rules are not implemented |
 | Interactive battle and return to the field | Not implemented; request/construction code is a partial dependency |
 | Save/load for a playable scenario | Not implemented |
 | Reference execution comparisons | No repeatable running-game capture is part of the current validation |
@@ -143,8 +143,8 @@ code or a reference capture behind it, not only a plausible native version.
 
 | Criterion | Done | Remaining |
 | --- | --- | --- |
-| 1. Load one map with player, environment and UI assets | Room 165: geometry, textures, combiners, lighting and terrain/collision in one scene; the player-character model skinned in its rest pose with its textures | Trace how a zone binds its environment and day/night, and which player model and outfit the game loads; skeletal animation (the 173-item pack beside the model); vertex shader outputs; culling, fog, projected textures and the field camera; decode the field UI |
-| 2. Move, collide, interact | The player model moves cell by cell with WASD over collision | Reconstruct the player controller (entry/spawn, walking/running, facing, terrain flags, collision response, warps) and one interaction: the script VM, an NPC or object event, and the message box |
+| 1. Load one map with player, environment and UI assets | Room 165: geometry, textures, combiners, lighting and terrain/collision in one scene; the player-character model skinned, textured and animated from its GF1 motion pack | Trace how a zone binds its environment and day/night, and which player model and outfit the game loads; which motions the game plays and how (rate, blending, foot placement); vertex shader outputs; culling, fog, projected textures and the field camera; decode the field UI |
+| 2. Move, collide, interact | The player model walks cell by cell with WASD over collision, with a walk cycle and glide per step | Reconstruct the player controller (entry/spawn, walking/running, facing, terrain flags, collision response, warps) and one interaction: the script VM, an NPC or object event, and the message box |
 | 3. Wild encounter and interactive battle | Encounter-record preparation, Pokémon construction, data/state and stats (eight milestones, synthetic resources) | Real personal/learnset/move resources; the encounter trigger on terrain; battle setup, the turn loop and damage, move effects, AI, battle UI and assets, and the battle outcome |
 | 4. Return to the field with state preserved | — | Battle-to-field transition and party/world state |
 | 5. Save and load | — | Save layout, serialization and the slice's state |

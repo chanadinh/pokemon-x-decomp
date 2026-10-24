@@ -165,11 +165,119 @@ static void test_bake(void)
     assert(m.positions == before && m.bone_indices == f.indices4);
     assert(!px_skin_bake_rest(NULL));
 }
+/* Animated pose: Origin, Leg (child, 10 up), Foot (child of Leg, 5 down),
+ * Extra (child of Origin, not in the motion). The motion holds Foot's
+ * translation in world space (flag 8): target (0, 10, 5). By hand: BT =
+ * target in Leg's frame = (0, 0, 5); PT = Leg translation (0, 10, 0); the
+ * rotation taking PT toward BT is +90 degrees about X, so Leg gets Euler
+ * (pi/2, 0, 0) and Foot's local translation is BT rotated back: (0, 5, 0). */
+static void motion_fixture(struct px_bch_bone b[4], struct px_gf_motion_pack *p, struct px_gf_motion *m,
+                           struct px_gf_channel ch[27], struct px_gf_key keys[4], struct px_gf_motion_bone mb[3])
+{
+    memset(b, 0, 4 * sizeof *b);
+    static const char *names[4] = {"Origin", "Leg", "Foot", "Extra"};
+    static const int32_t parents[4] = {-1, 0, 1, 0};
+    for (unsigned i = 0; i < 4; ++i) {
+        b[i].parent = parents[i];
+        b[i].scale[0] = b[i].scale[1] = b[i].scale[2] = 1;
+        b[i].name.present = 1; b[i].name.size = (uint32_t)strlen(names[i]);
+        memcpy(b[i].name.bytes, names[i], b[i].name.size + 1);
+    }
+    b[1].translation[1] = 10; b[2].translation[1] = -5;
+    b[3].translation[0] = 7; b[3].rotation[1] = 0.25f;
+    memset(mb, 0, 3 * sizeof *mb);
+    for (unsigned i = 0; i < 3; ++i) { strcpy(mb[i].name, names[i]); mb[i].parent = parents[i]; }
+    mb[2].flags = 8;
+    memset(ch, 0, 27 * sizeof *ch);
+    keys[0] = (struct px_gf_key){0, 0, 0}; keys[1] = (struct px_gf_key){0, 10, 0};
+    keys[2] = (struct px_gf_key){0, 5, 0}; keys[3] = (struct px_gf_key){0, 0, 0};
+    for (unsigned c = 0; c < 3; ++c) ch[18 + c] = (struct px_gf_channel){PX_GF_CHANNEL_CONSTANT, c, 1};
+    memset(m, 0, sizeof *m);
+    m->slot = 1; m->frames = 1; m->channels = ch;
+    memset(p, 0, sizeof *p);
+    p->bone_count = 3; p->bones = mb; p->motion_count = 1; p->motions = m; p->keys = keys; p->key_count = 4;
+}
+static void test_motion_locals(void)
+{
+    struct px_bch_bone b[4];
+    struct px_gf_motion_pack p;
+    struct px_gf_motion m;
+    struct px_gf_channel ch[27];
+    struct px_gf_key keys[4];
+    struct px_gf_motion_bone mb[3];
+    motion_fixture(b, &p, &m, ch, keys, mb);
+    struct px_bch_model model;
+    memset(&model, 0, sizeof model);
+    model.bones = b; model.bone_count = 4;
+    float l[4][9];
+    assert(px_skin_motion_locals(&model, &p, &m, 0, l));
+    assert(near(l[1][3], M_PI / 2) && near(l[1][4], 0) && near(l[1][5], 0) && near(l[1][1], 10));
+    assert(near(l[2][0], 0) && near(l[2][1], 5) && near(l[2][2], 0));
+    /* Unmatched and unanimated bones keep their stored transform. */
+    assert(l[3][0] == 7 && l[3][4] == 0.25f && l[3][6] == 1 && l[0][1] == 0);
+    double w[48];
+    assert(px_skin_world_from_locals(b, 4, (const float (*)[9])l, w));
+    assert(near(w[24 + 3], 0) && near(w[24 + 7], 10) && near(w[24 + 11], 5)); /* Foot at the target */
+    /* Frames clamp to the motion's length. */
+    float l2[4][9];
+    assert(px_skin_motion_locals(&model, &p, &m, 99, l2) && !memcmp(l, l2, sizeof l));
+    /* An animated parent rotation is kept; the child translation is still
+     * converted with it (here 0, so the same (0, 5, 0)). */
+    ch[9 + 3] = (struct px_gf_channel){PX_GF_CHANNEL_CONSTANT, 3, 1};
+    assert(px_skin_motion_locals(&model, &p, &m, 0, l));
+    assert(l[1][3] == 0 && near(l[2][1], 5));
+    /* Leg rotated 90 degrees about Z by the motion: the target in Leg's frame
+     * is Rz(pi/2)^-1 (0, 0, 5) = (0, 0, 5), so Foot's translation is again
+     * (0, 5, 0) and Leg keeps the motion's rotation. Foot then lands off the
+     * target, as SPICA's conversion does when the parent is animated. */
+    keys[3].value = (float)(M_PI / 2);
+    ch[9 + 3].kind = PX_GF_CHANNEL_ABSENT;
+    ch[9 + 5] = (struct px_gf_channel){PX_GF_CHANNEL_CONSTANT, 3, 1};
+    assert(px_skin_motion_locals(&model, &p, &m, 0, l));
+    assert(near(l[1][5], M_PI / 2) && near(l[2][0], 0) && near(l[2][1], 5) && near(l[2][2], 0));
+    /* A world-space bone without a parent is rejected. */
+    b[2].parent = -1;
+    assert(!px_skin_motion_locals(&model, &p, &m, 0, l));
+    b[2].parent = 1;
+    assert(!px_skin_motion_locals(NULL, &p, &m, 0, l) && !px_skin_motion_locals(&model, &p, NULL, 0, l));
+    b[2].parent = 2;
+    assert(!px_skin_world_from_locals(b, 4, (const float (*)[9])l, w));
+}
+static void test_attach_and_pose(void)
+{
+    /* Attach: bone 1 keeps its rest offset from bone 0 as bone 0 moves. */
+    struct px_bch_bone b[2];
+    double rest[24], w[24];
+    bones(b);
+    b[1].parent = -1; /* two roots */
+    assert(px_skin_rest_world(b, 2, rest));
+    memcpy(w, rest, sizeof w);
+    w[3] += 4; /* bone 0 moves 4 along x */
+    assert(px_skin_attach(rest, 2, 1, 0, w));
+    assert(near(w[12 + 3], rest[12 + 3] + 4) && near(w[12 + 7], rest[12 + 7]) && near(w[12], rest[12]));
+    assert(!px_skin_attach(rest, 2, 1, 1, w) && !px_skin_attach(rest, 2, 2, 0, w));
+    const double singular[24] = {0};
+    assert(!px_skin_attach(singular, 2, 1, 0, w));
+    /* Pose into caller buffers: the rest worlds reproduce the rest bake and
+     * the model keeps its unexpanded arrays. */
+    struct fixture f;
+    fixture(&f);
+    float positions[27], normals[27];
+    assert(px_skin_pose_indices(&f.m, f.world, positions, normals));
+    assert(f.m.bone_indices == f.indices4 && f.m.vertex_count == 4);
+    assert(near(positions[4 * 3], -1) && near(positions[4 * 3 + 1], 11));
+    assert(near(positions[3 * 3], -2) && near(normals[3 * 3 + 1], 1));
+    f.sub[1].bone_count = 1;
+    assert(!px_skin_pose_indices(&f.m, f.world, positions, normals));
+    assert(!px_skin_pose_indices(NULL, f.world, positions, normals));
+}
 int main(void)
 {
     test_rest_world_and_inverse();
     test_vertex_modes();
     test_bake();
-    puts("rest-pose skinning tests passed");
+    test_motion_locals();
+    test_attach_and_pose();
+    puts("skinning tests passed");
     return 0;
 }

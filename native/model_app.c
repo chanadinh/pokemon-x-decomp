@@ -28,6 +28,8 @@ struct options {
     const char *steps, *player_archive;
     uint32_t player_entry, player_section;
     int have_player_entry, have_player_section;
+    uint32_t motion_section, motion_slot, motion_frame, walk_motion_slot;
+    int have_motion_section, have_motion_slot, have_motion_frame, have_walk_motion;
     uint32_t entry, subentry, model, frames, section;
     uint32_t texture_entry, texture_subentry, texture_section;
     int have_entry, have_subentry, have_model, demo, inspect, software, self_test, textured;
@@ -43,6 +45,7 @@ struct walker {
     int active, x, z;
     int facing; /* quarter turns about +Y: 0 +Z (D), 1 +X (R), 2 -Z (U), 3 -X (L) */
     uint32_t moves, blocked;
+    int last_moved; /* the latest attempted step moved */
 };
 struct camera { double yaw, pitch, zoom; int running; struct walker *walk; };
 static int walkable(const struct walker *w, int x, int z)
@@ -66,8 +69,8 @@ static void walk_step(struct walker *w, char direction)
     const int dz = direction == 'U' ? -1 : direction == 'D' ? 1 : 0;
     /* The marker turns toward every attempted step, blocked or not. */
     w->facing = direction == 'D' ? 0 : direction == 'R' ? 1 : direction == 'U' ? 2 : 3;
-    if (walkable(w, w->x + dx, w->z + dz)) { w->x += dx; w->z += dz; ++w->moves; }
-    else ++w->blocked;
+    if (walkable(w, w->x + dx, w->z + dz)) { w->x += dx; w->z += dz; ++w->moves; w->last_moved = 1; }
+    else { ++w->blocked; w->last_moved = 0; }
 }
 /* Region-local cell center: (cell + 0.5) * 18 - 360, as the field viewer. */
 static double cell_center(int cell) { return (cell + 0.5) * 18 - 360; }
@@ -103,12 +106,27 @@ struct model_asset {
     struct walker walker;
     int walk;
     struct model_asset *player; /* --player-archive: drawn at the marker */
+    /* --motion: an unbaked copy of the skinned model, the GF1 pack and the
+     * per-frame buffers that pose the baked arrays in place. */
+    struct px_bch_model skin_source;
+    struct px_gf_motion_pack motion_pack;
+    const struct px_gf_motion *motion, *walk_motion, *posed_motion;
+    double glide[2]; /* player offset from its cell center while a step plays */
+    float (*motion_locals)[9];
+    double *motion_world, *motion_rest;
+    int32_t attach_child, attach_target; /* -1 when no attachment applies */
+    double attach_residual;
+    uint32_t motion_start, motion_posed;
+    int motion_fixed, motion_ready;
     int bch_textured;
 };
 
 static void asset_free(struct model_asset *asset)
 {
     if (asset->player) { asset_free(asset->player); free(asset->player); }
+    px_bch_model_free(&asset->skin_source);
+    px_gf_motion_pack_free(&asset->motion_pack);
+    free(asset->motion_locals); free(asset->motion_world); free(asset->motion_rest);
     if (asset->textures)
         for (uint32_t i = 0; i < asset->texture_count; ++i) px_texture_free(&asset->textures[i]);
     free(asset->textures);
@@ -181,6 +199,14 @@ static void usage(FILE *stream, const char *program)
         "  --player-archive RELATIVE/PATH  With --walk: draw this skinned BCH (rest\n"
         "                     pose, its own textures) at the marker instead of a box;\n"
         "                     --player-entry N, --player-section N select it\n"
+        "  --motion-section N  GF1 motion pack: this section of the skinned model's\n"
+        "                     entry (the player's with --player-archive)\n"
+        "  --motion N         Pose with motion slot N (1..), one motion frame per two\n"
+        "                     rendered frames, looping; --motion-frame N starts (and\n"
+        "                     with --inspect reports) frame N\n"
+        "  --walk-motion N    With --player-archive and --motion: play slot N once\n"
+        "                     per marker step while the player glides between cells;\n"
+        "                     --motion loops otherwise\n"
         "  --inspect          Print decoded mesh metadata without a window\n"
         "  --capture-frame F  Save first viewport to a new BMP file\n"
         "  --frames N         Exit after a positive number of frames\n"
@@ -188,7 +214,7 @@ static void usage(FILE *stream, const char *program)
         "  --self-test-input  Exercise orbit/zoom/reset/exit; default 3 frames\n"
         "Controls: arrows orbit, +/- zoom, R/Home reset, Escape exit.\n"
         "Orthographic wireframe by default; --textured uses a bounded software preview.\n"
-        "Inspection camera; lighting only with --environment-archive; no animation or gameplay.\n", program);
+        "Inspection camera; lighting only with --environment-archive; animation only with --motion.\n", program);
 }
 
 static int number(const char *text, uint32_t *out)
@@ -239,7 +265,8 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--environment-subentry") && strcmp(arg, "--environment-section") &&
             strcmp(arg, "--scene") && strcmp(arg, "--lighting") && strcmp(arg, "--steps") &&
             strcmp(arg, "--player-archive") && strcmp(arg, "--player-entry") &&
-            strcmp(arg, "--player-section")) return 0;
+            strcmp(arg, "--player-section") && strcmp(arg, "--motion-section") &&
+            strcmp(arg, "--motion") && strcmp(arg, "--motion-frame") && strcmp(arg, "--walk-motion")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -275,6 +302,19 @@ static int parse(int argc, char **argv, struct options *o)
                 o->environment_section = n; o->have_environment_section = 1;
             } else if (!strcmp(arg, "--scene")) { o->scene = n; o->have_scene = 1; }
             else if (!strcmp(arg, "--player-entry")) { o->player_entry = n; o->have_player_entry = 1; }
+            else if (!strcmp(arg, "--motion-section")) {
+                if (n > 255 || o->have_motion_section) return 0;
+                o->motion_section = n; o->have_motion_section = 1;
+            } else if (!strcmp(arg, "--motion")) {
+                if (!n || o->have_motion_slot) return 0;
+                o->motion_slot = n; o->have_motion_slot = 1;
+            } else if (!strcmp(arg, "--walk-motion")) {
+                if (!n || o->have_walk_motion) return 0;
+                o->walk_motion_slot = n; o->have_walk_motion = 1;
+            } else if (!strcmp(arg, "--motion-frame")) {
+                if (o->have_motion_frame) return 0;
+                o->motion_frame = n; o->have_motion_frame = 1;
+            }
             else if (!strcmp(arg, "--player-section")) {
                 if (n > 255) return 0;
                 o->player_section = n; o->have_player_section = 1;
@@ -309,6 +349,10 @@ static int parse(int argc, char **argv, struct options *o)
     if ((o->player_archive || o->have_player_entry || o->have_player_section) &&
         (!o->walk || !o->player_archive || !o->have_player_entry || !relative_path(o->player_archive)))
         return 0;
+    if ((o->have_motion_section || o->have_motion_slot || o->have_motion_frame) &&
+        (!o->have_motion_section || !o->have_motion_slot || (!o->skinned && !o->player_archive)))
+        return 0;
+    if (o->have_walk_motion && (!o->player_archive || !o->have_motion_slot)) return 0;
     if (o->inspect && (o->capture || o->frames || o->self_test)) return 0;
     if (o->self_test && !o->frames) o->frames = 3;
     return 1;
@@ -726,6 +770,124 @@ static int decode_model(const struct options *o, const uint8_t *data, size_t siz
     return !o->textured || load_images(data, size, asset);
 }
 
+/* Pose the baked (index-expanded) arrays at an integer motion frame; the
+ * baked order is the source index order, so index k writes vertex k. */
+static int pose_motion(struct model_asset *asset, const struct px_gf_motion *motion, uint32_t frame)
+{
+    if (!asset->motion_ready || !motion) return 0;
+    if (frame == asset->motion_posed && motion == asset->posed_motion && asset->motion_fixed) return 1;
+    const struct px_bch_model *m = &asset->skin_source;
+    if (!px_skin_motion_locals(m, &asset->motion_pack, motion, frame, asset->motion_locals) ||
+        !px_skin_world_from_locals(m->bones, m->bone_count, (const float (*)[9])asset->motion_locals,
+                                   asset->motion_world) ||
+        (asset->attach_child >= 0 && !px_skin_attach(asset->motion_rest, m->bone_count, (uint32_t)asset->attach_child,
+                                                      (uint32_t)asset->attach_target, asset->motion_world)) ||
+        !px_skin_pose_indices(m, asset->motion_world, asset->wire.positions, asset->bch.normals)) return 0;
+    asset->motion_posed = frame; asset->posed_motion = motion; asset->motion_fixed = 1;
+    return 1;
+}
+
+/* --motion: decode the GF1 pack, keep an unbaked copy of the skinned model
+ * and check that the requested frame poses. */
+static int load_motion(const struct options *o, const uint8_t *data, size_t size, struct model_asset *asset)
+{
+    struct resource pack = {0};
+    if (!read_resource(o->romfs, o->archive, o->entry, o->subentry, 1, o->motion_section, "motion", &pack))
+        return 0;
+    enum px_gf_motion_result status = px_gf_motion_pack_decode(pack.data, pack.size, &asset->motion_pack);
+    resource_free(&pack);
+    if (status != PX_GF_MOTION_OK) {
+        fprintf(stderr, "[model-viewer] GF1 motion pack: %s\n", px_gf_motion_result_string(status));
+        return 0;
+    }
+    asset->motion = px_gf_motion_find(&asset->motion_pack, o->motion_slot);
+    if (!asset->motion) {
+        fprintf(stderr, "[model-viewer] GF1 motion slot %" PRIu32 " is absent or empty.\n", o->motion_slot);
+        return 0;
+    }
+    if (px_bch_model_decode_skinned(data, size, o->model, &asset->skin_source) != PX_BCH_MODEL_OK ||
+        asset->skin_source.index_count != asset->wire.index_count) return 0;
+    const uint32_t bones = asset->skin_source.bone_count;
+    asset->motion_locals = calloc(bones ? bones : 1, sizeof *asset->motion_locals);
+    asset->motion_world = calloc(bones ? bones : 1, 12 * sizeof *asset->motion_world);
+    asset->motion_rest = calloc(bones ? bones : 1, 12 * sizeof *asset->motion_rest);
+    if (!asset->motion_locals || !asset->motion_world || !asset->motion_rest ||
+        !px_skin_rest_world(asset->skin_source.bones, bones, asset->motion_rest)) return 0;
+    /* Attachment policy: tr0002's rigid glasses are skinned to "glass", a
+     * child of the root "model" that no motion animates, whose rest world
+     * equals that of the motion bone "loc_acchat" (a head locator). The game's
+     * accessory attachment is not traced; the viewer re-parents glass onto
+     * loc_acchat only when both exist, glass is unanimated and their rest
+     * worlds agree within 1e-4 in every element (residual printed). */
+    asset->attach_child = asset->attach_target = -1;
+    for (uint32_t i = 0; i < bones; ++i) {
+        if (name_is(&asset->skin_source.bones[i].name, "glass")) asset->attach_child = (int32_t)i;
+        if (name_is(&asset->skin_source.bones[i].name, "loc_acchat")) asset->attach_target = (int32_t)i;
+    }
+    asset->attach_residual = 0;
+    if (asset->attach_child >= 0 && asset->attach_target >= 0) {
+        for (unsigned j = 0; j < 12; ++j) {
+            const double d = fabs(asset->motion_rest[(size_t)asset->attach_child * 12 + j] -
+                                  asset->motion_rest[(size_t)asset->attach_target * 12 + j]);
+            if (d > asset->attach_residual) asset->attach_residual = d;
+        }
+        for (uint32_t k = 0; k < asset->motion_pack.bone_count; ++k)
+            if (!strcmp(asset->motion_pack.bones[k].name, "glass")) asset->attach_residual = INFINITY;
+    }
+    if (asset->attach_child < 0 || asset->attach_target < 0 || !(asset->attach_residual <= 1e-4))
+        asset->attach_child = asset->attach_target = -1;
+    asset->motion_start = o->have_motion_frame ? o->motion_frame : 0;
+    asset->motion_fixed = 0;
+    asset->motion_ready = 1;
+    if (o->have_walk_motion && !(asset->walk_motion = px_gf_motion_find(&asset->motion_pack, o->walk_motion_slot))) {
+        fprintf(stderr, "[model-viewer] GF1 walk motion slot %" PRIu32 " is absent or empty.\n", o->walk_motion_slot);
+        return 0;
+    }
+    /* --motion-frame indexes the walk cycle when one is given (it starts the
+     * last --steps move), otherwise the looping motion. */
+    const uint32_t limit = asset->walk_motion ? asset->walk_motion->frames : asset->motion->frames;
+    if (asset->motion_start > limit) {
+        fprintf(stderr, "[model-viewer] --motion-frame exceeds the motion's %" PRIu32 " frames.\n", limit);
+        return 0;
+    }
+    /* Motions loop with period frames (frame N repeats frame 0), as playback does. */
+    const uint32_t idle_start = asset->walk_motion || !asset->motion->frames ? 0 :
+                                asset->motion_start % asset->motion->frames;
+    if (asset->walk_motion && !pose_motion(asset, asset->walk_motion, 0)) {
+        fprintf(stderr, "[model-viewer] GF1 walk motion: pose failed\n");
+        return 0;
+    }
+    if (!pose_motion(asset, asset->motion, idle_start)) {
+        fprintf(stderr, "[model-viewer] GF1 motion: pose failed\n");
+        return 0;
+    }
+    float low[3] = {0}, high[3] = {0};
+    for (uint32_t k = 0; k < asset->wire.index_count; ++k)
+        for (unsigned c = 0; c < 3; ++c) {
+            const float v = asset->wire.positions[(size_t)k * 3 + c];
+            if (!k || v < low[c]) low[c] = v;
+            if (!k || v > high[c]) high[c] = v;
+        }
+    uint32_t matched = 0, world_space = 0;
+    for (uint32_t i = 0; i < bones; ++i)
+        for (uint32_t k = 0; k < asset->motion_pack.bone_count; ++k)
+            if (name_is(&asset->skin_source.bones[i].name, asset->motion_pack.bones[k].name)) {
+                ++matched; world_space += (asset->motion_pack.bones[k].flags & 8) != 0; break;
+            }
+    printf("motion_section=%" PRIu32 " motion=%" PRIu32 " frames=%" PRIu32 " pack_slots=%" PRIu32
+           " pack_motions=%" PRIu32 " motion_bones=%" PRIu32 " model_bones=%" PRIu32 " matched=%" PRIu32
+           " world_space=%" PRIu32 " start_frame=%" PRIu32 " bytes=%" PRIu32
+           " posed_min=%.4f,%.4f,%.4f posed_max=%.4f,%.4f,%.4f attach=%s residual=%.3g\n",
+           o->motion_section, o->motion_slot, asset->motion->frames, asset->motion_pack.slot_count,
+           asset->motion_pack.motion_count, asset->motion_pack.bone_count, bones, matched, world_space,
+           asset->motion_start, asset->motion->byte_length, low[0], low[1], low[2], high[0], high[1], high[2],
+           asset->attach_child >= 0 ? "glass:loc_acchat" : "none", asset->attach_child >= 0 ? asset->attach_residual : 0.0);
+    if (asset->walk_motion)
+        printf("walk_motion=%" PRIu32 " frames=%" PRIu32 " playback=one-cycle-per-step glide=linear-over-cycle\n",
+               o->walk_motion_slot, asset->walk_motion->frames);
+    return 1;
+}
+
 static int load(const struct options *o, struct model_asset *asset)
 {
     struct px_cgfx_model *mesh = o->textured ? &asset->scene.mesh : &asset->wire;
@@ -744,6 +906,8 @@ static int load(const struct options *o, struct model_asset *asset)
     if (!read_resource(o->romfs, o->archive, o->entry, o->subentry, o->have_section,
                        o->section, "model", &model)) return 0;
     int ok = decode_model(o, model.data, model.size, asset);
+    if (ok && o->have_motion_slot && o->skinned && !o->player_archive)
+        ok = load_motion(o, model.data, model.size, asset);
     if (ok && o->walk) {
         const uint8_t *gr = model.decoded ? model.decoded : model.member;
         const size_t gr_size = model.decoded ? model.decoded_size : model.member_size;
@@ -1351,9 +1515,12 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
     if (asset->walk && asset->walker.active && asset->player) {
         /* Player: rest pose standing on the first stored collision triangle
          * under the marker's cell center, facing its last step direction. */
-        struct placement at = {cell_center(asset->walker.x), 0, cell_center(asset->walker.z),
+        struct placement at = {cell_center(asset->walker.x) + asset->player->glide[0], 0,
+                               cell_center(asset->walker.z) + asset->player->glide[1],
                                asset->walker.facing * 1.5707963267948966};
-        if (px_field_collision_first_height(&asset->collision, at.x, at.z, &at.y) != PX_FIELD_OK) at.y = 0;
+        if (px_field_collision_first_height(&asset->collision, at.x, at.z, &at.y) != PX_FIELD_OK &&
+            px_field_collision_first_height(&asset->collision, cell_center(asset->walker.x),
+                                            cell_center(asset->walker.z), &at.y) != PX_FIELD_OK) at.y = 0;
         project_bch(asset->player, &v, &at, player_points, player_normals);
         if (!draw_bch_meshes(asset->player, player_points, player_normals, target, NULL)) return 0;
     } else if (asset->walk && asset->walker.active) {
@@ -1436,7 +1603,17 @@ static int window(const struct options *o, struct model_asset *asset)
             asset->bch_combiner ? "BCH six-stage combiner software preview; declared unlit inputs; layer/priority/resource draw order" :
             asset->bch_textured ? "unlit BCH TEV-stage-0 software preview; layer/priority/resource draw order" :
             "unlit textured software preview; translucency/priority/resource draw order" : "wireframe");
-    uint32_t frames = 0;
+    uint32_t frames = 0, last_moves = asset->walker.moves;
+    int64_t step_frame = INT64_MIN; /* rendered frame where the playing step began */
+    int step_dx = 0, step_dz = 0;
+    if (asset->walk && asset->player && asset->player->walk_motion && asset->walker.last_moved) {
+        /* The last --steps move plays its cycle as display starts, from
+         * --motion-frame, so captures can show any phase of a step. */
+        const struct walker *w = &asset->walker;
+        step_frame = -2 * (int64_t)asset->player->motion_start;
+        step_dx = w->facing == 1 ? 1 : w->facing == 3 ? -1 : 0;
+        step_dz = w->facing == 0 ? 1 : w->facing == 2 ? -1 : 0;
+    }
     if (asset->bch_combiner) {
         counts = calloc(asset->bch.material_count, sizeof *counts);
         if (!counts) goto done;
@@ -1445,6 +1622,33 @@ static int window(const struct options *o, struct model_asset *asset)
         SDL_Event e; while (SDL_PollEvent(&e)) event(&c, &e);
         if (!c.running) break;
         const char *path = frames == 0 ? o->capture : NULL;
+        /* One motion frame per two rendered frames (30 of 60 Hz), looping. */
+        struct model_asset *animated = asset->motion_ready ? asset : asset->player && asset->player->motion_ready ?
+                                       asset->player : NULL;
+        if (animated) {
+            const struct px_gf_motion *motion = animated->motion;
+            uint64_t at = (animated->walk_motion ? 0 : (uint64_t)animated->motion_start) + frames / 2;
+            animated->glide[0] = animated->glide[1] = 0;
+            if (asset->walk && asset->walker.moves != last_moves) {
+                /* A step happened: start the walk cycle from the previous cell. */
+                last_moves = asset->walker.moves; step_frame = frames;
+                step_dx = asset->walker.facing == 1 ? 1 : asset->walker.facing == 3 ? -1 : 0;
+                step_dz = asset->walker.facing == 0 ? 1 : asset->walker.facing == 2 ? -1 : 0;
+            }
+            if (animated->walk_motion && step_frame != INT64_MIN &&
+                ((int64_t)frames - step_frame) / 2 < (int64_t)animated->walk_motion->frames) {
+                motion = animated->walk_motion;
+                at = (uint64_t)(((int64_t)frames - step_frame) / 2);
+                /* Glide: the player covers the 18-unit cell linearly over the
+                 * cycle, by motion frame (an inspection choice). */
+                const double remaining = 18.0 * (1.0 - (double)at / motion->frames);
+                animated->glide[0] = -step_dx * remaining; animated->glide[1] = -step_dz * remaining;
+            } else step_frame = INT64_MIN;
+            const uint32_t length = motion->frames;
+            if (!pose_motion(animated, motion, length ? (uint32_t)(at % length) : 0)) {
+                SDL_SetError("GF1 motion pose failed"); goto done;
+            }
+        }
         if (asset->bch_textured ? !draw_bch_textured(renderer, asset, &c, vertices, normals, &target, &frame, path,
                                                      frames == 0 ? counts : NULL, player_points, player_normals) :
             o->textured ? !draw_textured(renderer, asset, &c, vertices, &target, &frame, path) :

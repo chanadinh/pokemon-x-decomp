@@ -330,9 +330,46 @@ matrix is the identity for all 45 bones, and an independent pose of all 6,099
 vertices matches exactly.
 
 The player is lit by the environment's character light set. The rest pose is a
-T-pose because animations are not decoded yet.
+T-pose; the next section animates it.
 
 The walk camera now looks from above. The inspection camera's earlier negative
 pitch had put the eye below the floor. See the
 [player record](../native/reproduction/bch-player/README.txt).
+
+## Animating the player
+
+```sh
+native/build/pokemon_model_viewer --romfs /path/to/romfs \
+  --archive a/0/4/1 --entry 165 --section 1 --triangle-list --textured --combiners \
+  --texture-archive a/0/1/3 --texture-entry 75 --texture-section 11 \
+  --environment-archive a/0/0/3 --environment-entry 137 --environment-section 0 \
+  --walk --player-archive a/0/2/1 --player-entry 2 --player-section 0 \
+  --motion-section 1 --motion 1 --walk-motion 3
+```
+
+<table>
+  <tr>
+    <td><img src="images/native-bch-motion-walk.png" alt="The player character mid-stride on the rug of the lit room, seen from above" width="440"></td>
+    <td><img src="images/native-bch-motion.png" alt="The player-character model posed by a frame of its walk cycle" width="440"></td>
+  </tr>
+</table>
+
+The 173-item pack beside the player model is a GF1 motion pack: a 42-bone
+motion skeleton and 118 motions with 95,232 keys. The decoder follows SPICA's
+reading of the format and consumes every motion exactly. Channels are
+evaluated as SPICA does, with constant, linear and Hermite keys, and applied to
+the model's bones by name. The two feet are stored in world space; they are
+converted with SPICA's method, not a solver traced in the game.
+
+The rigid glasses hang from a bone that no motion animates, but its rest
+position equals a head locator's. The viewer attaches the glasses to that
+locator; this is an inspection rule.
+
+Slot 1 is a standing pose, slot 3 a walk cycle and slot 4 a run. These were
+identified by rendering. With `--walk-motion 3`, each step plays one walk cycle
+while the player glides to the next cell. An independent decoder and pose match
+the native one at every checked frame: all 4,110 channel values are
+bit-identical and all 6,099 vertices identical. The game's motion choice,
+playback rate and controller are not traced. See the
+[motion record](../native/reproduction/bch-motion/README.txt).
 
