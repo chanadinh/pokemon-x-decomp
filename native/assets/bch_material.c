@@ -18,11 +18,14 @@ static int fragment(const struct px_bch_fragment_state *f, struct px_bch_fragmen
     const uint32_t blend = f->blend.value;
     const uint32_t src_rgb = (blend >> 16) & 15, dst_rgb = (blend >> 20) & 15;
     const uint32_t src_alpha = (blend >> 24) & 15, dst_alpha = blend >> 28;
-    if ((blend & 0xffff) || src_rgb != src_alpha || dst_rgb != dst_alpha) return 0;
-    if (src_rgb == 1 && dst_rgb == 0) out->blend = PX_BCH_BLEND_REPLACE;
-    else if (src_rgb == 6 && dst_rgb == 7) out->blend = PX_BCH_BLEND_SOURCE_ALPHA;
-    else if (src_rgb == 6 && dst_rgb == 1) out->blend = PX_BCH_BLEND_ADD_SOURCE_ALPHA;
-    else return 0;
+    if ((blend & 0xffff) || src_rgb > 9 || dst_rgb > 9 || src_alpha > 9 || dst_alpha > 9) return 0;
+    out->blend_factors[0] = (uint8_t)src_rgb; out->blend_factors[1] = (uint8_t)dst_rgb;
+    out->blend_factors[2] = (uint8_t)src_alpha; out->blend_factors[3] = (uint8_t)dst_alpha;
+    const int same = src_rgb == src_alpha && dst_rgb == dst_alpha;
+    if (same && src_rgb == 1 && dst_rgb == 0) out->blend = PX_BCH_BLEND_REPLACE;
+    else if (same && src_rgb == 6 && dst_rgb == 7) out->blend = PX_BCH_BLEND_SOURCE_ALPHA;
+    else if (same && src_rgb == 6 && dst_rgb == 1) out->blend = PX_BCH_BLEND_ADD_SOURCE_ALPHA;
+    else out->blend = PX_BCH_BLEND_FACTORS;
     out->alpha_test = f->alpha_test.value & 1;
     out->alpha_compare = (f->alpha_test.value >> 4) & 7;
     out->alpha_reference = (f->alpha_test.value >> 8) & 255;
@@ -161,6 +164,7 @@ enum px_bch_material_result px_bch_material_preview(
     struct px_bch_fragment_preview frag;
     if (!fragment(f, &frag)) return PX_BCH_MATERIAL_UNSUPPORTED_FRAGMENT;
     out->blend = frag.blend;
+    memcpy(out->blend_factors, frag.blend_factors, sizeof out->blend_factors);
     out->unit = unit;
     out->combine_rgb = combine_rgb;
     out->combine_alpha = combine_alpha;

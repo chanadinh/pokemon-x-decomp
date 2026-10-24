@@ -447,10 +447,40 @@ of the earlier records now show their tables, cabinets and plants; without
 props (`--no-props`) the earlier captures are reproduced exactly.
 
 The scene is now heavier, so frames are drawn in horizontal bands on several
-CPU cores, with the same pixels as a single pass. 287 of the game's 360 zones
-now load (68 of them span several regions), and an independent reader
+CPU cores, with the same pixels as a single pass. With this milestone 287 of the game's 360 zones
+loaded (68 of them span several regions), and an independent reader
 agrees on every region placement, prop, NPC tile and warp tile. Bump maps,
-Fresnel terms and a few TV and PC models are not drawn yet. Walking north out
-of the town does not switch to Route 1 yet. See the
+Fresnel terms and a few TV and PC models are not drawn yet. See the
 [town record](../native/reproduction/bch-town/README.txt).
+
+## On to Aquacorde Town
+
+<table>
+  <tr>
+    <td><img src="images/native-bch-route1.png" alt="The player on Route 1, walking up the path toward the arch into Aquacorde Town" width="440"></td>
+    <td><img src="images/native-bch-aquacorde.png" alt="The player in front of the fountain in the square of Aquacorde Town, with townspeople around" width="440"></td>
+  </tr>
+</table>
+
+The path north of Vaniville now leads on. Each map cell belongs to a zone, and
+when the player steps into a cell of another zone the viewer switches to it
+without a load screen, keeping the player's position: up Route 1 and into
+Aquacorde Town, with its fountain and its own townspeople. Every scene also
+loads the ring of map cells around the zone, so the next area is already in
+view at the edge. Aquacorde's water needed two more kinds of blending,
+including blending by the alpha already on screen; the viewer now supports the
+3DS blend factors in general. 291 of the 360 zones load, and an independent
+walk over the map predicts both crossings. See the
+[route record](../native/reproduction/bch-route/README.txt).
+
+<table>
+  <tr>
+    <td><img src="images/native-bch-giant.png" alt="A giant player, three times normal size, towering over the fountain in Aquacorde Town" width="440"></td>
+    <td><img src="images/native-bch-moonwalk.png" alt="The player moonwalking up Route 1, facing the camera while moving away from it" width="440"></td>
+  </tr>
+</table>
+
+For fun, `--silly giant` makes the player three times larger, and
+`--silly moonwalk` makes the player walk facing backwards with the walk cycle
+reversed. Neither is game behaviour, and they change nothing else.
 

@@ -21,6 +21,10 @@ project owner's request. No generated artwork or mockups are used.
 | [Talking downstairs](native-bch-talk.png) | `outputs/native-bch-talk/talk.bmp` (lossless PNG conversion) | `--zone 4 --arrive 1 --play RRRRUUUURRUU. --frames 330 --capture-at 329`: the first page of the NPC's line, chosen by the zone script, in the viewer's own message window and font. Real archive paths. |
 | [Vaniville Town](native-bch-town.png) | `outputs/native-bch-town/town.bmp` (lossless PNG conversion) | `--zone 0 --arrive 1 --play DDDDDDDDDDD --frames 330 --capture-at 329`: the town's regions, props (lamps, doors) and NPCs around the player. Real archive paths. |
 | [Talking in town](native-bch-town-talk.png) | `outputs/native-bch-town/town-talk.bmp` (lossless PNG conversion) | `--zone 0 --arrive 2 --play DDDLL. --frames 150 --capture-at 149`: the first page of an NPC's line in Vaniville Town. Real archive paths. |
+| [Route 1](native-bch-route1.png) | `outputs/new-route-check/route-route1.bmp` (lossless PNG conversion) | `--zone 0 --play ruuu…u --frames 760 --capture-at 300` (one `r`, then 70 `u`): after the crossing from Vaniville Town into zone 258, walking north toward Aquacorde. Real archive paths. |
+| [Aquacorde Town](native-bch-aquacorde.png) | `outputs/new-route-check/route-aquacorde.bmp` (lossless PNG conversion) | The same run's frame 759: after the second crossing, in zone 8 at the fountain. |
+| [Giant](native-bch-giant.png) | `outputs/new-route-check/route-giant.bmp` (lossless PNG conversion) | The same run with `--silly giant` (a joke mode, not game behaviour). |
+| [Moonwalk](native-bch-moonwalk.png) | `outputs/new-route-check/route-moonwalk.bmp` (lossless PNG conversion) | The same run's frame 300 with `--silly moonwalk` (a joke mode, not game behaviour). |
 | [Textured CGFX model](native-textured-model.png) | `outputs/native-textured-model/model-frame.png` | Archive `a/1/0/2`, entry 0: six materials and textures in an unlit software preview. Lighting, complete shaders and original-game visual equivalence are not reproduced. |
 | [Terrain/collision inspector](native-field-inspector.png) | `outputs/native-field-scene/field-collision-frame.png` | Zone 5 → matrix 12 → region 165, with collision edges and a restricted inspection marker. This earlier capture's footer predates the separate BCH wireframe milestone; it is not the current status of BCH decoding. |
 
@@ -41,6 +45,7 @@ Evidence and reproduction instructions:
 - [Zone comparison](../../native/reproduction/bch-zone/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-zone/README.txt).
 - [Dialogue comparison](../../native/reproduction/bch-talk/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-talk/README.txt).
 - [Town comparison](../../native/reproduction/bch-town/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-town/README.txt).
+- [Route comparison](../../native/reproduction/bch-route/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-route/README.txt).
 - [Textured CGFX capture record](../../native/reproduction/textured-model/rendered-sample.json).
 - [Field inspector scope and reproduction](../../native/reproduction/field-scene/README.txt).
 
@@ -62,6 +67,10 @@ e617380d1a84d6d24b0240d5b94607ef908e3e1073865b0c3fe58143b0e73f8f  native-bch-zon
 592bf5b471d150352230972ff78bc87da4f144dc497d8c68e131d1e51eb16bf8  native-bch-talk.png
 e529a030786531ad91bd0e07a726ec4f876d3c1eab33bafd65b9a64310b420f6  native-bch-town.png
 91bc3ac2e2bae07ef8bfaacac8fed06094caa65c38a7850a0e5fe5fbda504440  native-bch-town-talk.png
+8241ece2d898c4ae126939ad1a5a255d72bba3e43fa4a5ba0202820ceeb88f52  native-bch-route1.png
+ee43af0523a4aec799c6f1cb9fa5034e9f8f0e829837ba3af349a7eca81b6ee8  native-bch-aquacorde.png
+8d9f412a898c7752346890c564d02eefb5ab9c296dd1aecb0278b6a6800cd0e3  native-bch-giant.png
+a6d50709637b89aba1d671d5e1735c7fc18f0a6f82395dfabd6d55a09fd91acf  native-bch-moonwalk.png
 b987693a363ff84bf009c6d537b7e2937e9e8d4fdba4d4855bcb2f11ae0a0f45  native-textured-model.png
 2335afaea29641d0c037bd082ec54963cdb2ea3099030a5d5a1e7a24862032de  native-field-inspector.png
 ```

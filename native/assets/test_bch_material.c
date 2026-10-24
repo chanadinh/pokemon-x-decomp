@@ -75,6 +75,17 @@ static void test_ordinary_state(void)
     assert(px_bch_material_preview(&m, &out) == PX_BCH_MATERIAL_OK && out.blend == PX_BCH_BLEND_SOURCE_ALPHA);
     m.fragment.blend = full(0x16160000);
     assert(px_bch_material_preview(&m, &out) == PX_BCH_MATERIAL_OK && out.blend == PX_BCH_BLEND_ADD_SOURCE_ALPHA);
+    m.fragment.blend = full(0x01760000);
+    assert(px_bch_material_preview(&m, &out) == PX_BCH_MATERIAL_OK && out.blend == PX_BCH_BLEND_FACTORS &&
+           out.blend_factors[0] == 6 && out.blend_factors[1] == 7 && out.blend_factors[2] == 1 &&
+           out.blend_factors[3] == 0);
+    m.fragment.blend = full(0x98980000);
+    assert(px_bch_material_preview(&m, &out) == PX_BCH_MATERIAL_OK && out.blend == PX_BCH_BLEND_FACTORS);
+    m.fragment.blend = full(0xa0760000); /* factor 10 (constant color): not supported */
+    assert(px_bch_material_preview(&m, &out) == PX_BCH_MATERIAL_UNSUPPORTED_FRAGMENT);
+    m.fragment.blend = full(0x76760001); /* a non-add equation */
+    assert(px_bch_material_preview(&m, &out) == PX_BCH_MATERIAL_UNSUPPORTED_FRAGMENT);
+    m.fragment.blend = full(0x16160000);
     m.fragment.alpha_test = full(0x10);
     m.fragment.depth_color = full(0x0f50);
     assert(px_bch_material_preview(&m, &out) == PX_BCH_MATERIAL_OK);
@@ -137,10 +148,19 @@ static void test_rejections(void)
     m = ordinary(); m.unit_parameters[0] = full(0x10000000); expect(m, PX_BCH_MATERIAL_UNSUPPORTED_SAMPLER);
     m = ordinary(); m.fragment.color_operation = full(0x000); expect(m, PX_BCH_MATERIAL_UNSUPPORTED_FRAGMENT);
     m = ordinary(); m.fragment.color_operation = full(0x101); expect(m, PX_BCH_MATERIAL_UNSUPPORTED_FRAGMENT);
-    const uint32_t bad_blends[] = {0x01010001, 0x01010100, 0x76710000, 0x77770000, 0x11110000, 0x01000000};
+    /* Equations other than add, and factors 10..15, are refused. */
+    const uint32_t bad_blends[] = {0x01010001, 0x01010100, 0x0a010000, 0x01f10000, 0xc1010000, 0x01d10000};
     for (unsigned i = 0; i < sizeof bad_blends / sizeof *bad_blends; ++i) {
         m = ordinary(); m.fragment.blend = full(bad_blends[i]);
         expect(m, PX_BCH_MATERIAL_UNSUPPORTED_FRAGMENT);
+    }
+    /* Other factor pairs 0..9 are general factors. */
+    const uint32_t factor_blends[] = {0x76710000, 0x77770000, 0x11110000, 0x01000000, 0x98980000};
+    for (unsigned i = 0; i < sizeof factor_blends / sizeof *factor_blends; ++i) {
+        struct px_bch_preview_material got;
+        m = ordinary(); m.fragment.blend = full(factor_blends[i]);
+        assert(px_bch_material_preview(&m, &got) == PX_BCH_MATERIAL_OK && got.blend == PX_BCH_BLEND_FACTORS);
+        assert(got.blend_factors[0] == ((factor_blends[i] >> 16) & 15) && got.blend_factors[3] == factor_blends[i] >> 28);
     }
     assert(strcmp(px_bch_material_result_string(PX_BCH_MATERIAL_OK), "success") == 0);
     assert(strcmp(px_bch_material_result_string((enum px_bch_material_result)99),

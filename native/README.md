@@ -476,3 +476,8 @@ from the area's prop registry. BCH scenes draw in row bands on several cores
 (`--threads N`; same pixels as one pass); `--no-props` gives the earlier scenes.
 See the [town record](reproduction/bch-town/README.txt).
 
+Walking into a map cell of another zone switches to that zone and keeps the
+player's world position (Vaniville Town → Route 1 → Aquacorde Town); scenes
+include a ring of neighbouring cells. `--silly giant` and `--silly moonwalk` are
+for fun. See the [route record](reproduction/bch-route/README.txt).
+

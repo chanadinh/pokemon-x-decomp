@@ -28,7 +28,8 @@ enum px_raster_blend {
     PX_RASTER_REPLACE = 0,
     PX_RASTER_SOURCE_OVER, /* Straight RGBA Porter-Duff source-over. */
     PX_RASTER_SOURCE_ALPHA, /* Every channel: src*srcA + dst*(1-srcA). */
-    PX_RASTER_ADD_SOURCE_ALPHA /* Every channel: src*srcA + dst, clamped to 1. */
+    PX_RASTER_ADD_SOURCE_ALPHA, /* Every channel: src*srcA + dst, clamped to 1. */
+    PX_RASTER_FACTORS /* src*F(blend_factors[0|2]) + dst*F(blend_factors[1|3]) per RGB|alpha, clamped. */
 };
 
 struct px_raster_target {
@@ -63,6 +64,11 @@ struct px_raster_state {
     enum px_raster_winding front;
     enum px_raster_blend blend;
     uint8_t color_write_mask; /* RGBA bits0..3; default15. */
+    /* PX_RASTER_FACTORS only: PICA factors source RGB, destination RGB,
+     * source alpha, destination alpha: 0 zero, 1 one, 2/3 source color and
+     * one minus it, 4/5 destination color, 6/7 source alpha, 8/9 destination
+     * alpha. */
+    uint8_t blend_factors[4];
 };
 
 /* Create a fresh/freed target; failures leave it zeroed. Clears are explicit.

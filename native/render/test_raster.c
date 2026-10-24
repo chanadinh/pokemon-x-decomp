@@ -258,7 +258,20 @@ static void winding_and_shared_edges(void)
         pixel(&t,x,y,(const uint8_t[]){128,40,0,164});
     OK(px_raster_draw(&t,a,NULL,NULL,&state));
     pixel(&t,0,0,(const uint8_t[]){255,40,0,228});pixel(&t,3,3,(const uint8_t[]){128,40,0,164});
-    { struct px_raster_state bad=state; bad.blend=(enum px_raster_blend)(PX_RASTER_ADD_SOURCE_ALPHA+1);
+    /* General factors: RGB source alpha / one minus it, alpha one / zero;
+     * then destination alpha / one minus destination alpha. */
+    state.blend=PX_RASTER_FACTORS;
+    state.blend_factors[0]=6;state.blend_factors[1]=7;state.blend_factors[2]=1;state.blend_factors[3]=0;
+    OK(px_raster_clear(&t,(const uint8_t[]){0,40,0,100},INFINITY));
+    OK(px_raster_draw(&t,a,NULL,NULL,&state));
+    pixel(&t,0,0,(const uint8_t[]){128,20,0,128});
+    state.blend_factors[0]=8;state.blend_factors[1]=9;state.blend_factors[2]=8;state.blend_factors[3]=9;
+    OK(px_raster_clear(&t,(const uint8_t[]){0,40,0,51},INFINITY));
+    OK(px_raster_draw(&t,a,NULL,NULL,&state));
+    pixel(&t,0,0,(const uint8_t[]){51,32,0,66});
+    { struct px_raster_state bad=state; bad.blend_factors[3]=10;
+      CHECK(px_raster_draw(&t,a,NULL,NULL,&bad)==PX_RASTER_INVALID_ARGUMENT); }
+    { struct px_raster_state bad=state; bad.blend=(enum px_raster_blend)(PX_RASTER_FACTORS+1);
       CHECK(px_raster_draw(&t,a,NULL,NULL,&bad)==PX_RASTER_INVALID_ARGUMENT); }
     /* Top horizontal and left vertical edges include exact pixel centers. */
     p[0]=vertex(.5,.5,0,0);p[1]=vertex(3.5,.5,0,0);p[2]=vertex(.5,3.5,0,0);

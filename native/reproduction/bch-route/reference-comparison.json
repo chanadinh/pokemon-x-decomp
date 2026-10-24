@@ -1,0 +1,2507 @@
+{
+ "archive_sha256": {
+  "a/0/1/2": "dc0b7a0dd2764480eaebd4c1c057d1fa8e268ccdf8953945713bb091925190d2",
+  "a/0/4/2": "37786d6473edc53d11eac8e60dfaf677895a402501242e4e920cc533cdf2eab3",
+  "a/0/4/1": "ab5acd0599c1d31ef03f1fcdf2149127812272cc2c8f53497948ffa1fe513e8b",
+  "a/0/1/3": "803d8ec7d99f177fc4843845966bb40775901d5eaf47083a3e0a357f13b48bbe",
+  "a/0/2/4": "58b71c72c8987f45afd346dd52a1558011785e8437995af8d25d8f509e050d37"
+ },
+ "verifier_sha256": "26d8588cb85b59456fa769a8494397e4132378d88badf82f15cc270a2363645d",
+ "town_verifier_sha256": "15590d07ae847b8f8cf44f74a7d1ac039d6a0e0433d7e0026d6db29522adb7f0",
+ "zones": {
+  "zones": 360,
+  "loaded": 291,
+  "multi_region_loaded": 72,
+  "failed": {
+   "region 923 failed to load.": 1,
+   "region 927 failed to load.": 1,
+   "region 344 failed to load.": 1,
+   "BCH model: invalid BCH geometry, index, relocation, or command": 6,
+   "region 738 failed to load.": 1,
+   "region 351 failed to load.": 1,
+   "region 984 failed to load.": 1,
+   "region 988 failed to load.": 4,
+   "BCH model: unsupported BCH version or static geometry feature": 2,
+   "region 840 failed to load.": 1,
+   "BCH textures: BCH texture index does not exist": 1,
+   "--walk GR terrain: unsupported field layout": 9,
+   "region 361 failed to load.": 1,
+   "region 386 failed to load.": 1,
+   "region 402 failed to load.": 1,
+   "region 955 failed to load.": 1,
+   "region 559 failed to load.": 1,
+   "region 563 failed to load.": 1,
+   "region 571 failed to load.": 1,
+   "region 579 failed to load.": 1,
+   "region 587 failed to load.": 1,
+   "region 567 failed to load.": 1,
+   "region 575 failed to load.": 1,
+   "region 583 failed to load.": 1,
+   "region 591 failed to load.": 1,
+   "region 595 failed to load.": 1,
+   "region 599 failed to load.": 1,
+   "region 603 failed to load.": 1,
+   "region 49 failed to load.": 1,
+   "region 87 failed to load.": 1,
+   "region 190 failed to load.": 1,
+   "region 226 failed to load.": 1,
+   "region 257 failed to load.": 1,
+   "region 135 failed to load.": 1,
+   "region 141 failed to load.": 1,
+   "region 144 failed to load.": 1,
+   "region 149 failed to load.": 1,
+   "region 950 failed to load.": 1,
+   "region 301 failed to load.": 1,
+   "region 316 failed to load.": 1,
+   "region 434 failed to load.": 1,
+   "region 445 failed to load.": 1,
+   "region 936 failed to load.": 1,
+   "region 464 failed to load.": 1,
+   "region 859 failed to load.": 1,
+   "region 475 failed to load.": 1,
+   "region 876 failed to load.": 1,
+   "region 483 failed to load.": 1,
+   "region 825 failed to load.": 1,
+   "region 529 failed to load.": 1,
+   "region 533 failed to load.": 1,
+   "region 545 failed to load.": 1
+  },
+  "props_drawn": 2511,
+  "props_not_drawn": 158,
+  "compared_props": 2669,
+  "compared_npc_tiles": 1947,
+  "compared_warp_tiles": 526,
+  "neighbour_regions_left_out": 4
+ },
+ "per_zone": {
+  "0": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 7,
+   "neighbours_left_out": 0,
+   "props": 17
+  },
+  "1": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "2": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "3": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "4": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "5": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "6": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "7": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 9
+  },
+  "8": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 11,
+   "neighbours_left_out": 2,
+   "props": 15
+  },
+  "9": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "10": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "11": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "12": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 8,
+   "neighbours_left_out": 0,
+   "props": 17
+  },
+  "13": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "14": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "15": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "16": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "17": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "18": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 20
+  },
+  "19": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 9
+  },
+  "20": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "21": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "neighbours_left_out": 0,
+   "props": 16
+  },
+  "22": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "neighbours_left_out": 0,
+   "props": 17
+  },
+  "23": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "neighbours_left_out": 0,
+   "props": 13
+  },
+  "24": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "25": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "26": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 20
+  },
+  "27": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "28": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "29": {
+   "loaded": false,
+   "reason": "region 923 failed to load.",
+   "derived": "loadable scene"
+  },
+  "30": {
+   "loaded": false,
+   "reason": "region 927 failed to load.",
+   "derived": "loadable scene"
+  },
+  "31": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "32": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "33": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "34": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "35": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 14
+  },
+  "36": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 14
+  },
+  "37": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 14
+  },
+  "38": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 8,
+   "neighbours_left_out": 1,
+   "props": 17
+  },
+  "39": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "40": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "41": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "42": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 20
+  },
+  "43": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "44": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "45": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 7,
+   "neighbours_left_out": 0,
+   "props": 9
+  },
+  "46": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "47": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "48": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "49": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "50": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "51": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "52": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 20
+  },
+  "53": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 14,
+   "neighbours_left_out": 0,
+   "props": 32
+  },
+  "54": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "55": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "56": {
+   "loaded": false,
+   "reason": "region 344 failed to load.",
+   "derived": "loadable scene"
+  },
+  "57": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "58": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "59": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 9
+  },
+  "60": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 9
+  },
+  "61": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 9
+  },
+  "62": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "63": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "64": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "65": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 36,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "66": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 24,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "67": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "68": {
+   "loaded": false,
+   "reason": "region 738 failed to load.",
+   "derived": "loadable scene"
+  },
+  "69": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "70": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "71": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "72": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "73": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "74": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "75": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "76": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "77": {
+   "loaded": false,
+   "reason": "region 351 failed to load.",
+   "derived": "loadable scene"
+  },
+  "78": {
+   "loaded": false,
+   "reason": "region 984 failed to load.",
+   "derived": "loadable scene"
+  },
+  "79": {
+   "loaded": false,
+   "reason": "region 988 failed to load.",
+   "derived": "loadable scene"
+  },
+  "80": {
+   "loaded": false,
+   "reason": "region 988 failed to load.",
+   "derived": "loadable scene"
+  },
+  "81": {
+   "loaded": false,
+   "reason": "region 988 failed to load.",
+   "derived": "loadable scene"
+  },
+  "82": {
+   "loaded": false,
+   "reason": "region 988 failed to load.",
+   "derived": "loadable scene"
+  },
+  "83": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "84": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "85": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "86": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "87": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "88": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "89": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 3
+  },
+  "90": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "91": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "92": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "93": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "94": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "95": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "96": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "97": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "98": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "99": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "100": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "101": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "102": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "103": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "104": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "105": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 9
+  },
+  "106": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "107": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "108": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "109": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "110": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "111": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "112": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "113": {
+   "loaded": false,
+   "reason": "BCH model: unsupported BCH version or static geometry feature",
+   "derived": "loadable scene"
+  },
+  "114": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "115": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "116": {
+   "loaded": false,
+   "reason": "BCH model: unsupported BCH version or static geometry feature",
+   "derived": "loadable scene"
+  },
+  "117": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "118": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 22
+  },
+  "119": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "120": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "121": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "122": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "123": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "124": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 3,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "125": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "126": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "127": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "128": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "129": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "130": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "131": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "132": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "133": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "134": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "135": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "136": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 33
+  },
+  "137": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 33
+  },
+  "138": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 33
+  },
+  "139": {
+   "loaded": false,
+   "reason": "region 840 failed to load.",
+   "derived": "loadable scene"
+  },
+  "140": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "141": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "142": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "143": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "144": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "145": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "146": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "147": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "148": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "149": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "150": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "151": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 24
+  },
+  "152": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "153": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "154": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "155": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "156": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "157": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 19,
+   "neighbours_left_out": 1,
+   "props": 23
+  },
+  "158": {
+   "loaded": false,
+   "reason": "BCH textures: BCH texture index does not exist",
+   "derived": "loadable scene"
+  },
+  "159": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "160": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "161": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "162": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 20
+  },
+  "163": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "164": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "165": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "166": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "167": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "168": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "169": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "170": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "171": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "172": {
+   "loaded": false,
+   "reason": "region 361 failed to load.",
+   "derived": "loadable scene"
+  },
+  "173": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "174": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "175": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "176": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "177": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "178": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "179": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "180": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "181": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "182": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "183": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "184": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "185": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "186": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "187": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 10,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "188": {
+   "loaded": false,
+   "reason": "region 386 failed to load.",
+   "derived": "loadable scene"
+  },
+  "189": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "190": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "191": {
+   "loaded": false,
+   "reason": "region 402 failed to load.",
+   "derived": "loadable scene"
+  },
+  "192": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "193": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "194": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "195": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 20
+  },
+  "196": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "197": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "198": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "199": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "200": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "neighbours_left_out": 0,
+   "props": 18
+  },
+  "201": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "202": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "203": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "204": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "205": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "206": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "207": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "208": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "209": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "210": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "211": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 8,
+   "neighbours_left_out": 0,
+   "props": 26
+  },
+  "212": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "213": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "214": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "215": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "216": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 19
+  },
+  "217": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "218": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "219": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 14
+  },
+  "220": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 14
+  },
+  "221": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 14
+  },
+  "222": {
+   "loaded": false,
+   "reason": "region 955 failed to load.",
+   "derived": "loadable scene"
+  },
+  "223": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "224": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "225": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "226": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "227": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "228": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "229": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "230": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "231": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "232": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "233": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 9,
+   "neighbours_left_out": 0,
+   "props": 33
+  },
+  "234": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "235": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "236": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "237": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "238": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "239": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "240": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "241": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "242": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 12
+  },
+  "243": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "244": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "245": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "246": {
+   "loaded": false,
+   "reason": "region 559 failed to load.",
+   "derived": "loadable scene"
+  },
+  "247": {
+   "loaded": false,
+   "reason": "region 563 failed to load.",
+   "derived": "loadable scene"
+  },
+  "248": {
+   "loaded": false,
+   "reason": "region 571 failed to load.",
+   "derived": "loadable scene"
+  },
+  "249": {
+   "loaded": false,
+   "reason": "region 579 failed to load.",
+   "derived": "loadable scene"
+  },
+  "250": {
+   "loaded": false,
+   "reason": "region 587 failed to load.",
+   "derived": "loadable scene"
+  },
+  "251": {
+   "loaded": false,
+   "reason": "region 567 failed to load.",
+   "derived": "loadable scene"
+  },
+  "252": {
+   "loaded": false,
+   "reason": "region 575 failed to load.",
+   "derived": "loadable scene"
+  },
+  "253": {
+   "loaded": false,
+   "reason": "region 583 failed to load.",
+   "derived": "loadable scene"
+  },
+  "254": {
+   "loaded": false,
+   "reason": "region 591 failed to load.",
+   "derived": "loadable scene"
+  },
+  "255": {
+   "loaded": false,
+   "reason": "region 595 failed to load.",
+   "derived": "loadable scene"
+  },
+  "256": {
+   "loaded": false,
+   "reason": "region 599 failed to load.",
+   "derived": "loadable scene"
+  },
+  "257": {
+   "loaded": false,
+   "reason": "region 603 failed to load.",
+   "derived": "loadable scene"
+  },
+  "258": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 7,
+   "neighbours_left_out": 0,
+   "props": 17
+  },
+  "259": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "260": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 7,
+   "neighbours_left_out": 0,
+   "props": 28
+  },
+  "261": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "262": {
+   "loaded": false,
+   "reason": "region 49 failed to load.",
+   "derived": "loadable scene"
+  },
+  "263": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "264": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 17,
+   "neighbours_left_out": 0,
+   "props": 31
+  },
+  "265": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "266": {
+   "loaded": false,
+   "reason": "region 87 failed to load.",
+   "derived": "loadable scene"
+  },
+  "267": {
+   "loaded": false,
+   "reason": "region 190 failed to load.",
+   "derived": "loadable scene"
+  },
+  "268": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 14,
+   "neighbours_left_out": 0,
+   "props": 17
+  },
+  "269": {
+   "loaded": false,
+   "reason": "region 226 failed to load.",
+   "derived": "loadable scene"
+  },
+  "270": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 12,
+   "neighbours_left_out": 0,
+   "props": 18
+  },
+  "271": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "272": {
+   "loaded": false,
+   "reason": "region 257 failed to load.",
+   "derived": "loadable scene"
+  },
+  "273": {
+   "loaded": false,
+   "reason": "region 135 failed to load.",
+   "derived": "loadable scene"
+  },
+  "274": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "275": {
+   "loaded": false,
+   "reason": "region 141 failed to load.",
+   "derived": "loadable scene"
+  },
+  "276": {
+   "loaded": false,
+   "reason": "region 144 failed to load.",
+   "derived": "loadable scene"
+  },
+  "277": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "278": {
+   "loaded": false,
+   "reason": "BCH model: invalid BCH geometry, index, relocation, or command",
+   "derived": "loadable scene"
+  },
+  "279": {
+   "loaded": false,
+   "reason": "region 149 failed to load.",
+   "derived": "loadable scene"
+  },
+  "280": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 14
+  },
+  "281": {
+   "loaded": false,
+   "reason": "region 950 failed to load.",
+   "derived": "loadable scene"
+  },
+  "282": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 12,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "283": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 6,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "284": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "285": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 14,
+   "neighbours_left_out": 0,
+   "props": 34
+  },
+  "286": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "287": {
+   "loaded": false,
+   "reason": "region 301 failed to load.",
+   "derived": "loadable scene"
+  },
+  "288": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 3,
+   "neighbours_left_out": 0,
+   "props": 44
+  },
+  "289": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "290": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "291": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 7
+  },
+  "292": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "293": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "294": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "295": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 15
+  },
+  "296": {
+   "loaded": false,
+   "reason": "region 316 failed to load.",
+   "derived": "loadable scene"
+  },
+  "297": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "298": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 14
+  },
+  "299": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "300": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 6
+  },
+  "301": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "302": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 12,
+   "neighbours_left_out": 0,
+   "props": 4
+  },
+  "303": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "304": {
+   "loaded": false,
+   "reason": "region 434 failed to load.",
+   "derived": "loadable scene"
+  },
+  "305": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "306": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "307": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "308": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "309": {
+   "loaded": false,
+   "reason": "region 445 failed to load.",
+   "derived": "loadable scene"
+  },
+  "310": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "311": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "312": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "313": {
+   "loaded": false,
+   "reason": "region 936 failed to load.",
+   "derived": "loadable scene"
+  },
+  "314": {
+   "loaded": false,
+   "reason": "region 464 failed to load.",
+   "derived": "loadable scene"
+  },
+  "315": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "316": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "317": {
+   "loaded": false,
+   "reason": "region 859 failed to load.",
+   "derived": "loadable scene"
+  },
+  "318": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 9
+  },
+  "319": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "320": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "321": {
+   "loaded": false,
+   "reason": "region 475 failed to load.",
+   "derived": "loadable scene"
+  },
+  "322": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "323": {
+   "loaded": false,
+   "reason": "region 876 failed to load.",
+   "derived": "loadable scene"
+  },
+  "324": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "325": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "326": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "327": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "328": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "329": {
+   "loaded": false,
+   "reason": "region 483 failed to load.",
+   "derived": "loadable scene"
+  },
+  "330": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "331": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "332": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "333": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "334": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "335": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 2,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "336": {
+   "loaded": false,
+   "reason": "region 825 failed to load.",
+   "derived": "loadable scene"
+  },
+  "337": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "338": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "339": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 2
+  },
+  "340": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "341": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "342": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "343": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "344": {
+   "loaded": false,
+   "reason": "--walk GR terrain: unsupported field layout",
+   "derived": "loadable scene"
+  },
+  "345": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 1
+  },
+  "346": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "347": {
+   "loaded": false,
+   "reason": "region 529 failed to load.",
+   "derived": "loadable scene"
+  },
+  "348": {
+   "loaded": false,
+   "reason": "region 533 failed to load.",
+   "derived": "loadable scene"
+  },
+  "349": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 38
+  },
+  "350": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "351": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 0
+  },
+  "352": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "353": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 10
+  },
+  "354": {
+   "loaded": false,
+   "reason": "region 545 failed to load.",
+   "derived": "loadable scene"
+  },
+  "355": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 8
+  },
+  "356": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 4,
+   "neighbours_left_out": 0,
+   "props": 11
+  },
+  "357": {
+   "loaded": true,
+   "multi_region": true,
+   "regions": 20,
+   "neighbours_left_out": 0,
+   "props": 34
+  },
+  "358": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 5
+  },
+  "359": {
+   "loaded": true,
+   "multi_region": false,
+   "regions": 1,
+   "neighbours_left_out": 0,
+   "props": 4
+  }
+ },
+ "earlier_captures_without_props": {
+  "bch-zone:0": "39dac8226ebeb9a727ee733a6eb6a1ebd034b7de76ee09e61c8abec170944d55",
+  "bch-zone:60": "0c42e3bae3a63d2ae7edaa4a96818cbef6aed87a602f16533a481355d9043e2e",
+  "bch-zone:200": "d34994de67b90d4b71d25a780f88d58e7e246ab47ba16d57b62a92aa3bc4b851",
+  "bch-talk": "7de47c74d5bb5dc18b4967a5ba14e59a84af68366c2678f748dc0cc60afc3621"
+ },
+ "runtime": {
+  "steps": "RUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
+  "start_world_tile": [
+   459,
+   590
+  ],
+  "crossings": [
+   [
+    0,
+    258,
+    460,
+    589
+   ],
+   [
+    258,
+    8,
+    460,
+    559
+   ]
+  ],
+  "end_world_tile": [
+   460,
+   530
+  ],
+  "end_zone": 8,
+  "inspect_lines": [
+   "zone_cross from_zone=0 to_zone=258 world_tile=460,589 result=loaded cell=60,69",
+   "zone_cross from_zone=258 to_zone=8 world_tile=460,559 result=loaded cell=100,119",
+   "zone_walk zone=8 cell=100,90 facing=2 moves=61 blocked=10 warps=0 policy=standard-cells-npcs-block-warps-on-step"
+  ],
+  "display_lines": [
+   "zone_cross from_zone=0 to_zone=258 world_tile=460,589 result=loaded cell=60,69",
+   "zone_cross from_zone=258 to_zone=8 world_tile=460,559 result=loaded cell=100,119"
+  ],
+  "capture_sha256": {
+   "aquacorde": "ac79a091432f1445b3ce184be6166a6d5bfa3fd4a0c4a22432631c3f9feba7d5",
+   "route1": "c2b0dfc9469c1317ae00bde0d92083274d6717f1949478c12a4d1c2c19423067",
+   "giant": "dc7060221bb68973774aab7d89ae4f528e9d10c8432cbac532bfd4c9306a3c0a",
+   "moonwalk": "f97fe6178a1695915d93ca89b4d585babbadccc8164b55b6f6a45de7577d0793"
+  }
+ }
+}

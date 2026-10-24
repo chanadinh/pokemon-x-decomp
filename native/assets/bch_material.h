@@ -17,7 +17,10 @@
  *   wrap: clamp-edge0, clamp-border1, repeat2, mirror3;
  *   compare: never0, always1, equal2, notequal3, less4, lequal5, greater6,
  *            gequal7;
- *   blend factor: zero0, one1, source-alpha6, one-minus-source-alpha7. */
+ *   blend factor: zero0, one1, source color2, one minus source color3,
+ *            destination color4, one minus destination color5,
+ *            source-alpha6, one-minus-source-alpha7, destination alpha8,
+ *            one minus destination alpha9 (10..15 unsupported). */
 enum px_bch_material_result {
     PX_BCH_MATERIAL_OK = 0,
     PX_BCH_MATERIAL_INVALID_ARGUMENT,
@@ -32,7 +35,8 @@ enum px_bch_material_result {
 enum px_bch_preview_blend {
     PX_BCH_BLEND_REPLACE = 0,     /* one, zero */
     PX_BCH_BLEND_SOURCE_ALPHA,    /* source alpha, one minus source alpha */
-    PX_BCH_BLEND_ADD_SOURCE_ALPHA /* source alpha, one */
+    PX_BCH_BLEND_ADD_SOURCE_ALPHA, /* source alpha, one */
+    PX_BCH_BLEND_FACTORS  /* any other factors 0..9 (add equation): see blend_factors */
 };
 
 struct px_bch_preview_material {
@@ -44,6 +48,7 @@ struct px_bch_preview_material {
     uint32_t depth_test, depth_compare, depth_write, color_write_mask;
     uint32_t cull;             /* register 0x40 bits 0..1, metadata only */
     enum px_bch_preview_blend blend;
+    uint8_t blend_factors[4];  /* source RGB, destination RGB, source alpha, destination alpha */
     uint32_t unexecuted_units; /* enabled units other than the sampled unit */
 };
 
@@ -53,6 +58,7 @@ struct px_bch_fragment_preview {
     uint32_t depth_test, depth_compare, depth_write, color_write_mask;
     uint32_t cull; /* register 0x40 bits 0..1, metadata only */
     enum px_bch_preview_blend blend;
+    uint8_t blend_factors[4]; /* source RGB, destination RGB, source alpha, destination alpha */
 };
 
 /* Full six-stage combiner interpretation (tev.h arithmetic). Every stage

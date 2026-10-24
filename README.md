@@ -29,7 +29,7 @@ not yet a playable port.**
 
 | Zones that load | Townspeople who speak | Story text | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
-| **287** of 360, every placement checked independently | **1,183** NPCs run their own script | **424** files, **7,607** lines decoded | **539** reconstruction file hashes |
+| **291** of 360, every placement checked independently | **1,183** NPCs run their own script | **424** files, **7,607** lines decoded | **539** reconstruction file hashes |
 
 ## Play the field slice
 
@@ -41,14 +41,16 @@ not yet a playable port.**
 </table>
 
 Start in the bedroom, walk downstairs, talk to the NPC there and step out of the
-front door into Vaniville Town. Every person, door, lamp and piece of furniture
-comes from the game files on your machine. On Linux or WSL, with SDL2
+front door into Vaniville Town, then north up Route 1 into Aquacorde Town.
+Every person, door, lamp and piece of furniture comes from the game files on
+your machine. On Linux or WSL, with SDL2
 development files installed:
 
 ```sh
 make -C native
 native/build/pokemon_model_viewer --romfs /path/to/romfs --zone 5
 # or start outside the house: --zone 0 --arrive 1
+# for fun: --silly giant, or --silly moonwalk
 ```
 
 | Key | Action |
@@ -59,9 +61,10 @@ native/build/pokemon_model_viewer --romfs /path/to/romfs --zone 5
 | Esc | Quit |
 
 What works: walking and running with the game's motions, collision with the
-terrain and NPCs, doors and stairs between zones, NPC dialogue from each zone's
+terrain and NPCs, doors and stairs between zones, walking from one zone into
+the next (Vaniville, Route 1, Aquacorde), NPC dialogue from each zone's
 compiled script, and region props. What is missing: battles, menus, story
-events, saving, sound, and walking on from the town onto Route 1. See the
+events, saving and sound. See the
 [town record](native/reproduction/bch-town/README.txt) for exactly what was
 checked.
 
@@ -231,7 +234,7 @@ recovered original source or builds that match the original machine code.
 <summary><strong>What the validation establishes</strong></summary>
 
 - The latest native milestone passes **21 C suites and 110 Python tests**, plus AddressSanitizer, UndefinedBehaviorSanitizer and LeakSanitizer checks on the viewer's zone, town and dialogue runs.
-- For all **360 zones**, an independent reader re-derives each scene from the map matrix and agrees with the viewer on every region placement, **2,474** props, **1,891** NPC tiles and **472** warp tiles in the **287** zones that load. **1,459** prop records and **3,063** prop-registry entries match the native decoders.
+- For all **360 zones**, an independent reader re-derives each scene from the map matrix and agrees with the viewer on every region placement, **2,669** props, **1,947** NPC tiles and **526** warp tiles in the **291** zones that load; an independent walk predicts the zone crossings from Vaniville to Aquacorde. **1,459** prop records and **3,063** prop-registry entries match the native decoders.
 - All **2,524** NPC script runs and all **7,607** story-text lines match a separately written Pawn interpreter and text decoder.
 - The field's **16 environment lights, 12 light sets and 7,068 normal components** match an independent parser. The lighting evaluator matches an independent float32 oracle of the pinned emulator behavior on **20,970** evaluations, and **44** original-code words back its sign and color conventions.
 - The six-stage combiner evaluator matches an independent oracle of the pinned emulator behavior on **116,000** evaluations, and **2,356** decoded vertex colors match bit for bit.
@@ -252,7 +255,7 @@ not a completion percentage.
 
 The next step is to connect these tested pieces into a game scene:
 
-- **Open the world:** switch zones seamlessly when walking from the town onto Route 1, and honor the story flags that decide which NPCs appear.
+- **Open the world:** stream map regions instead of reloading on each zone crossing, run zone-entry scripts, and honor the story flags that decide which NPCs appear.
 - **Complete the field renderer:** add the vertex shader's outputs, bump maps, point lights and the day/night selection, fog and projected textures; establish original culling and the game camera.
 - **Ground the player in the game's code:** reconstruct the game's own controller (spawn, speeds, terrain flags, collision response) and the remaining script natives.
 - **Finish the gameplay loop:** replace remaining resource stand-ins, connect battle and return-to-field behavior, and implement save/load.

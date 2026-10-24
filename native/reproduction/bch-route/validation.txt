@@ -1,0 +1,22 @@
+Open-world walking validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video with the software renderer. Not run on the local
+WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed.
+   21 native C suites (extended: test_raster, test_bch_material); 110
+   Python tests (BCH town viewer rewritten for the new scene rule).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection: a moonwalk run across
+   both crossings and the town suite under the sanitized viewer: no
+   diagnostics.
+4. Earlier records unchanged; --no-props still reproduces the captures of
+   ../bch-zone and ../bch-talk.
+5. verify_route.py: 291 of 360 zones load (72 multi-region, 4 neighbouring
+   regions left out); every zone_regions, prop (2,669), NPC tile (1,947) and
+   warp tile (526) line identical to the independent derivation; both
+   crossings of the walk north from Vaniville (0 -> 258 -> 8) and its end
+   predicted exactly; display runs cross identically.
+
+Not established: the game's own zone switching and streaming, zone-entry
+scripts, and any running-game comparison.

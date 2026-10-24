@@ -70,7 +70,7 @@ struct px_raster_state px_raster_default_state(void)
 {
     const struct px_raster_state state = {
         1, 1, PX_RASTER_LESS, PX_RASTER_ALWAYS, 0,
-        PX_RASTER_CULL_NONE, PX_RASTER_CW, PX_RASTER_REPLACE, 15
+        PX_RASTER_CULL_NONE, PX_RASTER_CW, PX_RASTER_REPLACE, 15, {0, 0, 0, 0}
     };
     return state;
 }
@@ -87,7 +87,9 @@ static int state_valid(const struct px_raster_state *state)
         compare_valid(state->depth_compare) && compare_valid(state->alpha_compare) &&
         state->cull >= PX_RASTER_CULL_NONE && state->cull <= PX_RASTER_CULL_BOTH &&
         state->front >= PX_RASTER_CW && state->front <= PX_RASTER_CCW &&
-        state->blend >= PX_RASTER_REPLACE && state->blend <= PX_RASTER_ADD_SOURCE_ALPHA &&
+        state->blend >= PX_RASTER_REPLACE && state->blend <= PX_RASTER_FACTORS &&
+        (state->blend != PX_RASTER_FACTORS || (state->blend_factors[0] <= 9 && state->blend_factors[1] <= 9 &&
+                                               state->blend_factors[2] <= 9 && state->blend_factors[3] <= 9)) &&
         state->color_write_mask <= 15;
 }
 
@@ -202,6 +204,23 @@ static int top_left(const struct point *a, const struct point *b)
     return b->y < a->y || (b->y == a->y && b->x > a->x);
 }
 
+/* A PICA blend factor for channel c (src and dst normalized). */
+static double factor(unsigned code, unsigned c, const double src[4], const double dst[4])
+{
+    switch (code) {
+    case 0: return 0;
+    case 1: return 1;
+    case 2: return src[c];
+    case 3: return 1 - src[c];
+    case 4: return dst[c];
+    case 5: return 1 - dst[c];
+    case 6: return src[3];
+    case 7: return 1 - src[3];
+    case 8: return dst[3];
+    default: return 1 - dst[3];
+    }
+}
+
 static void blend(uint8_t *dst, const double src[4], const struct px_raster_state *state)
 {
     double result[4];
@@ -210,6 +229,14 @@ static void blend(uint8_t *dst, const double src[4], const struct px_raster_stat
     } else if (state->blend == PX_RASTER_SOURCE_ALPHA) {
         for (unsigned c = 0; c < 4; ++c)
             result[c] = src[c] * src[3] + (dst[c] / 255.0) * (1 - src[3]);
+    } else if (state->blend == PX_RASTER_FACTORS) {
+        const double d[4] = {dst[0] / 255.0, dst[1] / 255.0, dst[2] / 255.0, dst[3] / 255.0};
+        for (unsigned c = 0; c < 4; ++c) {
+            const unsigned k = c < 3 ? 0 : 2;
+            result[c] = src[c] * factor(state->blend_factors[k], c, src, d) +
+                        d[c] * factor(state->blend_factors[k + 1], c, src, d);
+            if (result[c] > 1) result[c] = 1;
+        }
     } else if (state->blend == PX_RASTER_ADD_SOURCE_ALPHA) {
         for (unsigned c = 0; c < 4; ++c) {
             result[c] = src[c] * src[3] + dst[c] / 255.0;

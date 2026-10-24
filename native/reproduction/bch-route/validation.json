@@ -1,0 +1,89 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "5dbde7b892a1dd1821901c5fbc9e79d9c2df398e",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "Makefile": "8d8d734d1890effeca16bf38e469126858fd830639c60c79706819f15ed7bbda",
+  "model_app.c": "50b9fe4257c4e04c5cd2507c5ace1ef27ce0f7b2e782a6aee4eca54c5a2d1b61",
+  "assets/bch_material.c": "7679c3cb43f116a7550f96d60f9db0aaa30317524cfe17e5e6997489d8b9f3e0",
+  "render/raster.c": "03c8044fcfb307965c1bf439e03213f38de6b8a230281b9f53e9f46c2f6d3c06",
+  "tests/test_bch_town_viewer.py": "e8a05e9b1730c0c0f3f84470d439eb34cb45cc236e9dd166d8ef1ce5f6779415",
+  "reproduction/bch-route/verify_route.py": "26d8588cb85b59456fa769a8494397e4132378d88badf82f15cc270a2363645d",
+  "reproduction/bch-town/verify_town.py": "15590d07ae847b8f8cf44f74a7d1ac039d6a0e0433d7e0026d6db29522adb7f0"
+ },
+ "checks": [
+  {
+   "command": "make -C native clean && make -C native all test test-runtime",
+   "result": "passed",
+   "native_c_suites": 21,
+   "python_tests": 110
+  },
+  {
+   "command": "make -C reconstructed test; python3 -m unittest discover -s tests",
+   "result": "passed"
+  },
+  {
+   "command": "ASan/UBSan (halt on error) with leak detection: a 700-frame moonwalk run from Vaniville across Route 1 into Aquacorde, and the town viewer suite under the sanitized viewer",
+   "result": "passed; no diagnostics"
+  },
+  {
+   "command": "checksums of reconstructed and earlier reproduction records",
+   "result": "all unchanged"
+  },
+  {
+   "command": "native/reproduction/bch-route/verify_route.py on the real archive paths",
+   "result": "passed",
+   "zones": {
+    "zones": 360,
+    "loaded": 291,
+    "multi_region_loaded": 72,
+    "props_drawn": 2511,
+    "props_not_drawn": 158,
+    "compared_props": 2669,
+    "compared_npc_tiles": 1947,
+    "compared_warp_tiles": 526,
+    "neighbour_regions_left_out": 4
+   },
+   "earlier_captures_without_props": {
+    "bch-zone:0": "39dac8226ebeb9a727ee733a6eb6a1ebd034b7de76ee09e61c8abec170944d55",
+    "bch-zone:60": "0c42e3bae3a63d2ae7edaa4a96818cbef6aed87a602f16533a481355d9043e2e",
+    "bch-zone:200": "d34994de67b90d4b71d25a780f88d58e7e246ab47ba16d57b62a92aa3bc4b851",
+    "bch-talk": "7de47c74d5bb5dc18b4967a5ba14e59a84af68366c2678f748dc0cc60afc3621"
+   },
+   "crossings": [
+    [
+     0,
+     258,
+     460,
+     589
+    ],
+    [
+     258,
+     8,
+     460,
+     559
+    ]
+   ],
+   "inspect_lines": [
+    "zone_cross from_zone=0 to_zone=258 world_tile=460,589 result=loaded cell=60,69",
+    "zone_cross from_zone=258 to_zone=8 world_tile=460,559 result=loaded cell=100,119",
+    "zone_walk zone=8 cell=100,90 facing=2 moves=61 blocked=10 warps=0 policy=standard-cells-npcs-block-warps-on-step"
+   ],
+   "capture_sha256": {
+    "aquacorde": "ac79a091432f1445b3ce184be6166a6d5bfa3fd4a0c4a22432631c3f9feba7d5",
+    "route1": "c2b0dfc9469c1317ae00bde0d92083274d6717f1949478c12a4d1c2c19423067",
+    "giant": "dc7060221bb68973774aab7d89ae4f528e9d10c8432cbac532bfd4c9306a3c0a",
+    "moonwalk": "f97fe6178a1695915d93ca89b4d585babbadccc8164b55b6f6a45de7577d0793"
+   },
+   "report": "reference-comparison.json",
+   "report_sha256": "22e75b9c6f88a77e05f5c33929520a10ced41ef37e3010ee1db7d9443ab65b30"
+  }
+ ],
+ "limitations": [
+  "Zone crossing rule is an inspection policy; region streaming and zone-entry scripts not traced",
+  "Crossing reloads the whole scene",
+  "--silly modes are jokes, not game behaviour",
+  "No running-game comparison"
+ ]
+}

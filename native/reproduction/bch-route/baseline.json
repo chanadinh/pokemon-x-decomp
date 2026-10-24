@@ -1,0 +1,30 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "5dbde7b892a1dd1821901c5fbc9e79d9c2df398e",
+ "previous_native_sha256sums": {
+  "entries": 220,
+  "sha256": "0bea83f2a9c7ad6424a0306380d080bfd1997861ef509913d74e2cbda6b9e364"
+ },
+ "immutable_reproduction_records": "All earlier reproduction/ entries of the previous native/SHA256SUMS rechecked unchanged.",
+ "reconstructed_checkpoints": "All 539 reconstructed/*/SHA256SUMS entries rechecked unchanged.",
+ "capture_regressions": "../bch-town zone_regions lines and town captures change (neighbouring cells drawn, scene region at its offset); ../bch-zone and ../bch-talk --no-props captures still reproduce.",
+ "changed_native_sources": [
+  "README.md",
+  "model_app.c",
+  "assets/bch_material.c",
+  "assets/bch_material.h",
+  "assets/test_bch_material.c",
+  "render/raster.c",
+  "render/raster.h",
+  "render/test_raster.c",
+  "tests/test_bch_town_viewer.py"
+ ],
+ "added_native_files": [
+  "reproduction/bch-route/README.txt",
+  "reproduction/bch-route/baseline.json",
+  "reproduction/bch-route/reference-comparison.json",
+  "reproduction/bch-route/validation.json",
+  "reproduction/bch-route/validation.txt",
+  "reproduction/bch-route/verify_route.py"
+ ]
+}
