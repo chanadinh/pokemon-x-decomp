@@ -177,6 +177,7 @@ static struct fixture fixture_with(unsigned width, int parameters)
     single(&f, 0x227, 15, 0);
     single(&f, 0x228, 15, 3);
     single(&f, 0x25e, 8, 0);
+    if (skinned) single(&f, 0x2b0, 3, 0x7fff0006); /* bool uniforms b1, b2 (low bytes only) */
     stream(&f, SUB + 44, f.face);
     f.index_relocation = f.size;
     const size_t indices = stored_normal || skinned ? RAW + 80 : RAW + 60;
@@ -452,8 +453,25 @@ static void test_skinned(void)
     assert(memcmp(model.bone_indices, indices, sizeof indices) == 0);
     assert(memcmp(model.bone_weights, weights, sizeof weights) == 0);
     assert(model.positions[0] == 6 && model.uvs[0] == .125f); /* other attributes unchanged */
+    /* Shader inputs: unscaled stored values, absent components (0, 0, 0, 1),
+     * unloaded registers (0, 0, 0, 1). Vertex 0 is stored as position
+     * (-2, 3, 5), UV (.5, -1), indices (1, 0), weights (2, 0). */
+    assert(model.inputs != NULL);
+    static const float v0[4] = {-2, 3, 5, 1}, v1[4] = {0, 0, 0, 1}, v4[4] = {.5f, -1, 0, 1};
+    static const float v7[4] = {1, 0, 0, 1}, v8[4] = {2, 0, 0, 1};
+    assert(!memcmp(model.inputs, v0, sizeof v0) && !memcmp(model.inputs + 4, v1, sizeof v1) &&
+           !memcmp(model.inputs + 16, v4, sizeof v4) && !memcmp(model.inputs + 28, v7, sizeof v7) &&
+           !memcmp(model.inputs + 32, v8, sizeof v8));
+    assert(model.inputs[48] == 7 && model.inputs[48 + 28] == 0 && model.inputs[48 + 29] == 1);
+    /* Uniforms the enable stream writes: c6 offset, c7 and c8 scales. */
+    assert(mesh->uniforms.written[6] && mesh->uniforms.written[7] && mesh->uniforms.written[8] &&
+           !mesh->uniforms.written[9] && !mesh->uniforms.bools_known);
+    assert(mesh->uniforms.c[6][0] == 10 && mesh->uniforms.c[6][1] == -20 && mesh->uniforms.c[6][2] == 30 &&
+           mesh->uniforms.c[7][0] == 2 && mesh->uniforms.c[8][0] == .25f && mesh->uniforms.c[8][3] == .5f);
+    assert(sub->uniforms.bools_known == 0xffff && sub->uniforms.bools == 6 && !sub->uniforms.written[6]);
+    assert(model.shader_count == 0 && model.shaders == NULL && !model.materials[0].shader.present);
     px_bch_model_free(&model);
-    assert(model.bones == NULL && model.bone_weights == NULL);
+    assert(model.bones == NULL && model.bone_weights == NULL && model.inputs == NULL);
     /* Unskinned models decode identically through the skinned entry point. */
     f = fixture(1);
     assert(px_bch_model_decode_skinned(f.data, f.size, 0, &model) == PX_BCH_MODEL_OK);

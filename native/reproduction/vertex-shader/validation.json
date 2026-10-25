@@ -1,0 +1,20 @@
+{
+ "date": "2026-10-25",
+ "baseline_commit": "6110b6ded0599e4a9bbcf25c31e5478a7f870f9e",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video and dummy audio, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "assets/bch_model.h": "ce48e2918ac6b7ddbe5e4c0511af4202f000cc4b6f2a5f67897ac1ec56681042",
+  "assets/bch_model.c": "603baff2b1ca65f0ad3e06750f47282210ce1cadd38f66822a0936999520eff2",
+  "assets/test_bch_model.c": "45dbdde7cf0459d8691c865cbc1f5215ba58050bc7d2adf8c13663c9becd7fe9",
+  "render/skin.h": "5a489f36f05305ae7c42f4121bbe305301c0d63f96debf65c7552b31303f570a",
+  "render/skin.c": "9088a38b1349c7d71ba0abf3049bee1d56f428ba2a2f31b39a8f22ae73c33cb0",
+  "render/vertex_program.h": "d334721353d828cbe47d914885d7d206b9bac913329f11ada4825724f6ee729b",
+  "render/vertex_program.c": "6baab9d80f945935b723681420e0c5857fe4d770428698f408d48b843e9f4361",
+  "render/test_vertex_program.c": "258ce723d7f4b16137840008297f94d1048f5273fc8ba7138218581c1b3ae1f1",
+  "tools/shader_check.c": "ea24b0ce01f6b39b28e8a24722201e44df6c3921e5521aea7e2586558c834679",
+  "platform/pica_shader.c": "3d8615c471e306217d0c96d9bb20526dc49900bde55e07127a2ee655e0adec84",
+  "Makefile": "a7123ba6c1dff844be33bd32de06d841d774829f05d148939d8a561c574bdb50",
+  "reproduction/vertex-shader/verify_vertex_shader.py": "a3c99774b1a3f77217222efa00970094b6ba2415efec533b5f315c657a7f800f"
+ }
+}

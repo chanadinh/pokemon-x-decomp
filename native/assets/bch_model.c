@@ -31,6 +31,8 @@ struct commands {
     uint32_t values[1024], known[1024], sources[1024];
     float uniforms[3][4];
     unsigned uniform_mask, primitive_writes;
+    float all_uniforms[96][4]; /* every complete float32 uniform write */
+    uint8_t all_written[96];
     uint32_t draw_primitive_value, draw_primitive_known_mask;
     uint32_t draw_count, last_draw_offset;
     /* Fixed (default) attribute uploads: index register 0x232, then three
@@ -205,7 +207,7 @@ static int read_commands(struct reader *r, size_t field, struct commands *out)
     size_t start;
     if (!pointer(r, field, COMMANDS, (size_t)words * 4, &start) || start % 4) return 0;
     const size_t end = start + (size_t)words * 4;
-    unsigned uniform_component = 0, uniform_initialized = 0;
+    unsigned uniform_component = 0, uniform_initialized = 0, uniform_finite = 0;
     float uniform_values[4] = {0};
     for (size_t cursor = start; cursor < end;) {
         if (end - cursor < 8) return 0;
@@ -266,6 +268,15 @@ static int read_commands(struct reader *r, size_t field, struct commands *out)
                 if (mask != UINT32_MAX) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
                 if (!uniform_initialized || uniform_component >= 96 * 4) return 0;
                 const unsigned index = uniform_component / 4, component = uniform_component % 4;
+                {   /* Recorded, not validated: a non-finite value leaves the
+                     * register unwritten rather than rejecting the model. */
+                    const float number = f32(r->data + source);
+                    if (component == 0) uniform_finite = 1;
+                    if (!isfinite(number)) uniform_finite = 0;
+                    if (component == 0) out->all_written[index] = 0;
+                    out->all_uniforms[index][3 - component] = number;
+                    if (component == 3) out->all_written[index] = (uint8_t)uniform_finite;
+                }
                 if (index >= 6 && index <= 8) {
                     const float number = f32(r->data + source);
                     if (!bounded(number)) return 0;
@@ -310,6 +321,13 @@ static void observe(const struct commands *commands, unsigned reg,
     out->known_mask = commands->known[reg];
     out->value = commands->values[reg] & out->known_mask;
 }
+static void collect_uniforms(const struct commands *commands, struct px_bch_uniforms *out)
+{
+    memcpy(out->c, commands->all_uniforms, sizeof out->c);
+    memcpy(out->written, commands->all_written, sizeof out->written);
+    out->bools_known = commands->known[0x2b0] & 0xffff;
+    out->bools = commands->values[0x2b0] & out->bools_known;
+}
 static int read_parameters(struct reader *r, size_t params, struct px_bch_material *out)
 {
     /* Older synthetic or nonstandard parameter objects stay geometry-valid;
@@ -331,6 +349,12 @@ static int read_parameters(struct reader *r, size_t params, struct px_bch_materi
     }
     struct commands fragment;
     if (!read_commands(r, params + 0xc8, &fragment)) return 0;
+    if (r->skinned) {
+        collect_uniforms(&fragment, &out->uniforms);
+        /* Recorded when it is a string; anything else leaves it absent. */
+        if (!span(params, 0x108, r->sections[CONTENTS]) || !name(r, params + 0x104, 1, &out->shader))
+            memset(&out->shader, 0, sizeof out->shader);
+    }
     if (fragment.draw_count) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
     struct px_bch_fragment_state *f = &out->fragment;
     observe(&fragment, 0x40, &f->cull);
@@ -431,6 +455,7 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
     struct commands enable, other;
     if (!read_commands(r, at + 8, &enable) || !read_commands(r, at + 24, &other)) return 0;
     if (enable.draw_count || other.draw_count) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+    if (r->skinned) collect_uniforms(&enable, &mesh->uniforms);
     const uint32_t subcount = u32(r->data + at + 20);
     if (!subcount || subcount > MAX_ITEMS) return fail(r, PX_BCH_MODEL_LIMIT_EXCEEDED);
     size_t subs;
@@ -485,6 +510,7 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
         record->draw_count = other.draw_count;
         record->draw_source_offset = other.last_draw_offset;
         record->index_source_offset = (uint32_t)start;
+        if (r->skinned) collect_uniforms(&other, &record->uniforms);
         for (uint32_t j = 0; j < count; ++j) {
             const uint32_t index = width == 2 ? u16(r->data + start + (size_t)j * 2) : r->data[start + j];
             if (index > largest_index) largest_index = index;
@@ -540,11 +566,21 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
     if (byte > stride || !(semantics & 1)) return 0;
     double fixed_color[4] = {1, 1, 1, 1}, fixed_normal[4] = {0, 0, 0, 0};
     double fixed_index[4] = {0, 0, 0, 1}, fixed_weight[4] = {0, 0, 0, 0};
+    double fixed_input[12][4];
+    unsigned fixed_inputs = 0;
     for (unsigned slot = 0; slot < total; ++slot) if (fixed & (1u << slot)) {
         const unsigned semantic = (unsigned)(permutation >> (slot * 4)) & 15;
         if (semantic > (r->skinned ? 8u : 6u) || semantic == 0 || semantic == 4 ||
             (semantics & (1u << semantic))) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
         semantics |= 1u << semantic;
+        if (r->skinned && (enable.fixed_known & (1u << slot))) {
+            const uint32_t *w = enable.fixed_words[slot];
+            const uint32_t components[4] = {w[2] & 0xffffff, ((w[1] & 0xffff) << 8) | (w[2] >> 24),
+                                            ((w[0] & 0xff) << 16) | (w[1] >> 16), w[0] >> 8};
+            unsigned ok = 1;
+            for (unsigned c = 0; c < 4; ++c) ok &= (unsigned)float24(components[c], &fixed_input[semantic][c]);
+            if (ok) fixed_inputs |= 1u << semantic;
+        }
         if (semantic != 3 && semantic != 1 && semantic != 7 && semantic != 8) continue;
         if (!(enable.fixed_known & (1u << slot))) return 0;
         const uint32_t *w = enable.fixed_words[slot];
@@ -588,6 +624,14 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
     if (allocation == NULL) return 0;
     out->normals = allocation;
     if (r->skinned) {
+        allocation = grow(r, out->inputs, (size_t)new_count * 48, sizeof *out->inputs);
+        if (allocation == NULL) return 0;
+        out->inputs = allocation;
+        for (uint32_t vertex = 0; vertex < mesh->vertex_count; ++vertex)
+            for (unsigned reg = 0; reg < 12; ++reg)
+                for (unsigned c = 0; c < 4; ++c)
+                    out->inputs[((size_t)mesh->first_vertex + vertex) * 48 + reg * 4 + c] =
+                        (fixed_inputs >> reg & 1) ? (float)fixed_input[reg][c] : c == 3 ? 1.0f : 0.0f;
         allocation = grow(r, out->bone_indices, (size_t)new_count * 4, sizeof *out->bone_indices);
         if (allocation == NULL) return 0;
         out->bone_indices = allocation;
@@ -638,6 +682,9 @@ static int read_mesh(struct reader *r, size_t at, size_t names, uint32_t nodes,
                 else if (attr->kind == 2) decoded = u16(p) < 32768 ? u16(p) : (int)u16(p) - 65536;
                 else decoded = f32(p);
                 if (!bounded(decoded)) return 0;
+                if (r->skinned)
+                    out->inputs[((size_t)mesh->first_vertex + vertex) * 48 + attr->semantic * 4 + component] =
+                        (float)decoded;
                 decoded *= attr->scale;
                 if (!bounded(decoded)) return 0;
                 if (attr->semantic == 0) {
@@ -707,6 +754,27 @@ static int read_model(struct reader *r, uint32_t index, struct px_bch_model *out
     if ((r->skinned ? u16(r->data + at + 2) : u32(r->data + at)) || u32(r->data + at + 0x6c) ||
         (!r->skinned && u32(r->data + at + 0x74)))
         return fail(r, PX_BCH_MODEL_UNSUPPORTED);
+    if (r->skinned && r->counts[2]) {
+        out->shaders = calloc(r->counts[2], sizeof *out->shaders);
+        if (out->shaders == NULL) return fail(r, PX_BCH_MODEL_NO_MEMORY);
+        out->shader_count = r->counts[2];
+        /* A table that does not resolve is left out, not an error: the
+         * geometry does not depend on it. */
+        for (uint32_t k = 0; k < r->counts[2]; ++k) {
+            size_t record, program;
+            struct px_bch_shader *shader = out->shaders + k;
+            if (!pointer(r, r->tables[2] + (size_t)k * 4, CONTENTS, 8, &record) ||
+                !pointer(r, record, CONTENTS, u32(r->data + record + 4), &program) ||
+                !name(r, r->trees[2] + ((size_t)k + 1) * 12 + 8, 0, &shader->name)) {
+                free(out->shaders);
+                out->shaders = NULL;
+                out->shader_count = 0;
+                break;
+            }
+            shader->size = u32(r->data + record + 4);
+            shader->offset = (uint32_t)program;
+        }
+    }
     if (r->skinned) {
         out->model_flags = r->data[at];
         out->bone_scaling = r->data[at + 1];
@@ -924,6 +992,7 @@ void px_bch_model_free(struct px_bch_model *model)
 {
     if (model == NULL) return;
     free(model->positions); free(model->uvs); free(model->colors); free(model->normals); free(model->bone_indices); free(model->bone_weights); free(model->bones); free(model->indices);
+    free(model->inputs); free(model->shaders);
     free(model->meshes); free(model->submeshes); free(model->materials);
     memset(model, 0, sizeof *model);
 }

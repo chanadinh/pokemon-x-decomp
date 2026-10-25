@@ -647,3 +647,22 @@ own platform layer:
 Everything recorded before still comes out the same: all 328 zones, every
 prop and NPC placement, and the field captures byte for byte. See the
 [platform record](../native/reproduction/platform/README.txt).
+
+## The Pokémon's own shaders
+
+Each Pokémon model carries its GPU vertex programs, and each material names
+the one it is drawn with ("1@PokePack" for most). The interpreter now runs
+them on the model's real data: the raw vertex attributes as the GPU's vertex
+loader would hand them over, and the uniforms the model's own command
+streams set (texture matrices, scales, lighting parameters and the switches
+for skinning, lighting and UV mapping). Only the camera and bone matrices
+come from the viewer, because the game's engine sets those at run time.
+
+Run over every vertex of all 977 Pokémon (almost 16 million), the game's
+programs and the viewer's CPU skinning agree to within float rounding on
+position and exactly on texture coordinates, for every mesh except the 10
+flame meshes, which need matrices the engine supplies. That confirms the
+skinning the battle models use. It also shows what the CPU path does not do
+yet: the programs light each vertex themselves (diffuse, Phong and rim
+terms) and pass the light direction on in the tangent frame, rather than a
+normal. See the [vertex shader record](../native/reproduction/vertex-shader/README.txt).

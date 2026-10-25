@@ -19,10 +19,10 @@ MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c ass
 MODEL_HEADERS = platform/audio.h platform/audio_sdl.h platform/guest.h platform/fs.h platform/hid.h platform/clock.h platform/thread.h assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h render/skin.h assets/bch_scene.h assets/gf_motion.h assets/zone.h assets/gf_script.h assets/gf_text.h assets/zone_talk.h render/text.h render/text_glyphs.inc assets/pokedata.h game/battle.h game/battle_ui.h game/save.h
 FIELD_SOURCES = assets/field.c assets/garc.c assets/lz.c
 FIELD_HEADERS = assets/field.h assets/garc.h assets/lz.h
-CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script build/test_pokedata build/test_battle build/test_save build/test_guest build/test_fs build/test_hid_clock build/test_audio build/test_pica_shader
+CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script build/test_pokedata build/test_battle build/test_save build/test_guest build/test_fs build/test_hid_clock build/test_audio build/test_pica_shader build/test_vertex_program
 
 .PHONY: all test test-core test-runtime clean check-sdl
-all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/pica_probe
+all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/pica_probe build/shader_check
 
 check-sdl:
 	@test -n "$(SDL_LIBS)" || { echo 'SDL2 not configured: install SDL2 development files or set SDL_CFLAGS and SDL_LIBS.' >&2; exit 1; }
@@ -89,6 +89,12 @@ build/test_hid_clock: platform/hid.c platform/hid.h platform/clock.c platform/cl
 
 build/test_thread: platform/thread_sdl.c platform/thread.h platform/test_thread.c | build check-sdl
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) platform/thread_sdl.c platform/test_thread.c $(LDFLAGS) $(SDL_LIBS) -o $@
+
+build/shader_check: tools/shader_check.c assets/bch_model.c assets/bch_model.h render/skin.c render/skin.h render/vertex_program.c render/vertex_program.h platform/pica_shader.c platform/pica_shader.h assets/gf_motion.c assets/gf_motion.h | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) -D_DEFAULT_SOURCE tools/shader_check.c assets/bch_model.c render/skin.c render/vertex_program.c platform/pica_shader.c assets/gf_motion.c $(LDFLAGS) $(LDLIBS) -lm -o $@
+
+build/test_vertex_program: render/vertex_program.c render/vertex_program.h render/test_vertex_program.c assets/bch_model.h platform/pica_shader.c platform/pica_shader.h | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) render/vertex_program.c platform/pica_shader.c render/test_vertex_program.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/pica_probe: platform/pica_shader.c platform/pica_shader.h platform/pica_probe.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) platform/pica_shader.c platform/pica_probe.c $(LDFLAGS) $(LDLIBS) -lm -o $@
@@ -162,6 +168,7 @@ test test-core: $(CORE_TESTS)
 	./build/test_hid_clock
 	./build/test_audio
 	./build/test_pica_shader
+	./build/test_vertex_program
 	python3 -m unittest discover -s tests -p test_container.py -v
 	python3 -m unittest discover -s tests -p test_bch.py -v
 	python3 -m unittest discover -s tests -p test_pica_commands.py -v

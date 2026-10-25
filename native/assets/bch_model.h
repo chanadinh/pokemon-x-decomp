@@ -38,6 +38,17 @@ struct px_bch_fragment_state {
      * source, operand, combine, constant and scale registers in order. */
     struct px_bch_register tev[6][5];
 };
+/* Vertex shader uniforms one command stream writes (skinned decode only):
+ * float uniforms c0..c95 written completely in float32 mode (x, y, z, w;
+ * the stream sends w first), and the bool uniform register 0x2b0 (b0..b15). */
+struct px_bch_uniforms {
+    float c[96][4];
+    uint8_t written[96];
+    uint32_t bools, bools_known; /* bits 0..15 */
+};
+/* Skinned decode only: a shader resource (BCH index slot 2), a DVLB stored
+ * in contents at offset..offset+size of the input; name from its dictionary. */
+struct px_bch_shader { struct px_bch_name name; uint32_t offset, size; };
 struct px_bch_material {
     struct px_bch_name name, texture_names[3];
     uint32_t texture_unit_config;
@@ -60,6 +71,11 @@ struct px_bch_material {
     uint32_t lut_sampler_mask, fresnel_selector, bump_mode;
     uint8_t colors[5][4];
     float color_scale;
+    /* Skinned decode only: the vertex shader reference ("entry@resource",
+     * parameters +0x104, absent when null) and the uniforms the material's
+     * command stream (+0xc8) writes. */
+    struct px_bch_name shader;
+    struct px_bch_uniforms uniforms;
 };
 struct px_bch_submesh {
     uint32_t first_index, index_count, index_width;
@@ -75,6 +91,7 @@ struct px_bch_submesh {
      * 1 smooth, 2 rigid; bone palette of up to 20 skeleton indices. */
     uint32_t skinning, bone_count;
     uint16_t bone_indices[20];
+    struct px_bch_uniforms uniforms; /* skinned decode: the submesh stream's */
 };
 /* Skinned decode only: one H3DBone record (100 bytes) in skeleton order.
  * parent is -1 for a root, otherwise an earlier index. inverse is the stored
@@ -104,6 +121,7 @@ struct px_bch_mesh {
      * count (0 when fixed or absent), which gates the fourth weight. */
     uint32_t bone_index_source, bone_weight_source, bone_weight_elements;
     float bounds_min[3], bounds_max[3];
+    struct px_bch_uniforms uniforms; /* skinned decode: the enable stream's */
 };
 struct px_bch_model {
     struct px_bch_name name;
@@ -119,6 +137,14 @@ struct px_bch_model {
     float *bone_weights;
     struct px_bch_bone *bones;
     uint32_t bone_count, model_flags, bone_scaling;
+    /* Skinned decode only: the vertex shader's input registers v0..v11 per
+     * vertex (48 floats) as the PICA vertex loader delivers them: stored
+     * components converted to float without scaling (the shader scales),
+     * absent components (0, 0, 0, 1), fixed attributes from float24, and
+     * registers no attribute loads (0, 0, 0, 1) as well (an assumption). */
+    float *inputs;
+    struct px_bch_shader *shaders;
+    uint32_t shader_count;
     uint32_t *indices; /* Owned indices into the complete positions array. */
     struct px_bch_mesh *meshes;
     struct px_bch_submesh *submeshes;

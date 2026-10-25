@@ -513,3 +513,10 @@ ExeFS / save archives, the HID pad with circle pad and touch screen
 and sync objects, a DSP-style audio mixer with a BCWAV reader (`--sound`,
 `--list-sounds`), and a PICA vertex shader interpreter (`build/pica_probe`). See the [platform record](reproduction/platform/README.txt).
 
+`render/vertex_program.h` runs a skinned BCH model's own vertex programs:
+the material's shader reference picks the DVLB entry, the uniforms come
+from the model's command streams, the inputs are the raw vertex
+attributes. `build/shader_check MODEL.bch [--motion PACK --slot S]`
+compares the result with the CPU skinning; see the
+[vertex shader record](reproduction/vertex-shader/README.txt).
+

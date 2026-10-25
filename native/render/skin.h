@@ -39,7 +39,7 @@ int px_skin_vertex(const struct px_bch_model *model, const struct px_bch_mesh *m
  * per index (a vertex shared by submeshes with different palettes poses
  * differently in each). Indices become 0..index_count-1; each mesh's vertex
  * range becomes its index range; normals are renormalized when nonzero;
- * bounds are recomputed. Bone arrays are released. Returns 0 (model left
+ * bounds are recomputed. Bone arrays and shader inputs are released. Returns 0 (model left
  * unchanged) on invalid input, allocation failure or a pose failure. */
 int px_skin_bake_rest(struct px_bch_model *model);
 

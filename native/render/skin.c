@@ -156,9 +156,9 @@ int px_skin_bake_rest(struct px_bch_model *m)
     free(world);
     if (!ok) { free(positions); free(normals); free(uvs); free(colors); free(indices); return 0; }
     free(m->positions); free(m->normals); free(m->uvs); free(m->colors); free(m->indices);
-    free(m->bone_indices); free(m->bone_weights);
+    free(m->bone_indices); free(m->bone_weights); free(m->inputs);
     m->positions = positions; m->normals = normals; m->uvs = uvs; m->colors = colors; m->indices = indices;
-    m->bone_indices = NULL; m->bone_weights = NULL;
+    m->bone_indices = NULL; m->bone_weights = NULL; m->inputs = NULL; /* indexed by the old vertices */
     m->vertex_count = (uint32_t)n;
     for (uint32_t i = 0; i < m->mesh_count; ++i) {
         struct px_bch_mesh *mesh = m->meshes + i;

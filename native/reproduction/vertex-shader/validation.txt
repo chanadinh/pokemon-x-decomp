@@ -1,0 +1,25 @@
+Vertex shader validation, 2026-10-25
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video and dummy audio, the software renderer. Not run
+on the local WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (new: test_vertex_program; test_bch_model extended with shader inputs,
+   stream uniforms and submesh bools).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection: test_vertex_program,
+   test_bch_model, test_skin, shader_check on five models (Froakie rest and
+   with its attack motion, the flame model 130, 305, 46), and a Route 2
+   battle with both battle models under dummy video: no diagnostics.
+4. The decoder change adds fields only (failures to read them leave them
+   empty): ../bch-route/verify_route.py output identical to
+   ../bch-battle/route-recheck.json (328 zones, every count, the four
+   captures byte for byte); ../bch-battle-motion/verify_battle_motion.py
+   passes (972 packs identical, posed sample unchanged).
+5. verify_vertex_shader.py: 977 models, 6,714 meshes, 15,974,688 vertex
+   runs; 6,704 compared meshes within 2.98e-7 (position) and exact (UV);
+   10 flame meshes (models 110, 129, 130, 432) not comparable; animated
+   sample (21 motions x 3 frames, 1,063,476 runs) within 3.88e-6.
+
+Not established: the engine's per-draw matrices and palette; the programs'
+lighting outputs against the game or hardware; float24 rounding.

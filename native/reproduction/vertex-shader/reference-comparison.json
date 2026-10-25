@@ -1,0 +1,191 @@
+{
+  "models": 977,
+  "empty_models": [
+    963,
+    964,
+    967,
+    968
+  ],
+  "meshes": 6714,
+  "vertices": 15974688,
+  "failures": [],
+  "worst_compared": {
+    "position_error": 2.98e-07,
+    "w_error": 0.0,
+    "uv_error": 0.0,
+    "quaternion_from_identity": 2.73
+  },
+  "animated": {
+    "runs": [
+      "18:1",
+      "18:4",
+      "18:17",
+      "21:1",
+      "21:4",
+      "21:17",
+      "354:1",
+      "354:4",
+      "354:17",
+      "864:1",
+      "864:4",
+      "864:17",
+      "867:1",
+      "867:4",
+      "867:17",
+      "869:1",
+      "869:4",
+      "869:17",
+      "872:1",
+      "872:4",
+      "872:17"
+    ],
+    "vertex_runs": 1063476,
+    "position_error": 3.88e-06,
+    "w_error": 0.0,
+    "uv_error": 0.0
+  },
+  "meshes_by_program": {
+    "0@PokeFire": 10,
+    "0@PokePack": 446,
+    "1@MegaGangar": 4,
+    "1@PokePack": 6254
+  },
+  "distinct_bool_words": 46,
+  "outliers": [
+    {
+      "model": 110,
+      "mesh": "1",
+      "name": "pm0092_00_FireGeomSkin",
+      "material": "FireGeomA",
+      "shader": "0@PokeFire",
+      "bools": "8f82",
+      "vertices": "18",
+      "position_error": "429",
+      "w_error": "0",
+      "uv_error": "1.35"
+    },
+    {
+      "model": 129,
+      "mesh": "6",
+      "name": "pm0109_00_FireGeomASkin",
+      "material": "FireGeomA",
+      "shader": "0@PokeFire",
+      "bools": "8e82",
+      "vertices": "15",
+      "position_error": "440",
+      "w_error": "0",
+      "uv_error": "1.14"
+    },
+    {
+      "model": 129,
+      "mesh": "7",
+      "name": "pm0109_00_FireGeomB1Skin",
+      "material": "FireGeomB1",
+      "shader": "0@PokeFire",
+      "bools": "8e82",
+      "vertices": "6",
+      "position_error": "440",
+      "w_error": "0",
+      "uv_error": "0.76"
+    },
+    {
+      "model": 129,
+      "mesh": "8",
+      "name": "pm0109_00_FireGeomB2Skin",
+      "material": "FireGeomB2",
+      "shader": "0@PokeFire",
+      "bools": "8e82",
+      "vertices": "6",
+      "position_error": "439",
+      "w_error": "0",
+      "uv_error": "0.564"
+    },
+    {
+      "model": 130,
+      "mesh": "7",
+      "name": "pm0110_00_FireGeomASkin",
+      "material": "FireGeomA",
+      "shader": "0@PokeFire",
+      "bools": "8e82",
+      "vertices": "15",
+      "position_error": "582",
+      "w_error": "0",
+      "uv_error": "1.13"
+    },
+    {
+      "model": 130,
+      "mesh": "8",
+      "name": "pm0110_00_FireGeomB1Skin",
+      "material": "FireGeomB1",
+      "shader": "0@PokeFire",
+      "bools": "8e82",
+      "vertices": "6",
+      "position_error": "581",
+      "w_error": "0",
+      "uv_error": "0.861"
+    },
+    {
+      "model": 130,
+      "mesh": "9",
+      "name": "pm0110_00_FireGeomB2Skin",
+      "material": "FireGeomB2",
+      "shader": "0@PokeFire",
+      "bools": "8e82",
+      "vertices": "6",
+      "position_error": "582",
+      "w_error": "0",
+      "uv_error": "0.534"
+    },
+    {
+      "model": 432,
+      "mesh": "8",
+      "name": "pm0324_00_FireGeomASkin",
+      "material": "FireGeomA",
+      "shader": "0@PokeFire",
+      "bools": "8f82",
+      "vertices": "24",
+      "position_error": "469",
+      "w_error": "0",
+      "uv_error": "1.22"
+    },
+    {
+      "model": 432,
+      "mesh": "9",
+      "name": "pm0324_00_FireGeomBSkin",
+      "material": "FireGeomB",
+      "shader": "0@PokeFire",
+      "bools": "8f82",
+      "vertices": "18",
+      "position_error": "471",
+      "w_error": "0",
+      "uv_error": "1.01"
+    },
+    {
+      "model": 432,
+      "mesh": "10",
+      "name": "pm0324_00_FireGeomCSkin",
+      "material": "FireGeomC",
+      "shader": "0@PokeFire",
+      "bools": "8f82",
+      "vertices": "18",
+      "position_error": "471",
+      "w_error": "0",
+      "uv_error": "1.02"
+    }
+  ],
+  "outliers_not_comparable": 10,
+  "froakie_model_864": [
+    "pose=0 frame=0 mesh=0 name=pm0723_00_BodyASkin material=Mouth shader=1@PokePack entry=1 bools=eed3 vertices=240 quaternions=240 generated_uv=0 position_error=1.05e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=1 name=pm0723_00_BodyASkin material=AEye shader=1@PokePack entry=1 bools=eed3 vertices=888 quaternions=888 generated_uv=0 position_error=1.42e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=2 name=pm0723_00_BodyASkin material=BodyTattu00 shader=1@PokePack entry=1 bools=eed3 vertices=3708 quaternions=3708 generated_uv=0 position_error=1.42e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=3 name=pm0723_00_BodyASkin material=BodyDodoVco shader=1@PokePack entry=1 bools=eef3 vertices=648 quaternions=648 generated_uv=0 position_error=8.96e-08 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=4 name=pm0723_00_BodyASkin material=BodyTattu01 shader=1@PokePack entry=1 bools=efd3 vertices=7278 quaternions=7278 generated_uv=0 position_error=2.18e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=5 name=pm0723_00_BodyBSkin material=BodyDodoVco shader=1@PokePack entry=1 bools=eff3 vertices=6096 quaternions=6096 generated_uv=0 position_error=1.43e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=6 name=pm0723_00_BodyCSkin material=BodyDodoVco shader=1@PokePack entry=1 bools=eff3 vertices=4902 quaternions=4902 generated_uv=0 position_error=1.37e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=7 name=pm0723_00_EyeBSkin material=BEye shader=1@PokePack entry=1 bools=eed3 vertices=888 quaternions=888 generated_uv=0 position_error=1.42e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=8 name=pm0723_00_IrisSkin material=LIris shader=1@PokePack entry=1 bools=ee03 vertices=444 quaternions=444 generated_uv=0 position_error=1.42e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "pose=0 frame=0 mesh=9 name=pm0723_00_IrisSkin material=RIris shader=1@PokePack entry=1 bools=ee03 vertices=444 quaternions=444 generated_uv=0 position_error=1.38e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 errors=0",
+    "summary poses=1 meshes=10 vertices=25536 position_error=2.18e-07 w_error=0 uv_error=0 quaternion_from_identity=0 view_from_unit=0.293 failures=0"
+  ],
+  "passed": true
+}
