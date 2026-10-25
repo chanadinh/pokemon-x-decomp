@@ -309,6 +309,21 @@ or [propose a research task](https://github.com/chanadinh/pokemon-x-decomp/issue
 Star the repository to follow its progress, or use **Watch → Custom → Releases**
 for release notifications.
 
+## CI/CD package
+
+The GitHub Actions pipeline validates pull requests and pushes, then publishes
+the development environment as a GitHub Container Registry package on pushes to
+`main` and version tags. After the first successful workflow run, pull the
+package with:
+
+```sh
+docker pull ghcr.io/chanadinh/pokemon-x-decomp:latest
+docker run --rm -it ghcr.io/chanadinh/pokemon-x-decomp:latest
+```
+
+The image contains the portable-C source and its Ubuntu build dependencies. It
+does not contain Nintendo game files or other copyrighted game assets.
+
 ## Project notebook
 
 [Native viewers](native/README.md) · [Source milestones](reconstructed/README.md) ·
