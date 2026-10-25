@@ -15,7 +15,56 @@ permissions:
   contents: write
 
 jobs:
+  windows-build:
+    runs-on: windows-2022
+    steps:
+      - name: Check out the release
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+
+      - name: Set up MSYS2 and SDL2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            make
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-SDL2
+            zip
+
+      - name: Build Windows viewers
+        shell: msys2 {0}
+        run: |
+          make -C native all
+          mkdir -p release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/bin
+          for executable in pokemon_asset_viewer pokemon_model_viewer pokemon_field_viewer pica_probe shader_check; do
+            cp "native/build/$executable" "release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/bin/$executable.exe"
+          done
+          cat > "release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/README.txt" <<'EOF'
+          Pokémon X native viewer demo for Windows
+
+          Run the self-contained synthetic demo:
+            bin\pokemon_asset_viewer.exe --demo
+            bin\pokemon_model_viewer.exe --demo
+            bin\pokemon_field_viewer.exe --demo
+
+          Real-data viewing requires a locally extracted RomFS passed with
+          --romfs. This release does not include Nintendo game files.
+          EOF
+          cd release-assets
+          zip -r "PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows.zip" "PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows"
+
+      - name: Upload Windows release asset
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release-asset
+          path: release-assets/*.zip
+
   release:
+    needs: windows-build
     runs-on: ubuntu-latest
     steps:
       - name: Check out the release
@@ -59,6 +108,12 @@ jobs:
           RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
         run: bash scripts/package_release.sh "$RELEASE_TAG" release-assets
 
+      - name: Download Windows release asset
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-release-asset
+          path: release-assets
+
       - name: Create draft GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -77,6 +132,7 @@ jobs:
           - Reconstructed C module sources and synthetic tests
           - Native GARC, LZ, BCLIM, ETC1, BCH, CGFX, and field-scene tooling
           - Linux native viewer executables with self-contained demo modes
+          - Windows native viewer executables with self-contained demo modes
           - Reproducible ZIP and TAR.GZ source archives
           - SHA-256 checksums for both source archives
 
