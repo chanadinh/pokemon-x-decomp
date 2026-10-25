@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-25",
+  "method": "Live REA stdio MCP with original-byte analysis carrier; assembly-reviewed host C reconstruction",
+  "server": {
+    "name": "rea",
+    "version": "6.8.0",
+    "protocol": "2025-06-18",
+    "advertised_tools": 229
+  },
+  "analysis": {
+    "provider": "Ghidra 12.1.4",
+    "language": "ARM:LE:32:v6",
+    "original_project_unchanged": true,
+    "six_core_functions": true,
+    "instruction_bytes_verified": 928,
+    "literal_bytes_verified": 148,
+    "core_evidence_records_retained": 22
+  },
+  "tests": {
+    "reconstructed_modules_passed": 12,
+    "analysis_python_tests": 38,
+    "analysis_python_optional_skips": 2,
+    "byte_selector_cases": 8448,
+    "halfword_cases": 131072,
+    "unmapped_selector_fallbacks": 3,
+    "cache_capacity_cursor_cases": 423,
+    "maximum_pp_integration_cases": 3090,
+    "cache_full_width_ID_and_duplicate_cases": true,
+    "loader_fallback_and_callback_mutation_cases": true,
+    "asan": true,
+    "ubsan": true,
+    "sanitizer_options": "ASAN_OPTIONS=detect_leaks=0",
+    "original_data": {
+      "move_records": 618,
+      "selector_cases": 20394,
+      "accuracy_sentinel_records": 174,
+      "negative_priority_records": 11,
+      "all_match": true
+    },
+    "launcher_handshake": {
+      "serverInfo": {
+        "name": "rea",
+        "version": "6.8.0"
+      },
+      "protocolVersion": "2025-06-18",
+      "launcher": "scripts/run_rea_mcp.sh",
+      "exit_code": 0
+    },
+    "target_reproduction_byte_identical": true
+  },
+  "preservation": {
+    "previous_reconstruction_file_hashes_verified": 630,
+    "native_source_changes": false,
+    "native_manifest_repair": {
+      "path": "native/Makefile",
+      "previous_manifest_hash": "c14cf8cf5dc31c91a9f0c369830374835e21b9bd95ac628a4f210bdeebab1d8a",
+      "current_committed_hash": "3e793d7c441aa22802a45f59d990f110d717eafc092a7aa5d81b6cfa62274349"
+    }
+  },
+  "source_hashes": {
+    "reconstructed/pokemon_move_resource/pokemon_move_resource.c": "54cf79a4b3cdd8295b3959e439e401e907e181bb0156d1edfcbd6e259b5ac7a9",
+    "reconstructed/pokemon_move_resource/pokemon_move_resource.h": "6184a40b02f255abfa06ce6f81ab09b56a002734e3fbbcdc313197171dd3c742",
+    "reconstructed/pokemon_move_resource/test_pokemon_move_resource.c": "5da2ff8c4c33c1c706180e044a25de29d771252c299e7634a82e5eb9581ea18e",
+    "reconstructed/pokemon_move_resource/Makefile": "4f62655ae4946120c6faa4efda55568cbce466f756b063e20efede747e4a477a",
+    "reconstructed/pokemon_move_resource/reproduction/check_records.c": "e7f6786061b6bfe066a2e5d35b27a5a8f276953f57d88e6b4e6190df7e6e5dc4",
+    "reconstructed/pokemon_move_resource/reproduction/verify_rea.py": "34f24072e96ff7dec4b739f477751f2828b38c56f87728222e04bd65088fa172",
+    "scripts/prepare_rea_target.py": "47285ae5bd263825801572fb31c5e8671845a494888c0e9207919828c1e47772",
+    "scripts/run_rea_mcp.sh": "8c0a3cc3c323bfb2cdd8b4f732952263ff433ae445f969a8b5d392e04b5c7074",
+    "reconstructed/pokemon_moves/pokemon_moves.c": "3411b79e88c980eecc365d1a6618e287d152b98c71adf9e6b079ddc7fb4b0b2f",
+    "reconstructed/pokemon_moves/pokemon_moves.h": "dfc9151769f2eaf64639a1b524304af44c6f93f411ecbd67d3c3bacbc21db627",
+    "reconstructed/pokemon_state/state_fields.c": "e4d8480f9ba982783b49f7b476ad7ca6e6afe1720fe606c033029e8a501642f6",
+    "reconstructed/pokemon_data/pokemon_codec.c": "5b0e65eb2a64628fbb4db29df0988223b33ddaf1686cbb3ef1d91198e495448e",
+    "reconstructed/pokemon_constructor/pokemon_constructor.c": "c8c2e856036c532a0c1955bd002406fa4f648b1448bc9cb7ffa616dbf442d727",
+    "reconstructed/pokemon_constructor/pokemon_parameters.c": "4c39d34abe71e9d5c3422c1d4a1b3dcd8dde901310dfee0fef190e4a0ffc92e9"
+  },
+  "limits": [
+    "Archive reading, initialization, allocation and resource lifetime remain callbacks/external.",
+    "The native viewer and older integration fixtures retain their prior move-resource adapters.",
+    "Comparison with original ARM instruction execution or a running game was not performed."
+  ]
+}

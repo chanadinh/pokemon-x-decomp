@@ -1,0 +1,140 @@
+[
+  {
+    "source_evidence_id": "ev_826403f9dadf78192f8ebcaf119c3cacedb78755ba6bcb57cd2f225a4fb5cf4d",
+    "purpose": "Reviewed dependency only; no host implementation in this module. Full source Evidence remains in the local exported REA bundle.",
+    "procedure": {
+      "address": "0x300ef8",
+      "name": "FUN_00300ef8",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x300ef8",
+            "end": "0x300f7f"
+          }
+        ],
+        "total_bytes": 136,
+        "span_bytes": 136,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_00300ef8()",
+      "locals": []
+    },
+    "pseudocode": "\nundefined8 FUN_00300ef8(uint *param_1,uint *param_2,uint param_3,byte param_4)\n\n{\n  uint *puVar1;\n  uint *puVar2;\n  uint *puVar3;\n  byte *pbVar4;\n  byte bVar5;\n  undefined2 uVar6;\n  uint uVar7;\n  uint uVar8;\n  uint uVar9;\n  uint uVar10;\n  uint uVar11;\n  uint uVar12;\n  uint uVar13;\n  byte in_r12;\n  uint uVar14;\n  uint uVar15;\n  bool bVar16;\n  bool bVar17;\n  \n  if (3 < param_3) {\n    uVar14 = (uint)param_1 & 3;\n    puVar3 = param_1;\n    uVar15 = uVar14;\n    if (uVar14 != 0) {\n      bVar5 = (byte)*param_2;\n      puVar3 = (uint *)((int)param_2 + 1);\n      if (uVar14 < 3) {\n        puVar3 = (uint *)((int)param_2 + 2);\n        uVar15 = (uint)*(byte *)((int)param_2 + 1);\n      }\n      *(byte *)param_1 = bVar5;\n      param_2 = puVar3;\n      if (uVar14 < 2) {\n        param_2 = (uint *)((int)puVar3 + 1);\n        bVar5 = (byte)*puVar3;\n      }\n      puVar2 = (uint *)((int)param_1 + 1);\n      if (uVar14 < 3) {\n        puVar2 = (uint *)((int)param_1 + 2);\n        *(byte *)((int)param_1 + 1) = (byte)uVar15;\n      }\n      param_3 = (param_3 + uVar14) - 4;\n      puVar3 = puVar2;\n      if (uVar14 < 2) {\n        puVar3 = (uint *)((int)puVar2 + 1);\n        *(byte *)puVar2 = bVar5;\n      }\n    }\n    uVar14 = (uint)param_2 & 3;\n    if (uVar14 == 0) {\n      uVar15 = param_3 - 0x20;\n      uVar14 = 0;\n      if (0x1f < param_3) {\n        uVar14 = *param_2;\n        uVar7 = param_2[1];\n        uVar8 = param_2[2];\n        uVar9 = param_2[3];\n        HintPreloadData(param_2 + 0x14);\n        uVar10 = param_2[4];\n        uVar11 = param_2[5];\n        uVar12 = param_2[6];\n        uVar13 = param_2[7];\n        param_2 = param_2 + 8;\n        while( true ) {\n          *puVar3 = uVar14;\n          puVar3[1] = uVar7;\n          puVar3[2] = uVar8;\n          puVar3[3] = uVar9;\n          bVar16 = 0x1f < uVar15;\n          uVar15 = uVar15 - 0x20;\n          puVar3[4] = uVar10;\n          puVar3[5] = uVar11;\n          puVar3[6] = uVar12;\n          puVar3[7] = uVar13;\n          puVar3 = puVar3 + 8;\n          if (bVar16) {\n            uVar14 = *param_2;\n            uVar7 = param_2[1];\n            uVar8 = param_2[2];\n            uVar9 = param_2[3];\n            param_2 = param_2 + 4;\n          }\n          HintPreloadData(param_2 + 0x10);\n          if (!bVar16) break;\n          uVar10 = *param_2;\n          uVar11 = param_2[1];\n          uVar12 = param_2[2];\n          uVar13 = param_2[3];\n          param_2 = param_2 + 4;\n        }\n      }\n      if ((bool)((byte)(uVar15 >> 4) & 1)) {\n        uVar14 = *param_2;\n        uVar7 = param_2[1];\n        uVar8 = param_2[2];\n        uVar9 = param_2[3];\n        param_2 = param_2 + 4;\n        *puVar3 = uVar14;\n        puVar3[1] = uVar7;\n        puVar3[2] = uVar8;\n        puVar3[3] = uVar9;\n        puVar3 = puVar3 + 4;\n      }\n      if ((int)(uVar15 << 0x1c) < 0) {\n        uVar14 = *param_2;\n        uVar7 = param_2[1];\n        param_2 = param_2 + 2;\n        *puVar3 = uVar14;\n        puVar3[1] = uVar7;\n        puVar3 = puVar3 + 2;\n      }\n      puVar1 = puVar3;\n      puVar2 = param_2;\n      if ((bool)((byte)(uVar15 >> 2) & 1)) {\n        puVar2 = param_2 + 1;\n        uVar14 = *param_2;\n        puVar1 = puVar3 + 1;\n        *puVar3 = uVar14;\n      }\n      uVar6 = (undefined2)uVar14;\n      if ((uVar15 & 3) == 0) {\n        return CONCAT44(puVar2,puVar1);\n      }\n      bVar17 = (bool)((byte)(uVar15 >> 1) & 1);\n      uVar15 = uVar15 << 0x1f;\n      bVar16 = (int)uVar15 < 0;\n      puVar3 = puVar2;\n      if (bVar17) {\n        puVar3 = (uint *)((int)puVar2 + 2);\n        uVar6 = (undefined2)*puVar2;\n      }\n      puVar2 = puVar3;\n      if (bVar16) {\n        puVar2 = (uint *)((int)puVar3 + 1);\n        uVar15 = (uint)(byte)*puVar3;\n      }\n      puVar3 = puVar1;\n      if (bVar17) {\n        puVar3 = (uint *)((int)puVar1 + 2);\n        *(undefined2 *)puVar1 = uVar6;\n      }\n      puVar1 = puVar3;\n      if (bVar16) {\n        puVar1 = (uint *)((int)puVar3 + 1);\n        *(byte *)puVar3 = (byte)uVar15;\n      }\n      return CONCAT44(puVar2,puVar1);\n    }\n    while( true ) {\n      in_r12 = (byte)uVar15;\n      if (param_3 < 8) break;\n      puVar2 = param_2 + 1;\n      uVar14 = *param_2;\n      param_2 = param_2 + 2;\n      uVar15 = *puVar2;\n      *puVar3 = uVar14;\n      puVar3[1] = uVar15;\n      puVar3 = puVar3 + 2;\n      param_3 = param_3 - 8;\n    }\n    param_3 = param_3 - 4;\n    param_1 = puVar3;\n    if (-1 < (int)param_3) {\n      uVar14 = *param_2;\n      param_1 = puVar3 + 1;\n      *puVar3 = uVar14;\n      param_2 = param_2 + 1;\n    }\n    param_4 = (byte)uVar14;\n  }\n  bVar17 = (bool)((byte)(param_3 >> 1) & 1);\n  param_3 = param_3 << 0x1f;\n  bVar16 = (int)param_3 < 0;\n  if (bVar17) {\n    pbVar4 = (byte *)((int)param_2 + 1);\n    param_4 = (byte)*param_2;\n    param_2 = (uint *)((int)param_2 + 2);\n    in_r12 = *pbVar4;\n  }\n  puVar3 = param_2;\n  if (bVar16) {\n    puVar3 = (uint *)((int)param_2 + 1);\n    param_3 = (uint)(byte)*param_2;\n  }\n  if (bVar17) {\n    pbVar4 = (byte *)((int)param_1 + 1);\n    *(byte *)param_1 = param_4;\n    param_1 = (uint *)((int)param_1 + 2);\n    *pbVar4 = in_r12;\n  }\n  puVar2 = param_1;\n  if (bVar16) {\n    puVar2 = (uint *)((int)param_1 + 1);\n    *(byte *)param_1 = (byte)param_3;\n  }\n  return CONCAT44(puVar3,puVar2);\n}\n\n",
+    "assembly": [
+      "0x300ef8: cmp r2, #0x3",
+      "0x300efc: bls 0x00300f60",
+      "0x300f00: ands r12, r0, #0x3",
+      "0x300f04: beq 0x00300f2c",
+      "0x300f08: ldrb r3, [r1],#0x1",
+      "0x300f0c: cmp r12, #0x2",
+      "0x300f10: add r2, r2, r12",
+      "0x300f14: ldrbls r12, [r1],#0x1",
+      "0x300f18: strb r3, [r0],#0x1",
+      "0x300f1c: ldrbcc r3, [r1],#0x1",
+      "0x300f20: strbls r12, [r0],#0x1",
+      "0x300f24: sub r2, r2, #0x4",
+      "0x300f28: strbcc r3, [r0],#0x1",
+      "0x300f2c: ands r3, r1, #0x3",
+      "0x300f30: beq 0x00144f34",
+      "0x300f34: subs r2, r2, #0x8",
+      "0x300f38: bcc 0x00300f50",
+      "0x300f3c: ldr r3, [r1],#0x4",
+      "0x300f40: subs r2, r2, #0x8",
+      "0x300f44: ldr r12, [r1],#0x4",
+      "0x300f48: stmia r0!,{r3,r12}",
+      "0x300f4c: b 0x00300f38",
+      "0x300f50: adds r2, r2, #0x4",
+      "0x300f54: ldrpl r3, [r1],#0x4",
+      "0x300f58: strpl r3, [r0],#0x4",
+      "0x300f5c: cpy r0, r0",
+      "0x300f60: movs r2, r2, lsl #0x1f",
+      "0x300f64: ldrbcs r3, [r1],#0x1",
+      "0x300f68: ldrbcs r12, [r1],#0x1",
+      "0x300f6c: ldrbmi r2, [r1],#0x1",
+      "0x300f70: strbcs r3, [r0],#0x1",
+      "0x300f74: strbcs r12, [r0],#0x1",
+      "0x300f78: strbmi r2, [r0],#0x1",
+      "0x300f7c: bx lr"
+    ],
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  },
+  {
+    "source_evidence_id": "ev_a3501f6d0883399767885d12f0775847dc29775439fcf169162185814c6d1d01",
+    "purpose": "Reviewed dependency only; no host implementation in this module. Full source Evidence remains in the local exported REA bundle.",
+    "procedure": {
+      "address": "0x15e958",
+      "name": "FUN_0015e958",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x15e958",
+            "end": "0x15e987"
+          }
+        ],
+        "total_bytes": 48,
+        "span_bytes": 48,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_0015e958()",
+      "locals": []
+    },
+    "pseudocode": "\nundefined8 FUN_0015e958(uint param_1,uint param_2)\n\n{\n  undefined4 uVar1;\n  uint uVar2;\n  int iVar3;\n  uint uVar4;\n  bool bVar5;\n  bool bVar6;\n  bool bVar7;\n  bool bVar8;\n  \n  iVar3 = 0;\n  uVar2 = param_2;\n  if (param_2 <= param_1 >> 2) {\n    if (param_2 <= param_1 >> 5) {\n      if (param_2 <= param_1 >> 8) {\n        if (param_1 >> 0xc < param_2) goto LAB_00300784;\n        if (param_1 >> 0x10 < param_2) goto LAB_00300754;\n        uVar2 = param_2 << 8;\n        iVar3 = -0x1000000;\n        if (uVar2 <= param_1 >> 0x10) {\n          iVar3 = -0x10000;\n          uVar2 = param_2 << 0x10;\n        }\n        if (param_1 >> 0xc < uVar2) goto LAB_00300784;\n        bVar5 = false;\n        if (uVar2 == 0) {\n          uVar1 = thunk_FUN_001768a0(0,0,iVar3,0);\n          return CONCAT44(param_1,uVar1);\n        }\n        do {\n          if (bVar5) {\n            uVar2 = uVar2 >> 8;\n          }\nLAB_00300754:\n          bVar5 = uVar2 <= param_1 >> 0xf;\n          if (bVar5) {\n            param_1 = param_1 + uVar2 * -0x8000;\n          }\n          bVar6 = uVar2 <= param_1 >> 0xe;\n          if (bVar6) {\n            param_1 = param_1 + uVar2 * -0x4000;\n          }\n          bVar7 = uVar2 <= param_1 >> 0xd;\n          if (bVar7) {\n            param_1 = param_1 + uVar2 * -0x2000;\n          }\n          bVar8 = uVar2 <= param_1 >> 0xc;\n          if (bVar8) {\n            param_1 = param_1 + uVar2 * -0x1000;\n          }\n          iVar3 = (((iVar3 * 2 + (uint)bVar5) * 2 + (uint)bVar6) * 2 + (uint)bVar7) * 2 +\n                  (uint)bVar8;\nLAB_00300784:\n          bVar5 = uVar2 <= param_1 >> 0xb;\n          if (bVar5) {\n            param_1 = param_1 + uVar2 * -0x800;\n          }\n          bVar6 = uVar2 <= param_1 >> 10;\n          if (bVar6) {\n            param_1 = param_1 + uVar2 * -0x400;\n          }\n          bVar7 = uVar2 <= param_1 >> 9;\n          if (bVar7) {\n            param_1 = param_1 + uVar2 * -0x200;\n          }\n          uVar4 = ((iVar3 * 2 + (uint)bVar5) * 2 + (uint)bVar6) * 2 + (uint)bVar7;\n          bVar6 = uVar2 <= param_1 >> 8;\n          if (bVar6) {\n            param_1 = param_1 + uVar2 * -0x100;\n          }\n          iVar3 = uVar4 * 2 + (uint)bVar6;\n          bVar5 = true;\n        } while (CARRY4(uVar4,uVar4) || CARRY4(uVar4 * 2,(uint)bVar6));\n      }\n      bVar5 = uVar2 <= param_1 >> 7;\n      if (bVar5) {\n        param_1 = param_1 + uVar2 * -0x80;\n      }\n      bVar6 = uVar2 <= param_1 >> 6;\n      if (bVar6) {\n        param_1 = param_1 + uVar2 * -0x40;\n      }\n      bVar7 = uVar2 <= param_1 >> 5;\n      if (bVar7) {\n        param_1 = param_1 + uVar2 * -0x20;\n      }\n      iVar3 = ((iVar3 * 2 + (uint)bVar5) * 2 + (uint)bVar6) * 2 + (uint)bVar7;\n    }\n    bVar5 = uVar2 <= param_1 >> 4;\n    if (bVar5) {\n      param_1 = param_1 + uVar2 * -0x10;\n    }\n    bVar6 = uVar2 <= param_1 >> 3;\n    if (bVar6) {\n      param_1 = param_1 + uVar2 * -8;\n    }\n    bVar7 = uVar2 <= param_1 >> 2;\n    if (bVar7) {\n      param_1 = param_1 + uVar2 * -4;\n    }\n    iVar3 = ((iVar3 * 2 + (uint)bVar5) * 2 + (uint)bVar6) * 2 + (uint)bVar7;\n  }\n  bVar5 = uVar2 <= param_1 >> 1;\n  if (bVar5) {\n    param_1 = param_1 + uVar2 * -2;\n  }\n  uVar4 = param_1 - uVar2;\n  if (uVar2 > param_1) {\n    uVar4 = param_1;\n  }\n  return CONCAT44(uVar4,(iVar3 * 2 + (uint)bVar5) * 2 + (uint)(uVar2 <= param_1));\n}\n\n",
+    "assembly": [
+      "0x15e958: movs r2, #0x0",
+      "0x15e95c: rsbs r3, r1, r0, lsr #0x2",
+      "0x15e960: bcc 0x00300800",
+      "0x15e964: rsbs r3, r1, r0, lsr #0x5",
+      "0x15e968: bcc 0x003007dc",
+      "0x15e96c: rsbs r3, r1, r0, lsr #0x8",
+      "0x15e970: bcc 0x003007b8",
+      "0x15e974: rsbs r3, r1, r0, lsr #0xc",
+      "0x15e978: bcc 0x00300784",
+      "0x15e97c: rsbs r3, r1, r0, lsr #0x10",
+      "0x15e980: bcc 0x00300754",
+      "0x15e984: b 0x0030072c"
+    ],
+    "limitations": [
+      "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+      "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+      "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+      "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+    ]
+  }
+]

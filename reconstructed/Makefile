@@ -11,3 +11,4 @@ all test clean:
 	$(MAKE) -C pokemon_moves $@
 	$(MAKE) -C pokemon_learnset $@
 	$(MAKE) -C pokemon_names $@
+	$(MAKE) -C pokemon_move_resource $@

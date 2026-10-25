@@ -1,0 +1,26 @@
+Live REA MCP move-resource milestone, 2026-10-25
+
+REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6.
+Six core routines: 928 instruction bytes and 148 literal bytes match live REA
+read_bytes results and the pinned code.bin. Live section addresses, sizes,
+permissions, initialization and BSS match the analysis carrier.
+
+All twelve reconstructed C suites passed. Analysis-tool Python tests: 38 run,
+two optional extraction-tool skips. New suite: 8,448 byte-selector, 131,072
+halfword, three unmapped fallback and 423 capacity/cursor scenarios, plus
+ID fallback/reuse, full-width cache identities, callback mutation and 3,090
+maximum-PP integrations. ASan/UBSan passed with leak detection disabled.
+
+All 20,394 selectors across 618 original move records agree with the existing
+native decoder: 174 accuracy sentinels and 11 negative-priority records.
+The target-preparation script reproduced the exact ELF bytes in a fresh output
+directory; the shipped launcher negotiated a real REA MCP handshake and exited
+cleanly. The full local Evidence bundle and snapshot were saved before close.
+
+All 630 hashes in the preceding eleven reconstruction checkpoints still match.
+Native implementation files were not changed. One stale native/Makefile hash
+was corrected to its already committed Windows-build revision.
+
+Archive access and resource lifecycle remain external. The old fixtures and
+native viewer retain their existing adapters. No original ARM execution or
+running-game behavior comparison was performed.
