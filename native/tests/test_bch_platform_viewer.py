@@ -124,13 +124,14 @@ class BCHPlatformViewerTests(unittest.TestCase):
             self.run_viewer(root, '--zone', 0, '--software', '--play', 'R?', '--frames', 5, success=False)
 
     def test_vertex_shader_option(self):
-        # The synthetic battle models carry no shader resources, so with
-        # --vertex-shader every material keeps its stored colors: same frame.
+        # The synthetic battle models carry no shader resources, so the
+        # default (their own programs) keeps every material's stored colors:
+        # the same frame as --no-vertex-shader. Both together are refused.
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             write_battle_romfs(root)
             shots = []
-            for extra in ((), ('--vertex-shader',)):
+            for extra in (('--no-vertex-shader',), (), ('--vertex-shader',)):
                 capture = root / f'battle{len(shots)}.bmp'
                 out = self.run_viewer(root, '--zone', 0, '--partner', 1, '--encounter-rate', 100, '--software',
                                       '--play', 'RR', '--frames', 40, '--capture-frame', capture,
@@ -138,6 +139,8 @@ class BCHPlatformViewerTests(unittest.TestCase):
                 self.assertIn('battle_model side=partner', out)
                 shots.append(capture.read_bytes())
             self.assertEqual(shots[0], shots[1])
+            self.assertEqual(shots[1], shots[2])
+            self.run_viewer(root, '--zone', 0, '--software', '--vertex-shader', '--no-vertex-shader', success=False)
 
 
 if __name__ == '__main__':

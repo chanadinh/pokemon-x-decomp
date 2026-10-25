@@ -59,7 +59,8 @@ struct options {
     int have_partner, have_partner_level, have_seed, have_encounter_rate, have_balls;
     const char *code_bin;
     const char *save_path, *load_path; /* --save / --load: the viewer save file (game/save.h) */
-    int vertex_shader;    /* --vertex-shader: battle models' primary color from their own vertex programs */
+    int vertex_shader;    /* battle models: run their own vertex programs and the fragment lighting unit */
+    int no_vertex_shader; /* --no-vertex-shader: the earlier CPU-only lighting for battle models */
     int bottom_screen;    /* --bottom-screen: the 3DS's second screen, the touch screen, below */
     const char *touch_play; /* --touch-play F:X,Y;...: scripted taps on the bottom screen */
     const char *sound;      /* --sound PATH[@OFFSET]: a BCWAV in the RomFS to play (looping as stored) */
@@ -448,8 +449,8 @@ static void usage(FILE *stream, const char *program)
         "  --encounter-rate N Percent chance per grass step, 0..100 (default 10)\n"
         "  --code-bin PATH    code.bin for the nature table (else natures are neutral)\n"
         "  --balls N          Poke Balls to start with, 0..999 (default 10)\n"
-        "  --vertex-shader    With --zone: light the battle models per vertex with their\n"
-        "                     own vertex programs (slower)\n"
+        "  --no-vertex-shader With --zone: light the battle models as before, without\n"
+        "                     their own vertex programs and the GPU lighting unit\n"
         "  --bottom-screen    With --zone: show the 3DS bottom (touch) screen below;\n"
         "                     click it to touch (battle commands are there)\n"
         "  --touch-play F:X,Y;...  With --bottom-screen and --frames: tap (X, Y) of\n"
@@ -532,7 +533,8 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--combiners")) { o->combiners = 1; continue; }
         if (!strcmp(arg, "--no-props")) { o->no_props = 1; continue; }
         if (!strcmp(arg, "--bottom-screen")) { o->bottom_screen = 1; continue; }
-        if (!strcmp(arg, "--vertex-shader")) { o->vertex_shader = 1; continue; }
+        if (!strcmp(arg, "--vertex-shader")) { if (o->no_vertex_shader) return 0; o->vertex_shader = 1; continue; } /* the default */
+        if (!strcmp(arg, "--no-vertex-shader")) { if (o->vertex_shader) return 0; o->no_vertex_shader = 1; continue; }
         if (!strcmp(arg, "--walk")) { o->walk = 1; continue; }
         if (!strcmp(arg, "--skinned")) { o->skinned = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
@@ -2261,6 +2263,7 @@ static void battle_model_load(const struct options *o, unsigned side, uint16_t s
     po.environment_archive = "a/0/0/3"; po.environment_entry = 137; po.have_environment_entry = 1;
     po.environment_subentry = 0; po.have_environment_section = 1; po.environment_section = 0; po.scene = 0;
     po.skinned = 1; po.allow_skeleton = 1; po.hide_invisible = 1;
+    po.vertex_shader = !o->no_vertex_shader;
     po.walk = 0; po.steps = NULL; po.player_archive = NULL; po.quiet = 1; po.silent = 1;
     po.have_motion_frame = 0; po.have_walk_motion = po.have_run_motion = 0;
     /* The battle motions: section 0 of the model's PB pack (+5), a GF1 pack;

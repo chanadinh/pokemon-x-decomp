@@ -37,6 +37,8 @@ project owner's request. No generated artwork or mockups are used.
 | [Textured CGFX model](native-textured-model.png) | `outputs/native-textured-model/model-frame.png` | Archive `a/1/0/2`, entry 0: six materials and textures in an unlit software preview. Lighting, complete shaders and original-game visual equivalence are not reproduced. |
 | [Terrain/collision inspector](native-field-inspector.png) | `outputs/native-field-scene/field-collision-frame.png` | Zone 5 → matrix 12 → region 165, with collision edges and a restricted inspection marker. This earlier capture's footer predates the separate BCH wireframe milestone; it is not the current status of BCH decoding. |
 
+Battle captures made before the lighting default changed reproduce with `--no-vertex-shader` added; the two lighting comparisons name the options they used (their lit halves were made with earlier steps of the same lighting).
+
 The source captures are dated October 23, 2026, except the lit-field and walk captures
 (October 24, 2026), and the player, motion and zone captures (also October 24). PNG dimensions are 960 × 640 for
 the eleven model images, 800 × 480 for the three zone images and 1100 × 760 for the field inspector. They retain their

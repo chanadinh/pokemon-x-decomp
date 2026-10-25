@@ -693,3 +693,9 @@ looks its Pokémon lights up by name, light_poke_1 to light_poke_6, in the
 field scene, and the graphics library uses one material flag both to switch
 the reflection tables on and to give them the light's own highlight color.
 See the [battle lights record](../native/reproduction/battle-lights/README.txt).
+
+With both traced, this is now how the battle draws its Pokémon by default;
+`--no-vertex-shader` brings back the earlier CPU lighting. Battle images
+above this section were captured before the change and match
+`--no-vertex-shader`. See the
+[lighting default record](../native/reproduction/lighting-default/README.txt).

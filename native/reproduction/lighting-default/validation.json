@@ -1,0 +1,14 @@
+{
+ "date": "2026-10-25",
+ "baseline_commit": "fde96af53d5daac4d5911335d55e79f4eb987cff",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video and dummy audio, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "6a9898c93e1a711be6d2981748602fc3afa2099ba255dbc113e218691600ae0c",
+  "tests/test_bch_platform_viewer.py": "e782464a0dd9f9ba5e219ae50dd5410227649494981672907449cc7523c684f6"
+ },
+ "capture_sha256": {
+  "default": "d7bcfa36144b9e00ef48b43aa7c612d7be7a40ae39d19ed45d516b245d251772",
+  "no_vertex_shader": "349e2217bab31972b8d19b1075208994ee76a42f8379878008a439dae15203ef"
+ }
+}

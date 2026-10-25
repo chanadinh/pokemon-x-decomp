@@ -1,0 +1,13 @@
+Lighting default validation, 2026-10-25
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video and dummy audio, the software renderer. Not run
+on the local WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native all test test-runtime and the root test suite: passed
+   (tests/test_bch_platform_viewer.py: default, --vertex-shader and
+   --no-vertex-shader frames equal on the program-less synthetic models;
+   both options together refused).
+2. Route 2 battle frame 238: default d7bcfa36...1772, --no-vertex-shader
+   349e2217...03ef.
+3. ../bch-catch/verify_catch.py, ../bch-save/verify_save.py and
+   ../bch-party/verify_party.py pass with this viewer.
