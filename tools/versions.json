@@ -25,7 +25,11 @@
   },
   "rea": {
     "repository": "https://github.com/morluto/rea",
-    "note": "Reviewed previously; not installed or used by this first-pass workflow."
+    "note": "Installed locally for live stdio MCP analysis with the pinned Ghidra/JDK. Earlier first-pass exports used Ghidra directly. Local package: tools/rea; launcher: scripts/run_rea_mcp.sh. Existing analysis projects are not opened by REA.",
+    "version": "6.8.0",
+    "package": "rea-agents",
+    "npm_integrity": "sha512-9QDeRnGqEDzABZyr04eLnBXBv/c6I9/TWu/6M0MD4pEfkySI/BIgwTODIbAReX3C1x6hjw9+Jlx4A2yUSPZ9ww==",
+    "node_version": "24.22.1"
   },
   "active_target": {
     "name": "Pokemon X",
