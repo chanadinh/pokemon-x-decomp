@@ -14,6 +14,7 @@
 #include "assets/pokedata.h"
 #include "game/battle.h"
 #include "game/battle_ui.h"
+#include "game/save.h"
 #include "render/light.h"
 #include "render/raster.h"
 #include "render/skin.h"
@@ -47,6 +48,7 @@ struct options {
     uint32_t partner, partner_level, seed, encounter_rate, balls;
     int have_partner, have_partner_level, have_seed, have_encounter_rate, have_balls;
     const char *code_bin;
+    const char *save_path, *load_path; /* --save / --load: the viewer save file (game/save.h) */
     const char *play; /* --zone: scripted input during display */
     int silly; /* --silly: 0 none, 1 giant, 2 moonwalk (for fun; not game behaviour) */
     uint32_t entry, subentry, model, frames, section;
@@ -129,6 +131,7 @@ struct camera {
     double yaw, pitch, zoom; int running; struct walker *walk;
     int zone;       /* --zone: WASD queue a step for the controller, Space/Return talk */
     char queued;    /* U, D, L, R or 0 */
+    int save_request; /* F5 */
     int interact;
     const char *play; /* --play cursor */
     int internal_w, internal_h; /* --zone: fixed render size, scaled to the window */
@@ -369,6 +372,10 @@ static void usage(FILE *stream, const char *program)
         "  --encounter-rate N Percent chance per grass step, 0..100 (default 10)\n"
         "  --code-bin PATH    code.bin for the nature table (else natures are neutral)\n"
         "  --balls N          Poke Balls to start with, 0..999 (default 10)\n"
+        "  --save PATH        With --zone and --code-bin: F5 (or s in --play) saves the\n"
+        "                     zone, position, party and balls to PATH\n"
+        "  --load PATH        With --code-bin, instead of --zone: start from that save\n"
+        "                     (F5 then saves back to it unless --save is given)\n"
         "  --silly MODE       With --zone, for fun: giant (a three-times player) or\n"
         "                     moonwalk (walks facing backwards, cycle reversed)\n"
         "  --self-test-input  Exercise orbit/zoom/reset/exit; default 3 frames\n"
@@ -431,7 +438,8 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--zone") && strcmp(arg, "--arrive") && strcmp(arg, "--play") &&
             strcmp(arg, "--capture-at") && strcmp(arg, "--threads") && strcmp(arg, "--silly") &&
             strcmp(arg, "--partner") && strcmp(arg, "--partner-level") && strcmp(arg, "--seed") &&
-            strcmp(arg, "--encounter-rate") && strcmp(arg, "--code-bin") && strcmp(arg, "--balls")) return 0;
+            strcmp(arg, "--encounter-rate") && strcmp(arg, "--code-bin") && strcmp(arg, "--balls") &&
+            strcmp(arg, "--save") && strcmp(arg, "--load")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -441,8 +449,14 @@ static int parse(int argc, char **argv, struct options *o)
         else if (!strcmp(arg, "--environment-archive")) o->environment_archive = value;
         else if (!strcmp(arg, "--player-archive")) o->player_archive = value;
         else if (!strcmp(arg, "--code-bin")) { if (o->code_bin) return 0; o->code_bin = value; }
+        else if (!strcmp(arg, "--save")) { if (o->save_path) return 0; o->save_path = value; }
+        else if (!strcmp(arg, "--load")) {
+            /* The zone comes from the file (read in main); --zone must not be given too. */
+            if (o->load_path || o->have_zone) return 0;
+            o->load_path = value; o->have_zone = 1;
+        }
         else if (!strcmp(arg, "--play")) {
-            if (o->play || strspn(value, "UDLRudlr.x") != strlen(value) || strlen(value) > 4096) return 0;
+            if (o->play || strspn(value, "UDLRudlr.xs") != strlen(value) || strlen(value) > 4096) return 0;
             o->play = value;
         }
         else if (!strcmp(arg, "--steps")) {
@@ -536,6 +550,10 @@ static int parse(int argc, char **argv, struct options *o)
         }
     }
     if ((o->have_arrive || o->play) && !o->have_zone) return 0;
+    /* Saving and loading need the zone scene and code.bin (the record block order). */
+    if ((o->save_path || o->load_path) && (!o->have_zone || !o->code_bin)) return 0;
+    if (o->load_path && (o->have_arrive || o->have_partner || o->have_partner_level || o->have_balls || o->have_seed))
+        return 0;
     if (o->have_capture_at && (!o->capture || !o->frames || o->capture_at >= o->frames)) return 0;
     if (o->have_zone) {
         /* --zone resolves the whole scene itself; only run-time and lighting
@@ -1694,6 +1712,8 @@ struct game_session {
     uint8_t chart[PX_TYPE_COUNT][PX_TYPE_COUNT];
     uint8_t natures[125];
     int have_natures;
+    uint8_t block_table[128]; /* code.bin 0x00570eec: the party record block order (game/save.h) */
+    int have_block_table;
     char **species_names, **move_names, **type_names;
     uint32_t species_name_count, move_name_count, type_name_count;
     uint32_t growth[8][101]; uint32_t growth_count;
@@ -1789,6 +1809,7 @@ static int game_load(const struct options *o)
     }
     if (o->code_bin && (f = fopen(o->code_bin, "rb"))) {
         g->have_natures = !fseek(f, 0x470f6c, SEEK_SET) && fread(g->natures, 1, 125, f) == 125;
+        g->have_block_table = !fseek(f, 0x470eec, SEEK_SET) && fread(g->block_table, 1, 128, f) == 128;
         fclose(f);
     }
     /* Growth tables (a/2/1/7, 101 u32 per group) and every learnset (a/2/1/4). */
@@ -1874,6 +1895,100 @@ static void print_battler(const char *what, const struct px_battler *b)
 /* After a completed step onto grass: roll, and on an encounter prepare the
  * wild Pokémon (g_game.pending). Returns 1 on an encounter. */
 static void battle_model_load(const struct options *o, unsigned side, uint16_t species);
+/* The partner is made on first need (the first encounter, or a save). */
+static int ensure_partner(const struct options *o)
+{
+    if (g_game.have_partner) return 1;
+    if (!game_load(o) ||
+        !game_pokemon(o, (uint16_t)(o->have_partner ? o->partner : 656),
+                      (uint8_t)(o->have_partner_level ? o->partner_level : 5), &g_game.partner)) return 0;
+    g_game.have_partner = 1;
+    g_game.party[0] = g_game.partner; g_game.party_count = 1;
+    print_battler("partner", &g_game.partner);
+    return 1;
+}
+/* --save / F5: the zone, the walker's world tile and facing, the party, the
+ * balls and the random state (game/save.h); written to a temporary file and
+ * renamed over the target. */
+static int game_save(const struct options *o, const struct model_asset *asset)
+{
+    struct game_session *g = &g_game;
+    const char *path = o->save_path ? o->save_path : o->load_path;
+    if (!path || !asset->zone || !ensure_partner(o)) return 0;
+    if (!g->have_block_table) { fprintf(stderr, "[model-viewer] save: code.bin block table not read\n"); return 0; }
+    struct px_save save;
+    memset(&save, 0, sizeof save);
+    save.zone = asset->zone->zone;
+    save.world_x = asset->walker.x + 40 * (int32_t)asset->zone->cell_x0;
+    save.world_z = asset->walker.z + 40 * (int32_t)asset->zone->cell_z0;
+    save.facing = (uint8_t)(asset->walker.facing & 3);
+    save.balls = g->balls; save.rng = g->rng.state; save.trainer = 0;
+    save.party_count = g->party_count;
+    memcpy(save.party, g->party, sizeof save.party);
+    uint8_t file[PX_SAVE_SIZE];
+    char error[160], temporary[1100];
+    if (!px_save_encode(&save, &g->data, g->block_table, file, error, sizeof error)) {
+        fprintf(stderr, "[model-viewer] save: %s\n", error); return 0;
+    }
+    memcpy(g->party, save.party, sizeof g->party); /* keys assigned on first save stay */
+    g->partner.key = g->party[0].key;
+    snprintf(temporary, sizeof temporary, "%s.tmp", path);
+    FILE *f = fopen(temporary, "wb");
+    int ok = f && fwrite(file, 1, sizeof file, f) == sizeof file;
+    if (f && fclose(f)) ok = 0;
+    if (ok) ok = !rename(temporary, path);
+    if (!ok) { remove(temporary); fprintf(stderr, "[model-viewer] save: cannot write %s\n", path); return 0; }
+    printf("save path=%s zone=%" PRIu32 " world_tile=%" PRId32 ",%" PRId32 " facing=%u party=%" PRIu32
+           " balls=%" PRIu32 " bytes=%u\n", path, save.zone, save.world_x, save.world_z, save.facing,
+           save.party_count, save.balls, (unsigned)sizeof file);
+    snprintf(asset->zone->message, sizeof asset->zone->message, "saved");
+    return 1;
+}
+/* --load: the file's party, balls and random state; the zone is loaded by
+ * main, which then places the walker with load_place. */
+static struct px_save g_loaded;
+static int game_restore(const struct options *o)
+{
+    struct game_session *g = &g_game;
+    uint8_t file[PX_SAVE_SIZE + 1];
+    FILE *f = fopen(o->load_path, "rb");
+    const size_t size = f ? fread(file, 1, sizeof file, f) : 0;
+    if (f) fclose(f);
+    char error[160];
+    if (!f) { fprintf(stderr, "[model-viewer] --load: cannot read %s\n", o->load_path); return 0; }
+    if (!game_load(o)) return 0;
+    if (!g->have_block_table) { fprintf(stderr, "[model-viewer] --load: code.bin block table not read\n"); return 0; }
+    if (!px_save_decode(file, size, &g->data, g->block_table, &g_loaded, error, sizeof error)) {
+        fprintf(stderr, "[model-viewer] --load: %s\n", error); return 0;
+    }
+    g->party_count = g_loaded.party_count;
+    memcpy(g->party, g_loaded.party, sizeof g->party);
+    g->partner = g->party[0]; g->have_partner = 1;
+    g->balls = g_loaded.balls; g->rng.state = g_loaded.rng ? g_loaded.rng : 1;
+    return 1;
+}
+static int load_place(struct model_asset *asset)
+{
+    struct walker *w = &asset->walker;
+    const int32_t x = g_loaded.world_x - 40 * (int32_t)asset->zone->cell_x0;
+    const int32_t z = g_loaded.world_z - 40 * (int32_t)asset->zone->cell_z0;
+    if (x < 0 || z < 0 || x >= (int32_t)asset->grid.width || z >= (int32_t)asset->grid.height) {
+        fprintf(stderr, "[model-viewer] --load: tile %" PRId32 ",%" PRId32 " is outside zone %" PRIu32 ".\n",
+                g_loaded.world_x, g_loaded.world_z, g_loaded.zone);
+        return 0;
+    }
+    w->x = x; w->z = z; w->facing = g_loaded.facing; w->active = 1;
+    printf("load zone=%" PRIu32 " world_tile=%" PRId32 ",%" PRId32 " cell=%" PRId32 ",%" PRId32
+           " facing=%u party=%" PRIu32 " balls=%" PRIu32 "\n", g_loaded.zone, g_loaded.world_x, g_loaded.world_z, x, z,
+           g_loaded.facing, g_loaded.party_count, g_loaded.balls);
+    for (uint32_t i = 0; i < g_game.party_count; ++i) {
+        const struct px_battler *b = &g_game.party[i];
+        printf("party_member slot=%" PRIu32 " species=%u level=%u exp=%u hp=%u/%u moves=%u,%u,%u,%u pp=%u,%u,%u,%u\n", i,
+               b->species, b->level, (unsigned)b->exp, b->hp, b->stats[0], b->moves[0], b->moves[1], b->moves[2],
+               b->moves[3], b->pp[0], b->pp[1], b->pp[2], b->pp[3]);
+    }
+    return 1;
+}
 static int maybe_encounter(const struct options *o, struct model_asset *asset)
 {
     const struct zone_state *zs = asset->zone;
@@ -1892,13 +2007,7 @@ static int maybe_encounter(const struct options *o, struct model_asset *asset)
     if (!s->species) return 0;
     const uint8_t level = (uint8_t)(s->min_level + px_rng_below(&g_game.rng, s->max_level - s->min_level + 1u));
     if (!game_pokemon(o, s->species, level, &g_game.wild)) return 0;
-    if (!g_game.have_partner) {
-        if (!game_pokemon(o, (uint16_t)(o->have_partner ? o->partner : 656),
-                          (uint8_t)(o->have_partner_level ? o->partner_level : 5), &g_game.partner)) return 0;
-        g_game.have_partner = 1;
-        g_game.party[0] = g_game.partner; g_game.party_count = 1;
-        print_battler("partner", &g_game.partner);
-    }
+    if (!ensure_partner(o)) return 0;
     ++g_game.encounters;
     printf("encounter zone=%" PRIu32 " cell=%d,%d slot=%u species=%u level=%u\n", zs->zone, w->x, w->z, slot,
            s->species, level);
@@ -2189,6 +2298,7 @@ static void event(struct camera *c, const SDL_Event *e)
         case SDLK_d: case SDLK_RIGHT: c->battle_key = 'R'; break;
         case SDLK_SPACE: case SDLK_RETURN: c->battle_key = '.'; break;
         case SDLK_x: case SDLK_BACKSPACE: c->battle_key = 'x'; break;
+        case SDLK_F5: c->save_request = 1; break; /* saved once back on the field */
         default: break;
         }
         return;
@@ -2207,6 +2317,7 @@ static void event(struct camera *c, const SDL_Event *e)
     case SDLK_a: if (c->zone) c->queued = 'L'; else if (c->walk) walk_step(c->walk, 'L'); break;
     case SDLK_d: if (c->zone) c->queued = 'R'; else if (c->walk) walk_step(c->walk, 'R'); break;
     case SDLK_SPACE: case SDLK_RETURN: if (c->zone) c->interact = 1; break;
+    case SDLK_F5: if (c->zone) c->save_request = 1; break;
     default: break;
     }
     c->yaw = fmod(c->yaw, 6.283185307179586);
@@ -3139,7 +3250,8 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
         c->battle_key = 0; c->queued = 0; c->interact = 0;
         if (!key && c->play && *c->play) {
             key = *c->play++;
-            if (key >= 'a' && key != 'x') key = (char)(key - 'a' + 'A');
+            if (key == 's') { c->save_request = 1; key = 0; } /* saved once back on the field */
+            else if (key >= 'a' && key != 'x') key = (char)(key - 'a' + 'A');
         }
         if (key) battle_input(key);
         c->in_battle = g_game.active;
@@ -3154,12 +3266,14 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
         if (!direction && c->play && *c->play) {
             /* --play: one scripted input per free controller frame. */
             const char next = *c->play++;
-            if (next == '.') c->interact = 1;
+            if (next == 's') c->save_request = 1;
+            else if (next == '.') c->interact = 1;
             else {
                 run = next >= 'a';
                 direction = (char)(next >= 'a' ? next - 'a' + 'A' : next);
             }
         }
+        if (c->save_request) { c->save_request = 0; game_save(o, asset); }
         int moved = 0;
         if (direction && w->active) {
             walk_step(w, direction);
@@ -3516,8 +3630,13 @@ int main(int argc, char **argv)
     struct options o = {0}; int parsed = parse(argc, argv, &o);
     if (parsed != 1) { usage(parsed == 2 ? stdout : stderr, argv[0]); return parsed == 2 ? 0 : 1; }
     struct model_asset asset = {0};
+    if (o.load_path) {
+        if (!game_restore(&o)) return 1;
+        o.zone = g_loaded.zone;
+    }
     if (o.have_zone) {
         if (!load_zone(&o, o.zone, &asset)) { asset_free(&asset); return 1; }
+        if (o.load_path && !load_place(&asset)) { asset_free(&asset); return 1; }
         if (o.have_arrive && !zone_arrive(&asset, o.arrive)) {
             fprintf(stderr, "[model-viewer] --arrive: zone %" PRIu32 " has no supported warp %" PRIu32 ".\n",
                     o.zone, o.arrive);

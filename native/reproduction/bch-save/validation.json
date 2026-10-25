@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-25",
+ "baseline_commit": "8026eb75fc2a8fdb7310631330cb764089452661",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "f17d5b21a80dd24aefc3e07090f8ec1de8a32a08d0b95cb04fd5cad6d3202d80",
+  "Makefile": "373fa5b6402670bee9372f47650375c958dbdec0f9bc64c897b11f6e9af90f34",
+  "game/save.c": "2ad7bd5f4c4aabbb2613e57f753f71c2b8e8d1bf0680945b6bf6190706a898b6",
+  "game/save.h": "85763bc11221d45a9e959bb3732dde490092744edc95ccc7a91b95206e30dbcd",
+  "game/test_save.c": "aae010fb62876dd1e00f1a256bbde2b181740deb1337e23ce19c7d33fb839f53",
+  "game/battle.h": "ea94222ce6af62a8a70c83df964e9e78799f250b46e72867334581ea8e6d65e8",
+  "tests/test_bch_save_viewer.py": "8396dc2b86641635ce5d01d2dee13a7cc9bb3991ce107b795554ec966cbb26e0",
+  "reproduction/bch-save/verify_save.py": "8fd700c408f03b97589f94b9cc1fc94fd68216c94fabffc3d31383c84b6817f2"
+ }
+}

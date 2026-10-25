@@ -1,0 +1,18 @@
+Save and load validation, 2026-10-25
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video with the software renderer. Not run on the local
+WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (new: test_save, BCH save viewer).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection: test_save and the save
+   viewer suite under the sanitized viewer: no diagnostics; verify_save.py
+   also passes with the sanitized viewer.
+4. Earlier records unchanged; ../bch-catch/verify_catch.py passes.
+5. verify_save.py: two records decoded independently with PK6 conventions,
+   fields as printed, independent re-encoding identical, load as saved,
+   load-then-save identical.
+
+Not established: the game's own save format and record generation, and any
+running-game comparison.

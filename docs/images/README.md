@@ -55,6 +55,7 @@ Evidence and reproduction instructions:
 - [Catch comparison](../../native/reproduction/bch-catch/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-catch/README.txt).
 - [Battle model comparison](../../native/reproduction/bch-pokemon/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-pokemon/README.txt).
 - [Battle motion comparison](../../native/reproduction/bch-battle-motion/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-battle-motion/README.txt).
+- [Save comparison](../../native/reproduction/bch-save/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-save/README.txt).
 - [Textured CGFX capture record](../../native/reproduction/textured-model/rendered-sample.json).
 - [Field inspector scope and reproduction](../../native/reproduction/field-scene/README.txt).
 

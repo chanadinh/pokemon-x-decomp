@@ -579,3 +579,21 @@ All 972 motion packs decode identically in the independent reader of the
 player's motions, and for the Route 2 Pokémon every frame of the motions the
 viewer plays agrees exactly. See the
 [battle motion record](../native/reproduction/bch-battle-motion/README.txt).
+
+## Saving and loading
+
+Press F5 to save (start the viewer with `--save my.sav --code-bin PATH`), and
+start again later with `--load my.sav --code-bin PATH`: you are back on the
+same tile, facing the same way, with the same party, levels, HP, PP and
+Poké Balls. Even the random numbers carry on, so a resumed game meets the
+same wild Pokémon a continuous one would. Saving during a battle happens as
+soon as the battle is over.
+
+Each party Pokémon is stored as the game's own 260-byte party record. It is
+written by the reconstructed Pokémon data code (the checksum, the encryption
+stream and the block shuffling recovered from the game), with the shuffle
+table read from your code.bin. The file around the records is the viewer's
+own; it is not a 3DS save file. An independent reader built from PKHeX's
+documentation of the format decodes the records, finds every value where it
+should be, and re-encodes them to the same bytes. See the
+[save record](../native/reproduction/bch-save/README.txt).

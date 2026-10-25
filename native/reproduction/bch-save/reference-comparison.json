@@ -1,0 +1,108 @@
+{
+ "verifier_sha256": "8fd700c408f03b97589f94b9cc1fc94fd68216c94fabffc3d31383c84b6817f2",
+ "play": "RDDDDDDDDD..R..x.x.x.x.x.x.x.x.x.xR...s",
+ "viewer_lines": [
+  "partner species=656 name=Froakie level=5 nature=12 iv=11,23,10,14,21,17 stats=19,11,9,12,12,10 moves=1,45,145,0",
+  "wild species=664 name=Scatterbug level=3 nature=7 iv=15,17,16,26,18,5 stats=15,7,7,6,7,6 moves=33,81,0,0",
+  "battle_end result=caught turns=2 partner_hp=19/19 level=5 exp=135 wild_hp=15/15 balls=8",
+  "party count=2 0:Froakie:Lv5:19/19 1:Scatterbug:Lv3:15/15",
+  "save path=/tmp/claude-0/-home-claude/48e2aeff-96ae-5f0d-bfd2-e56379184411/scratchpad/savecheck/route2.sav zone=259 world_tile=460,449 facing=0 party=2 balls=8 bytes=1596"
+ ],
+ "file_bytes": 1596,
+ "version": 1,
+ "header": {
+  "zone": 259,
+  "world_tile": [
+   460,
+   449
+  ],
+  "facing": 0,
+  "balls": 8,
+  "random_state_present": true,
+  "trainer": 0
+ },
+ "records": [
+  {
+   "species": 656,
+   "trainer": 0,
+   "exp": 135,
+   "ability": 67,
+   "ability_number": 1,
+   "nature": 12,
+   "moves": [
+    1,
+    45,
+    145,
+    0
+   ],
+   "pp": [
+    35,
+    40,
+    30,
+    0
+   ],
+   "iv": [
+    11,
+    23,
+    10,
+    14,
+    21,
+    17
+   ],
+   "iv_high_bits": 0,
+   "level": 5,
+   "hp": 19,
+   "stats": [
+    19,
+    11,
+    9,
+    12,
+    12,
+    10
+   ]
+  },
+  {
+   "species": 664,
+   "trainer": 0,
+   "exp": 27,
+   "ability": 19,
+   "ability_number": 1,
+   "nature": 7,
+   "moves": [
+    33,
+    81,
+    0,
+    0
+   ],
+   "pp": [
+    35,
+    39,
+    0,
+    0
+   ],
+   "iv": [
+    15,
+    17,
+    16,
+    26,
+    18,
+    5
+   ],
+   "iv_high_bits": 0,
+   "level": 3,
+   "hp": 15,
+   "stats": [
+    15,
+    7,
+    7,
+    6,
+    7,
+    6
+   ]
+  }
+ ],
+ "checksums_valid": 2,
+ "independent_re_encoding_identical": 2,
+ "load_line": "load zone=259 world_tile=460,449 cell=100,89 facing=0 party=2 balls=8",
+ "load_then_save_identical": true
+}

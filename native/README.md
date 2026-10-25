@@ -498,3 +498,8 @@ idle, attack, damage and faint motions; see the
 [battle model record](reproduction/bch-pokemon/README.txt) and the
 [battle motion record](reproduction/bch-battle-motion/README.txt).
 
+`--save FILE` (F5, or `s` in `--play`) and `--load FILE`, both with `--code-bin`, save and
+resume the zone, position, party and balls; party Pokémon are stored as the game's
+party records through the reconstructed codec. See the
+[save record](reproduction/bch-save/README.txt).
+

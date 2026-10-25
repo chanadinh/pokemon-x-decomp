@@ -68,6 +68,7 @@ struct px_battler {
     uint16_t moves[4];
     uint8_t pp[4];
     int8_t stages[8];
+    uint32_t key;      /* the stored record's encryption constant (game/save.h); 0 until first saved */
 };
 /* Stats from the reconstructed formulas (EVs 0); HP full; PP from the move
  * data. 0 when the species or a move is outside the tables. */
