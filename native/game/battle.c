@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "../../reconstructed/pokemon_stats/stats_math.h"
+#include "../platform/guest.h"
 
 uint32_t px_rng_next(struct px_rng *rng)
 {
@@ -16,24 +17,22 @@ uint32_t px_rng_next(struct px_rng *rng)
 
 uint32_t px_rng_below(struct px_rng *rng, uint32_t n) { return n ? px_rng_next(rng) % n : 0; }
 
-/* The reconstructed nature adjustment reads the table through logical
- * addresses; this adapter serves the 125 bytes at 0x00570f6c. */
-static uint8_t nature_load8(void *user, uint32_t address)
-{
-    const uint8_t *table = user;
-    const uint32_t at = address - UINT32_C(0x00570f6c);
-    return table && at < 125 ? table[at] : 0;
-}
+/* The reconstructed nature adjustment reads the table at its game address,
+ * 0x00570f6c (rodata); the guest maps the 125 bytes there (zeros, which are
+ * neutral, without a table). */
+enum { NATURE_TABLE = 0x00570f6c };
+static const uint8_t neutral_natures[125];
 
 /* Stats of the battler's species, level, IVs and nature through the
  * reconstructed formulas (EVs 0). */
 static void compute_stats(const struct px_battle_data *d, struct px_battler *out)
 {
     const struct px_personal *p = &d->personal[out->species];
-    struct px_pokemon_api memory;
-    memset(&memory, 0, sizeof memory);
-    memory.user = (void *)d->natures;
-    memory.load8 = nature_load8;
+    struct px_guest guest;
+    px_guest_init(&guest);
+    px_guest_map_view(&guest, NATURE_TABLE, 125, PX_GUEST_READ, (void *)(d->natures ? d->natures : neutral_natures),
+                      "natures");
+    const struct px_pokemon_api memory = px_guest_pokemon_api(&guest);
     out->stats[0] = (uint16_t)px_pokemon_hp_value(out->species, out->level, p->base[0], out->iv[0], 0);
     static const enum px_stat stat[6] = {PX_STAT_HP, PX_STAT_ATTACK, PX_STAT_DEFENSE, PX_STAT_SPEED,
                                          PX_STAT_SPECIAL_ATTACK, PX_STAT_SPECIAL_DEFENSE};
@@ -43,33 +42,34 @@ static void compute_stats(const struct px_battle_data *d, struct px_battler *out
 }
 
 /* The reconstructed level-from-growth routine reads the selected growth
- * table through 0x005d17ac (a pointer) and table + 8 + 4 x level; this
- * adapter serves the a/2/1/7 member of the selected group there. */
-struct growth_view { const struct px_battle_data *data; uint32_t group; };
-enum { GROWTH_POINTER = 0x005d17ac, GROWTH_TABLE = 0x10000000 };
-static uint32_t growth_load32(void *user, uint32_t address)
-{
-    const struct growth_view *g = user;
-    if (address == GROWTH_POINTER) return GROWTH_TABLE;
-    const uint32_t at = address - GROWTH_TABLE - 8;
-    if (address < GROWTH_TABLE + 8 || at % 4 || at / 4 > 100 || g->group >= g->data->growth_count) return 0;
-    return g->data->growth[g->group][at / 4];
-}
+ * table through the pointer at 0x005d17ac (in the game's data segment) and
+ * then table + 8 + 4 x level. The guest holds that pointer cell and, at the
+ * start of the heap, the selected a/2/1/7 member behind an 8-byte header;
+ * the selection callback fills it (zeros for a species out of range). */
+enum { GROWTH_POINTER = 0x005d17ac, GROWTH_TABLE = PX_GUEST_HEAP };
+struct growth_view { const struct px_battle_data *data; uint8_t cell[4], table[8 + 4 * 101]; };
 static void growth_select(void *user, uint32_t species, uint32_t form)
 {
     (void)form;
     struct growth_view *g = user;
-    g->group = species < g->data->personal_count ? g->data->personal[species].growth : UINT32_MAX;
+    const uint32_t group = species < g->data->personal_count ? g->data->personal[species].growth : UINT32_MAX;
+    memset(g->table, 0, sizeof g->table);
+    for (unsigned l = 0; group < g->data->growth_count && l <= 100; ++l)
+        for (unsigned k = 0; k < 4; ++k) g->table[8 + 4 * l + k] = (uint8_t)(g->data->growth[group][l] >> (8 * k));
 }
 
 uint8_t px_battle_level_for(const struct px_battle_data *d, uint16_t species, uint32_t exp)
 {
     if (!d->growth || species >= d->personal_count) return 1;
-    struct growth_view view = {d, 0};
-    struct px_pokemon_api memory;
-    memset(&memory, 0, sizeof memory);
-    memory.user = &view;
-    memory.load32 = growth_load32;
+    struct growth_view view;
+    memset(&view, 0, sizeof view);
+    view.data = d;
+    for (unsigned k = 0; k < 4; ++k) view.cell[k] = (uint8_t)(GROWTH_TABLE >> (8 * k));
+    struct px_guest guest;
+    px_guest_init(&guest);
+    px_guest_map_view(&guest, GROWTH_POINTER, 4, PX_GUEST_READ | PX_GUEST_WRITE, view.cell, "growth pointer");
+    px_guest_map_view(&guest, GROWTH_TABLE, sizeof view.table, PX_GUEST_READ, view.table, "growth table");
+    const struct px_pokemon_api memory = px_guest_pokemon_api(&guest);
     struct px_data_api api = {&memory, &view, growth_select};
     return (uint8_t)px_pokemon_level_from_growth(species, 0, exp, &api);
 }

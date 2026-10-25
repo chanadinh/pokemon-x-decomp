@@ -1,0 +1,28 @@
+Platform layer validation, 2026-10-25
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video and dummy audio, the software renderer. Not run
+on the local WSL host or native Windows, and no sound was heard on real
+hardware. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (new: test_guest, test_fs, test_hid_clock, test_audio, test_pica_shader,
+   test_thread, tests/test_bch_platform_viewer.py).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection: every platform test, the
+   battle, save and platform viewer suites, pica_probe on the 8 game DVLBs
+   and on 400 truncated or bit-flipped copies of them: no diagnostics.
+4. Earlier records against this viewer: ../bch-route/verify_route.py output
+   identical to ../bch-battle/route-recheck.json (328 zones, every count,
+   the four captures byte for byte); ../bch-catch, ../bch-save, ../bch-party
+   and ../bch-battle-motion verifiers pass; ../bch-pokemon and ../bch-battle
+   pass their table steps and differ only in their runtime steps, as later
+   records already note (battle_model lines now carry motions; battle_end
+   now carries experience and balls).
+5. verify_shaders.py: 977 models, 8,023 shader resources, 8 distinct DVLBs;
+   all decode; 11 vertex entries x 256 bool combinations run to END; 3
+   geometry entries stop at EMIT/SETEMIT as expected.
+
+Not established: the shader interpreter's output against hardware or the
+game (inputs and uniforms in the survey are placeholders); the audio path on
+the game's own sound files; that the HID mapping, clock and thread behaviour
+match the system's services beyond what 3dbrew documents.

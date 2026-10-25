@@ -4,65 +4,32 @@
 #include <string.h>
 
 #include "../../reconstructed/pokemon_data/pokemon_data.h"
+#include "../platform/guest.h"
 
-/* The reconstructed codec reaches memory through logical ARM addresses; this
- * adapter maps the manager, one record, its extension and the block-order
- * table. Any other access is an error. */
-enum { MANAGER = 0x10000000, DATA = 0x10000100, EXTRA = 0x10000200, TABLE = 0x00570eec };
+/* The reconstructed codec reaches memory through 32-bit guest addresses:
+ * the guest maps the manager, one record and its extension in the heap, and
+ * the block-order table at its game address 0x00570eec (rodata, read-only).
+ * Any other access is a fault, reported as an error. */
+enum { MANAGER = PX_GUEST_HEAP, DATA = PX_GUEST_HEAP + 0x100, EXTRA = PX_GUEST_HEAP + 0x200, TABLE = 0x00570eec };
 struct space {
     uint8_t manager[0x10], data[0xe8], extra[0x1c];
-    const uint8_t *table;
-    int fault;
+    struct px_guest guest;
 };
-static uint8_t *at(struct space *s, uint32_t address, uint32_t width)
+static void space_init(struct space *s, const uint8_t table[128])
 {
-    if (address >= MANAGER && address + width <= MANAGER + sizeof s->manager) return s->manager + (address - MANAGER);
-    if (address >= DATA && address + width <= DATA + sizeof s->data) return s->data + (address - DATA);
-    if (address >= EXTRA && address + width <= EXTRA + sizeof s->extra) return s->extra + (address - EXTRA);
-    s->fault = 1;
-    return NULL;
+    memset(s->manager, 0, sizeof s->manager); memset(s->data, 0, sizeof s->data); memset(s->extra, 0, sizeof s->extra);
+    px_guest_init(&s->guest);
+    px_guest_map_view(&s->guest, MANAGER, sizeof s->manager, PX_GUEST_READ | PX_GUEST_WRITE, s->manager, "manager");
+    px_guest_map_view(&s->guest, DATA, sizeof s->data, PX_GUEST_READ | PX_GUEST_WRITE, s->data, "record");
+    px_guest_map_view(&s->guest, EXTRA, sizeof s->extra, PX_GUEST_READ | PX_GUEST_WRITE, s->extra, "extension");
+    px_guest_map_view(&s->guest, TABLE, 128, PX_GUEST_READ, (void *)table, "block order");
 }
-static uint8_t load8(void *user, uint32_t address)
-{
-    struct space *s = user;
-    if (address >= TABLE && address < TABLE + 128) return s->table[address - TABLE];
-    const uint8_t *p = at(s, address, 1);
-    return p ? p[0] : 0;
-}
-static uint16_t load16(void *user, uint32_t address)
-{
-    const uint8_t *p = at(user, address, 2);
-    return p ? (uint16_t)(p[0] | p[1] << 8) : 0;
-}
-static uint32_t load32(void *user, uint32_t address)
-{
-    const uint8_t *p = at(user, address, 4);
-    return p ? (uint32_t)p[0] | (uint32_t)p[1] << 8 | (uint32_t)p[2] << 16 | (uint32_t)p[3] << 24 : 0;
-}
-static void store8(void *user, uint32_t address, uint8_t v)
-{
-    uint8_t *p = at(user, address, 1);
-    if (p) p[0] = v;
-}
-static void store16(void *user, uint32_t address, uint16_t v)
-{
-    uint8_t *p = at(user, address, 2);
-    if (p) { p[0] = (uint8_t)v; p[1] = (uint8_t)(v >> 8); }
-}
-static void store32(void *user, uint32_t address, uint32_t v)
-{
-    uint8_t *p = at(user, address, 4);
-    if (p) for (unsigned k = 0; k < 4; ++k) p[k] = (uint8_t)(v >> (8 * k));
-}
-static struct px_pokemon_api api_for(struct space *s)
-{
-    struct px_pokemon_api a;
-    memset(&a, 0, sizeof a);
-    a.user = s;
-    a.load8 = load8; a.load16 = load16; a.load32 = load32;
-    a.store8 = store8; a.store16 = store16; a.store32 = store32;
-    return a;
-}
+#define load8(s, a) px_guest_load8(&(s)->guest, (a))
+#define load16(s, a) px_guest_load16(&(s)->guest, (a))
+#define load32(s, a) px_guest_load32(&(s)->guest, (a))
+#define store8(s, a, v) px_guest_store8(&(s)->guest, (a), (v))
+#define store16(s, a, v) px_guest_store16(&(s)->guest, (a), (v))
+#define store32(s, a, v) px_guest_store32(&(s)->guest, (a), (v))
 static void put16(uint8_t *p, uint32_t v) { p[0] = (uint8_t)v; p[1] = (uint8_t)(v >> 8); }
 static void put32(uint8_t *p, uint32_t v) { for (unsigned k = 0; k < 4; ++k) p[k] = (uint8_t)(v >> (8 * k)); }
 static uint32_t get16(const uint8_t *p) { return (uint32_t)p[0] | (uint32_t)p[1] << 8; }
@@ -102,9 +69,8 @@ int px_save_encode(struct px_save *save, const struct px_battle_data *d, const u
         if (!b->species || b->species >= d->personal_count) return fail(error, error_size, "party species out of range");
         if (!b->key) b->key = derive_key(b, i, save->trainer);
         struct space s;
-        memset(&s, 0, sizeof s);
-        s.table = table;
-        const struct px_pokemon_api a = api_for(&s);
+        space_init(&s, table);
+        const struct px_pokemon_api a = px_guest_pokemon_api(&s.guest);
         /* Bind (an initial encode of the empty record), then the setters in
          * the order the population routine uses them. */
         px_bind_pokemon_data(MANAGER, DATA, EXTRA, &a);
@@ -132,7 +98,7 @@ int px_save_encode(struct px_save *save, const struct px_battle_data *d, const u
         store16(&s, EXTRA + 8, b->hp);
         for (unsigned k = 0; k < 6; ++k) store16(&s, EXTRA + 0x0a + 2 * k, b->stats[k]);
         px_encode_pokemon_manager(MANAGER, &a);
-        if (s.fault) return fail(error, error_size, "codec accessed memory outside the record");
+        if (s.guest.fault) return fail(error, error_size, "codec accessed memory outside the record");
         memcpy(out + PX_SAVE_HEADER + i * PX_SAVE_SLOT, s.data, sizeof s.data);
         memcpy(out + PX_SAVE_HEADER + i * PX_SAVE_SLOT + sizeof s.data, s.extra, sizeof s.extra);
     }
@@ -155,11 +121,10 @@ int px_save_decode(const uint8_t *in, size_t size, const struct px_battle_data *
     save->balls = get32(in + 24); save->rng = get32(in + 28); save->trainer = get32(in + 32);
     for (uint32_t i = 0; i < save->party_count; ++i) {
         struct space s;
-        memset(&s, 0, sizeof s);
-        s.table = table;
+        space_init(&s, table);
         memcpy(s.data, in + PX_SAVE_HEADER + i * PX_SAVE_SLOT, sizeof s.data);
         memcpy(s.extra, in + PX_SAVE_HEADER + i * PX_SAVE_SLOT + sizeof s.data, sizeof s.extra);
-        const struct px_pokemon_api a = api_for(&s);
+        const struct px_pokemon_api a = px_guest_pokemon_api(&s.guest);
         /* An encoded record bound as it is stored: manager +8 data, +4 the
          * extension, +0x0c set (encoded), then decode (which checks). */
         store32(&s, MANAGER + 8, DATA); store32(&s, MANAGER + 4, EXTRA);
@@ -176,7 +141,7 @@ int px_save_decode(const uint8_t *in, size_t size, const struct px_battle_data *
         struct px_battler *b = &save->party[i];
         const uint16_t species = load16(&s, block_a);
         if (!px_battler_make(d, species, s.extra[4], iv, (uint8_t)load8(&s, block_a + 0x14), moves, b) ||
-            s.fault) return fail(error, error_size, "a party record does not form a Pokémon");
+            s.guest.fault) return fail(error, error_size, "a party record does not form a Pokémon");
         b->exp = load32(&s, block_a + 8);
         b->key = load32(&s, DATA);
         for (unsigned k = 0; k < 4; ++k) {

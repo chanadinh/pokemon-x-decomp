@@ -42,4 +42,11 @@ void px_battle_ui_draw_stage(uint8_t *rgba, uint32_t width, uint32_t height, con
                              unsigned modeled);
 void px_battle_ui_draw_hud(uint8_t *rgba, uint32_t width, uint32_t height, const struct px_battle_ui *ui,
                            const struct px_battle *battle);
+/* The bottom screen (320 x 240, the touch screen): the command, move and
+ * party choices as buttons, "Tap to continue" under messages. A tap at
+ * (x, y) acts like choosing that button (any tap turns a message page);
+ * returns 1 when it ran a battle turn. The layout is the viewer's own. */
+void px_battle_ui_draw_touch(uint8_t *rgba, uint32_t width, uint32_t height, const struct px_battle_ui *ui,
+                             const struct px_battle *battle);
+int px_battle_ui_touch(struct px_battle_ui *ui, struct px_battle *battle, int x, int y);
 #endif

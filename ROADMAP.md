@@ -48,7 +48,9 @@ by their zone's own Pawn script. Tall grass on Route 2 starts wild battles on
 the game's data, with stats from the reconstructed routines; wins give
 experience and level-ups, and Poké Balls add the catch to the party. 328 of 360
 zones load. The battle shows the Pokémon's own models with their idle,
-attack, damage and faint motions. The whole party battles (switching, replacing a fainted
+attack, damage and faint motions. A platform layer stands in for the 3DS services (guest memory, filesystem,
+HID with touch, clock, threads, audio) and a vertex shader interpreter that runs all the Pokémon models' programs; feeding it the models' vertices and uniforms is next.
+The whole party battles (switching, replacing a fainted
 Pokémon). The slice saves and loads (party records through the
 reconstructed codec). Battle effects, items, menus, story state, saving and audio are not
 implemented. See [the field slice](README.md#play-the-field-slice).

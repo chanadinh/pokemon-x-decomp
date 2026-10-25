@@ -506,3 +506,10 @@ party records through the reconstructed codec. See the
 The battle menu's POKéMON entry switches party members, and a fainted Pokémon is
 replaced from the party; see the [party record](reproduction/bch-party/README.txt).
 
+The viewer runs on `platform/`, which stands in for the 3DS: a 32-bit
+little-endian guest memory with code.bin mapped at its own addresses, RomFS /
+ExeFS / save archives, the HID pad with circle pad and touch screen
+(`--bottom-screen`, `--touch-play`), the system tick and 60 Hz frame, threads
+and sync objects, a DSP-style audio mixer with a BCWAV reader (`--sound`,
+`--list-sounds`), and a PICA vertex shader interpreter (`build/pica_probe`). See the [platform record](reproduction/platform/README.txt).
+

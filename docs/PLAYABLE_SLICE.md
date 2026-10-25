@@ -149,7 +149,7 @@ code or a reference capture behind it, not only a plausible native version.
 | 4. Return to the field with state preserved | The partner's HP, level, experience and moves, the party and the ball count persist after a battle | Battle-to-field transition and party/world state |
 | 5. Save and load | The slice's state round-trips through a documented file; party records through the reconstructed codec | The game's own save blocks (main save, boxes, bag, flags) |
 | 6. Reference comparisons | Static asset and code-byte checks | A recorded run (emulator or hardware) of the chosen scenario with states and frames to compare |
-| Audio | — | `sound/` BCSAR decoding and playback for the field and battle |
+| Audio | 24-voice DSP-style mixer (PCM8/16, DSP-ADPCM), BCWAV reader, SDL output; not yet tried on the game's sound archive | `sound/` BCSAR decoding and playback for the field and battle |
 
 The field and battle sides can proceed in parallel. The largest single items
 are the battle engine, the script VM and the reference capture.

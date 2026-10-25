@@ -15,12 +15,20 @@
 #include "game/battle.h"
 #include "game/battle_ui.h"
 #include "game/save.h"
+#include "platform/audio.h"
+#include "platform/audio_sdl.h"
+#include "platform/clock.h"
+#include "platform/fs.h"
+#include "platform/hid.h"
+#include "platform/thread.h"
+#include "platform/guest.h"
 #include "render/light.h"
 #include "render/raster.h"
 #include "render/skin.h"
 #include "render/text.h"
 
 #include <SDL.h>
+#include <ctype.h>
 #include <errno.h>
 #include <inttypes.h>
 #include <math.h>
@@ -49,6 +57,10 @@ struct options {
     int have_partner, have_partner_level, have_seed, have_encounter_rate, have_balls;
     const char *code_bin;
     const char *save_path, *load_path; /* --save / --load: the viewer save file (game/save.h) */
+    int bottom_screen;    /* --bottom-screen: the 3DS's second screen, the touch screen, below */
+    const char *touch_play; /* --touch-play F:X,Y;...: scripted taps on the bottom screen */
+    const char *sound;      /* --sound PATH[@OFFSET]: a BCWAV in the RomFS to play (looping as stored) */
+    const char *list_sounds; /* --list-sounds PATH: the BCWAVs inside a RomFS file */
     const char *play; /* --zone: scripted input during display */
     int silly; /* --silly: 0 none, 1 giant, 2 moonwalk (for fun; not game behaviour) */
     uint32_t entry, subentry, model, frames, section;
@@ -137,7 +149,55 @@ struct camera {
     int internal_w, internal_h; /* --zone: fixed render size, scaled to the window */
     int in_battle;     /* keys drive the battle menu instead */
     char battle_key;   /* U, D, L, R, '.' or 'x', or 0 */
+    /* The pad (platform/hid.h): host keys become 3DS buttons; the latches
+     * above are taken from its presses each frame. */
+    struct px_hid hid;
+    const struct px_hid_state *pad;
+    int bottom; /* --bottom-screen: taps reach the battle menu */
 };
+/* The bottom screen (320 x 240) below the top one in a 400 x 480 logical
+ * window, centred as on the 3DS. */
+enum { PX_BOTTOM_X = 40, PX_BOTTOM_Y = 240 };
+static struct { int enabled; SDL_Texture *texture; uint8_t rgba[PX_TOUCH_WIDTH * PX_TOUCH_HEIGHT * 4]; } g_bottom;
+/* The game's reading of the pad: a direction from the D-pad or the circle
+ * pad (up, down, left, right first), and in battle A confirms, B cancels. */
+static char pad_direction(uint32_t keys)
+{
+    return keys & (PX_KEY_DUP | PX_KEY_CPAD_UP) ? 'U' : keys & (PX_KEY_DDOWN | PX_KEY_CPAD_DOWN) ? 'D' :
+           keys & (PX_KEY_DLEFT | PX_KEY_CPAD_LEFT) ? 'L' : keys & (PX_KEY_DRIGHT | PX_KEY_CPAD_RIGHT) ? 'R' : 0;
+}
+static char pad_battle_key(uint32_t keys)
+{
+    const char d = pad_direction(keys);
+    return d ? d : keys & PX_KEY_A ? '.' : keys & PX_KEY_B ? 'x' : 0;
+}
+/* Host keyboard to the pad (an inspection mapping): WASD the D-pad (the
+ * arrows too in battle; in the field they turn the camera), Space/Return A,
+ * X/Backspace and Shift B (B held runs, as in the game). */
+static uint32_t host_held(int in_battle)
+{
+    const Uint8 *k = SDL_GetKeyboardState(NULL);
+    uint32_t keys = 0;
+    if (k[SDL_SCANCODE_W] || (in_battle && k[SDL_SCANCODE_UP])) keys |= PX_KEY_DUP;
+    if (k[SDL_SCANCODE_S] || (in_battle && k[SDL_SCANCODE_DOWN])) keys |= PX_KEY_DDOWN;
+    if (k[SDL_SCANCODE_A] || (in_battle && k[SDL_SCANCODE_LEFT])) keys |= PX_KEY_DLEFT;
+    if (k[SDL_SCANCODE_D] || (in_battle && k[SDL_SCANCODE_RIGHT])) keys |= PX_KEY_DRIGHT;
+    if (k[SDL_SCANCODE_SPACE] || k[SDL_SCANCODE_RETURN]) keys |= PX_KEY_A;
+    if (k[SDL_SCANCODE_X] || k[SDL_SCANCODE_BACKSPACE] || (SDL_GetModState() & KMOD_SHIFT)) keys |= PX_KEY_B;
+    return keys;
+}
+/* End of the host's input for a frame: the pad state, then the latches. */
+static void pad_frame(struct camera *c, uint32_t held)
+{
+    px_hid_set_held(&c->hid, held);
+    c->pad = px_hid_update(&c->hid);
+    const uint32_t down = c->pad->down;
+    if (c->in_battle) { const char k = pad_battle_key(down); if (k) c->battle_key = k; return; }
+    if (!c->zone) return;
+    const char d = pad_direction(down);
+    if (d) c->queued = d;
+    if (down & PX_KEY_A) c->interact = 1;
+}
 static int npc_at(const struct zone_state *zone, int x, int z)
 {
     for (uint32_t i = 0; zone && i < zone->npc_count; ++i)
@@ -372,6 +432,12 @@ static void usage(FILE *stream, const char *program)
         "  --encounter-rate N Percent chance per grass step, 0..100 (default 10)\n"
         "  --code-bin PATH    code.bin for the nature table (else natures are neutral)\n"
         "  --balls N          Poke Balls to start with, 0..999 (default 10)\n"
+        "  --bottom-screen    With --zone: show the 3DS bottom (touch) screen below;\n"
+        "                     click it to touch (battle commands are there)\n"
+        "  --touch-play F:X,Y;...  With --bottom-screen and --frames: tap (X, Y) of\n"
+        "                     the bottom screen during rendered frame F\n"
+        "  --sound PATH[@OFFSET]  Play the BCWAV at OFFSET of RomFS file PATH\n"
+        "  --list-sounds PATH With --romfs alone: list the BCWAVs inside RomFS file PATH\n"
         "  --save PATH        With --zone and --code-bin: F5 (or s in --play) saves the\n"
         "                     zone, position, party and balls to PATH\n"
         "  --load PATH        With --code-bin, instead of --zone: start from that save\n"
@@ -409,6 +475,31 @@ static int relative_path(const char *path)
     }
 }
 
+/* --touch-play: "F:X,Y" entries separated by ';', frames ascending,
+ * coordinates on the 320 x 240 bottom screen. */
+struct touch_tap { uint32_t frame; int x, y; };
+static int touch_script_next(const char **p, struct touch_tap *t)
+{
+    unsigned long f; int x, y, n = 0;
+    if (!**p || sscanf(*p, "%lu:%d,%d%n", &f, &x, &y, &n) != 3 || x < 0 || y < 0 || x >= PX_TOUCH_WIDTH ||
+        y >= PX_TOUCH_HEIGHT || f > UINT32_MAX) return 0;
+    t->frame = (uint32_t)f; t->x = x; t->y = y;
+    *p += n;
+    if (**p == ';') ++*p;
+    return 1;
+}
+static int touch_script_valid(const char *s)
+{
+    struct touch_tap t; int64_t last = -1;
+    const char *p = s;
+    if (!*p) return 0;
+    while (*p) {
+        if (!touch_script_next(&p, &t) || (int64_t)t.frame <= last) return 0;
+        last = t.frame;
+    }
+    return 1;
+}
+
 static int parse(int argc, char **argv, struct options *o)
 {
     for (int i = 1; i < argc; ++i) {
@@ -422,6 +513,7 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--triangle-list")) { o->triangle_list = 1; continue; }
         if (!strcmp(arg, "--combiners")) { o->combiners = 1; continue; }
         if (!strcmp(arg, "--no-props")) { o->no_props = 1; continue; }
+        if (!strcmp(arg, "--bottom-screen")) { o->bottom_screen = 1; continue; }
         if (!strcmp(arg, "--walk")) { o->walk = 1; continue; }
         if (!strcmp(arg, "--skinned")) { o->skinned = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
@@ -439,7 +531,8 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--capture-at") && strcmp(arg, "--threads") && strcmp(arg, "--silly") &&
             strcmp(arg, "--partner") && strcmp(arg, "--partner-level") && strcmp(arg, "--seed") &&
             strcmp(arg, "--encounter-rate") && strcmp(arg, "--code-bin") && strcmp(arg, "--balls") &&
-            strcmp(arg, "--save") && strcmp(arg, "--load")) return 0;
+            strcmp(arg, "--save") && strcmp(arg, "--load") && strcmp(arg, "--touch-play") &&
+            strcmp(arg, "--sound") && strcmp(arg, "--list-sounds")) return 0;
         if (++i == argc || !argv[i][0]) return 0;
         const char *value = argv[i];
         if (!strcmp(arg, "--romfs")) o->romfs = value;
@@ -450,13 +543,16 @@ static int parse(int argc, char **argv, struct options *o)
         else if (!strcmp(arg, "--player-archive")) o->player_archive = value;
         else if (!strcmp(arg, "--code-bin")) { if (o->code_bin) return 0; o->code_bin = value; }
         else if (!strcmp(arg, "--save")) { if (o->save_path) return 0; o->save_path = value; }
+        else if (!strcmp(arg, "--sound")) { if (o->sound) return 0; o->sound = value; }
+        else if (!strcmp(arg, "--list-sounds")) { if (o->list_sounds) return 0; o->list_sounds = value; }
+        else if (!strcmp(arg, "--touch-play")) { if (o->touch_play || !touch_script_valid(value)) return 0; o->touch_play = value; }
         else if (!strcmp(arg, "--load")) {
             /* The zone comes from the file (read in main); --zone must not be given too. */
             if (o->load_path || o->have_zone) return 0;
             o->load_path = value; o->have_zone = 1;
         }
         else if (!strcmp(arg, "--play")) {
-            if (o->play || strspn(value, "UDLRudlr.xs") != strlen(value) || strlen(value) > 4096) return 0;
+            if (o->play || !px_hid_script_valid(value) || strlen(value) > 4096) return 0;
             o->play = value;
         }
         else if (!strcmp(arg, "--steps")) {
@@ -549,7 +645,21 @@ static int parse(int argc, char **argv, struct options *o)
             else { if (!n) return 0; o->frames = n; }
         }
     }
+    if (o->list_sounds) {
+        /* A listing on its own: only --romfs. */
+        return o->romfs && !o->have_zone && !o->archive && !o->demo && !o->sound && px_fs_path_valid(o->list_sounds);
+    }
+    if (o->sound) {
+        const char *at = strchr(o->sound, '@');
+        char path[256];
+        const size_t n = at ? (size_t)(at - o->sound) : strlen(o->sound);
+        if (!o->romfs || n >= sizeof path) return 0;
+        memcpy(path, o->sound, n); path[n] = 0;
+        if (!px_fs_path_valid(path) || (at && !at[1])) return 0;
+        for (const char *d = at ? at + 1 : ""; *d; ++d) if (!isxdigit((unsigned char)*d) && *d != 'x') return 0;
+    }
     if ((o->have_arrive || o->play) && !o->have_zone) return 0;
+    if ((o->bottom_screen && !o->have_zone) || (o->touch_play && (!o->bottom_screen || !o->frames))) return 0;
     /* Saving and loading need the zone scene and code.bin (the record block order). */
     if ((o->save_path || o->load_path) && (!o->have_zone || !o->code_bin)) return 0;
     if (o->load_path && (o->have_arrive || o->have_partner || o->have_partner_level || o->have_balls || o->have_seed))
@@ -677,24 +787,37 @@ static void resource_free(struct resource *r)
     memset(r, 0, sizeof *r);
 }
 
+/* A RomFS GARC opened through the filesystem service; the stream stays
+ * open (borrowed by the archive) until romfs_garc_close. */
+struct romfs_garc { FILE *file; struct px_garc *garc; };
+static int romfs_garc_open(const char *path, struct romfs_garc *out, char *error, size_t error_size)
+{
+    memset(out, 0, sizeof *out);
+    const enum px_fs_result r = px_fs_open(PX_FS_ROMFS, path, &out->file);
+    if (r != PX_FS_OK) { snprintf(error, error_size, "%s: %s", path, px_fs_result_string(r)); return 0; }
+    if (!px_garc_open_file(out->file, &out->garc, error, error_size)) { fclose(out->file); out->file = NULL; return 0; }
+    return 1;
+}
+static void romfs_garc_close(struct romfs_garc *g)
+{
+    if (g->garc) px_garc_close(g->garc);
+    if (g->file) fclose(g->file);
+    memset(g, 0, sizeof *g);
+}
+
 static int read_resource(const char *romfs, const char *archive_path, uint32_t entry,
                          uint32_t subentry, int have_section, uint32_t section,
                          const char *label, struct resource *out)
 {
+    (void)romfs; /* mounted as the RomFS archive in main */
     memset(out, 0, sizeof *out);
     out->compression = out->section_compression = "none";
-    size_t a = strlen(romfs), b = strlen(archive_path);
-    if (a > SIZE_MAX - b - 2) return 0;
-    char *path = malloc(a + b + 2);
-    if (!path) return 0;
-    memcpy(path, romfs, a); path[a] = '/'; memcpy(path + a + 1, archive_path, b + 1);
-    char error[256]; struct px_garc *archive = NULL;
-    int ok = px_garc_open(path, &archive, error, sizeof error);
-    free(path);
+    char error[300]; struct romfs_garc archive;
+    int ok = romfs_garc_open(archive_path, &archive, error, sizeof error);
     if (!ok) { fprintf(stderr, "[model-viewer] %s archive: %s\n", label, error); return 0; }
-    ok = px_garc_read(archive, entry, subentry, 64 * 1024 * 1024,
+    ok = px_garc_read(archive.garc, entry, subentry, 64 * 1024 * 1024,
                       &out->member, &out->member_size, error, sizeof error);
-    px_garc_close(archive);
+    romfs_garc_close(&archive);
     if (!ok) { fprintf(stderr, "[model-viewer] %s member: %s\n", label, error); return 0; }
     const size_t size = out->member_size;
     out->data = out->member;
@@ -1537,11 +1660,7 @@ static int load_zone(const struct options *o, uint32_t zone, struct model_asset 
     }
     {
         /* Optional: without the story text archive NPCs still face the player. */
-        char path[512];
-        snprintf(path, sizeof path, "%s/a/0/8/2", o->romfs);
-        FILE *probe = fopen(path, "rb");
-        if (probe) {
-            fclose(probe);
+        if (px_fs_exists(PX_FS_ROMFS, "a/0/8/2")) {
             if (read_resource(o->romfs, "a/0/8/2", zs->text_id, 0, 0, 0, "story text", &r)) {
                 zs->has_text = px_gf_text_decode(r.data, r.size, &zs->text) == PX_GF_TEXT_OK;
                 resource_free(&r);
@@ -1714,6 +1833,7 @@ struct game_session {
     int have_natures;
     uint8_t block_table[128]; /* code.bin 0x00570eec: the party record block order (game/save.h) */
     int have_block_table;
+    struct px_guest image; int have_image, image_flat; /* the game's process image (platform/guest.h) */
     char **species_names, **move_names, **type_names;
     uint32_t species_name_count, move_name_count, type_name_count;
     uint32_t growth[8][101]; uint32_t growth_count;
@@ -1743,6 +1863,7 @@ struct game_session {
     struct options opts; int have_opts; /* the options battle models load with mid-battle (a switch) */
 };
 static struct game_session g_game;
+static char g_code_name[256] = "code.bin", g_save_name[256], g_load_name[256]; /* names inside their archives */
 
 static char **text_lines(const struct options *o, uint32_t file, uint32_t *count)
 {
@@ -1771,13 +1892,15 @@ static int game_load(const struct options *o)
     struct game_session *g = &g_game;
     if (g->loaded || g->failed) return g->loaded;
     g->failed = 1;
-    char error[256], path[1024];
+    char error[300];
+    const char *path;
     for (unsigned table = 0; table < 2; ++table) {
-        snprintf(path, sizeof path, "%s/%s", o->romfs, table ? "a/2/1/2" : "a/2/1/8");
-        struct px_garc *archive = NULL;
-        if (!px_garc_open(path, &archive, error, sizeof error)) {
+        path = table ? "a/2/1/2" : "a/2/1/8";
+        struct romfs_garc garc;
+        if (!romfs_garc_open(path, &garc, error, sizeof error)) {
             fprintf(stderr, "[model-viewer] battle data: %s\n", error); return 0;
         }
+        struct px_garc *archive = garc.garc;
         /* The personal archive's last entry is every entry concatenated. */
         const uint32_t count = (uint32_t)px_garc_count(archive) - (table ? 0 : 1);
         if (table) g->moves = calloc(count, sizeof *g->moves); else g->personal = calloc(count, sizeof *g->personal);
@@ -1789,40 +1912,59 @@ static int game_load(const struct options *o)
                  == PX_POKEDATA_OK;
             free(member);
         }
-        px_garc_close(archive);
+        romfs_garc_close(&garc);
         if (!ok) { fprintf(stderr, "[model-viewer] battle data: %s entries do not decode\n", path); return 0; }
         if (table) g->move_count = count; else g->personal_count = count;
     }
-    snprintf(path, sizeof path, "%s/DllBattle.cro", o->romfs);
-    FILE *f = fopen(path, "rb");
     uint8_t *cro = NULL;
     size_t cro_size = 0;
-    if (f) {
-        cro = malloc(1u << 21);
-        if (cro) cro_size = fread(cro, 1, 1u << 21, f);
-        fclose(f);
-    }
+    if (px_fs_read_all(PX_FS_ROMFS, "DllBattle.cro", 16u << 20, &cro, &cro_size) != PX_FS_OK) cro_size = 0;
     const enum px_pokedata_result chart = px_type_chart_decode(cro, cro_size, g->chart);
     free(cro);
     if (chart != PX_POKEDATA_OK) {
         fprintf(stderr, "[model-viewer] battle data: DllBattle.cro type chart: %s\n", px_pokedata_result_string(chart));
         return 0;
     }
-    if (o->code_bin && (f = fopen(o->code_bin, "rb"))) {
-        g->have_natures = !fseek(f, 0x470f6c, SEEK_SET) && fread(g->natures, 1, 125, f) == 125;
-        g->have_block_table = !fseek(f, 0x470eec, SEEK_SET) && fread(g->block_table, 1, 128, f) == 128;
-        fclose(f);
+    if (o->code_bin) {
+        /* The process image: code.bin mapped as the exheader places its
+         * segments (exheader.bin beside it), else at code.bin offset =
+         * address - 0x00100000 (how its page-aligned segments lie). The game
+         * tables are then read at their own addresses. */
+        uint8_t *code = NULL, *ex = NULL;
+        size_t code_size = 0, ex_size = 0;
+        if (px_fs_read_all(PX_FS_EXEFS, g_code_name, 64u << 20, &code, &code_size) == PX_FS_OK) {
+            const int have_ex = px_fs_read_all(PX_FS_EXEFS, "exheader.bin", 4096, &ex, &ex_size) == PX_FS_OK;
+            px_guest_init(&g->image);
+            g->have_image = have_ex && px_guest_map_image(&g->image, code, code_size, ex, ex_size);
+            if (!g->have_image) {
+                px_guest_free(&g->image);
+                g->have_image = px_guest_map(&g->image, PX_GUEST_CODE, (uint32_t)code_size,
+                                             PX_GUEST_READ | PX_GUEST_EXECUTE, code, code_size, "code.bin");
+                g->image_flat = 1;
+            }
+            if (g->have_image) {
+                for (uint32_t k = 0; k < 125; ++k) g->natures[k] = px_guest_load8(&g->image, 0x00570f6c + k);
+                for (uint32_t k = 0; k < 128; ++k) g->block_table[k] = px_guest_load8(&g->image, 0x00570eec + k);
+                g->have_natures = g->have_block_table = g->image.fault == PX_FAULT_NONE;
+                if (!o->silent)
+                    printf("process_image source=%s regions=%u fault=%s\n",
+                           g->image_flat ? "code.bin-flat" : "code.bin+exheader", g->image.region_count,
+                           px_guest_fault_string(g->image.fault));
+            }
+        }
+        free(code); free(ex);
     }
     /* Growth tables (a/2/1/7, 101 u32 per group) and every learnset (a/2/1/4). */
     for (unsigned table = 0; table < 2; ++table) {
-        snprintf(path, sizeof path, "%s/%s", o->romfs, table ? "a/2/1/4" : "a/2/1/7");
-        struct px_garc *archive = NULL;
-        if (!px_garc_open(path, &archive, error, sizeof error)) {
+        path = table ? "a/2/1/4" : "a/2/1/7";
+        struct romfs_garc garc;
+        if (!romfs_garc_open(path, &garc, error, sizeof error)) {
             fprintf(stderr, "[model-viewer] battle data: %s\n", error); return 0;
         }
+        struct px_garc *archive = garc.garc;
         uint32_t count = (uint32_t)px_garc_count(archive);
         if (!table && count > 8) count = 8;
-        if (table && !(g->learnsets = calloc(count ? count : 1, sizeof *g->learnsets))) { px_garc_close(archive); return 0; }
+        if (table && !(g->learnsets = calloc(count ? count : 1, sizeof *g->learnsets))) { romfs_garc_close(&garc); return 0; }
         int ok = 1;
         for (uint32_t i = 0; ok && i < count; ++i) {
             uint8_t *member = NULL; size_t size = 0;
@@ -1836,7 +1978,7 @@ static int game_load(const struct options *o)
             }
             free(member);
         }
-        px_garc_close(archive);
+        romfs_garc_close(&garc);
         if (!ok) { fprintf(stderr, "[model-viewer] battle data: %s entries do not decode\n", path); return 0; }
         if (table) g->learnset_count = count; else g->growth_count = count;
     }
@@ -1867,13 +2009,13 @@ static int game_pokemon(const struct options *o, uint16_t species, uint8_t level
     /* Read raw: learnset members are not compressed, and a first move id of
      * 16 or 17 would look like an LZ header. */
     static struct px_learnset learnset;
-    char error[256], path[1024];
-    snprintf(path, sizeof path, "%s/a/2/1/4", o->romfs);
-    struct px_garc *archive = NULL;
+    (void)o;
+    char error[300];
+    struct romfs_garc garc;
     uint8_t *member = NULL; size_t size = 0;
-    if (!px_garc_open(path, &archive, error, sizeof error)) { fprintf(stderr, "[model-viewer] learnsets: %s\n", error); return 0; }
-    const int read = px_garc_read(archive, species, 0, 1u << 20, &member, &size, error, sizeof error);
-    px_garc_close(archive);
+    if (!romfs_garc_open("a/2/1/4", &garc, error, sizeof error)) { fprintf(stderr, "[model-viewer] learnsets: %s\n", error); return 0; }
+    const int read = px_garc_read(garc.garc, species, 0, 1u << 20, &member, &size, error, sizeof error);
+    romfs_garc_close(&garc);
     const enum px_pokedata_result lr = read ? px_learnset_decode(member, size, &learnset) : PX_POKEDATA_TRUNCATED;
     free(member);
     if (lr != PX_POKEDATA_OK) return 0;
@@ -1939,12 +2081,12 @@ static int game_save(const struct options *o, const struct model_asset *asset)
     }
     memcpy(g->party, save.party, sizeof g->party); /* keys assigned on first save stay */
     g->partner.key = g->party[0].key;
-    snprintf(temporary, sizeof temporary, "%s.tmp", path);
-    FILE *f = fopen(temporary, "wb");
-    int ok = f && fwrite(file, 1, sizeof file, f) == sizeof file;
-    if (f && fclose(f)) ok = 0;
-    if (ok) ok = !rename(temporary, path);
-    if (!ok) { remove(temporary); fprintf(stderr, "[model-viewer] save: cannot write %s\n", path); return 0; }
+    (void)temporary;
+    const enum px_fs_result written = px_fs_write_all(PX_FS_SAVE, o->save_path ? g_save_name : g_load_name, file,
+                                                      sizeof file);
+    if (written != PX_FS_OK) {
+        fprintf(stderr, "[model-viewer] save: %s: %s\n", path, px_fs_result_string(written)); return 0;
+    }
     printf("save path=%s zone=%" PRIu32 " world_tile=%" PRId32 ",%" PRId32 " facing=%u party=%" PRIu32
            " balls=%" PRIu32 " bytes=%u\n", path, save.zone, save.world_x, save.world_z, save.facing,
            save.party_count, save.balls, (unsigned)sizeof file);
@@ -1957,17 +2099,21 @@ static struct px_save g_loaded;
 static int game_restore(const struct options *o)
 {
     struct game_session *g = &g_game;
-    uint8_t file[PX_SAVE_SIZE + 1];
-    FILE *f = fopen(o->load_path, "rb");
-    const size_t size = f ? fread(file, 1, sizeof file, f) : 0;
-    if (f) fclose(f);
+    uint8_t *file = NULL;
+    size_t size = 0;
     char error[160];
-    if (!f) { fprintf(stderr, "[model-viewer] --load: cannot read %s\n", o->load_path); return 0; }
-    if (!game_load(o)) return 0;
-    if (!g->have_block_table) { fprintf(stderr, "[model-viewer] --load: code.bin block table not read\n"); return 0; }
-    if (!px_save_decode(file, size, &g->data, g->block_table, &g_loaded, error, sizeof error)) {
-        fprintf(stderr, "[model-viewer] --load: %s\n", error); return 0;
+    const enum px_fs_result read = px_fs_read_all(PX_FS_SAVE, g_load_name, PX_SAVE_SIZE + 1, &file, &size);
+    if (read != PX_FS_OK) {
+        fprintf(stderr, "[model-viewer] --load: cannot read %s: %s\n", o->load_path, px_fs_result_string(read));
+        return 0;
     }
+    if (!game_load(o)) { free(file); return 0; }
+    if (!g->have_block_table) {
+        free(file); fprintf(stderr, "[model-viewer] --load: code.bin block table not read\n"); return 0;
+    }
+    const int decoded = px_save_decode(file, size, &g->data, g->block_table, &g_loaded, error, sizeof error);
+    free(file);
+    if (!decoded) { fprintf(stderr, "[model-viewer] --load: %s\n", error); return 0; }
     g->party_count = g_loaded.party_count;
     memcpy(g->party, g_loaded.party, sizeof g->party);
     g->partner = g->party[0]; g->have_partner = 1;
@@ -2054,11 +2200,7 @@ static void battle_model_load(const struct options *o, unsigned side, uint16_t s
     if (!g->model_index_tried) {
         g->model_index_tried = 1;
         struct resource r = {0};
-        char path[1024];
-        snprintf(path, sizeof path, "%s/a/0/0/7", o->romfs);
-        FILE *probe = fopen(path, "rb");
-        if (probe) {
-            fclose(probe);
+        if (px_fs_exists(PX_FS_ROMFS, "a/0/0/7")) {
             if (read_resource(o->romfs, "a/0/0/7", 0, 0, 0, 0, "battle model index", &r) &&
                 (g->model_index = malloc(r.size ? r.size : 1))) {
                 memcpy(g->model_index, r.data, r.size); g->model_index_size = r.size;
@@ -2145,11 +2287,26 @@ static void battle_begin(void)
 }
 
 /* One battle input; ends the battle after its last page. */
+static void battle_after(uint32_t before);
 static void battle_input(char key)
 {
     struct game_session *g = &g_game;
     const uint32_t before = g->ui.phase == PX_UI_MESSAGES ? g->ui.page_count : 0;
     px_battle_ui_input(&g->ui, &g->battle, key);
+    battle_after(before);
+}
+/* A tap on the bottom screen in battle. */
+static void battle_touch(int x, int y)
+{
+    struct game_session *g = &g_game;
+    const uint32_t before = g->ui.phase == PX_UI_MESSAGES ? g->ui.page_count : 0;
+    printf("touch x=%d y=%d phase=%d\n", x, y, (int)g->ui.phase);
+    px_battle_ui_touch(&g->ui, &g->battle, x, y);
+    battle_after(before);
+}
+static void battle_after(uint32_t before)
+{
+    struct game_session *g = &g_game;
     if (g->ui.phase == PX_UI_MESSAGES && g->ui.page_count > before)
         for (uint32_t i = before; i < g->ui.page_count; ++i)
             printf("battle turn=%" PRIu32 " message=\"%s\"\n", g->battle.turn, g->ui.pages[i]);
@@ -2305,16 +2462,16 @@ static void event(struct camera *c, const SDL_Event *e)
     if (e->type == SDL_QUIT) c->running = 0;
     if (e->type != SDL_KEYDOWN) return;
     if (c->in_battle) {
-        /* Battle menu: WASD or arrows move the cursor, Space/Return confirm,
-         * X/Backspace cancel, Escape still exits. */
+        /* Battle menu: the pad (WASD or arrows, Space/Return A, X/Backspace
+         * B); Escape still exits. */
         switch (e->key.keysym.sym) {
         case SDLK_ESCAPE: c->running = 0; break;
-        case SDLK_w: case SDLK_UP: c->battle_key = 'U'; break;
-        case SDLK_s: case SDLK_DOWN: c->battle_key = 'D'; break;
-        case SDLK_a: case SDLK_LEFT: c->battle_key = 'L'; break;
-        case SDLK_d: case SDLK_RIGHT: c->battle_key = 'R'; break;
-        case SDLK_SPACE: case SDLK_RETURN: c->battle_key = '.'; break;
-        case SDLK_x: case SDLK_BACKSPACE: c->battle_key = 'x'; break;
+        case SDLK_w: case SDLK_UP: px_hid_press(&c->hid, PX_KEY_DUP); break;
+        case SDLK_s: case SDLK_DOWN: px_hid_press(&c->hid, PX_KEY_DDOWN); break;
+        case SDLK_a: case SDLK_LEFT: px_hid_press(&c->hid, PX_KEY_DLEFT); break;
+        case SDLK_d: case SDLK_RIGHT: px_hid_press(&c->hid, PX_KEY_DRIGHT); break;
+        case SDLK_SPACE: case SDLK_RETURN: px_hid_press(&c->hid, PX_KEY_A); break;
+        case SDLK_x: case SDLK_BACKSPACE: px_hid_press(&c->hid, PX_KEY_B); break;
         case SDLK_F5: c->save_request = 1; break; /* saved once back on the field */
         default: break;
         }
@@ -2329,11 +2486,11 @@ static void event(struct camera *c, const SDL_Event *e)
     case SDLK_PLUS: case SDLK_EQUALS: case SDLK_KP_PLUS: c->zoom *= 1.25; break;
     case SDLK_MINUS: case SDLK_KP_MINUS: c->zoom /= 1.25; break;
     case SDLK_r: case SDLK_HOME: reset(c); break;
-    case SDLK_w: if (c->zone) c->queued = 'U'; else if (c->walk) walk_step(c->walk, 'U'); break;
-    case SDLK_s: if (c->zone) c->queued = 'D'; else if (c->walk) walk_step(c->walk, 'D'); break;
-    case SDLK_a: if (c->zone) c->queued = 'L'; else if (c->walk) walk_step(c->walk, 'L'); break;
-    case SDLK_d: if (c->zone) c->queued = 'R'; else if (c->walk) walk_step(c->walk, 'R'); break;
-    case SDLK_SPACE: case SDLK_RETURN: if (c->zone) c->interact = 1; break;
+    case SDLK_w: if (c->zone) px_hid_press(&c->hid, PX_KEY_DUP); else if (c->walk) walk_step(c->walk, 'U'); break;
+    case SDLK_s: if (c->zone) px_hid_press(&c->hid, PX_KEY_DDOWN); else if (c->walk) walk_step(c->walk, 'D'); break;
+    case SDLK_a: if (c->zone) px_hid_press(&c->hid, PX_KEY_DLEFT); else if (c->walk) walk_step(c->walk, 'L'); break;
+    case SDLK_d: if (c->zone) px_hid_press(&c->hid, PX_KEY_DRIGHT); else if (c->walk) walk_step(c->walk, 'R'); break;
+    case SDLK_SPACE: case SDLK_RETURN: if (c->zone) px_hid_press(&c->hid, PX_KEY_A); break;
     case SDLK_F5: if (c->zone) c->save_request = 1; break;
     default: break;
     }
@@ -2363,8 +2520,13 @@ static int input_test(struct camera *c)
     reset(c);
     if (c->zone) {
         /* Zone mode queues steps for the controller instead of moving. */
-        if (!inject(c, SDLK_d) || c->queued != 'R' || !inject(c, SDLK_w) || c->queued != 'U' ||
-            !inject(c, SDLK_SPACE) || !c->interact) return 0;
+        if (!inject(c, SDLK_d)) return 0;
+        pad_frame(c, 0);
+        if (c->queued != 'R' || !inject(c, SDLK_w)) return 0;
+        pad_frame(c, 0);
+        if (c->queued != 'U' || !inject(c, SDLK_SPACE)) return 0;
+        pad_frame(c, 0);
+        if (!c->interact) return 0;
         c->queued = 0; c->interact = 0;
         fprintf(stderr, "[model-viewer] Input self-test passed: orbit, zoom, reset, Escape, WASD queue, talk.\n");
         return 1;
@@ -3049,6 +3211,27 @@ static int draw_battle_models(struct px_raster_target *target)
     return 1;
 }
 
+/* The bottom screen: the battle's touch menu, or in the field the party. */
+static void draw_bottom_screen(void)
+{
+    uint8_t *rgba = g_bottom.rgba;
+    const uint32_t w = PX_TOUCH_WIDTH, h = PX_TOUCH_HEIGHT;
+    if (g_game.active) { px_battle_ui_draw_touch(rgba, w, h, &g_game.ui, &g_game.battle); return; }
+    static const uint8_t back[4] = {214, 228, 214, 255}, ink[4] = {40, 48, 40, 255};
+    px_text_rect(rgba, w, h, 0, 0, (int)w, (int)h, back);
+    char line[96];
+    px_text_draw(rgba, w, h, 10, 8, "PARTY", ink, 1);
+    for (uint32_t i = 0; i < g_game.party_count; ++i) {
+        const struct px_battler *b = &g_game.party[i];
+        snprintf(line, sizeof line, "%s  Lv%u  HP %u/%u", b->species < g_game.species_name_count ?
+                 g_game.species_names[b->species] : "?", b->level, b->hp, b->stats[0]);
+        px_text_draw(rgba, w, h, 16, 28 + 18 * (int)i, line, ink, 1);
+    }
+    if (!g_game.party_count) px_text_draw(rgba, w, h, 16, 28, "(your partner joins at the first encounter)", ink, 1);
+    snprintf(line, sizeof line, "Poke Balls: %u", (unsigned)(g_game.loaded ? g_game.balls : 0));
+    px_text_draw(rgba, w, h, 10, 220, line, ink, 1);
+}
+
 static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *asset,
                              const struct camera *camera, const struct frame_buffers *b,
                              struct px_raster_target *target, SDL_Texture **frame,
@@ -3104,7 +3287,7 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
      * counted first frame is drawn in one pass. */
     const unsigned bands = g_game.active ? 0 : counts ? 1 : b->bands;
     struct band_job jobs[PX_MAX_BANDS];
-    SDL_Thread *threads[PX_MAX_BANDS] = {0};
+    struct px_thread *threads[PX_MAX_BANDS] = {0};
     for (unsigned k = 0; k < bands; ++k) {
         struct band_job *j = &jobs[k];
         j->asset = asset; j->view = &v;
@@ -3119,7 +3302,7 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
         j->ok = 0;
     }
     for (unsigned k = 1; k < bands; ++k)
-        if (!(threads[k] = SDL_CreateThread(band_thread, "band", &jobs[k]))) band_thread(&jobs[k]);
+        if (!(threads[k] = px_thread_create(band_thread, &jobs[k], "band", 0x30, -2))) band_thread(&jobs[k]);
     int all = 1;
     if (bands) {
         jobs[0].ok = draw_scene(asset, &v, jobs[0].points, jobs[0].normals, jobs[0].player_points,
@@ -3134,15 +3317,21 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
         px_battle_ui_draw_hud(target->rgba, target->width, target->height, &g_game.ui, &g_game.battle);
     }
     for (unsigned k = 1; k < bands; ++k) {
-        if (threads[k]) SDL_WaitThread(threads[k], NULL);
+        if (threads[k]) px_thread_join(threads[k]);
         all &= jobs[k].ok;
     }
     if (!all) return 0;
     if (asset->zone && asset->zone->page_count && !g_game.active)
         px_text_window(target->rgba, target->width, target->height, asset->zone->pages[asset->zone->page],
                        asset->zone->page + 1 < asset->zone->page_count);
-    if (SDL_UpdateTexture(*frame, NULL, target->rgba, w * 4) ||
-        SDL_RenderClear(renderer) || SDL_RenderCopy(renderer, *frame, NULL, NULL)) return 0;
+    const SDL_Rect top = {0, 0, w, h}, bottom = {PX_BOTTOM_X, PX_BOTTOM_Y, PX_TOUCH_WIDTH, PX_TOUCH_HEIGHT};
+    if (SDL_UpdateTexture(*frame, NULL, target->rgba, w * 4) || SDL_RenderClear(renderer) ||
+        SDL_RenderCopy(renderer, *frame, NULL, g_bottom.enabled ? &top : NULL)) return 0;
+    if (g_bottom.enabled) {
+        draw_bottom_screen();
+        if (SDL_UpdateTexture(g_bottom.texture, NULL, g_bottom.rgba, PX_TOUCH_WIDTH * 4) ||
+            SDL_RenderCopy(renderer, g_bottom.texture, NULL, &bottom)) return 0;
+    }
     if (path && !capture(renderer, path, out_w, out_h)) return 0;
     SDL_RenderPresent(renderer); return 1;
 raster_error:
@@ -3271,28 +3460,30 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
         char key = c->battle_key;
         c->battle_key = 0; c->queued = 0; c->interact = 0;
         if (!key && c->play && *c->play) {
-            key = *c->play++;
-            if (key == 's') { c->save_request = 1; key = 0; } /* saved once back on the field */
-            else if (key >= 'a' && key != 'x') key = (char)(key - 'a' + 'A');
+            const char next = *c->play++;
+            if (next == 's') c->save_request = 1; /* saved once back on the field */
+            else key = pad_battle_key(px_hid_script_buttons(next));
         }
         if (key) battle_input(key);
+        else if (c->bottom && c->pad && (c->pad->down & PX_KEY_TOUCH)) battle_touch(c->pad->touch_x, c->pad->touch_y);
         c->in_battle = g_game.active;
         return 1;
     }
     if (!zm->stepping && !asset->zone->page_count) {
-        const Uint8 *keys = SDL_GetKeyboardState(NULL);
-        char direction = keys[SDL_SCANCODE_W] ? 'U' : keys[SDL_SCANCODE_S] ? 'D' : keys[SDL_SCANCODE_A] ? 'L' :
-                         keys[SDL_SCANCODE_D] ? 'R' : c->queued;
+        const uint32_t held = c->pad ? c->pad->held : 0;
+        char direction = pad_direction(held & (PX_KEY_DPAD | PX_KEY_CPAD));
+        if (!direction) direction = c->queued;
         c->queued = 0;
-        int run = (SDL_GetModState() & KMOD_SHIFT) != 0;
+        int run = (held & PX_KEY_B) != 0;
         if (!direction && c->play && *c->play) {
-            /* --play: one scripted input per free controller frame. */
+            /* --play: one scripted pad input per free controller frame. */
             const char next = *c->play++;
+            const uint32_t buttons = px_hid_script_buttons(next);
             if (next == 's') c->save_request = 1;
-            else if (next == '.') c->interact = 1;
+            else if (buttons & PX_KEY_A) c->interact = 1;
             else {
-                run = next >= 'a';
-                direction = (char)(next >= 'a' ? next - 'a' + 'A' : next);
+                run = (buttons & PX_KEY_B) != 0;
+                direction = pad_direction(buttons);
             }
         }
         if (c->save_request) { c->save_request = 0; game_save(o, asset); }
@@ -3368,6 +3559,81 @@ static int zone_frame(const struct options *o, struct model_asset *asset, struct
     return 1;
 }
 
+/* --sound / --list-sounds: BCWAVs read through the filesystem service. */
+static const char *const encoding_names[] = {"pcm8", "pcm16", "dsp-adpcm"};
+static int sound_split(const char *spec, char *path, size_t size, uint64_t *offset)
+{
+    const char *at = strchr(spec, '@');
+    const size_t n = at ? (size_t)(at - spec) : strlen(spec);
+    if (n >= size) return 0;
+    memcpy(path, spec, n); path[n] = 0;
+    *offset = at ? strtoull(at + 1, NULL, 0) : 0;
+    return 1;
+}
+static int list_sounds(const char *path)
+{
+    uint8_t *data = NULL; size_t size = 0;
+    const enum px_fs_result r = px_fs_read_all(PX_FS_ROMFS, path, (size_t)1 << 31, &data, &size);
+    if (r != PX_FS_OK) { fprintf(stderr, "[model-viewer] --list-sounds: %s: %s\n", path, px_fs_result_string(r)); return 0; }
+    uint32_t found = 0, valid = 0;
+    for (size_t at = 0; at + 4 <= size; ++at) {
+        if (memcmp(data + at, "CWAV", 4)) continue;
+        struct px_audio_wave waves[2]; uint32_t channels;
+        const int result = px_cwav_decode(data + at, size - at, waves, &channels);
+        ++found;
+        if (result != PX_CWAV_OK) { printf("sound offset=0x%zx result=\"%s\"\n", at, px_cwav_result_string(result)); continue; }
+        ++valid;
+        printf("sound offset=0x%zx channels=%" PRIu32 " encoding=%s rate=%" PRIu32 " samples=%" PRIu32 " loop=%d loop_start=%" PRIu32 "\n",
+               at, channels, encoding_names[waves[0].encoding], waves[0].rate, waves[0].samples, waves[0].loop, waves[0].loop_start);
+    }
+    printf("sounds path=%s bytes=%zu cwav_magics=%" PRIu32 " decoded=%" PRIu32 "\n", path, size, found, valid);
+    free(data);
+    return 1;
+}
+/* The --sound voice(s) and the device; silent (with a note) when the host
+ * has no audio. */
+static struct px_audio g_audio;
+static struct px_audio_device *g_audio_device;
+static uint8_t *g_sound_file;
+static void sound_start(const struct options *o)
+{
+    char path[256], error[256];
+    uint64_t offset = 0;
+    if (!o->sound || !sound_split(o->sound, path, sizeof path, &offset)) return;
+    size_t size = 0;
+    const enum px_fs_result r = px_fs_read_all(PX_FS_ROMFS, path, (size_t)1 << 31, &g_sound_file, &size);
+    if (r != PX_FS_OK || offset >= size) {
+        fprintf(stderr, "[model-viewer] --sound: %s: %s\n", path, r != PX_FS_OK ? px_fs_result_string(r) : "offset beyond the file");
+        return;
+    }
+    struct px_audio_wave waves[2]; uint32_t channels;
+    const int result = px_cwav_decode(g_sound_file + offset, size - (size_t)offset, waves, &channels);
+    if (result != PX_CWAV_OK) { fprintf(stderr, "[model-viewer] --sound: %s\n", px_cwav_result_string(result)); return; }
+    px_audio_init(&g_audio, PX_DSP_RATE);
+    int ok = channels == 1 ? px_audio_play(&g_audio, 0, &waves[0], 1, 1) :
+             px_audio_play(&g_audio, 0, &waves[0], 1, 0) && px_audio_play(&g_audio, 1, &waves[1], 0, 1);
+    if (!ok) { fprintf(stderr, "[model-viewer] --sound: the wave does not decode\n"); px_audio_free(&g_audio); return; }
+    g_audio_device = px_audio_device_open(&g_audio, error, sizeof error);
+    printf("audio driver=%s mix_rate=%u device_rate=%" PRIu32 " voices=%d sound=%s@0x%" PRIx64 " channels=%" PRIu32
+           " encoding=%s rate=%" PRIu32 " samples=%" PRIu32 " loop=%d\n", g_audio_device ? px_audio_device_driver() : "none",
+           (unsigned)PX_DSP_RATE, px_audio_device_rate(g_audio_device), PX_AUDIO_VOICES, path, offset, channels,
+           encoding_names[waves[0].encoding], waves[0].rate, waves[0].samples, waves[0].loop);
+    if (!g_audio_device) fprintf(stderr, "[model-viewer] audio device: %s (continuing silently)\n", error);
+}
+static void sound_stop(void)
+{
+    px_audio_device_close(g_audio_device); g_audio_device = NULL;
+    px_audio_free(&g_audio);
+    free(g_sound_file); g_sound_file = NULL;
+}
+
+static uint64_t host_now_ns(void *user)
+{
+    (void)user;
+    const Uint64 count = SDL_GetPerformanceCounter(), rate = SDL_GetPerformanceFrequency();
+    return (uint64_t)(count / rate) * 1000000000u + (uint64_t)(count % rate) * 1000000000u / rate;
+}
+
 static int window(const struct options *o, struct model_asset *asset)
 {
     const struct px_cgfx_model *mesh = o->textured && !asset->bch_textured ?
@@ -3376,8 +3642,8 @@ static int window(const struct options *o, struct model_asset *asset)
     SDL_Window *win = SDL_CreateWindow(o->textured ?
         "Pokemon X unlit textured preview — arrows: orbit | +/-: zoom | R: reset | Esc: exit" :
         "Pokemon X wireframe — arrows: orbit | +/-: zoom | R: reset | Esc: exit",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, asset->zone ? 800 : 960, asset->zone ? 480 : 640,
-        SDL_WINDOW_RESIZABLE);
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, asset->zone ? 800 : 960,
+        asset->zone ? (o->bottom_screen ? 960 : 480) : 640, SDL_WINDOW_RESIZABLE);
     SDL_Renderer *renderer = NULL; int ok = 0;
     SDL_Texture *frame = NULL; struct px_raster_target target = {0};
     struct frame_buffers b;
@@ -3387,8 +3653,21 @@ static int window(const struct options *o, struct model_asset *asset)
     if (!renderer) renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_SOFTWARE);
     if (!renderer) goto done;
     if (!buffers_alloc(o, asset, &b)) goto done;
+    if (o->bottom_screen && asset->zone) {
+        /* Two screens in a 400 x 480 logical window: SDL scales it and maps
+         * the mouse into it. */
+        g_bottom.enabled = 1;
+        g_bottom.texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING,
+                                             PX_TOUCH_WIDTH, PX_TOUCH_HEIGHT);
+        if (!g_bottom.texture || SDL_RenderSetLogicalSize(renderer, 400, 480)) goto done;
+    }
+    sound_start(o);
     struct camera c;
     memset(&c, 0, sizeof c);
+    c.bottom = g_bottom.enabled;
+    const char *taps = o->touch_play;
+    struct touch_tap tap = {0};
+    int have_tap = taps && touch_script_next(&taps, &tap);
     c.walk = asset->walk ? &asset->walker : NULL;
     c.zone = asset->zone != NULL;
     c.play = o->play;
@@ -3415,17 +3694,38 @@ static int window(const struct options *o, struct model_asset *asset)
     }
     struct zone_motion zm;
     memset(&zm, 0, sizeof zm);
-    const uint64_t start_ticks = SDL_GetTicks64();
-    uint64_t frame_ticks = start_ticks;
+    /* The frame clock (platform/clock.h): fixed for runs with --frames, so
+     * they repeat; live otherwise, paced to 60 Hz. */
+    struct px_clock clock;
+    px_clock_init(&clock, o->frames != 0, host_now_ns, NULL);
+    px_hid_init(&c.hid);
     if (asset->zone) zone_title(win, asset);
     while (c.running) {
         SDL_Event e; while (SDL_PollEvent(&e)) event(&c, &e);
         if (!c.running) break;
+        /* The touch screen: the left mouse button on the bottom screen, or a
+         * scripted tap for this frame. */
+        if (c.bottom) {
+            int touching = 0, tx = 0, ty = 0;
+            if (have_tap && tap.frame == frames) {
+                touching = 1; tx = tap.x; ty = tap.y;
+                have_tap = touch_script_next(&taps, &tap);
+            } else if (!o->frames) {
+                int mx, my; float lx, ly;
+                if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON_LMASK) {
+                    SDL_RenderWindowToLogical(renderer, mx, my, &lx, &ly);
+                    tx = (int)lx - PX_BOTTOM_X; ty = (int)ly - PX_BOTTOM_Y;
+                    touching = tx >= 0 && ty >= 0 && tx < PX_TOUCH_WIDTH && ty < PX_TOUCH_HEIGHT;
+                }
+            }
+            px_hid_touch(&c.hid, touching, tx, ty);
+        }
+        pad_frame(&c, o->frames ? 0 : host_held(c.in_battle));
         const char *path = frames == o->capture_at ? o->capture : NULL;
         if (asset->zone) {
             int swapped = 0;
             const char before = asset->zone->message[0];
-            const uint64_t now = o->frames ? (uint64_t)frames * 1000 / 60 : SDL_GetTicks64() - start_ticks;
+            const uint64_t now = px_clock_ms(&clock);
             if (!zone_frame(o, asset, &c, &zm, now, &swapped)) { SDL_SetError("zone frame failed"); goto done; }
             if (swapped && !buffers_alloc(o, asset, &b)) goto done;
             (void)before;
@@ -3476,18 +3776,17 @@ static int window(const struct options *o, struct model_asset *asset)
                 putchar('\n');
             }
         if (++frames == o->frames) break;
-        if (asset->zone) {
-            /* --zone paces to about 60 Hz: wait only for what rendering left. */
-            const uint64_t spent = SDL_GetTicks64() - frame_ticks;
-            if (spent < 16) SDL_Delay((Uint32)(16 - spent));
-            frame_ticks = SDL_GetTicks64();
-        } else SDL_Delay(16);
+        const uint64_t wait = px_clock_end_frame(&clock);
+        if (wait) SDL_Delay((Uint32)((wait + 999999) / 1000000));
     }
     fprintf(stderr, "[model-viewer] Exit after %" PRIu32 " frames.\n", frames); ok = 1;
 done:
     if (!ok) fprintf(stderr, "[model-viewer] Runtime: %s\n", SDL_GetError());
     buffers_free(&b);
     px_raster_free(&target); if (frame) SDL_DestroyTexture(frame);
+    sound_stop();
+    if (g_bottom.texture) SDL_DestroyTexture(g_bottom.texture);
+    g_bottom.texture = NULL; g_bottom.enabled = 0;
     if (renderer) SDL_DestroyRenderer(renderer);
     if (win) SDL_DestroyWindow(win);
     SDL_Quit();
@@ -3652,9 +3951,23 @@ int main(int argc, char **argv)
     struct options o = {0}; int parsed = parse(argc, argv, &o);
     if (parsed != 1) { usage(parsed == 2 ? stdout : stderr, argv[0]); return parsed == 2 ? 0 : 1; }
     struct model_asset asset = {0};
+    /* The filesystem service: the RomFS, the ExeFS inputs and the save
+     * archive are mounted on the host paths the options name. */
+    px_fs_reset();
+    if (o.romfs) px_fs_mount(PX_FS_ROMFS, o.romfs, 0);
+    if (o.code_bin && px_fs_mount_file(PX_FS_EXEFS, o.code_bin, 0, g_code_name, sizeof g_code_name) != PX_FS_OK) {
+        fprintf(stderr, "[model-viewer] --code-bin: invalid path\n"); return 1;
+    }
     if (o.load_path) {
+        if (px_fs_mount_file(PX_FS_SAVE, o.load_path, 1, g_load_name, sizeof g_load_name) != PX_FS_OK) {
+            fprintf(stderr, "[model-viewer] --load: invalid path\n"); return 1;
+        }
         if (!game_restore(&o)) return 1;
         o.zone = g_loaded.zone;
+    }
+    if (o.list_sounds) return list_sounds(o.list_sounds) ? 0 : 1;
+    if (o.save_path && px_fs_mount_file(PX_FS_SAVE, o.save_path, 1, g_save_name, sizeof g_save_name) != PX_FS_OK) {
+        fprintf(stderr, "[model-viewer] --save: invalid path\n"); return 1;
     }
     if (o.have_zone) {
         if (!load_zone(&o, o.zone, &asset)) { asset_free(&asset); return 1; }

@@ -613,3 +613,37 @@ motions load as it is sent out.
 From a saved game, an independent model predicts the next wild encounter
 and every message of the switch turn, down to the damage, and the viewer
 matches it. See the [party record](../native/reproduction/bch-party/README.txt).
+
+## Standing in for the 3DS
+
+<img src="images/native-bch-two-screens.png" alt="Both 3DS screens: the battle on top, the move buttons on the touch screen below" width="400">
+
+A port has to provide what the console provided. The viewer now runs on its
+own platform layer:
+
+- **Memory.** The game's code expects a 32-bit, little-endian machine with
+  4-byte pointers, so the reconstructed code sees exactly that, on any PC.
+  `code.bin` is laid out at the addresses its exheader gives, and the code
+  reads the game's tables where the game does: the nature table, the shuffle
+  order of saved Pokémon records, the experience table pointer.
+- **Files.** RomFS, the ExeFS inputs and the save archive are mounted
+  archives; nothing can reach outside them, and saves are written atomically.
+- **Input.** Keyboard and mouse become the 3DS pad: the buttons, the circle
+  pad and the touch screen, read once per frame as the game reads them.
+  `--bottom-screen` shows the touch screen below the top one; in battle the
+  commands are buttons there, as on the 3DS.
+- **Time and threads.** The system tick and a 60 Hz frame clock (fixed for
+  recorded runs, so they repeat exactly), and threads, mutexes, events and
+  semaphores.
+- **Sound.** A 24-voice mixer at the DSP's rate playing PCM and DSP-ADPCM,
+  and a reader for the game's BCWAV sounds (`--list-sounds`, `--sound`).
+  The RomFS copied over so far has no `sound/` folder, so it has only heard
+  test tones yet.
+- **Shaders.** The fragment side of the 3DS GPU was already replaced; now
+  there is a reader and interpreter for its vertex shader programs too. All
+  977 Pokémon models share just 8 programs, and every vertex program runs.
+  The viewer does not use them yet.
+
+Everything recorded before still comes out the same: all 328 zones, every
+prop and NPC placement, and the field captures byte for byte. See the
+[platform record](../native/reproduction/platform/README.txt).

@@ -10,16 +10,19 @@ RECON = ../reconstructed
 STATS_SOURCES = $(RECON)/pokemon_stats/stats_math.c $(RECON)/pokemon_data/pokemon_data.c \
 	$(RECON)/pokemon_data/pokemon_codec.c $(RECON)/pokemon_data/pokemon_fields.c \
 	$(RECON)/pokemon_constructor/pokemon_constructor.c $(RECON)/pokemon_constructor/pokemon_parameters.c
+# The platform layer (platform/): guest memory is part of every build that runs reconstructed code.
+GAME_CORE = $(STATS_SOURCES) platform/guest.c platform/fs.c
+PLATFORM_SOURCES = platform/hid.c platform/clock.c platform/thread_sdl.c platform/audio.c platform/audio_sdl.c
 ASSET_SOURCES = assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/texture.c assets/cgfx.c assets/bch_texture.c assets/field.c
 ASSET_HEADERS = assets/garc.h assets/lz.h assets/bclim.h assets/etc1.h assets/texture.h assets/cgfx.h assets/bch_texture.h assets/field.h
-MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c assets/bch_texture.c assets/field.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c render/tev.c render/light.c render/skin.c assets/gf_motion.c assets/zone.c assets/gf_script.c assets/gf_text.c assets/zone_talk.c render/text.c assets/pokedata.c game/battle.c game/battle_ui.c game/save.c $(STATS_SOURCES)
-MODEL_HEADERS = assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h render/skin.h assets/bch_scene.h assets/gf_motion.h assets/zone.h assets/gf_script.h assets/gf_text.h assets/zone_talk.h render/text.h render/text_glyphs.inc assets/pokedata.h game/battle.h game/battle_ui.h game/save.h
+MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c assets/bch_texture.c assets/field.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c render/tev.c render/light.c render/skin.c assets/gf_motion.c assets/zone.c assets/gf_script.c assets/gf_text.c assets/zone_talk.c render/text.c assets/pokedata.c game/battle.c game/battle_ui.c game/save.c $(GAME_CORE) $(PLATFORM_SOURCES)
+MODEL_HEADERS = platform/audio.h platform/audio_sdl.h platform/guest.h platform/fs.h platform/hid.h platform/clock.h platform/thread.h assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h render/skin.h assets/bch_scene.h assets/gf_motion.h assets/zone.h assets/gf_script.h assets/gf_text.h assets/zone_talk.h render/text.h render/text_glyphs.inc assets/pokedata.h game/battle.h game/battle_ui.h game/save.h
 FIELD_SOURCES = assets/field.c assets/garc.c assets/lz.c
 FIELD_HEADERS = assets/field.h assets/garc.h assets/lz.h
-CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script build/test_pokedata build/test_battle build/test_save
+CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script build/test_pokedata build/test_battle build/test_save build/test_guest build/test_fs build/test_hid_clock build/test_audio build/test_pica_shader
 
 .PHONY: all test test-core test-runtime clean check-sdl
-all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer
+all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/pica_probe
 
 check-sdl:
 	@test -n "$(SDL_LIBS)" || { echo 'SDL2 not configured: install SDL2 development files or set SDL_CFLAGS and SDL_LIBS.' >&2; exit 1; }
@@ -72,11 +75,32 @@ build/test_gf_script: assets/gf_script.c assets/gf_script.h assets/zone_talk.c a
 build/test_pokedata: assets/pokedata.c assets/pokedata.h assets/test_pokedata.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/pokedata.c assets/test_pokedata.c $(LDFLAGS) $(LDLIBS) -o $@
 
-build/test_battle: game/battle.c game/battle.h game/battle_ui.c game/battle_ui.h game/test_battle.c assets/pokedata.c render/text.c $(STATS_SOURCES) | build
-	$(CC) $(CPPFLAGS) $(CFLAGS) game/battle.c game/battle_ui.c game/test_battle.c assets/pokedata.c render/text.c $(STATS_SOURCES) $(LDFLAGS) $(LDLIBS) -lm -o $@
+build/test_battle: game/battle.c game/battle.h game/battle_ui.c game/battle_ui.h game/test_battle.c assets/pokedata.c render/text.c $(GAME_CORE) | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) game/battle.c game/battle_ui.c game/test_battle.c assets/pokedata.c render/text.c $(GAME_CORE) $(LDFLAGS) $(LDLIBS) -lm -o $@
 
-build/test_save: game/save.c game/save.h game/test_save.c game/battle.c game/battle.h assets/pokedata.c $(STATS_SOURCES) | build
-	$(CC) $(CPPFLAGS) $(CFLAGS) game/save.c game/test_save.c game/battle.c assets/pokedata.c $(STATS_SOURCES) $(LDFLAGS) $(LDLIBS) -lm -o $@
+build/test_guest: platform/guest.c platform/guest.h platform/test_guest.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) platform/guest.c platform/test_guest.c $(LDFLAGS) $(LDLIBS) -o $@
+
+build/test_fs: platform/fs.c platform/fs.h platform/test_fs.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) platform/fs.c platform/test_fs.c $(LDFLAGS) $(LDLIBS) -o $@
+
+build/test_hid_clock: platform/hid.c platform/hid.h platform/clock.c platform/clock.h platform/test_hid_clock.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) platform/hid.c platform/clock.c platform/test_hid_clock.c $(LDFLAGS) $(LDLIBS) -o $@
+
+build/test_thread: platform/thread_sdl.c platform/thread.h platform/test_thread.c | build check-sdl
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) platform/thread_sdl.c platform/test_thread.c $(LDFLAGS) $(SDL_LIBS) -o $@
+
+build/pica_probe: platform/pica_shader.c platform/pica_shader.h platform/pica_probe.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) platform/pica_shader.c platform/pica_probe.c $(LDFLAGS) $(LDLIBS) -lm -o $@
+
+build/test_pica_shader: platform/pica_shader.c platform/pica_shader.h platform/test_pica_shader.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) platform/pica_shader.c platform/test_pica_shader.c $(LDFLAGS) $(LDLIBS) -lm -o $@
+
+build/test_audio: platform/audio.c platform/audio.h platform/test_audio.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) platform/audio.c platform/test_audio.c $(LDFLAGS) $(LDLIBS) -lm -o $@
+
+build/test_save: game/save.c game/save.h game/test_save.c game/battle.c game/battle.h assets/pokedata.c $(GAME_CORE) | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) game/save.c game/test_save.c game/battle.c assets/pokedata.c $(GAME_CORE) $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/test_zone: assets/zone.c assets/zone.h assets/test_zone.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/zone.c assets/test_zone.c $(LDFLAGS) $(LDLIBS) -lm -o $@
@@ -133,12 +157,18 @@ test test-core: $(CORE_TESTS)
 	./build/test_pokedata
 	./build/test_battle
 	./build/test_save
+	./build/test_guest
+	mkdir -p build/fs-test && ./build/test_fs build/fs-test
+	./build/test_hid_clock
+	./build/test_audio
+	./build/test_pica_shader
 	python3 -m unittest discover -s tests -p test_container.py -v
 	python3 -m unittest discover -s tests -p test_bch.py -v
 	python3 -m unittest discover -s tests -p test_pica_commands.py -v
 	python3 -m unittest discover -s tests -p test_bch_model.py -v
 
-test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer
+test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/test_thread
+	./build/test_thread
 	./build/pokemon_asset_viewer --demo --inspect
 	SDL_VIDEODRIVER=dummy ./build/pokemon_asset_viewer --demo --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_viewer.py -v
@@ -158,6 +188,7 @@ test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemo
 	python3 -m unittest discover -s tests -p test_bch_town_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_battle_viewer.py -v
 	python3 -m unittest discover -s tests -p test_bch_save_viewer.py -v
+	python3 -m unittest discover -s tests -p test_bch_platform_viewer.py -v
 	SDL_VIDEODRIVER=dummy ./build/pokemon_field_viewer --demo --software --frames 3 --self-test-input
 	python3 -m unittest discover -s tests -p test_field_viewer.py -v
 

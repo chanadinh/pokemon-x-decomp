@@ -1,0 +1,43 @@
+{
+ "date": "2026-10-25",
+ "baseline_commit": "b49c5d2f3e02031832244a3c19270176ced3f0f2",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video and dummy audio, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "5fa3c346867a2112ea602ccb15d43b98c903527c05f3baae95adace27ca16efd",
+  "Makefile": "b6fdece15c75d73599d4e085fb61daba58ac6a54653866113458c87816967b06",
+  "game/battle.c": "2c068ab0a850c712cf54c0d4ea9c2c0c312a0160db6bb61c2100ee4801a29c45",
+  "game/battle_ui.c": "847f78c2cc9eef63c892adec9e0c1c3da5ec7ea83d3855f2927c8818253e3532",
+  "game/battle_ui.h": "2dcdecd9f2c755ae8bc4ee17f0f2c140562969a40ea399c3790d533c4b6226da",
+  "game/save.c": "7ccc43140815d66fdc5e8a5707d15a834b087dc271f8e1bff165b87320013cfd",
+  "game/test_battle.c": "45b1ae309fa241a35b178b07afda016867e6b4b87ef521bbf2e2c376a45b7647",
+  "platform/guest.h": "15b44779b0c5dae6b538cfcaf88a628bf0fbe22a3a9207b68c507538f51aca0e",
+  "platform/guest.c": "884ef7e89debac8f39f94c7a4d45a2633144f93be79217d3ce80f1f94a68a072",
+  "platform/test_guest.c": "c73f11a0b8f86b71f17e190341f8b63104d2e9614ba760d1907929404bfb62c1",
+  "platform/fs.h": "7610e1a360ea4155a2e6259e2dae4ae6922b215e538776db22e95107645c0915",
+  "platform/fs.c": "d4c9697f51648de66911ca946b719efa491d6c3a3ab9626fc308b93e6d12afe7",
+  "platform/test_fs.c": "24208b4970bd5e62e7a136e4fc25a8b62d061fddbf40b0e9bbaf1aea153c667a",
+  "platform/hid.h": "c4ef1b6af296f38720d701161b99eeaaffaaf85b94be446c279be222b5d2214d",
+  "platform/hid.c": "1357559a76aba41388f1cb28122641a5ddf78268cff9b652acaaaa38a70b6cfb",
+  "platform/clock.h": "3dfd5594145e58a1ea5727df5c672d0330a0761982bf62e1d6d150185f4c859f",
+  "platform/clock.c": "515298266c24ad01b3ac0b0239ed5a8a10dcaaafd0766af13802457ad496d8d9",
+  "platform/test_hid_clock.c": "ae8d10f569c9ee4d782cf21b93cd1c6d1b15a7c34462a9774361e0973dc79c1b",
+  "platform/thread.h": "0456d092bec45c280091201326f9fd4aa5b2aebb831587c7a3b64d555d71370a",
+  "platform/thread_sdl.c": "2d2bbd7e217bbe21e309e26113e993e95e15195e21d418061d292ef123b7a204",
+  "platform/test_thread.c": "673fc265a19bacd27386ec579ab21904f1e4c02e233b015c959ab143eeb49356",
+  "platform/audio.h": "e5d1f64a254396a0f70ac7ec9ca13364bcb1fefb72ca5d632c211bc5a1df103a",
+  "platform/audio.c": "c31ebc1d11909c00c6293355f0b169505cbd0d74ab65ada1387aff8eb88c565e",
+  "platform/audio_sdl.h": "4ef3fc59fa6535b9eff3e0909582ea42e09a7ccf80bcd217f8564c6b18216d5a",
+  "platform/audio_sdl.c": "fb7a278553163fca2c9836c66f4537aa15992820fd6b698b32277ac7c7cb4ea5",
+  "platform/test_audio.c": "30e0df578604a23452d6f3477d043a92ba82ac456e313dcf899f280211e8bfdb",
+  "platform/pica_shader.h": "67f5874b8f0b92eb282f6a96df0fbeaf8ea5af675167faffa0caa65834bbce53",
+  "platform/pica_shader.c": "3d8615c471e306217d0c96d9bb20526dc49900bde55e07127a2ee655e0adec84",
+  "platform/test_pica_shader.c": "4d4975e1f9c3fb3df3c38163903e4537435f581b75ca7413352b8a3a6798125c",
+  "platform/pica_probe.c": "963f062d780201033f514363151437bf6b29a77bcfbc1468f2e03064302620cd",
+  "tests/test_bch_platform_viewer.py": "4d6cc7d6999e0813da0debba87510b680748822bb9d16b0ea36339897b37dc4e",
+  "reproduction/platform/verify_shaders.py": "02f7f7f0677eb08b328321ab018048941248fcd8750365b549bb7290935a90bc"
+ },
+ "image": {
+  "docs/images/native-bch-two-screens.png": "d3af5f4eac291cc528fe47ed3bfaf16cefd853aa33e088a766a1924a025ef76a"
+ }
+}

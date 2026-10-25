@@ -242,3 +242,79 @@ void px_battle_ui_draw(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_ba
     px_battle_ui_draw_stage(rgba, w, h, b, 0);
     px_battle_ui_draw_hud(rgba, w, h, ui, b);
 }
+
+/* ---------------------------------------------------------------- touch */
+/* The bottom screen (320 x 240), where the game puts its battle commands:
+ * the viewer's own layout of buttons, tapped through the touch screen. */
+struct box { int x0, y0, x1, y1; };
+static const struct box command_boxes[4] = {
+    {20, 16, 300, 108}, {20, 120, 154, 172}, {166, 120, 300, 172}, {90, 184, 230, 228}};
+static const struct box move_boxes[4] = {{10, 10, 155, 92}, {165, 10, 310, 92}, {10, 102, 155, 184}, {165, 102, 310, 184}};
+static const struct box back_box = {110, 198, 210, 232};
+static struct box party_box(uint32_t i) { return (struct box){10, 4 + 32 * (int)i, 310, 32 + 32 * (int)i}; }
+static int inside(struct box b, int x, int y) { return x >= b.x0 && x < b.x1 && y >= b.y0 && y < b.y1; }
+
+static void button(uint8_t *rgba, uint32_t w, uint32_t h, struct box b, const char *label, int lit)
+{
+    static const uint8_t frame[4] = {64, 72, 88, 255}, face[4] = {236, 240, 248, 255}, hot[4] = {252, 220, 200, 255};
+    static const uint8_t ink[4] = {40, 40, 48, 255};
+    px_text_rect(rgba, w, h, b.x0, b.y0, b.x1, b.y1, frame);
+    px_text_rect(rgba, w, h, b.x0 + 2, b.y0 + 2, b.x1 - 2, b.y1 - 2, lit ? hot : face);
+    const int width = 6 * (int)strlen(label); /* close enough for centring ASCII labels */
+    px_text_draw(rgba, w, h, (b.x0 + b.x1 - width) / 2, (b.y0 + b.y1) / 2 - 4, label, ink, 1);
+}
+
+void px_battle_ui_draw_touch(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_battle_ui *ui,
+                             const struct px_battle *b)
+{
+    static const uint8_t back[4] = {200, 212, 228, 255}, ink[4] = {40, 40, 48, 255};
+    px_text_rect(rgba, w, h, 0, 0, (int)w, (int)h, back);
+    char line[96], buffer[16];
+    if (ui->phase == PX_UI_COMMAND) {
+        snprintf(line, sizeof line, "BALL x%u", (unsigned)b->balls);
+        const char *label[4] = {"FIGHT", line, "POKéMON", "RUN"};
+        for (int k = 0; k < 4; ++k) button(rgba, w, h, command_boxes[k], label[k], ui->cursor == k);
+    } else if (ui->phase == PX_UI_MOVES) {
+        for (int k = 0; k < 4; ++k) {
+            const uint16_t id = b->side[0].moves[k];
+            if (id) snprintf(line, sizeof line, "%s %u/%u", name_of(ui->move_names, ui->move_count, id, buffer, sizeof buffer),
+                             b->side[0].pp[k], b->data->moves[id].pp);
+            else snprintf(line, sizeof line, "-");
+            button(rgba, w, h, move_boxes[k], line, ui->cursor == k);
+        }
+        button(rgba, w, h, back_box, "BACK", 0);
+    } else if (ui->phase == PX_UI_PARTY) {
+        for (uint32_t i = 0; i < b->party_count; ++i) {
+            const struct px_battler *p = &b->party[i];
+            snprintf(line, sizeof line, "%s Lv%u %u/%u", name_of(ui->species_names, ui->species_count, p->species,
+                     buffer, sizeof buffer), p->level, p->hp, p->stats[0]);
+            button(rgba, w, h, party_box(i), line, ui->cursor == (int)i);
+        }
+        if (!ui->forced) button(rgba, w, h, back_box, "BACK", 0);
+    } else if (ui->phase == PX_UI_MESSAGES) {
+        px_text_draw(rgba, w, h, 100, 116, "Tap to continue", ink, 1);
+    }
+}
+
+int px_battle_ui_touch(struct px_battle_ui *ui, struct px_battle *b, int x, int y)
+{
+    switch (ui->phase) {
+    case PX_UI_MESSAGES: return px_battle_ui_input(ui, b, '.');
+    case PX_UI_COMMAND:
+        for (int k = 0; k < 4; ++k)
+            if (inside(command_boxes[k], x, y)) { ui->cursor = k; return px_battle_ui_input(ui, b, '.'); }
+        return 0;
+    case PX_UI_MOVES:
+        if (inside(back_box, x, y)) return px_battle_ui_input(ui, b, 'x');
+        for (int k = 0; k < 4; ++k)
+            if (inside(move_boxes[k], x, y)) { ui->cursor = k; return px_battle_ui_input(ui, b, '.'); }
+        return 0;
+    case PX_UI_PARTY:
+        if (!ui->forced && inside(back_box, x, y)) return px_battle_ui_input(ui, b, 'x');
+        for (uint32_t i = 0; i < b->party_count; ++i)
+            if (inside(party_box(i), x, y)) { ui->cursor = (int)i; return px_battle_ui_input(ui, b, '.'); }
+        return 0;
+    case PX_UI_DONE: return 0;
+    }
+    return 0;
+}

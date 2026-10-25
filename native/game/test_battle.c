@@ -195,6 +195,26 @@ int main(void)
                !strcmp(x.log[x.log_count - 1], "You have no more Pokémon that can fight!"));
         assert(!px_battle_send_out(&x, 1, species, 4, names, 6));
     }
+    {   /* The touch screen: taps choose buttons, any tap turns a page. */
+        static uint8_t bottom[320 * 240 * 4];
+        px_battle_start(&x, &data, &a, &b, 11);
+        px_battle_ui_start(&ui, &x, species, 4, names, 6, NULL);
+        assert(px_battle_ui_touch(&ui, &x, 5, 5) == 0 && ui.page == 1);
+        px_battle_ui_touch(&ui, &x, 300, 230);
+        assert(ui.phase == PX_UI_COMMAND);
+        px_battle_ui_draw_touch(bottom, 320, 240, &ui, &x);
+        assert(px_battle_ui_touch(&ui, &x, 5, 235) == 0 && ui.phase == PX_UI_COMMAND); /* between buttons */
+        px_battle_ui_touch(&ui, &x, 160, 60);                                          /* FIGHT */
+        assert(ui.phase == PX_UI_MOVES);
+        px_battle_ui_draw_touch(bottom, 320, 240, &ui, &x);
+        px_battle_ui_touch(&ui, &x, 160, 215);                                         /* BACK */
+        assert(ui.phase == PX_UI_COMMAND);
+        px_battle_ui_touch(&ui, &x, 160, 60);
+        assert(px_battle_ui_touch(&ui, &x, 80, 140) == 1 && !strcmp(ui.pages[0], "Froakie used Growl!")); /* slot 2 */
+        while (ui.phase == PX_UI_MESSAGES) px_battle_ui_touch(&ui, &x, 1, 1);
+        assert(px_battle_ui_touch(&ui, &x, 160, 206) == 1 && !strcmp(ui.pages[0], "Got away safely!"));   /* RUN */
+        px_battle_ui_draw_touch(bottom, 320, 240, &ui, &x);
+    }
     /* Experience and levels: growth group 0 is level^3 (a/2/1/7 layout). */
     static uint32_t growth[1][101];
     for (unsigned l = 0; l <= 100; ++l) growth[0][l] = l * l * l;

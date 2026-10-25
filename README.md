@@ -24,9 +24,10 @@ account of what remains unknown.
 
 **The destination is a native PC game. Today you can walk out of the player's
 house into Vaniville Town, open doors and talk to the townspeople with the game's
-own lines, and fight wild Pokémon in the tall grass of Route 2. Menus, story
-events are not there yet, so this is not yet a playable
-port.**
+own lines, and fight wild Pokémon in the tall grass of Route 2. It runs on a
+platform layer that stands in for the 3DS (memory, files, buttons and touch
+screen, clock, threads, audio), not on an emulator. Menus and story events are
+not there yet, so this is not yet a playable port.**
 
 | Zones that load | Townspeople who speak | Wild battles | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
@@ -59,10 +60,11 @@ native/build/pokemon_model_viewer --romfs /path/to/romfs --zone 5
 
 | Key | Action |
 | --- | --- |
-| W A S D | Walk (hold Shift to run) |
+| W A S D | Walk (hold Shift, or X, to run: the B button) |
 | Space or Enter | Talk to the person ahead; turn the page of a message; choose in battle |
 | X or Backspace | Go back in the battle menu |
 | F5 | Save (with `--save FILE` or `--load FILE`, and `--code-bin`) |
+| Mouse on the bottom screen | Touch (with `--bottom-screen`) |
 | Arrow keys, + / − | Turn and zoom the camera |
 | Esc | Quit |
 
@@ -74,7 +76,10 @@ game's species, moves and type chart, with experience, level-ups and Poké Balls
 that add the catch to your party, and the Pokémon's own animated 3D models.
 Your whole party fights: switch with POKéMON, and send in the next one when
 one faints. You can save and come back later.
-What is missing: battle effects, items, switching, menus, story events and sound. See the
+Add `--bottom-screen` for the 3DS touch screen with the battle commands on it.
+What is missing: battle effects, items, menus, story events, the game's own
+sound (the mixer is ready; the sound files have not been tried) and its vertex
+shaders. See the
 [town record](native/reproduction/bch-town/README.txt) for exactly what was
 checked.
 
