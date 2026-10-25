@@ -38,7 +38,9 @@ jobs:
       - name: Build Windows viewers
         shell: msys2 {0}
         run: |
-          make -C native all
+          SDL_CFLAGS="$(pkg-config --cflags sdl2)"
+          SDL_LIBS="$(pkg-config --libs sdl2)"
+          SDL_CFLAGS="$SDL_CFLAGS" SDL_LIBS="$SDL_LIBS" make -C native all
           mkdir -p release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/bin
           for executable in pokemon_asset_viewer pokemon_model_viewer pokemon_field_viewer pokemon_slice pica_probe shader_check; do
             cp "native/build/$executable.exe" "release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/bin/$executable.exe"
