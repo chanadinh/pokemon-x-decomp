@@ -1,0 +1,90 @@
+{
+  "input": {
+    "file": "code.bin",
+    "size": 5156864,
+    "sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a"
+  },
+  "verified_functions": [
+    {
+      "address": "0014f224",
+      "instruction_bytes": 108,
+      "instruction_bytes_sha256": "0367afd05ab5c1ab229620cc2105c4f6b4cca86a630bc08317c6985385d2ccb5",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "001685c0",
+      "instruction_bytes": 48,
+      "instruction_bytes_sha256": "6efa925722115bf5cd4af1ce6c8390d71c3c0f044387b1155601420445eb1421",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "001679f4",
+      "instruction_bytes": 180,
+      "instruction_bytes_sha256": "ae54f67765c6252c4d4a7421dc372d9debde7943cc65884869ac2d4092a4360b",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00167c38",
+      "instruction_bytes": 100,
+      "instruction_bytes_sha256": "7e04ca1f86d040bc420373dd5515178bdcdfadd9f48b33733695a1f6599b38e2",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0013a19c",
+      "instruction_bytes": 516,
+      "instruction_bytes_sha256": "e662c998b0c41f49dfcb9627efdf7af77bc2878a4c442e5741645bd7323fe60f",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "001685f0",
+      "instruction_bytes": 112,
+      "instruction_bytes_sha256": "3fe06bf300b306ff8666c11d229de4010853ad1a35eb8718e094bf219c894d7a",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00168660",
+      "instruction_bytes": 128,
+      "instruction_bytes_sha256": "43ed13e91ea244217e91f5a2c930a8febfbdc6b8bdb13d3c657e13e5144536cd",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0016b3d4",
+      "instruction_bytes": 116,
+      "instruction_bytes_sha256": "99b2f4309856ef69ef0176f21f84f889f90c44eedd6a7bb0f1f53fcfd0a3fcec",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0013ff50",
+      "instruction_bytes": 384,
+      "instruction_bytes_sha256": "7e748e2d64e2ca8ac04ed9e8f652626b8f0d15f69b1f5b5fbd9c3b4fad56df08",
+      "matches_original_input": true,
+      "decompiled": true
+    }
+  ],
+  "verified_literal_words": {
+    "0013a3a0": "d8105d00",
+    "001400d0": "83290000",
+    "0014f290": "90175d00",
+    "00167c9c": "d1020000",
+    "00167ca0": "78175d00",
+    "0016b448": "d4836400",
+    "0016b44c": "d8826400",
+    "0016b450": "ec0e5700"
+  },
+  "instruction_bytes": 1692,
+  "literal_bytes": 32,
+  "notes": [
+    "Each instruction and exported PC-relative literal compared at address minus 0x00100000.",
+    "Read-only, noanalysis Ghidra export; no project repair or saved project mutation.",
+    "Exports include explicit external dependencies, not only implemented functions.",
+    "Static evidence and synthetic host tests do not establish original-game execution equivalence."
+  ]
+}

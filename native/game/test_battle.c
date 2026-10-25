@@ -63,6 +63,20 @@ int main(void)
     assert(px_battler_make(&data, 1, 5, iv, 0, set, &a));
     assert(a.stats[0] == 20 && a.stats[1] == 12 && a.stats[2] == 10 && a.stats[3] == 13 && a.hp == 20);
     assert(a.pp[0] == 35 && a.pp[3] == 30);
+    {
+        struct px_battler named = a;
+        const uint16_t utf16[] = {'F', 0x00e9, 0x2640, 0xd83d, 0xde00, 0, 'X'};
+        assert(px_battler_set_name(&named, utf16, 7) && !memcmp(named.name, utf16, 6 * sizeof *utf16));
+        assert(named.name[6] == 0 && named.species == a.species && named.hp == a.hp);
+        const struct px_battler original = named;
+        const uint16_t token[] = {'A', 0x10, 0, 0}, missing[] = {'X', 'Y'};
+        assert(!px_battler_set_name(&named, token, 4) && !memcmp(&named, &original, sizeof named));
+        assert(!px_battler_set_name(&named, missing, 2) && !memcmp(&named, &original, sizeof named));
+        assert(!px_battler_set_name(&named, missing, 0) && !px_battler_set_name(&named, NULL, 0));
+        assert(!px_battler_set_name(NULL, utf16, 7));
+        /* An aliased source is captured before replacing/clearing the name. */
+        assert(px_battler_set_name(&named, named.name + 1, 12) && named.name[0] == 0x00e9 && named.name[4] == 0);
+    }
     assert(px_battler_make(&data, 2, 5, low, 0, set, &b) && b.stats[0] == 18 && b.stats[2] == 8);
     assert(!px_battler_make(&data, 4, 5, iv, 0, set, &g) && !px_battler_make(&data, 1, 0, iv, 0, set, &g));
     const uint16_t bad[4] = {1, 9, 0, 0};

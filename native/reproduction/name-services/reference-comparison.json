@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-25",
+  "native": {
+    "text_lines": 800,
+    "builder_cases": 724,
+    "resource_calls": 724,
+    "saved_names": 721,
+    "max_name_units": 11,
+    "plain_text_lines": 722,
+    "rejected_placeholder_lines": 78,
+    "block_selector_rows": 32,
+    "all_match": true
+  },
+  "independent": {
+    "all_match": true,
+    "block_selector_rows": 32,
+    "checksums": 721,
+    "independent_saved_names": 721,
+    "records_sha256": "81544edb6d1a286aa07e37b464ea866b9de23dd422799ebc0fc5fa95f84f5dae",
+    "text_member_sha256": "a7029cc4925bd658538b8daca1bbe2cbbdd40f2c869eea571660237d6dfb8a4f",
+    "viewer_saved_names": 2
+  },
+  "viewer_scenario": {
+    "scenario": "bch-save verify_save.py Route 2 catch/save/load/re-save",
+    "result": "passed",
+    "party_names_independently_compared": 2,
+    "load_then_save_identical": true,
+    "save_sha256": "f9f98a7d9462fac40e71d42712ab51f71a6816e1a936fd75087334ab8ae705f8"
+  },
+  "limitations": [
+    "Host reconstruction and static instruction evidence; no original ARM execution or captured running-game reference.",
+    "The native GF text decoder is shared by the C checker and viewer; the Python text/PK6 name comparison is independent.",
+    "Language/resource initialization and original message loading remain external."
+  ]
+}

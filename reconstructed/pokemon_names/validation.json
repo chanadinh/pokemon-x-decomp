@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-25",
+  "baseline_commit": "a28737ad23cdf0494fd04319f70abd54c2d5eaa2",
+  "prior_worktree": "Contains the earlier uncommitted move and learnset milestones.",
+  "environment": {
+    "platform": "Ubuntu 24.04 WSL2 x86_64",
+    "compiler": "GCC 13.2.0",
+    "python": "3.12.3",
+    "SDL": "2.30.0",
+    "setup": "source tools/native-sdl/activate.sh"
+  },
+  "evidence": {
+    "functions_exported": 9,
+    "new_routines": 4,
+    "instruction_bytes_verified": 1692,
+    "literal_bytes_verified": 32,
+    "writer_encoding_fallthrough_verified": true
+  },
+  "synthetic": {
+    "non_token_utf16_values": 65535,
+    "plain_lengths": 2051,
+    "token_count_prefix_following_cases": 128,
+    "form_index_cases": 945,
+    "writer_codec_cases": 3328,
+    "builder_capture_reload_cases": true,
+    "state_move_learnset_name_integration": true,
+    "native_unicode_alias_bounds_tests": true,
+    "valid_checksum_invalid_name_rejections": true
+  },
+  "original_data": {
+    "text_lines": 800,
+    "builder_cases": 724,
+    "resource_calls": 724,
+    "saved_names": 721,
+    "max_name_units": 11,
+    "plain_text_lines": 722,
+    "rejected_placeholder_lines": 78,
+    "block_selector_rows": 32,
+    "all_match": true
+  },
+  "independent_comparison": {
+    "all_match": true,
+    "block_selector_rows": 32,
+    "checksums": 721,
+    "independent_saved_names": 721,
+    "records_sha256": "81544edb6d1a286aa07e37b464ea866b9de23dd422799ebc0fc5fa95f84f5dae",
+    "text_member_sha256": "a7029cc4925bd658538b8daca1bbe2cbbdd40f2c869eea571660237d6dfb8a4f",
+    "viewer_saved_names": 2
+  },
+  "preservation": {
+    "earlier_checkpoints": 10,
+    "earlier_checkpoint_hashes": 599,
+    "earlier_files_compared": 815,
+    "earlier_native_reproduction_files": 206
+  },
+  "tested_source_sha256": {
+    "reconstructed/pokemon_names/Makefile": "238338f3b3f7318507ae3312c1b70b0df1903e45db08d852ac8daa141c42f87f",
+    "reconstructed/pokemon_names/README.md": "f97affc80c3044222062f00b09460fee5dca8259459f999b467c47aded23c2ce",
+    "reconstructed/pokemon_names/evidence/0013a19c.asm": "6d186fbc31fbc0a363675089aa77f95b2d97e9e75eaff33a893d818661581b26",
+    "reconstructed/pokemon_names/evidence/0013a19c.c": "e2aea3cee0ead8f9fc8aa4b81b759c533b537ad7ad6603fbab3599aafd66b6c3",
+    "reconstructed/pokemon_names/evidence/0013ff50.asm": "f79f5fbd1c3db00ef6bb80174c94cec151bab7e84044b7b7e84fd1b87b37a0d8",
+    "reconstructed/pokemon_names/evidence/0013ff50.c": "53c7f717fbcb912f9c3f0dd3ea5844ce5aa8c9ffc340c116a3c50345ce48fc84",
+    "reconstructed/pokemon_names/evidence/0014f224.asm": "9493c7e479621420d0296159952ebddf76c4a8ef8b0d4bddfe38f6950b9719c2",
+    "reconstructed/pokemon_names/evidence/0014f224.c": "5e2674067e97b6f218dc7cfcd6c8e4011a902c5478fac1795c054795901299d8",
+    "reconstructed/pokemon_names/evidence/001679f4.asm": "0a1ba7ba086b2b4b7dfd76de0286f1f7a10ccff8aca1b2394a2d4383f4d3fa85",
+    "reconstructed/pokemon_names/evidence/001679f4.c": "2290897530aa1657cc50b6c7538e164d8e23eeebdec9cd9ef0f9e9195cf8b022",
+    "reconstructed/pokemon_names/evidence/00167c38.asm": "40c68cc5c90949a9eddaa3f73d54449892f7ada5f7eea5f88d1513dd89cf1835",
+    "reconstructed/pokemon_names/evidence/00167c38.c": "0ace9a37cf8d6b369085f1ff9bd36d07f77874ffdabd4355ee3a36206360ed1f",
+    "reconstructed/pokemon_names/evidence/001685c0.asm": "85efdbf73fdaa7033543531e09f43d603155947426fc90536a1ac672d41f93ac",
+    "reconstructed/pokemon_names/evidence/001685c0.c": "9627104e77db47571c12a8728336e7bcddbc2d09cabedfa97d73f27b916a9e09",
+    "reconstructed/pokemon_names/evidence/001685f0.asm": "b48c1ba4ec9b4f6734dc55be9f902ab7e47d10a49282960ca2a0c1c4bffb2668",
+    "reconstructed/pokemon_names/evidence/001685f0.c": "bd1a61dc7fd4acb72e899a8edc3e945179c27f70c9120e5298d718400f89a669",
+    "reconstructed/pokemon_names/evidence/00168660.asm": "4deed6210f00118072519da5ce25ec3f32c653f6470edbbcc383c2199aedcd48",
+    "reconstructed/pokemon_names/evidence/00168660.c": "5e80c73b6a10fdf53ae6170c95f608b4d9f9cc1f6726b3b32cc40c61ace84f08",
+    "reconstructed/pokemon_names/evidence/0016b3d4.asm": "39401b9b5bb750847570d1299952042aa535afdeb0ff065f7e2c8d573e6c9dfa",
+    "reconstructed/pokemon_names/evidence/0016b3d4.c": "e1af54a4d47d83e94fd6819ae2686db2d72e53f096637952293db750cd1768d7",
+    "reconstructed/pokemon_names/evidence/functions.json": "f275b7c2218d991fe74997c023050ba9d8f206389a50b05e1a4ec7218afc6ea2",
+    "reconstructed/pokemon_names/evidence/literals.json": "ab4eeb089f17f93c743afde8c339c69612bd77c931131682741d314b4fb9fe23",
+    "reconstructed/pokemon_names/evidence/provenance.json": "70aff356927cc3d8f6f066c87a11435e5666d4e32d1775fad1da9baaedd46d70",
+    "reconstructed/pokemon_names/pokemon_names.c": "c4570d993543e6f78375e7e4f9351e56dabd92c0189411d42b1b3826dfa9ee71",
+    "reconstructed/pokemon_names/pokemon_names.h": "b52fd7e74d6cc4889bd4c8c9ca425b61b22f6061c26c1010951febef82f69cee",
+    "reconstructed/pokemon_names/reproduction/README.txt": "af745550d3850fbbcf3fe584cd9751e4a19d64b2d5d93e524182d7b6accff89c",
+    "reconstructed/pokemon_names/reproduction/export_names.py": "a8ae73033a84e182deb04641de334c550639d63d0e3037cbe947da53f30796d7",
+    "reconstructed/pokemon_names/reproduction/verify_names.py": "88d205664bf076770ec83cc117b822ddd14aa66d1761285c979fb8ec64d79f3d",
+    "reconstructed/pokemon_names/test_pokemon_names.c": "4cd80a8ae6b442938e22b580aa7b93cdcdcc54a7cab2d174cb024b98b7392c9f",
+    "native/game/names.c": "278c784d41d4126c2c373e3fe477e23a6a8983fe6dbc22dfacb3c113c1a42f61",
+    "native/game/save.c": "386e985a35abd9b6553bb7a7ffc54008d89f51765e61b472865f565f12f36328",
+    "native/game/save.h": "23de4b25a56d27827debfba644c136dc8e328cda818565d0533db22c6eff27c7",
+    "native/game/battle.h": "4bd2334c376bfc5fee6f46bcb288279b94ac6288b1b1322cfad8d94847bad3f5",
+    "native/game/test_battle.c": "72ca3a807bf15446a9a9caf43490fac1abbe1d31a01130d7d129ed2d6a013092",
+    "native/game/test_save.c": "9930a844875d67e35b02da3243fc85821b534e75f3017b77eafd4b2e78d9eeb5",
+    "native/model_app.c": "bbf18daa9d3b5f92d1240321ecd4acc417cda62f2ec56842ddfc5784e6f846bb",
+    "native/Makefile": "c14cf8cf5dc31c91a9f0c369830374835e21b9bd95ac628a4f210bdeebab1d8a",
+    "native/tests/test_bch_save_viewer.py": "39481b0ebd528842ee673a054a7edf432ea150347c5dac723dcd7139f760585b",
+    "native/reproduction/name-services/check_names.c": "d19b17cf87f2c310c199e63ba7bbf9b8b2e28ca720b3079bf555f2979893fc6d",
+    "native/reproduction/name-services/verify_names.py": "0bff623181ec60ed85a1f6153e9a8a85c034af56136d804fe20b55ea83969a0f",
+    "reconstructed/Makefile": "b396fdc2764028373b2c93c9ee2a4fe1dff29761b925fdf87850bade2e6d3140"
+  },
+  "limitations": [
+    "Host and static original-byte comparisons; no original ARM execution or captured running-game comparison.",
+    "Message/resource loading, language setup and initialization remain external.",
+    "Native names accept at most 12 plain UTF-16 units and zero; original shared copier retains its wider behavior.",
+    "ASan/UBSan leak detection disabled; native Windows ABI untested."
+  ],
+  "runs": [
+    {
+      "command": "make -C reconstructed test",
+      "exit_code": 0,
+      "log_sha256": "5e49cd3c91774ec1dd9cd6be65d6f859937e76a2f20fedbcd8ede0749fd37f2b",
+      "c_suites": 11
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "log_sha256": "4cb47681132ad9ee084d526925ed28833b54a33f94263b2619c89399a684e02d",
+      "python_tests": 38,
+      "optional_skips": 2
+    },
+    {
+      "command": "make -C native all test build/check_names",
+      "exit_code": 0,
+      "log_sha256": "16a90d3476bbea52ab5665b889f87367dad277c8f76a9ebb15cf057be61b1c25",
+      "python_tests": 43,
+      "c_suites": 31
+    },
+    {
+      "command": "make -C native test-runtime",
+      "exit_code": 0,
+      "log_sha256": "2d36b058cf1cf84cc34bfe6976b1c0d40f25e28cd2ba669b0477e82736421e98",
+      "python_tests": 72
+    },
+    {
+      "command": "ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-names/test_names_sanitized",
+      "exit_code": 0,
+      "log_sha256": "6d82bbbff7213b1abba72b7fb388caa653ec1882f7c20d37cec8fca47125ce83"
+    },
+    {
+      "command": "ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-names/test_battle_sanitized\nASAN_OPTIONS=detect_leaks=0 outputs/pokemon-names/test_save_sanitized",
+      "exit_code": 0,
+      "log_sha256": "88b968f7546eb2f5941a030e7d74d32c56a63f610ea9082a9f1bb73fe6fca6b1"
+    },
+    {
+      "command": "ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-names/test_save_sanitized",
+      "exit_code": 0,
+      "log_sha256": "413c45b55196340c59ed20775def170cbe4875b1e7169162f0ab4c93ee17d70a"
+    },
+    {
+      "command": "python3 -I -B native/reproduction/bch-save/verify_save.py --romfs ROMFS --code-bin CODE_BIN --viewer native/build/pokemon_model_viewer --out outputs/pokemon-names/viewer-save",
+      "exit_code": 0,
+      "log_sha256": "536848122d525984e35b9c6dafc73240a4167079e46245cfea020e253894c27b"
+    }
+  ],
+  "result": "passed",
+  "original_data_commands": [
+    "native/build/check_names ROMFS CODE_BIN outputs/pokemon-names/party-records-final.bin",
+    "python3 -I native/reproduction/name-services/verify_names.py --romfs ROMFS --code CODE_BIN --records outputs/pokemon-names/party-records-final.bin --viewer-save outputs/pokemon-names/viewer-save/route2.sav"
+  ]
+}

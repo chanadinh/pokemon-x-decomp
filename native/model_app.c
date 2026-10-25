@@ -1874,6 +1874,7 @@ struct game_session {
     int have_block_table;
     struct px_guest image; int have_image, image_flat; /* the game's process image (platform/guest.h) */
     char **species_names, **move_names, **type_names;
+    struct px_gf_text species_text; /* original UTF-16 names for stored party records */
     uint32_t species_name_count, move_name_count, type_name_count;
     uint32_t growth[8][101]; uint32_t growth_count;
     struct px_learnset *learnsets; uint32_t learnset_count;
@@ -1904,7 +1905,7 @@ struct game_session {
 static struct game_session g_game;
 static char g_code_name[256] = "code.bin", g_save_name[256], g_load_name[256]; /* names inside their archives */
 
-static char **text_lines(const struct options *o, uint32_t file, uint32_t *count)
+static char **text_lines(const struct options *o, uint32_t file, uint32_t *count, struct px_gf_text *decoded)
 {
     struct resource r = {0};
     struct px_gf_text text;
@@ -1922,7 +1923,8 @@ static char **text_lines(const struct options *o, uint32_t file, uint32_t *count
         else buffer[0] = 0;
     }
     if (lines) *count = text.line_count;
-    px_gf_text_free(&text);
+    if (decoded && lines) *decoded = text;
+    else px_gf_text_free(&text);
     return lines;
 }
 
@@ -2022,9 +2024,9 @@ static int game_load(const struct options *o)
         if (table) g->learnset_count = count; else g->growth_count = count;
     }
     g->balls = o->have_balls ? o->balls : 10;
-    g->species_names = text_lines(o, 80, &g->species_name_count);
-    g->move_names = text_lines(o, 14, &g->move_name_count);
-    g->type_names = text_lines(o, 17, &g->type_name_count);
+    g->species_names = text_lines(o, 80, &g->species_name_count, &g->species_text);
+    g->move_names = text_lines(o, 14, &g->move_name_count, NULL);
+    g->type_names = text_lines(o, 17, &g->type_name_count, NULL);
     g->data = (struct px_battle_data){g->personal, g->personal_count, g->moves, g->move_count,
                                       (const uint8_t (*)[PX_TYPE_COUNT])g->chart,
                                       g->have_natures ? g->natures : NULL, (const uint32_t (*)[101])g->growth,
@@ -2063,7 +2065,13 @@ static int game_pokemon(const struct options *o, uint16_t species, uint8_t level
     uint8_t iv[6];
     for (unsigned k = 0; k < 6; ++k) iv[k] = (uint8_t)px_rng_below(&g_game.rng, 32);
     const uint8_t nature = (uint8_t)px_rng_below(&g_game.rng, 25);
-    return px_battler_make(&g_game.data, species, level, iv, nature, moves, out);
+    if (!px_battler_make(&g_game.data, species, level, iv, nature, moves, out)) return 0;
+    const struct px_gf_text *names = &g_game.species_text;
+    /* Missing or placeholder text keeps an empty stored name. The native
+     * name bridge rejects message controls before the shared string copier. */
+    if (species < names->line_count)
+        (void)px_battler_set_name(out, names->units + names->first[species], names->length[species]);
+    return 1;
 }
 
 static void print_battler(const char *what, const struct px_battler *b)

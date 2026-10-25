@@ -70,6 +70,7 @@ int px_battle_initial_moves(const struct px_battle_data *data, const struct px_l
  * 3 Sp. Atk, 4 Sp. Def, 5 Speed, 6 accuracy, 7 evasion), -6..6. */
 struct px_battler {
     uint16_t species;
+    uint16_t name[13]; /* stored UTF-16 name: at most 12 units plus zero */
     uint8_t level, nature, types[2], iv[6];
     uint16_t stats[6], hp;
     uint32_t exp;      /* total experience (the growth table's value at the level) */
@@ -78,6 +79,11 @@ struct px_battler {
     int8_t stages[8];
     uint32_t key;      /* the stored record's encryption constant (game/save.h); 0 until first saved */
 };
+/* Validate a terminated, plain UTF-16 name, then copy it through reconstructed
+ * 001679f4. Zeros the unused name units; leaves the battler unchanged on failure.
+ * units includes the terminator; control token 0010 and names over 12 units
+ * are rejected before calling the original unbounded string-copy routine. */
+int px_battler_set_name(struct px_battler *battler, const uint16_t *name, size_t units);
 /* Stats from the reconstructed formulas (EVs 0); HP full; PP from the move
  * data. 0 when the species or a move is outside the tables. */
 int px_battler_make(const struct px_battle_data *data, uint16_t species, uint8_t level, const uint8_t iv[6],

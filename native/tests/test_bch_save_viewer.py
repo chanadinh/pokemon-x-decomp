@@ -81,6 +81,9 @@ class BCHSaveViewerTests(unittest.TestCase):
             rows += rows[:8]
             block_a = rows[(key >> 13) & 31][0]
             self.assertEqual(struct.unpack_from('<H', plain, 8 + 0x38 * block_a)[0], 1)  # species
+            block_b = rows[(key >> 13) & 31][1]
+            self.assertEqual(list(struct.unpack_from('<13H', plain, 8 + 0x38 * block_b)),
+                             list(map(ord, 'Froakie')) + [0] * 6)
             extension = extension_plain(key, data[36 + 0xe8:36 + 0x104])
             self.assertEqual(extension[4], 5)  # the party level
             # Loading puts the walker back and restores the party.
@@ -105,6 +108,13 @@ class BCHSaveViewerTests(unittest.TestCase):
             saved = self.lines(caught, 'save ')
             self.assertEqual(len(saved), 1)
             self.assertIn(' party=2 ', saved[0])
+            party_file = save.read_bytes()
+            for i, name in enumerate(('Froakie', 'Bunnelby')):
+                key, plain, ok = decrypt(party_file[36 + i * 0x104:36 + i * 0x104 + 0xe8])
+                self.assertTrue(ok)
+                block_b = rows[(key >> 13) & 31][1]
+                self.assertEqual(list(struct.unpack_from('<13H', plain, 8 + 0x38 * block_b)),
+                                 list(map(ord, name)) + [0] * (13 - len(name)))
             out = self.run_viewer(root, '--load', save, '--code-bin', code, '--inspect').stdout
             self.assertIn(' party=2 balls=', out)
             self.assertRegex(out, r'party_member slot=1 species=2 level=3 ')

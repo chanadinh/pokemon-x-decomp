@@ -4,24 +4,28 @@
 #include <string.h>
 
 #include "../../reconstructed/pokemon_data/pokemon_data.h"
+#include "../../reconstructed/pokemon_names/pokemon_names.h"
 #include "../platform/guest.h"
 
 /* The reconstructed codec reaches memory through 32-bit guest addresses:
  * the guest maps the manager, one record and its extension in the heap, and
  * the block-order table at its game address 0x00570eec (rodata, read-only).
  * Any other access is a fault, reported as an error. */
-enum { MANAGER = PX_GUEST_HEAP, DATA = PX_GUEST_HEAP + 0x100, EXTRA = PX_GUEST_HEAP + 0x200, TABLE = 0x00570eec };
+enum { MANAGER = PX_GUEST_HEAP, DATA = PX_GUEST_HEAP + 0x100, EXTRA = PX_GUEST_HEAP + 0x200,
+       NAME = PX_GUEST_HEAP + 0x300, TABLE = 0x00570eec };
 struct space {
-    uint8_t manager[0x10], data[0xe8], extra[0x1c];
+    uint8_t manager[0x10], data[0xe8], extra[0x1c], name[26];
     struct px_guest guest;
 };
 static void space_init(struct space *s, const uint8_t table[128])
 {
     memset(s->manager, 0, sizeof s->manager); memset(s->data, 0, sizeof s->data); memset(s->extra, 0, sizeof s->extra);
+    memset(s->name, 0, sizeof s->name);
     px_guest_init(&s->guest);
     px_guest_map_view(&s->guest, MANAGER, sizeof s->manager, PX_GUEST_READ | PX_GUEST_WRITE, s->manager, "manager");
     px_guest_map_view(&s->guest, DATA, sizeof s->data, PX_GUEST_READ | PX_GUEST_WRITE, s->data, "record");
     px_guest_map_view(&s->guest, EXTRA, sizeof s->extra, PX_GUEST_READ | PX_GUEST_WRITE, s->extra, "extension");
+    px_guest_map_view(&s->guest, NAME, sizeof s->name, PX_GUEST_READ | PX_GUEST_WRITE, s->name, "name");
     px_guest_map_view(&s->guest, TABLE, 128, PX_GUEST_READ, (void *)table, "block order");
 }
 #define load8(s, a) px_guest_load8(&(s)->guest, (a))
@@ -71,6 +75,14 @@ int px_save_encode(struct px_save *save, const struct px_battle_data *d, const u
         struct space s;
         space_init(&s, table);
         const struct px_pokemon_api a = px_guest_pokemon_api(&s.guest);
+        /* Native input bounds protect the original shared string copier. */
+        unsigned name_length = 0;
+        while (name_length < 13 && b->name[name_length]) {
+            if (b->name[name_length] == 0x10) return fail(error, error_size, "a party name contains a control token");
+            put16(s.name + 2 * name_length, b->name[name_length]);
+            ++name_length;
+        }
+        if (name_length == 13) return fail(error, error_size, "a party name is not terminated within 13 units");
         /* Bind (an initial encode of the empty record), then the setters in
          * the order the population routine uses them. */
         px_bind_pokemon_data(MANAGER, DATA, EXTRA, &a);
@@ -88,6 +100,7 @@ int px_save_encode(struct px_save *save, const struct px_battle_data *d, const u
         px_set_pokemon_field(MANAGER, PX_DATA_ABILITY, d->personal[b->species].abilities[0], &a);
         px_set_pokemon_field(MANAGER, PX_DATA_ABILITY_FLAG_0, 1, &a);
         px_set_pokemon_field(MANAGER, PX_DATA_GROWTH, b->exp, &a);
+        px_write_pokemon_name(MANAGER, NAME, &a);
         /* Moves, PP and the party values: decoded, written, encoded again. */
         px_decode_pokemon_manager(MANAGER, &a);
         const uint32_t block_b = px_pokemon_block(MANAGER, 1, 1, &a);
@@ -142,6 +155,9 @@ int px_save_decode(const uint8_t *in, size_t size, const struct px_battle_data *
         const uint16_t species = load16(&s, block_a);
         if (!px_battler_make(d, species, s.extra[4], iv, (uint8_t)load8(&s, block_a + 0x14), moves, b) ||
             s.guest.fault) return fail(error, error_size, "a party record does not form a Pokémon");
+        uint16_t name[13];
+        for (unsigned k = 0; k < 13; ++k) name[k] = load16(&s, block_b + 2 * k);
+        if (!px_battler_set_name(b, name, 13)) return fail(error, error_size, "a party name is invalid");
         b->exp = load32(&s, block_a + 8);
         b->key = load32(&s, DATA);
         for (unsigned k = 0; k < 4; ++k) {

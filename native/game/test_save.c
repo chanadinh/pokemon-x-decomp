@@ -69,6 +69,10 @@ int main(void)
     const uint16_t m0[4] = {1, 2, 0, 0}, m1[4] = {2, 0, 0, 0};
     assert(px_battler_make(&data, 1, 7, iv0, 0, m0, &save.party[0]));
     assert(px_battler_make(&data, 2, 3, iv1, 0, m1, &save.party[1]));
+    const uint16_t first_name[] = {'F', 'r', 'o', 'a', 'k', 'i', 'e', 0};
+    const uint16_t second_name[] = {0x30d4, 0x30ab, 0x30c1, 0x30e5, 0x30a6, 0x2640, 0};
+    assert(px_battler_set_name(&save.party[0], first_name, sizeof first_name / sizeof *first_name));
+    assert(px_battler_set_name(&save.party[1], second_name, sizeof second_name / sizeof *second_name));
     save.party[0].exp = 400; save.party[0].hp = 9; save.party[0].pp[0] = 20;
     save.party[1].key = 0x00006000; /* key bits 13..17: row 3 */
     uint8_t file[PX_SAVE_SIZE];
@@ -81,6 +85,8 @@ int main(void)
         const uint8_t *slot = file + PX_SAVE_HEADER + i * PX_SAVE_SLOT;
         const struct px_battler *b = &save.party[i];
         unsigned ok;
+        for (unsigned k = 0; k < 13; ++k)
+            assert(stored_word(slot, table, 1, 2 * k, 2, &ok) == b->name[k] && ok);
         assert(stored_word(slot, table, 0, 0, 2, &ok) == b->species && ok);
         assert(stored_word(slot, table, 0, 4, 4, &ok) == save.trainer);
         assert(stored_word(slot, table, 0, 8, 4, &ok) == b->exp);
@@ -124,6 +130,37 @@ int main(void)
     assert(!px_save_encode(&tampered, &data, table, bad, error, sizeof error));
     tampered = save; tampered.party[1].species = 3;
     assert(!px_save_encode(&tampered, &data, table, bad, error, sizeof error));
+    tampered = save; tampered.party[0].name[0] = 0x10;
+    assert(!px_save_encode(&tampered, &data, table, bad, error, sizeof error) && strstr(error, "control"));
+    tampered = save;
+    for (unsigned k = 0; k < 13; ++k) tampered.party[0].name[k] = 'X';
+    assert(!px_save_encode(&tampered, &data, table, bad, error, sizeof error) && strstr(error, "terminated"));
+    /* A maximum-length name uses all 12 units and stops before moves. */
+    tampered = save; tampered.party[0].name[12] = 0;
+    for (unsigned k = 0; k < 12; ++k) tampered.party[0].name[k] = (uint16_t)(0x410 + k);
+    assert(px_save_encode(&tampered, &data, table, bad, error, sizeof error));
+    assert(px_save_decode(bad, sizeof bad, &data, table, &back, error, sizeof error));
+    assert(!memcmp(back.party[0].name, tampered.party[0].name, sizeof back.party[0].name));
+    assert(!memcmp(back.party[0].moves, save.party[0].moves, sizeof back.party[0].moves));
+    /* Corrupt the decoded name while retaining a valid checksum: invalid
+     * names must be rejected independently of the codec's integrity check. */
+    const unsigned row = (tampered.party[0].key >> 13) & 31;
+    const unsigned terminator = PX_SAVE_HEADER + 8 + 0x38 * table[4 * row + 1] + 24;
+    bad[terminator] ^= 'A'; /* zero -> A under the XOR stream */
+    unsigned sum = (unsigned)bad[PX_SAVE_HEADER + 6] | (unsigned)bad[PX_SAVE_HEADER + 7] << 8;
+    sum = (sum + 'A') & 0xffff;
+    bad[PX_SAVE_HEADER + 6] = (uint8_t)sum; bad[PX_SAVE_HEADER + 7] = (uint8_t)(sum >> 8);
+    assert(!px_save_decode(bad, sizeof bad, &data, table, &back, error, sizeof error) && strstr(error, "name"));
+    assert(px_save_encode(&tampered, &data, table, bad, error, sizeof error));
+    const unsigned name_start = terminator - 24;
+    bad[name_start + 1] ^= 4; /* U+0410 -> 0010 control token */
+    sum = ((unsigned)bad[PX_SAVE_HEADER + 6] | (unsigned)bad[PX_SAVE_HEADER + 7] << 8) - 0x400;
+    bad[PX_SAVE_HEADER + 6] = (uint8_t)sum; bad[PX_SAVE_HEADER + 7] = (uint8_t)(sum >> 8);
+    assert(!px_save_decode(bad, sizeof bad, &data, table, &back, error, sizeof error) && strstr(error, "name"));
+    /* Earlier viewer records with empty names still load and stay empty. */
+    tampered = save; memset(tampered.party[0].name, 0, sizeof tampered.party[0].name);
+    assert(px_save_encode(&tampered, &data, table, bad, error, sizeof error));
+    assert(px_save_decode(bad, sizeof bad, &data, table, &back, error, sizeof error) && back.party[0].name[0] == 0);
     puts("save tests passed");
     return 0;
 }

@@ -1,0 +1,34 @@
+Name milestone validation, 2026-10-25
+
+make -C reconstructed test
+  exit 0; 11 C suites
+
+python3 -m unittest discover -s tests -v
+  exit 0; 38 Python tests; 2 optional extraction skips
+
+make -C native all test build/check_names
+  exit 0; 31 C suites; 43 Python tests
+
+make -C native test-runtime
+  exit 0; 72 Python tests
+
+ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-names/test_names_sanitized
+  exit 0
+
+ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-names/test_battle_sanitized
+ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-names/test_save_sanitized
+  exit 0
+
+ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-names/test_save_sanitized
+  exit 0
+
+python3 -I -B native/reproduction/bch-save/verify_save.py --romfs ROMFS --code-bin CODE_BIN --viewer native/build/pokemon_model_viewer --out outputs/pokemon-names/viewer-save
+  exit 0
+
+Static evidence: 9 functions (4 new routines), 1,692 instruction bytes, 32 literal bytes and writer/encoder fall-through verified against pinned code.bin.
+Synthetic: 65,535 non-token UTF-16 unit values, 2,051 plain lengths, 128 token cases, 945 form indices, builder reloads, 3,328 writer/codec cases and state/learnset/move/name integration.
+Native: Unicode, aliased sources, length/token guards, invalid names with valid checksums, empty old names and independent stored names. ASan/UBSan passed for the new reconstruction and native battle/save tests (detect_leaks=0).
+Local data: 724 builder requests, 721 saved names, maximum 11 UTF-16 units, all 32 selector rows. Independent Python decoding matches names/checksums. All 800 text lines checked: 722 plain, 78 rejected placeholder/control lines.
+Actual Route 2 viewer: catch/save/load/re-save passes, save bytes identical; both party names independently match original text. All 72 runtime Python tests pass, including new stored-name assertions after catching.
+Preservation: 599 hashes in ten earlier reconstruction checkpoints; 815 earlier source/evidence files compared; all 206 prior native reproduction files unchanged.
+No original ARM execution, running-game reference comparison or native Windows check. Message-resource loading and language initialization remain external. Full logs: outputs/pokemon-names/.

@@ -22,10 +22,13 @@
  * Fields written (logical block offsets): through the reconstructed setters
  * the key, species (A+0), trainer id (A+4), experience (A+8), ability (A+0x0c,
  * the species' first) and its slot flag, nature (A+0x14), IVs (B+0x34) and
- * the party level (extension +4); directly into the decoded blocks the four
+ * the party level (extension +4), and the name (B+0, at most 12 UTF-16 units
+ * plus zero) through the reconstructed name writer; directly into the decoded blocks the four
  * moves (B+0x1a) and their PP (B+0x22), the current HP (extension +8) and the
  * six stats (extension +0x0a). Offsets as in PKHeX's PK6 for the cross-check;
- * other fields stay zero. A record that fails its checksum is rejected. */
+ * other fields stay zero. Names use plain UTF-16 without control tokens;
+ * loading normalizes units after the terminator to zero. Empty names in
+ * earlier viewer files remain empty. A record that fails its checksum is rejected. */
 enum { PX_SAVE_HEADER = 36, PX_SAVE_SLOT = 0x104, PX_SAVE_SIZE = PX_SAVE_HEADER + 6 * PX_SAVE_SLOT };
 struct px_save {
     uint32_t zone;
