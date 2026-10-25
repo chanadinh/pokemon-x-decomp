@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-25",
+ "baseline_commit": "ffd0f918fbad8162b74012f6a24e3bb91ea3171c",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video and dummy audio, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "c840b812b87f56db30b5514a53ae2ff93c8a06ff66be4d119eccaca459299ea0",
+  "reproduction/battle-lights/verify_battle_lights.py": "e98b1f4c79dc849ff02b1d748362d45693010e005b53590a7d81ec5229e69a6e"
+ },
+ "inputs_sha256": {
+  "DllBattle.cro": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1"
+ },
+ "capture_sha256": {
+  "vertex_shader": "d7bcfa36144b9e00ef48b43aa7c612d7be7a40ae39d19ed45d516b245d251772"
+ }
+}

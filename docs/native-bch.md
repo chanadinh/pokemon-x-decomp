@@ -685,6 +685,11 @@ direction relative to each bit of surface, the bump map adds detail, and
 each material's lookup tables turn that into three ramps (a specular curve,
 a per-Pokémon table and a linear one) that the combiners mix in. Froakie's
 outline catches the light and Zigzagoon's fur lightens (below, before
-above). Which light the battle uses, and one flag in the game's light setup,
-are educated guesses for now. See the
+above). See the
 [fragment lighting record](../native/reproduction/fragment-lighting/README.txt).
+
+Both guesses behind it are now traced in the game's code. The battle module
+looks its Pokémon lights up by name, light_poke_1 to light_poke_6, in the
+field scene, and the graphics library uses one material flag both to switch
+the reflection tables on and to give them the light's own highlight color.
+See the [battle lights record](../native/reproduction/battle-lights/README.txt).

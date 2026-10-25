@@ -3256,22 +3256,26 @@ static int battle_shown(unsigned s)
  * camera rotation with the camera 1000 units in front, so the programs'
  * view-dependent terms see a nearby perspective eye. */
 /* --vertex-shader: the fragment lighting unit's state per material, as the
- * game's runtime would set it from the material and the scene (render/
+ * game's runtime sets it from the material and the scene (render/
  * frag_light.h). From the material: the fragment flags (+6: bit 0 bump
  * renormalization, 1 clamp highlights, 2 Distribution0, 3 Distribution1,
  * 4 reflection), the LUT input registers, the LUT table and sampler names
  * (matched against the model's LUT sets), the Fresnel selector and bump
- * mode and texture. From the scene: the material's directional lights as
- * prepare_bch_lighting selects them, their vectors rotated into view space
- * (view: the camera rows). Light colors are the registers the traced color
- * loop (code.bin 0x3030a8, reproduction/bch-lighting) writes; for specular1
- * that loop writes the light's own color, not its product with the
- * material, when its fourth argument is set (0x3031d8; the caller derives
- * it from bit 5 of a word it reaches through the material object at
- * +0x288, not traced further). Here that path is assumed for materials
- * whose reflection LUTs are enabled; a material reading no LUT that is
- * present keeps the directional approximation. */
-static int build_fragment_light(struct model_asset *a, const float view[12])
+ * mode and texture. Lights (reproduction/battle-lights): the battle looks
+ * up light_poke_1 .. light_poke_6 by name in the scene (DllBattle.cro
+ * 0x38f54..0x38fb4), one per battle position; the partner takes
+ * light_poke_1 and the wild Pokémon light_poke_2 here (the position-to-
+ * light mapping is not traced; the six lights are identical in the field
+ * scene). Their vectors are rotated into view space (view: the camera
+ * rows). Light colors are the registers the traced color loop (code.bin
+ * 0x3030a8, reproduction/bch-lighting) writes; for specular1 that loop
+ * writes the light's own color when its fourth argument is set
+ * (0x3031d8). The caller passes bit 5 of the material's lighting flags,
+ * the same bit that leaves the reflection LUTs enabled in the lighting
+ * config register (0x2e9030..0x2e9074), so it is set exactly for
+ * materials with reflection. A material reading no LUT that is present
+ * keeps the directional approximation. */
+static int build_fragment_light(struct model_asset *a, const float view[12], unsigned side)
 {
     const struct px_bch_model *m = &a->skin_source;
     if (!a->bch_light || !a->light_index || m->material_count != a->bch.material_count) return 0;
@@ -3313,12 +3317,13 @@ static int build_fragment_light(struct model_asset *a, const float view[12])
         c->bump_renormalize = flags & 1;
         c->fresnel_primary = mat->fresnel_selector & 1;
         c->fresnel_secondary = (mat->fresnel_selector >> 1) & 1;
-        /* The lights: the scene's set named for the Pokémon (light_poke_1,
-         * set 5 of the field environment) when it exists, else the
-         * material's own set as prepare_bch_lighting selected it. */
+        /* The lights: the set holding this position's light_poke_N when the
+         * scene has it, else the material's own set as prepare_bch_lighting
+         * selected it. */
+        const char *wanted_light = side ? "light_poke_2" : "light_poke_1";
         const struct px_bch_light_set *set = NULL;
         for (uint32_t k = 0; k < env->set_count && !set; ++k)
-            if (env->sets[k].count == 1 && name_is(&env->lights[env->set_lights[env->sets[k].first]].name, "light_poke_1"))
+            if (env->sets[k].count == 1 && name_is(&env->lights[env->set_lights[env->sets[k].first]].name, wanted_light))
                 set = &env->sets[k];
         const struct px_light_setup *setup = &a->bch_light[i];
         memcpy(c->global_ambient, setup->global_ambient, sizeof c->global_ambient);
@@ -3345,7 +3350,7 @@ static int build_fragment_light(struct model_asset *a, const float view[12])
 }
 
 static void shade_battle_model(struct model_asset *a, const struct placement *at, const struct view *v,
-                               struct px_raster_vertex *points)
+                               struct px_raster_vertex *points, unsigned side)
 {
     const struct px_bch_model *m = &a->skin_source;
     if (!a->programs || !a->program_state) return;
@@ -3358,7 +3363,7 @@ static void shade_battle_model(struct model_asset *a, const struct placement *at
         {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
         a->motion_fixed ? a->motion_world : a->motion_rest};
     struct px_pica_state *prepared = &a->program_state[0], *work = &a->program_state[1];
-    if (!build_fragment_light(a, frame.view)) return;
+    if (!build_fragment_light(a, frame.view, side)) return;
     for (uint32_t i = 0; i < m->mesh_count; ++i) {
         const struct px_bch_mesh *mesh = m->meshes + i;
         const struct px_vertex_program *program = a->programs[mesh->material_index];
@@ -3402,7 +3407,7 @@ static int draw_battle_models(struct px_raster_target *target)
                                s ? 0.4 : 3.14159265358979323846 - 0.6, 1, {k, k, k}};
         at.y = (h / 2 + v.sp * z - feet) / v.cp - k * lo[1];
         project_bch(m, &v, &at, g->model_points[s], g->model_normals[s]);
-        shade_battle_model(m, &at, &v, g->model_points[s]);
+        shade_battle_model(m, &at, &v, g->model_points[s], s);
         if (!draw_bch_meshes(m, g->model_points[s], g->model_normals[s], target, NULL)) return 0;
     }
     return 1;

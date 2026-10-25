@@ -1,0 +1,16 @@
+Battle lights validation, 2026-10-25
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video and dummy audio, the software renderer. Not run
+on the local WSL host or native Windows. Tested hashes are in validation.json.
+
+1. verify_battle_lights.py: all 28 code.bin words and 10 DllBattle.cro words
+   as cited; the CRO relocation of the literal at 0x393d0 resolves to rodata
+   0xd8c8c; the strings at +0xc8 and +0xd8 are light_poke_1 and
+   light_eff_obj; the uniform name at 0x59f7d0 is dmp_LightEnv.lutEnabledRefl.
+2. make -C native all test test-runtime and the root test suite: passed.
+3. The Route 2 battle frame is unchanged by the light-by-name change: with
+   --vertex-shader d7bcfa36...1772, without 349e2217...03ef (both as in
+   ../fragment-lighting).
+
+Not established: the position-to-light mapping, run-time light movement,
+how the library fills the material flags word.
