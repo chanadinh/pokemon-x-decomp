@@ -24,6 +24,7 @@ for executable in \
 	pokemon_asset_viewer \
 	pokemon_model_viewer \
 	pokemon_field_viewer \
+	pokemon_slice \
 	pica_probe \
 	shader_check; do
 	if [[ ! -x "native/build/$executable" ]]; then
@@ -44,6 +45,7 @@ Run the self-contained synthetic demo:
   ./bin/pokemon_asset_viewer --demo
   ./bin/pokemon_model_viewer --demo
   ./bin/pokemon_field_viewer --demo
+  ./bin/pokemon_slice --demo
 
 To inspect locally extracted game data, pass --romfs /path/to/romfs to the
 viewer described in the project documentation. This release does not include

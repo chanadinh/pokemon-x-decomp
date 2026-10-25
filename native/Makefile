@@ -28,7 +28,7 @@ FIELD_HEADERS = assets/field.h assets/garc.h assets/lz.h
 CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script build/test_pokedata build/test_battle build/test_save build/test_guest build/test_fs build/test_hid_clock build/test_audio build/test_pica_shader build/test_vertex_program build/test_frag_light
 
 .PHONY: all test test-core test-runtime clean check-sdl
-all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/pica_probe build/shader_check
+all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/pica_probe build/shader_check build/pokemon_slice
 
 check-sdl:
 	@test -n "$(SDL_LIBS)" || { echo 'SDL2 not configured: install SDL2 development files or set SDL_CFLAGS and SDL_LIBS.' >&2; exit 1; }
@@ -41,6 +41,9 @@ build/pokemon_model_viewer: model_app.c $(MODEL_SOURCES) $(MODEL_HEADERS) $(MOVE
 
 build/pokemon_field_viewer: field_app.c $(FIELD_SOURCES) $(FIELD_HEADERS) | build check-sdl
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) field_app.c $(FIELD_SOURCES) $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -lm -o $@
+
+build/pokemon_slice: slice_app.c | build check-sdl
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) slice_app.c $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -o $@
 
 build/test_field: assets/field.c assets/field.h assets/test_field.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/field.c assets/test_field.c $(LDFLAGS) $(LDLIBS) -lm -o $@

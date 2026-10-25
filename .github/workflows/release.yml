@@ -40,9 +40,10 @@ jobs:
         run: |
           make -C native all
           mkdir -p release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/bin
-          for executable in pokemon_asset_viewer pokemon_model_viewer pokemon_field_viewer pica_probe shader_check; do
-            cp "native/build/$executable" "release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/bin/$executable.exe"
+          for executable in pokemon_asset_viewer pokemon_model_viewer pokemon_field_viewer pokemon_slice pica_probe shader_check; do
+            cp "native/build/$executable.exe" "release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/bin/$executable.exe"
           done
+          cp /mingw64/bin/SDL2.dll "release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/bin/SDL2.dll"
           cat > "release-assets/PokemonX-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}-windows/README.txt" <<'EOF'
           Pokémon X native viewer demo for Windows
 
@@ -50,6 +51,7 @@ jobs:
             bin\pokemon_asset_viewer.exe --demo
             bin\pokemon_model_viewer.exe --demo
             bin\pokemon_field_viewer.exe --demo
+            bin\pokemon_slice.exe --demo
 
           Real-data viewing requires a locally extracted RomFS passed with
           --romfs. This release does not include Nintendo game files.
