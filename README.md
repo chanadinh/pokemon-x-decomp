@@ -31,7 +31,7 @@ not there yet, so this is not yet a playable port.**
 
 | Zones that load | Townspeople who speak | Wild battles | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
-| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **539** reconstruction file hashes |
+| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **599** earlier reconstruction file hashes |
 
 ## Play the field slice
 
@@ -227,7 +227,7 @@ native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
 
 ## Rebuilding the rules
 
-The visual tools sit alongside eight connected C reconstruction milestones.
+The visual tools sit alongside eleven connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -241,9 +241,12 @@ construction, payload storage, state refresh and stat calculations.
 | [Pokémon data](reconstructed/pokemon_data/README.md) | Population, 26 field setters, checksum and storage codec |
 | [Pokémon state](reconstructed/pokemon_state/README.md) | Initialization, HP/PP refresh and 13 field accessors |
 | [Pokémon stats](reconstructed/pokemon_stats/README.md) | HP/stat updates, nature adjustment and growth-to-level lookup |
+| [Pokémon moves](reconstructed/pokemon_moves/README.md) | Constructor move insertion, ordered slots and maximum PP |
+| [Pokémon learnsets](reconstructed/pokemon_learnset/README.md) | Entry access, form selection, loading orchestration and caching |
+| [Pokémon names](reconstructed/pokemon_names/README.md) | UTF-16/control-token copy, form indices, name building and storage |
 
-Personal/growth resources, learnset access, move insertion, name construction and
-maximum-PP services still use synthetic resources or callbacks where their
+Personal/growth resources, archive/message loading and move-resource
+caching still use synthetic resources or callbacks where their
 dependencies remain unresolved. These are analyst-authored reconstructions, not
 recovered original source or builds that match the original machine code.
 
@@ -260,7 +263,7 @@ recovered original source or builds that match the original machine code.
 - The selected area's **100,608 texture pixels** match an independent decoder and separately implemented alpha/tile reconstruction.
 - The selected field's **positions, UVs and indices** match an independent geometry reference at the native renderer's documented precision.
 - The area-consumer trace checks **1,348 instructions** against original executable bytes across thirteen functions.
-- All **539 earlier reconstruction checkpoint files** retain their recorded hashes.
+- All **599 earlier reconstruction checkpoint files** retain their recorded hashes.
 
 These results validate specific boundaries. They do not establish running-game
 behavior or visual equivalence. The analysis baseline's 133 CRO modules, 44,279

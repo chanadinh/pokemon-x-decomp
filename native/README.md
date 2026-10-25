@@ -5,15 +5,18 @@ and displays supported textures. It establishes an executable, window and event
 loop, monotonic timing, keyboard controls, image decoding, and bounded resource
 access. A separate executable previews a restricted subset of static CGFX mesh
 geometry as a wireframe or an opt-in unlit textured preview, and the selected
-BCH field as a wireframe or a TEV-stage-0 textured preview. The eight reconstructed game-logic modules are
-not connected to gameplay in this application yet. A third executable loads
+BCH field as a wireframe or a TEV-stage-0 textured preview. The model viewer
+now connects reconstructed stats, level, learnset access, move insertion,
+maximum-PP, name-copy/writing and storage routines to
+its wild battles. A third executable loads
 checked XY zone, matrix and region records for terrain/collision inspection.
 
-A first playable still needs environment rendering, player entry/movement and collision,
-interactions, an interactive battle, return to the map, and save/load. See the
+The field slice supports walking, interaction, wild battles, return to the map,
+and save/load. Menus, story progression, fuller battle rules and a captured
+comparison against the original remain work for the first playable. See the
 [first-playable acceptance criteria](../docs/PLAYABLE_SLICE.md). This directory
 contains independently authored host/platform code, rather than an additional
-ARM game-function reconstruction milestone. All eight earlier checkpoints stay
+ARM game-function reconstruction milestone. All ten earlier checkpoints stay
 unchanged.
 
 ## Build and run
@@ -213,7 +216,7 @@ placement evidence, limits and policy are documented in [the field notes](../doc
 ```sh
 make -C native test          # C asset + Python container tests; no SDL/game files.
 make -C native test-runtime  # Viewer CLI, pixel exports, and dummy-video input.
-make -C reconstructed test  # The eight immutable game-logic suites.
+make -C reconstructed test  # Eleven game-logic suites; ten earlier checkpoints preserved.
 python3 -m unittest discover -s tests -v
 ```
 
@@ -487,6 +490,17 @@ reconstructed routines, and published damage formulas (`--partner`,
 `--partner-level`, `--seed`, `--encounter-rate`, `--code-bin`). See the
 [battle record](reproduction/bch-battle/README.txt).
 
+Constructor moves now retain the original slot order: once four moves are
+known, a new one shifts the oldest out and appends at the end. Known moves
+keep their slots. Battler creation uses the reconstructed maximum-PP service;
+see the [move-service record](reproduction/move-services/README.txt).
+
+Initial move selection now also runs the reconstructed learnset count/entry
+accessors and insertion on temporary logical records. Form-aware loading and
+caching are reconstructed and checked separately; the viewer still supplies an
+already selected resource. See the
+[learnset record](reproduction/learnset-services/README.txt).
+
 Wins give experience from the game's growth tables (`a/2/1/7`); the level comes
 from the reconstructed level-from-experience routine and new moves from the
 learnset. BALL throws a Poké Ball (`--balls N`, default 10) and a catch joins a
@@ -502,6 +516,11 @@ idle, attack, damage and faint motions; see the
 resume the zone, position, party and balls; party Pokémon are stored as the game's
 party records through the reconstructed codec. See the
 [save record](reproduction/bch-save/README.txt).
+
+UTF-16 names are retained in party records through the reconstructed name writer;
+old saves with empty names stay empty. The native bridge validates a plain
+12-unit name plus zero before calling the original shared copier. See the
+[name record](reproduction/name-services/README.txt).
 
 The battle menu's POKéMON entry switches party members, and a fainted Pokémon is
 replaced from the party; see the [party record](reproduction/bch-party/README.txt).

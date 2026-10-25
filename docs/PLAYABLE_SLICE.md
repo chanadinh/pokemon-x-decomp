@@ -7,25 +7,29 @@ systems. The native asset viewer and host tests do not yet provide a playable ga
 
 ## Current position
 
-Eight source milestones connect wild-battle request preparation to Pokémon
+Eleven source milestones connect wild-battle request preparation to Pokémon
 construction, payload storage, state initialization/refresh, and HP/stat
-calculation. Growth-to-level lookup and nature adjustment are reconstructed
-alongside the HP and five stat updates. Their tests still use synthetic
-personal/growth resources and callbacks for learnset access, move insertion,
-name construction, and maximum-PP services. Scope and validation are described
-in the [source overview](../reconstructed/README.md) and
-[stats milestone](../reconstructed/pokemon_stats/README.md).
+calculation, constructor move insertion, maximum PP, learnset access/selection
+and name construction/storage. Growth-to-level lookup and nature adjustment
+are reconstructed alongside the HP and five stat updates.
+Their tests still use synthetic personal/growth resources and callbacks for
+underlying archive/message loading and move-resource caching. Scope and
+validation are described in the [source overview](../reconstructed/README.md),
+[stats milestone](../reconstructed/pokemon_stats/README.md),
+[move milestone](../reconstructed/pokemon_moves/README.md),
+[learnset milestone](../reconstructed/pokemon_learnset/README.md), and
+[name milestone](../reconstructed/pokemon_names/README.md).
 
 | Requirement | Current state |
 | --- | --- |
-| Reviewed game logic | Eight connected host-source milestones, including HP/stat updates and level resolution |
+| Reviewed game logic | Eleven connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets and name construction/storage |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |
 | Renderer and game asset loading | BCLIM/CGFX/BCH textures, texture transforms and base mip levels; zones load from game data with their regions (several per town), terrain and collision, region props, area textures, six combiner stages, vertex colors and directional lighting. 328 of 360 zones load. Vertex shader, bump maps, Fresnel, point lights, fog, projection, culling and the game camera remain missing |
 | Player controls, movement, and collision | The animated player walks and runs in real time through the house and Vaniville Town on exact standard cells over the collision floor; NPCs block, doors and stairs load their target zones, and NPCs answer with their script's lines. The game's own controller, spawn and collision rules are not reconstructed |
 | Interactive battle and return to the field | Wild one-on-one battles from tall grass on Route 2: game species, moves, learnsets, type chart and natures; stats from the reconstructed routines; published damage formulas; returns to the field with the partner's HP. Experience and level-ups from the game's growth tables, learning moves, Poké Balls and a party of six. The Pokémon's own 3D models with their idle, attack, damage and faint motions. Switching and replacing a fainted Pokémon from the party. No battle effects or items |
-| Save/load for a playable scenario | `--save` / `--load` (F5): zone, tile, facing, party, balls and random state in the viewer's own file; party Pokémon as the game's 0x104-byte party records through the reconstructed codec, cross-checked with PKHeX's PK6 layout. Not the game's save file |
+| Save/load for a playable scenario | `--save` / `--load` (F5): zone, tile, facing, party, balls and random state in the viewer's own file; party Pokémon with UTF-16 names as the game's 0x104-byte party records through the reconstructed codec/name writer, cross-checked with PKHeX's PK6 layout. Not the game's save file |
 | Reference execution comparisons | No repeatable running-game capture is part of the current validation |
 
 Source milestones measure reviewed behavior at specific boundaries. They do
@@ -188,7 +192,7 @@ services, and persistence work together.
 | Reference capture | Fix the base revision/update/language target and capture one candidate map, interaction, encounter, battle action, and return using a repeatable starting save and input sequence | Input/save identifiers, screenshots or video, recorded inputs, and selected observable state before/after; memory observations where available |
 | Native application | Extend the working texture viewer with explicit game-address/platform interfaces and bounded game-state initialization | Reconstructed logic can run from checked real resources inside the application with documented lifecycle and reference comparisons |
 | Asset decoding | Extend the bounded GARC/LZ/BCLIM path to required palette/model formats and scene bindings; identify candidate map/player/UI resources through loaders and reference observations | Documented paths/indices and supported formats, checksums for selected samples, and a visible comparison to the reference |
-| Game reconstruction | Replace personal/growth resources, learnset access, move insertion, name construction, maximum-PP, and wider encounter/setup dependencies needed by the selected scenario | Reviewed instruction bytes, independent tests, explicit remaining services, and comparisons to captured reference values |
+| Game reconstruction | Replace personal/growth resources, archive/message loading, move-resource caching, resource initialization, and wider encounter/setup dependencies needed by the selected scenario | Reviewed instruction bytes, independent tests, explicit remaining services, and comparisons to captured reference values |
 | Slice integration | Connect movement/collision, interaction, battle, return, and save/load after their contracts are understood | One automated or recorded end-to-end scenario satisfying the acceptance criteria above |
 
 Continue the first three workstreams alongside bounded code reconstruction.
