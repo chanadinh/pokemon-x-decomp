@@ -123,6 +123,22 @@ class BCHPlatformViewerTests(unittest.TestCase):
             self.assertNotIn('encounter ', still)
             self.run_viewer(root, '--zone', 0, '--software', '--play', 'R?', '--frames', 5, success=False)
 
+    def test_vertex_shader_option(self):
+        # The synthetic battle models carry no shader resources, so with
+        # --vertex-shader every material keeps its stored colors: same frame.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_battle_romfs(root)
+            shots = []
+            for extra in ((), ('--vertex-shader',)):
+                capture = root / f'battle{len(shots)}.bmp'
+                out = self.run_viewer(root, '--zone', 0, '--partner', 1, '--encounter-rate', 100, '--software',
+                                      '--play', 'RR', '--frames', 40, '--capture-frame', capture,
+                                      '--capture-at', 30, *extra).stdout
+                self.assertIn('battle_model side=partner', out)
+                shots.append(capture.read_bytes())
+            self.assertEqual(shots[0], shots[1])
+
 
 if __name__ == '__main__':
     unittest.main()

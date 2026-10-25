@@ -26,6 +26,7 @@
 #include "render/raster.h"
 #include "render/skin.h"
 #include "render/text.h"
+#include "render/vertex_program.h"
 
 #include <SDL.h>
 #include <ctype.h>
@@ -57,6 +58,7 @@ struct options {
     int have_partner, have_partner_level, have_seed, have_encounter_rate, have_balls;
     const char *code_bin;
     const char *save_path, *load_path; /* --save / --load: the viewer save file (game/save.h) */
+    int vertex_shader;    /* --vertex-shader: battle models' primary color from their own vertex programs */
     int bottom_screen;    /* --bottom-screen: the 3DS's second screen, the touch screen, below */
     const char *touch_play; /* --touch-play F:X,Y;...: scripted taps on the bottom screen */
     const char *sound;      /* --sound PATH[@OFFSET]: a BCWAV in the RomFS to play (looping as stored) */
@@ -305,6 +307,10 @@ struct model_asset {
     int motion_fixed, motion_ready;
     int bch_textured;
     int hide_invisible; /* skip meshes whose visible flag is 0 */
+    /* --vertex-shader: each material's vertex program (NULL when it has none
+     * that loads) and two interpreter states. */
+    struct px_vertex_program **programs;
+    struct px_pica_state *program_state;
 };
 
 static void asset_free(struct model_asset *asset)
@@ -328,6 +334,8 @@ static void asset_free(struct model_asset *asset)
     px_bch_model_free(&asset->skin_source);
     px_gf_motion_pack_free(&asset->motion_pack);
     free(asset->motion_locals); free(asset->motion_world); free(asset->motion_rest);
+    for (uint32_t i = 0; asset->programs && i < asset->skin_source.material_count; ++i) free(asset->programs[i]);
+    free(asset->programs); free(asset->program_state);
     if (asset->textures)
         for (uint32_t i = 0; i < asset->texture_count; ++i) px_texture_free(&asset->textures[i]);
     free(asset->textures);
@@ -432,6 +440,8 @@ static void usage(FILE *stream, const char *program)
         "  --encounter-rate N Percent chance per grass step, 0..100 (default 10)\n"
         "  --code-bin PATH    code.bin for the nature table (else natures are neutral)\n"
         "  --balls N          Poke Balls to start with, 0..999 (default 10)\n"
+        "  --vertex-shader    With --zone: light the battle models per vertex with their\n"
+        "                     own vertex programs (slower)\n"
         "  --bottom-screen    With --zone: show the 3DS bottom (touch) screen below;\n"
         "                     click it to touch (battle commands are there)\n"
         "  --touch-play F:X,Y;...  With --bottom-screen and --frames: tap (X, Y) of\n"
@@ -514,6 +524,7 @@ static int parse(int argc, char **argv, struct options *o)
         if (!strcmp(arg, "--combiners")) { o->combiners = 1; continue; }
         if (!strcmp(arg, "--no-props")) { o->no_props = 1; continue; }
         if (!strcmp(arg, "--bottom-screen")) { o->bottom_screen = 1; continue; }
+        if (!strcmp(arg, "--vertex-shader")) { o->vertex_shader = 1; continue; }
         if (!strcmp(arg, "--walk")) { o->walk = 1; continue; }
         if (!strcmp(arg, "--skinned")) { o->skinned = 1; continue; }
         if (strcmp(arg, "--romfs") && strcmp(arg, "--archive") && strcmp(arg, "--entry") &&
@@ -1204,6 +1215,20 @@ static int load_motion(const struct options *o, const uint8_t *data, size_t size
     asset->motion_rest = calloc(bones ? bones : 1, 12 * sizeof *asset->motion_rest);
     if (!asset->motion_locals || !asset->motion_world || !asset->motion_rest ||
         !px_skin_rest_world(asset->skin_source.bones, bones, asset->motion_rest)) return 0;
+    if (o->vertex_shader && asset->skin_source.inputs && asset->skin_source.material_count) {
+        /* A material whose program does not load keeps the stored colors. */
+        const struct px_bch_model *m = &asset->skin_source;
+        asset->programs = calloc(m->material_count, sizeof *asset->programs);
+        asset->program_state = malloc(2 * sizeof *asset->program_state);
+        if (!asset->programs || !asset->program_state) return 0;
+        for (uint32_t i = 0; i < m->material_count; ++i) {
+            asset->programs[i] = malloc(sizeof *asset->programs[i]);
+            if (asset->programs[i] && !px_vertex_program_load(data, size, m, i, asset->programs[i])) {
+                free(asset->programs[i]);
+                asset->programs[i] = NULL;
+            }
+        }
+    }
     /* Attachment policy: tr0002's rigid glasses are skinned to "glass", a
      * child of the root "model" that no motion animates, whose rest world
      * equals that of the motion bone "loc_acchat" (a head locator). The game's
@@ -3188,6 +3213,46 @@ static int battle_shown(unsigned s)
             return 1;
     return 0;
 }
+/* --vertex-shader: run each mesh's own vertex program for every drawn index
+ * and take its color output (o3) as the primary color, as the PICA feeds the
+ * combiners. The Pokémon programs write per-vertex lighting there (diffuse,
+ * Phong and rim terms in separate channels; see reproduction/vertex-shader).
+ * Positions and UVs stay the CPU path's (they agree). The engine's matrices
+ * are not traced: WrldMtx is the battle placement, ViewMtx the viewer's
+ * camera rotation with the camera 1000 units in front, so the programs'
+ * view-dependent terms see a nearby perspective eye. */
+static void shade_battle_model(const struct model_asset *a, const struct placement *at, const struct view *v,
+                               struct px_raster_vertex *points)
+{
+    const struct px_bch_model *m = &a->skin_source;
+    if (!a->programs || !a->program_state) return;
+    const double c = cos(at->yaw), s = sin(at->yaw), k = at->scale[0];
+    struct px_vertex_frame frame = {
+        {(float)(k * c), 0, (float)(k * s), (float)at->x, 0, (float)k, 0, (float)at->y,
+         (float)(-k * s), 0, (float)(k * c), (float)at->z},
+        {(float)v->cy, 0, (float)v->sy, 0, (float)(v->sp * v->sy), (float)v->cp, (float)(-v->sp * v->cy), 0,
+         (float)(-v->cp * v->sy), (float)v->sp, (float)(v->cp * v->cy), -1000},
+        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+        a->motion_fixed ? a->motion_world : a->motion_rest};
+    struct px_pica_state *prepared = &a->program_state[0], *work = &a->program_state[1];
+    for (uint32_t i = 0; i < m->mesh_count; ++i) {
+        const struct px_bch_mesh *mesh = m->meshes + i;
+        const struct px_vertex_program *program = a->programs[mesh->material_index];
+        if (!program) continue;
+        for (uint32_t sub = 0; sub < mesh->submesh_count; ++sub) {
+            const struct px_bch_submesh *sm = m->submeshes + mesh->first_submesh + sub;
+            if (!px_vertex_program_prepare(program, m, i, sub, &frame, prepared)) continue;
+            for (uint32_t x = sm->first_index; x < sm->first_index + sm->index_count && x < m->index_count; ++x) {
+                float color[4];
+                if (px_vertex_program_run(program, m, m->indices[x], prepared, work) != PX_PICA_OK ||
+                    px_vertex_program_output(program, work, PX_VERTEX_OUTPUT_COLOR, color) != 15) continue;
+                for (unsigned j = 0; j < 4; ++j)
+                    points[x].rgba[j] = !(color[j] > 0) ? 0 : color[j] > 1 ? 1 : color[j];
+            }
+        }
+    }
+}
+
 static int draw_battle_models(struct px_raster_target *target)
 {
     struct game_session *g = &g_game;
@@ -3206,6 +3271,7 @@ static int draw_battle_models(struct px_raster_target *target)
                                s ? 0.4 : 3.14159265358979323846 - 0.6, 1, {k, k, k}};
         at.y = (h / 2 + v.sp * z - feet) / v.cp - k * lo[1];
         project_bch(m, &v, &at, g->model_points[s], g->model_normals[s]);
+        shade_battle_model(m, &at, &v, g->model_points[s]);
         if (!draw_bch_meshes(m, g->model_points[s], g->model_normals[s], target, NULL)) return 0;
     }
     return 1;

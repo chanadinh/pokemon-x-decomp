@@ -49,7 +49,7 @@ the game's data, with stats from the reconstructed routines; wins give
 experience and level-ups, and Poké Balls add the catch to the party. 328 of 360
 zones load. The battle shows the Pokémon's own models with their idle,
 attack, damage and faint motions. A platform layer stands in for the 3DS services (guest memory, filesystem,
-HID with touch, clock, threads, audio) and a vertex shader interpreter. It runs the Pokémon models' own programs on their real vertices and uniforms, and agrees with the CPU skinning on all 6,704 comparable meshes. Using the programs' per-vertex lighting in the renderer is next.
+HID with touch, clock, threads, audio) and a vertex shader interpreter. It runs the Pokémon models' own programs on their real vertices and uniforms, and agrees with the CPU skinning on all 6,704 comparable meshes. `--vertex-shader` lights the battle models with the programs' per-vertex output; the fragment lighting's use of their light vector is next.
 The whole party battles (switching, replacing a fainted
 Pokémon). The slice saves and loads (party records through the
 reconstructed codec). Battle effects, items, menus, story state, saving and audio are not

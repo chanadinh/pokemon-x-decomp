@@ -1,0 +1,17 @@
+{
+ "date": "2026-10-25",
+ "baseline_commit": "c1962bbddd7f26678c1aeb0be1f1c63690d8f567",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video and dummy audio, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "8361ec2d96c512293e98dc26ab896786d5ccfa016f14a83d91f2427e77359d26",
+  "Makefile": "2960b64072673c3c8555d3a6a90ba51e4342ed53b60c0797ed6cfd85ef088bff",
+  "render/vertex_program.c": "6baab9d80f945935b723681420e0c5857fe4d770428698f408d48b843e9f4361",
+  "render/vertex_program.h": "d334721353d828cbe47d914885d7d206b9bac913329f11ada4825724f6ee729b",
+  "tests/test_bch_platform_viewer.py": "d2606ee5b0dab484c0abd560fe597185eb54a33239a5e445975d7ab48bb3fc27",
+  "reproduction/vertex-lighting/verify_vertex_lighting.py": "82e0a7888f978e796d82399b4b5f798f39f327cdb6a90783dcabfbfdbf02f0cd"
+ },
+ "image": {
+  "docs/images/native-bch-vertex-lighting.png": "7f2bac63592fa20a7f40ded1f9d2c925b76bf6c0246c8d5a1e0cf97e1c2b37a5"
+ }
+}

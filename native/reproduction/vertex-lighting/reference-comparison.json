@@ -1,0 +1,34 @@
+{
+  "models_reading_primary_color": {
+    "864": [
+      "AEye",
+      "BEye",
+      "BodyDodoVco",
+      "BodyTattu00",
+      "BodyTattu01",
+      "Mouth"
+    ],
+    "354": []
+  },
+  "capture_sha256": {
+    "stored_colors": "349e2217bab31972b8d19b1075208994ee76a42f8379878008a439dae15203ef",
+    "vertex_shader": "ab3bcf7334f979b32191350065d4a027a4a1407e62bf35142e080f886de88875"
+  },
+  "changed_pixels": 15828,
+  "changed_box": [
+    90,
+    154,
+    291,
+    355
+  ],
+  "size": [
+    800,
+    480
+  ],
+  "battle_lines": [
+    "encounter zone=259 cell=100,89 slot=2 species=263 level=3",
+    "wild species=263 name=Zigzagoon level=3 nature=11 iv=12,20,7,25,19,0 stats=15,7,6,9,7,7 moves=45,33,0,0",
+    "battle_model side=partner species=656 model=864 entry=6916 texture_entry=6918 meshes=10 vertices=25536 motion_entry=6921 motions=9 slots=1:30,2:40,4:15,5:15,6:20,9:65,13:54,17:20,18:50 pose=idle",
+    "battle_model side=wild species=263 model=354 entry=2836 texture_entry=2838 meshes=5 vertices=13614 motion_entry=2841 motions=10 slots=1:48,2:48,4:15,5:20,6:15,9:75,13:50,17:20,18:50,26:70 pose=idle"
+  ]
+}

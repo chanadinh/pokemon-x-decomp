@@ -76,9 +76,10 @@ game's species, moves and type chart, with experience, level-ups and Poké Balls
 that add the catch to your party, and the Pokémon's own animated 3D models.
 Your whole party fights: switch with POKéMON, and send in the next one when
 one faints. You can save and come back later.
-Add `--bottom-screen` for the 3DS touch screen with the battle commands on it.
+Add `--bottom-screen` for the 3DS touch screen with the battle commands on it,
+and `--vertex-shader` to light the Pokémon with their own GPU vertex programs.
 What is missing: battle effects, items, menus, story events, the game's own
-sound (the mixer is ready; the sound files have not been tried) and its vertex
+sound (the mixer is ready; the sound files have not been tried) and the field's
 shaders. See the
 [town record](native/reproduction/bch-town/README.txt) for exactly what was
 checked.
@@ -147,8 +148,8 @@ pixels as one pass. [See Vaniville Town →](docs/native-bch.md#vaniville-town)
 
 [What remains before the first playable →](docs/PLAYABLE_SLICE.md#what-remains-before-the-first-playable)
 
-The previews do not reproduce the game's complete shaders: the vertex shader,
-point lights, fog and projected textures are still missing.
+The previews do not reproduce the game's complete shaders: the field models'
+vertex shaders, point lights, fog and projected textures are still missing.
 The terrain image records an earlier milestone; its footer predates the separate
 BCH wireframe viewer shown above. The marker is an inspection tool, not a player
 character. [Capture provenance and validation](docs/images/README.md) identify the

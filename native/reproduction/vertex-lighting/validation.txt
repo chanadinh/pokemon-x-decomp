@@ -1,0 +1,22 @@
+Vertex lighting validation, 2026-10-25
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video and dummy audio, the software renderer. Not run
+on the local WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (new: tests/test_bch_platform_viewer.py's --vertex-shader check on the
+   synthetic battle models, which carry no programs: identical frames).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection: the Route 2 battle with
+   --vertex-shader under dummy video: no diagnostics, and its capture is
+   byte-identical to the optimized build's.
+4. Without the option the viewer's output is unchanged: the
+   stored_colors capture is byte-identical to the one the previous
+   commit's viewer (c1962bb) renders for the same command (sha256
+   349e2217...03ef). The option only acts in draw_battle_models.
+5. verify_vertex_lighting.py: same lines with and without the option;
+   15,828 pixels differ, all inside the partner's half (box 90,154 to
+   291,355); Froakie's six source-0 materials and none of Zigzagoon's.
+
+Not established: the game's own battle lighting (no running-game
+comparison), the engine's camera and light values.

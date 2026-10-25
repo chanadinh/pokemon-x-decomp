@@ -518,5 +518,7 @@ the material's shader reference picks the DVLB entry, the uniforms come
 from the model's command streams, the inputs are the raw vertex
 attributes. `build/shader_check MODEL.bch [--motion PACK --slot S]`
 compares the result with the CPU skinning; see the
-[vertex shader record](reproduction/vertex-shader/README.txt).
+[vertex shader record](reproduction/vertex-shader/README.txt). With
+`--zone`, `--vertex-shader` lights the battle models with those programs'
+color output ([record](reproduction/vertex-lighting/README.txt)).
 

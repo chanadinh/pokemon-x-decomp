@@ -666,3 +666,13 @@ skinning the battle models use. It also shows what the CPU path does not do
 yet: the programs light each vertex themselves (diffuse, Phong and rim
 terms) and pass the light direction on in the tangent frame, rather than a
 normal. See the [vertex shader record](../native/reproduction/vertex-shader/README.txt).
+
+<img src="images/native-bch-vertex-lighting.png" alt="Froakie with its stored vertex colors, and lit by its own vertex program" width="600">
+
+`--vertex-shader` uses that lighting: the battle models' combiners get the
+color the programs compute for each vertex, as the 3DS hands it to them,
+instead of the stored vertex color. Froakie loses its blown-out white and
+gains soft shading and a rim light (right). Models whose combiners never read
+that color, like Zigzagoon, look the same. The camera and light the engine
+would set are approximated, so this is an option for now. See the
+[vertex lighting record](../native/reproduction/vertex-lighting/README.txt).
