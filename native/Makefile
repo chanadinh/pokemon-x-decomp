@@ -15,11 +15,11 @@ GAME_CORE = $(STATS_SOURCES) platform/guest.c platform/fs.c
 PLATFORM_SOURCES = platform/hid.c platform/clock.c platform/thread_sdl.c platform/audio.c platform/audio_sdl.c
 ASSET_SOURCES = assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/texture.c assets/cgfx.c assets/bch_texture.c assets/field.c
 ASSET_HEADERS = assets/garc.h assets/lz.h assets/bclim.h assets/etc1.h assets/texture.h assets/cgfx.h assets/bch_texture.h assets/field.h
-MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c assets/bch_texture.c assets/field.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c render/tev.c render/light.c render/skin.c render/vertex_program.c platform/pica_shader.c assets/gf_motion.c assets/zone.c assets/gf_script.c assets/gf_text.c assets/zone_talk.c render/text.c assets/pokedata.c game/battle.c game/battle_ui.c game/save.c $(GAME_CORE) $(PLATFORM_SOURCES)
-MODEL_HEADERS = platform/audio.h platform/audio_sdl.h platform/guest.h platform/fs.h platform/hid.h platform/clock.h platform/thread.h assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h render/skin.h render/vertex_program.h platform/pica_shader.h assets/bch_scene.h assets/gf_motion.h assets/zone.h assets/gf_script.h assets/gf_text.h assets/zone_talk.h render/text.h render/text_glyphs.inc assets/pokedata.h game/battle.h game/battle_ui.h game/save.h
+MODEL_SOURCES = assets/cgfx_model.c assets/bch_model.c assets/bch_material.c assets/bch_texture.c assets/field.c assets/garc.c assets/lz.c assets/cgfx.c assets/texture.c assets/etc1.c render/raster.c render/tev.c render/light.c render/skin.c render/vertex_program.c render/frag_light.c platform/pica_shader.c assets/gf_motion.c assets/zone.c assets/gf_script.c assets/gf_text.c assets/zone_talk.c render/text.c assets/pokedata.c game/battle.c game/battle_ui.c game/save.c $(GAME_CORE) $(PLATFORM_SOURCES)
+MODEL_HEADERS = platform/audio.h platform/audio_sdl.h platform/guest.h platform/fs.h platform/hid.h platform/clock.h platform/thread.h assets/cgfx_model.h assets/bch_model.h assets/bch_material.h assets/bch_texture.h assets/field.h assets/garc.h assets/lz.h assets/cgfx.h assets/texture.h assets/etc1.h render/raster.h render/tev.h render/light.h render/skin.h render/vertex_program.h render/frag_light.h platform/pica_shader.h assets/bch_scene.h assets/gf_motion.h assets/zone.h assets/gf_script.h assets/gf_text.h assets/zone_talk.h render/text.h render/text_glyphs.inc assets/pokedata.h game/battle.h game/battle_ui.h game/save.h
 FIELD_SOURCES = assets/field.c assets/garc.c assets/lz.c
 FIELD_HEADERS = assets/field.h assets/garc.h assets/lz.h
-CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script build/test_pokedata build/test_battle build/test_save build/test_guest build/test_fs build/test_hid_clock build/test_audio build/test_pica_shader build/test_vertex_program
+CORE_TESTS = build/test_garc build/test_lz build/test_bclim build/test_etc1 build/test_texture build/test_cgfx build/test_cgfx_model build/test_cgfx_scene build/test_raster build/test_field build/test_bch_texture build/test_bch_model build/test_bch_material build/test_tev build/test_bch_scene build/test_light build/test_skin build/test_gf_motion build/test_zone build/test_gf_text build/test_gf_script build/test_pokedata build/test_battle build/test_save build/test_guest build/test_fs build/test_hid_clock build/test_audio build/test_pica_shader build/test_vertex_program build/test_frag_light
 
 .PHONY: all test test-core test-runtime clean check-sdl
 all: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/pica_probe build/shader_check
@@ -92,6 +92,9 @@ build/test_thread: platform/thread_sdl.c platform/thread.h platform/test_thread.
 
 build/shader_check: tools/shader_check.c assets/bch_model.c assets/bch_model.h render/skin.c render/skin.h render/vertex_program.c render/vertex_program.h platform/pica_shader.c platform/pica_shader.h assets/gf_motion.c assets/gf_motion.h | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) -D_DEFAULT_SOURCE tools/shader_check.c assets/bch_model.c render/skin.c render/vertex_program.c platform/pica_shader.c assets/gf_motion.c $(LDFLAGS) $(LDLIBS) -lm -o $@
+
+build/test_frag_light: render/frag_light.c render/frag_light.h render/test_frag_light.c | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) render/frag_light.c render/test_frag_light.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/test_vertex_program: render/vertex_program.c render/vertex_program.h render/test_vertex_program.c assets/bch_model.h platform/pica_shader.c platform/pica_shader.h | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) render/vertex_program.c platform/pica_shader.c render/test_vertex_program.c $(LDFLAGS) $(LDLIBS) -lm -o $@
@@ -169,6 +172,7 @@ test test-core: $(CORE_TESTS)
 	./build/test_audio
 	./build/test_pica_shader
 	./build/test_vertex_program
+	./build/test_frag_light
 	python3 -m unittest discover -s tests -p test_container.py -v
 	python3 -m unittest discover -s tests -p test_bch.py -v
 	python3 -m unittest discover -s tests -p test_pica_commands.py -v

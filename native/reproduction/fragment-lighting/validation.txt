@@ -1,0 +1,22 @@
+Fragment lighting validation, 2026-10-25
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video and dummy audio, the software renderer. Not run
+on the local WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (new: test_frag_light; test_raster with the eight-varying draw).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection: test_frag_light,
+   test_bch_model, test_raster, dump_luts on four models, and the Route 2
+   battle with --vertex-shader under dummy video: no diagnostics; the
+   sanitized capture is byte-identical to the optimized one.
+4. Without --vertex-shader the battle frame is byte-identical to the
+   previous viewer's (349e2217...03ef). ../bch-route/verify_route.py with
+   this viewer: 328 zones, 2,705 props drawn, 2,217 NPC tiles, and all four
+   captures identical to ../bch-battle/route-recheck.json (the eight-varying
+   rasterizer change leaves the field's lit draws unchanged).
+5. verify_fragment_lighting.py: 977 models, 6,376 LUT samplers and 5,877
+   materials read independently, all identical to the decoder.
+
+Not established: the battle's lights, the runtime's specular1 flag, the
+look against the running game.

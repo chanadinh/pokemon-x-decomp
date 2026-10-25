@@ -520,5 +520,7 @@ attributes. `build/shader_check MODEL.bch [--motion PACK --slot S]`
 compares the result with the CPU skinning; see the
 [vertex shader record](reproduction/vertex-shader/README.txt). With
 `--zone`, `--vertex-shader` lights the battle models with those programs'
-color output ([record](reproduction/vertex-lighting/README.txt)).
+color output ([record](reproduction/vertex-lighting/README.txt)) and runs
+the PICA fragment lighting unit (`render/frag_light.h`) with the materials'
+LUTs ([record](reproduction/fragment-lighting/README.txt)).
 

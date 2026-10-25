@@ -1,0 +1,27 @@
+{
+ "date": "2026-10-25",
+ "baseline_commit": "b9b0800639dcc5ccacaad2363f31d1452407e944",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video and dummy audio, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "ccf9ca2f4cee44677d66ca870ede08e45f7bf39e0e77cc209ab6f16c3707033a",
+  "Makefile": "84dac697ad9850594d78157d4ffee00408e2559d0a8297ae1796da5cd259e988",
+  "assets/bch_model.h": "168fc58b812803f5d8af240f5b021fd4eb0f2d8bb74159f99feda380bf8d9d18",
+  "assets/bch_model.c": "b56ae93d0911d15cdff3134c69a9194395133d2ff73f07cb9bfd02622b9d507a",
+  "render/frag_light.h": "0733cd25a6b70b356eaa94078e4ea5b7a262617d48fac82c8e6a7a27e66b24fa",
+  "render/frag_light.c": "269975592f445be1159d027e300801ff815e186de185d8d299ebaa8cbcfcca63",
+  "render/test_frag_light.c": "1cda99ece505520ebf824ef0f3a1011fec9a970f0d9660d53ff9cc3fe45adf28",
+  "render/raster.h": "97cab3a57f36a4dbdcba7d4ca347d7fc36b484626ec245bd77855be0a8e9af06",
+  "render/raster.c": "267013dbade9045eb5d413e5fa99d9289b4db61015429612fe31fdc78b80c54a",
+  "render/test_raster.c": "f967342fe32ebedf18c3f1083f1e5c035f26c219c7f88b7085c0db8f80f75708",
+  "reproduction/fragment-lighting/dump_luts.c": "29b30b4e6e01178863721843d4bdec099cbb9fabb733cd6e15b3942f2743a63c",
+  "reproduction/fragment-lighting/verify_fragment_lighting.py": "bc437fe08f46861e2f5f295c3ca471113d84000c0c4128e816775aae83d48a45"
+ },
+ "captures_sha256": {
+  "stored_colors (no option)": "349e2217bab31972b8d19b1075208994ee76a42f8379878008a439dae15203ef",
+  "vertex_shader": "d7bcfa36144b9e00ef48b43aa7c612d7be7a40ae39d19ed45d516b245d251772"
+ },
+ "image": {
+  "docs/images/native-bch-fragment-lighting.png": "95cddc6661ed04dabbe07864c1c4b22d032574e670cb2fb44ad2243cb962b011"
+ }
+}

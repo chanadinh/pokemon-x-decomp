@@ -378,7 +378,7 @@ static void shaded(void)
 
 struct varying_log { unsigned calls; double at_1_1[4]; };
 static void varying_shader(void *context, double u, double v, const double rgba[4],
-                           const double varying[4], double out[4])
+                           const double varying[8], double out[4])
 {
     struct varying_log *log = context;
     (void)rgba;

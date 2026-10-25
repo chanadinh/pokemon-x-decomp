@@ -27,6 +27,7 @@
 #include "render/skin.h"
 #include "render/text.h"
 #include "render/vertex_program.h"
+#include "render/frag_light.h"
 
 #include <SDL.h>
 #include <ctype.h>
@@ -311,6 +312,12 @@ struct model_asset {
      * that loads) and two interpreter states. */
     struct px_vertex_program **programs;
     struct px_pica_state *program_state;
+    /* Per material: the fragment lighting unit's configuration (lights in
+     * view space, rebuilt each frame) and whether it executes; per index
+     * the program's normal quaternion (o1) and view vector (o2). */
+    struct px_frag_light_config *fragment_light;
+    uint8_t *fragment_ok;
+    double (*program_varyings)[8];
 };
 
 static void asset_free(struct model_asset *asset)
@@ -336,6 +343,7 @@ static void asset_free(struct model_asset *asset)
     free(asset->motion_locals); free(asset->motion_world); free(asset->motion_rest);
     for (uint32_t i = 0; asset->programs && i < asset->skin_source.material_count; ++i) free(asset->programs[i]);
     free(asset->programs); free(asset->program_state);
+    free(asset->fragment_light); free(asset->fragment_ok); free(asset->program_varyings);
     if (asset->textures)
         for (uint32_t i = 0; i < asset->texture_count; ++i) px_texture_free(&asset->textures[i]);
     free(asset->textures);
@@ -1006,6 +1014,10 @@ failed:
     return 0;
 }
 
+static int same_name_bytes(const struct px_bch_name *a, const struct px_bch_name *b)
+{
+    return a->present && b->present && a->size == b->size && !memcmp(a->bytes, b->bytes, a->size);
+}
 static int name_is(const struct px_bch_name *name, const char *text)
 {
     return name->present && name->size == strlen(text) && !memcmp(name->bytes, text, name->size);
@@ -1039,7 +1051,7 @@ static int prepare_bch_lighting(struct model_asset *asset, int lighting)
          * reported. */
         if (m->bump_mode == 1 || m->fresnel_selector) ++asset->approximated;
         if (!m->parameters_present || !(m->material_flags & 1) || m->bump_mode > 1) {
-            fprintf(stderr, "[model-viewer] Material %" PRIu32 " uses unsupported fragment lighting state.\n", i); fprintf(stderr,"DBG p=%d f=%x fr=%d bump=%d\n",m->parameters_present,m->material_flags,m->fresnel_selector,m->bump_mode);
+            fprintf(stderr, "[model-viewer] Material %" PRIu32 " uses unsupported fragment lighting state.\n", i);
             return 0;
         }
         const struct px_bch_light_set *set = px_bch_environment_set(env, m->light_set_index);
@@ -2780,6 +2792,10 @@ struct combiner_shader {
     struct px_raster_image images[3];
     struct px_raster_sampler samplers[3];
     struct combiner_counts *counts; /* NULL except on a counted frame */
+    /* --vertex-shader: the fragment lighting unit (render/frag_light.h)
+     * replaces the directional approximation; varyings 0..3 are the
+     * program's quaternion, 4..6 its view vector. */
+    const struct px_frag_light_config *fragment_light;
 };
 
 static uint8_t quantize(double value)
@@ -2788,7 +2804,7 @@ static uint8_t quantize(double value)
 }
 
 static void combiner_fragment(void *context, double u, double v, const double rgba[4],
-                              const double varying[4], double out[4])
+                              const double varying[8], double out[4])
 {
     const struct combiner_shader *s = context;
     const struct px_bch_combiner_material *m = s->material;
@@ -2798,19 +2814,6 @@ static void combiner_fragment(void *context, double u, double v, const double rg
     for (unsigned c = 0; c < 4; ++c) {
         in.primary[c] = quantize(rgba[c]);
         in.fragment_primary[c] = 255;
-    }
-    if (s->light) {
-        /* Executed lighting: secondary RGB is exactly zero (see
-         * prepare_bch_lighting) and its alpha is 255. */
-        in.fragment_secondary[3] = 255;
-        /* Interpolated model-space normal, renormalized by px_light_primary.
-         * A zero interpolated normal gives a black fragment primary. */
-        const float normal[3] = {(float)varying[0], (float)varying[1], (float)varying[2]};
-        if (!px_light_primary(s->light, normal, in.fragment_primary)) {
-            memset(in.fragment_primary, 0, 3);
-            in.fragment_primary[3] = 255;
-            degenerate = 1;
-        }
     }
     for (unsigned unit = 0; unit < 3; ++unit) {
         if ((m->sampled_units >> unit) & 1) {
@@ -2827,6 +2830,29 @@ static void combiner_fragment(void *context, double u, double v, const double rg
             for (unsigned c = 0; c < 4; ++c) in.texture[unit][c] = quantize(texel[c]);
         } else if ((m->projected_units >> unit) & 1) {
             memset(in.texture[unit], 255, 4);
+        }
+    }
+    if (s->fragment_light) {
+        const struct px_frag_light_config *f = s->fragment_light;
+        const float q[4] = {(float)varying[0], (float)varying[1], (float)varying[2], (float)varying[3]};
+        const float view[3] = {(float)varying[4], (float)varying[5], (float)varying[6]};
+        if (!px_frag_light(f, q, view, f->bump ? in.texture[f->bump_unit] : NULL, in.fragment_primary,
+                           in.fragment_secondary)) {
+            memset(in.fragment_primary, 0, 3); memset(in.fragment_secondary, 0, 3);
+            in.fragment_primary[3] = in.fragment_secondary[3] = 255;
+            degenerate = 1;
+        }
+    } else if (s->light) {
+        /* Executed lighting: secondary RGB is exactly zero (see
+         * prepare_bch_lighting) and its alpha is 255. */
+        in.fragment_secondary[3] = 255;
+        /* Interpolated model-space normal, renormalized by px_light_primary.
+         * A zero interpolated normal gives a black fragment primary. */
+        const float normal[3] = {(float)varying[0], (float)varying[1], (float)varying[2]};
+        if (!px_light_primary(s->light, normal, in.fragment_primary)) {
+            memset(in.fragment_primary, 0, 3);
+            in.fragment_primary[3] = 255;
+            degenerate = 1;
         }
     }
     uint8_t result[4];
@@ -2970,6 +2996,8 @@ static int draw_bch_meshes(const struct model_asset *asset, const struct px_rast
                 shader.light = &asset->bch_light[m->material_index];
                 shader.point_bound = &asset->point_bound[(size_t)m->material_index * 3];
             }
+            const int executed = asset->fragment_light && asset->fragment_ok[m->material_index] && asset->program_varyings;
+            if (executed) shader.fragment_light = &asset->fragment_light[m->material_index];
             static const enum px_raster_wrap wrap[] = {
                 PX_RASTER_CLAMP, PX_RASTER_CLAMP, PX_RASTER_REPEAT, PX_RASTER_MIRROR
             };
@@ -2995,10 +3023,16 @@ static int draw_bch_meshes(const struct model_asset *asset, const struct px_rast
                 struct px_raster_vertex triangle[3] = {
                     points[mesh->indices[first]], points[mesh->indices[first + 1]], points[mesh->indices[first + 2]]
                 };
-                double varyings[12];
-                for (unsigned k = 0; k < 3; ++k)
-                    memcpy(varyings + 4 * k, normals[mesh->indices[first + k]], 4 * sizeof *varyings);
-                result = px_raster_draw_varying(target, triangle, varyings, combiner_fragment, &shader, &state);
+                double varyings[24];
+                if (executed) {
+                    for (unsigned k = 0; k < 3; ++k)
+                        memcpy(varyings + 8 * k, asset->program_varyings[mesh->indices[first + k]], 8 * sizeof *varyings);
+                    result = px_raster_draw_varying8(target, triangle, varyings, combiner_fragment, &shader, &state);
+                } else {
+                    for (unsigned k = 0; k < 3; ++k)
+                        memcpy(varyings + 4 * k, normals[mesh->indices[first + k]], 4 * sizeof *varyings);
+                    result = px_raster_draw_varying(target, triangle, varyings, combiner_fragment, &shader, &state);
+                }
                 if (result != PX_RASTER_OK) { SDL_SetError("Rasterizer: %s", px_raster_result_string(result)); return 0; }
             }
             continue;
@@ -3221,7 +3255,96 @@ static int battle_shown(unsigned s)
  * are not traced: WrldMtx is the battle placement, ViewMtx the viewer's
  * camera rotation with the camera 1000 units in front, so the programs'
  * view-dependent terms see a nearby perspective eye. */
-static void shade_battle_model(const struct model_asset *a, const struct placement *at, const struct view *v,
+/* --vertex-shader: the fragment lighting unit's state per material, as the
+ * game's runtime would set it from the material and the scene (render/
+ * frag_light.h). From the material: the fragment flags (+6: bit 0 bump
+ * renormalization, 1 clamp highlights, 2 Distribution0, 3 Distribution1,
+ * 4 reflection), the LUT input registers, the LUT table and sampler names
+ * (matched against the model's LUT sets), the Fresnel selector and bump
+ * mode and texture. From the scene: the material's directional lights as
+ * prepare_bch_lighting selects them, their vectors rotated into view space
+ * (view: the camera rows). Light colors are the registers the traced color
+ * loop (code.bin 0x3030a8, reproduction/bch-lighting) writes; for specular1
+ * that loop writes the light's own color, not its product with the
+ * material, when its fourth argument is set (0x3031d8; the caller derives
+ * it from bit 5 of a word it reaches through the material object at
+ * +0x288, not traced further). Here that path is assumed for materials
+ * whose reflection LUTs are enabled; a material reading no LUT that is
+ * present keeps the directional approximation. */
+static int build_fragment_light(struct model_asset *a, const float view[12])
+{
+    const struct px_bch_model *m = &a->skin_source;
+    if (!a->bch_light || !a->light_index || m->material_count != a->bch.material_count) return 0;
+    if (!a->fragment_light) {
+        a->fragment_light = calloc(m->material_count, sizeof *a->fragment_light);
+        a->fragment_ok = calloc(m->material_count, 1);
+        a->program_varyings = calloc(a->wire.vertex_count ? a->wire.vertex_count : 1, sizeof *a->program_varyings);
+        if (!a->fragment_light || !a->fragment_ok || !a->program_varyings) return 0;
+    }
+    const struct px_bch_environment *env = &a->environment;
+    for (uint32_t i = 0; i < m->material_count; ++i) {
+        const struct px_bch_material *mat = &m->materials[i];
+        struct px_frag_light_config *c = &a->fragment_light[i];
+        memset(c, 0, sizeof *c);
+        a->fragment_ok[i] = 0;
+        if (!a->programs[i] || !(mat->material_flags & 1) || (mat->lut_known & 7) != 7 || mat->bump_mode > 1) continue;
+        px_frag_light_inputs(c, mat->lut_registers[0], mat->lut_registers[1], mat->lut_registers[2]);
+        /* Material LUT slots 0 D0, 1 D1, 2 Fresnel, 3..5 reflection R, G, B. */
+        static const unsigned slot[6] = {PX_LUT_D0, PX_LUT_D1, PX_LUT_FR, PX_LUT_RR, PX_LUT_RG, PX_LUT_RB};
+        const uint32_t flags = mat->fragment_flags;
+        const int wanted[6] = {(flags >> 2) & 1, (flags >> 3) & 1, mat->fresnel_selector != 0,
+                               (flags >> 4) & 1, (flags >> 4) & 1, (flags >> 4) & 1};
+        unsigned found = 0;
+        for (unsigned k = 0; k < 6; ++k) {
+            if (!wanted[k] || !mat->lut_table[k].present || !mat->lut_sampler[k].present) continue;
+            for (uint32_t l = 0; l < m->lut_count; ++l)
+                if (same_name_bytes(&m->luts[l].table, &mat->lut_table[k]) &&
+                    same_name_bytes(&m->luts[l].sampler, &mat->lut_sampler[k])) {
+                    c->lut[slot[k]] = m->luts[l].entries;
+                    ++found;
+                    break;
+                }
+        }
+        if (!found) continue;
+        c->clamp_highlights = (flags >> 1) & 1;
+        c->bump = mat->bump_mode == 1 && mat->bump_texture < 3 &&
+                  ((a->bch_combiner[i].sampled_units >> mat->bump_texture) & 1);
+        c->bump_unit = c->bump ? (int)mat->bump_texture : 0;
+        c->bump_renormalize = flags & 1;
+        c->fresnel_primary = mat->fresnel_selector & 1;
+        c->fresnel_secondary = (mat->fresnel_selector >> 1) & 1;
+        /* The lights: the scene's set named for the Pokémon (light_poke_1,
+         * set 5 of the field environment) when it exists, else the
+         * material's own set as prepare_bch_lighting selected it. */
+        const struct px_bch_light_set *set = NULL;
+        for (uint32_t k = 0; k < env->set_count && !set; ++k)
+            if (env->sets[k].count == 1 && name_is(&env->lights[env->set_lights[env->sets[k].first]].name, "light_poke_1"))
+                set = &env->sets[k];
+        const struct px_light_setup *setup = &a->bch_light[i];
+        memcpy(c->global_ambient, setup->global_ambient, sizeof c->global_ambient);
+        c->count = set ? set->count : setup->count;
+        for (uint32_t l = 0; l < c->count; ++l) {
+            const struct px_bch_light *light = &env->lights[set ? env->set_lights[set->first + l] :
+                                                            a->light_index[(size_t)i * 8 + l]];
+            struct px_frag_light_source *to = &c->lights[l];
+            float vector[3];
+            for (unsigned k = 0; k < 3; ++k) vector[k] = -light->direction[k] + 0.0f;
+            for (unsigned k = 0; k < 3; ++k) {
+                to->ambient[k] = px_light_register_channel(light->ambient[k], mat->colors[1][k]);
+                to->diffuse[k] = px_light_register_channel(light->diffuse[k], mat->colors[2][k]);
+                to->specular0[k] = px_light_register_channel(light->specular0[k], mat->colors[3][k]);
+                to->specular1[k] = (flags >> 4) & 1 ? light->specular1[k] :
+                                   px_light_register_channel(light->specular1[k], mat->colors[4][k]);
+                to->vector[k] = view[k * 4] * vector[0] + view[k * 4 + 1] * vector[1] + view[k * 4 + 2] * vector[2];
+            }
+            to->two_sided = (int)(light->flags & 1);
+        }
+        a->fragment_ok[i] = 1;
+    }
+    return 1;
+}
+
+static void shade_battle_model(struct model_asset *a, const struct placement *at, const struct view *v,
                                struct px_raster_vertex *points)
 {
     const struct px_bch_model *m = &a->skin_source;
@@ -3235,6 +3358,7 @@ static void shade_battle_model(const struct model_asset *a, const struct placeme
         {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
         a->motion_fixed ? a->motion_world : a->motion_rest};
     struct px_pica_state *prepared = &a->program_state[0], *work = &a->program_state[1];
+    if (!build_fragment_light(a, frame.view)) return;
     for (uint32_t i = 0; i < m->mesh_count; ++i) {
         const struct px_bch_mesh *mesh = m->meshes + i;
         const struct px_vertex_program *program = a->programs[mesh->material_index];
@@ -3243,11 +3367,18 @@ static void shade_battle_model(const struct model_asset *a, const struct placeme
             const struct px_bch_submesh *sm = m->submeshes + mesh->first_submesh + sub;
             if (!px_vertex_program_prepare(program, m, i, sub, &frame, prepared)) continue;
             for (uint32_t x = sm->first_index; x < sm->first_index + sm->index_count && x < m->index_count; ++x) {
-                float color[4];
+                float color[4], quaternion[4] = {0, 0, 0, 1};
                 if (px_vertex_program_run(program, m, m->indices[x], prepared, work) != PX_PICA_OK ||
                     px_vertex_program_output(program, work, PX_VERTEX_OUTPUT_COLOR, color) != 15) continue;
                 for (unsigned j = 0; j < 4; ++j)
                     points[x].rgba[j] = !(color[j] > 0) ? 0 : color[j] > 1 ? 1 : color[j];
+                float view[4] = {0, 0, 0, 0};
+                px_vertex_program_output(program, work, PX_VERTEX_OUTPUT_QUATERNION, quaternion);
+                px_vertex_program_output(program, work, PX_VERTEX_OUTPUT_VIEW, view);
+                for (unsigned j = 0; j < 8; ++j) {
+                    const float value = j < 4 ? quaternion[j] : j < 7 ? view[j - 4] : 0;
+                    a->program_varyings[x][j] = isfinite(value) && fabsf(value) <= 1e6f ? value : 0;
+                }
             }
         }
     }
@@ -3257,7 +3388,7 @@ static int draw_battle_models(struct px_raster_target *target)
 {
     struct game_session *g = &g_game;
     for (unsigned s = 0; s < 2; ++s) {
-        const struct model_asset *m = g->models[s];
+        struct model_asset *m = g->models[s];
         if (!m || !battle_shown(s)) continue;
         const float *lo = g->model_lo[s], *hi = g->model_hi[s];
         const double height = hi[1] - lo[1] > 1e-6 ? hi[1] - lo[1] : 1;

@@ -354,6 +354,21 @@ static int read_parameters(struct reader *r, size_t params, struct px_bch_materi
         /* Recorded when it is a string; anything else leaves it absent. */
         if (!span(params, 0x108, r->sections[CONTENTS]) || !name(r, params + 0x104, 1, &out->shader))
             memset(&out->shader, 0, sizeof out->shader);
+        /* LUT configuration, recorded where it reads cleanly. */
+        for (unsigned k = 0; k < 3; ++k) {
+            const uint32_t value = u32(r->data + params + 168 + 8 * k), header = u32(r->data + params + 172 + 8 * k);
+            const unsigned reg = header & 0xffff;
+            if (reg >= 0x1d0 && reg <= 0x1d2 && ((header >> 16) & 15) == 15 && !((header >> 20) & 0x7ff)) {
+                out->lut_registers[reg - 0x1d0] = value;
+                out->lut_known |= 1u << (reg - 0x1d0);
+            }
+        }
+        for (unsigned k = 0; k < 6; ++k) {
+            if (!span(params, 0x104, r->sections[CONTENTS]) || !name(r, params + 0xd4 + 4 * k, 1, &out->lut_table[k]))
+                memset(&out->lut_table[k], 0, sizeof out->lut_table[k]);
+            if (!span(params, 0x104, r->sections[CONTENTS]) || !name(r, params + 0xec + 4 * k, 1, &out->lut_sampler[k]))
+                memset(&out->lut_sampler[k], 0, sizeof out->lut_sampler[k]);
+        }
     }
     if (fragment.draw_count) return fail(r, PX_BCH_MODEL_UNSUPPORTED);
     struct px_bch_fragment_state *f = &out->fragment;
@@ -375,6 +390,7 @@ static int read_parameters(struct reader *r, size_t params, struct px_bch_materi
         if (u32(r->data + params + 140 + j * 4)) out->lut_sampler_mask |= 1u << j;
     out->fresnel_selector = r->data[params + 165];
     out->bump_mode = r->data[params + 166];
+    out->bump_texture = r->data[params + 167];
     static const unsigned stages[6] = {0xc0, 0xc8, 0xd0, 0xd8, 0xf0, 0xf8};
     for (unsigned stage = 0; stage < 6; ++stage)
         for (unsigned j = 0; j < 5; ++j) observe(&fragment, stages[stage] + j, &f->tev[stage][j]);
@@ -745,6 +761,70 @@ static int read_skeleton(struct reader *r, size_t model, struct px_bch_model *ou
     }
     return 1;
 }
+/* Skinned decode only: LUT sets (index slot 4): name +8, sampler array +0
+ * and count +4; each sampler is 16 bytes (flags, command pointer and word
+ * count, name). A sampler stream may write the LUT index register 0x1c5 and
+ * the data registers 0x1c8..0x1cf (full masks); each data word stores one
+ * entry and advances the index. Anything that does not read cleanly leaves
+ * the whole list out (only allocation failure is an error). */
+static int read_luts(struct reader *r, struct px_bch_model *out)
+{
+    uint32_t total = 0;
+    for (uint32_t k = 0; k < r->counts[4]; ++k) {
+        size_t set;
+        if (!pointer(r, r->tables[4] + (size_t)k * 4, CONTENTS, 12, &set)) return 1;
+        const uint32_t n = u32(r->data + set + 4);
+        if (n > 64 || total + n > 1024) return 1;
+        total += n;
+    }
+    if (!total) return 1;
+    out->luts = calloc(total, sizeof *out->luts);
+    if (out->luts == NULL) return fail(r, PX_BCH_MODEL_NO_MEMORY);
+    uint32_t at = 0;
+    for (uint32_t k = 0; k < r->counts[4]; ++k) {
+        size_t set, samplers;
+        struct px_bch_name table;
+        if (!pointer(r, r->tables[4] + (size_t)k * 4, CONTENTS, 12, &set) || !name(r, set + 8, 0, &table)) goto bad;
+        const uint32_t n = u32(r->data + set + 4);
+        if (n && !pointer(r, set, CONTENTS, (size_t)n * 16, &samplers)) goto bad;
+        for (uint32_t j = 0; j < n; ++j) {
+            const size_t sampler = samplers + (size_t)j * 16;
+            struct px_bch_lut *lut = out->luts + at++;
+            lut->table = table;
+            lut->flags = u32(r->data + sampler);
+            const uint32_t words = u32(r->data + sampler + 8);
+            size_t start;
+            if (!name(r, sampler + 12, 0, &lut->sampler) || !words || words > 4096 ||
+                !pointer(r, sampler + 4, COMMANDS, (size_t)words * 4, &start)) goto bad;
+            const size_t end = start + (size_t)words * 4;
+            uint32_t index = 0;
+            for (size_t cursor = start; cursor + 8 <= end;) {
+                const uint32_t header = u32(r->data + cursor + 4);
+                const unsigned reg = header & 0xffff, extra = (header >> 20) & 0x7ff, consecutive = header >> 31;
+                const size_t packet = ((size_t)(2 + extra) * 4 + 7) & ~(size_t)7;
+                if (packet > end - cursor) goto bad;
+                for (unsigned p = 0; p <= extra; ++p) {
+                    const unsigned target = reg + (consecutive ? p : 0);
+                    const uint32_t value = u32(r->data + cursor + (p ? 4 + (size_t)p * 4 : 0));
+                    if (((header >> 16) & 15) != 15) goto bad;
+                    if (target == 0x1c5) index = value & 255;
+                    else if (target >= 0x1c8 && target <= 0x1cf) {
+                        if (index > 255) goto bad;
+                        lut->entries[index++] = value & 0xffffff;
+                    }
+                }
+                cursor += packet;
+            }
+        }
+    }
+    out->lut_count = at;
+    return 1;
+bad:
+    free(out->luts);
+    out->luts = NULL;
+    out->lut_count = 0;
+    return 1;
+}
 static int read_model(struct reader *r, uint32_t index, struct px_bch_model *out)
 {
     if (index >= r->counts[0]) return 0;
@@ -775,6 +855,7 @@ static int read_model(struct reader *r, uint32_t index, struct px_bch_model *out
             shader->offset = (uint32_t)program;
         }
     }
+    if (r->skinned && r->counts[4] && !read_luts(r, out)) return 0;
     if (r->skinned) {
         out->model_flags = r->data[at];
         out->bone_scaling = r->data[at + 1];
@@ -992,7 +1073,7 @@ void px_bch_model_free(struct px_bch_model *model)
 {
     if (model == NULL) return;
     free(model->positions); free(model->uvs); free(model->colors); free(model->normals); free(model->bone_indices); free(model->bone_weights); free(model->bones); free(model->indices);
-    free(model->inputs); free(model->shaders);
+    free(model->inputs); free(model->shaders); free(model->luts);
     free(model->meshes); free(model->submeshes); free(model->materials);
     memset(model, 0, sizeof *model);
 }

@@ -49,6 +49,10 @@ struct px_bch_uniforms {
 /* Skinned decode only: a shader resource (BCH index slot 2), a DVLB stored
  * in contents at offset..offset+size of the input; name from its dictionary. */
 struct px_bch_shader { struct px_bch_name name; uint32_t offset, size; };
+/* Skinned decode only: one LUT sampler of a LUT set (BCH index slot 4), the
+ * 256 raw 24-bit entries its command stream writes to the lighting LUT data
+ * registers (value bits 0..11, difference 12..22, its sign bit 23). */
+struct px_bch_lut { struct px_bch_name table, sampler; uint32_t flags; uint32_t entries[256]; };
 struct px_bch_material {
     struct px_bch_name name, texture_names[3];
     uint32_t texture_unit_config;
@@ -69,6 +73,7 @@ struct px_bch_material {
      * fresnel selector +165 and bump mode +166. Nothing here is executed. */
     uint32_t material_flags, fragment_flags, light_set_index, fog_index;
     uint32_t lut_sampler_mask, fresnel_selector, bump_mode;
+    uint32_t bump_texture; /* +167: the texture unit the bump map is read from */
     uint8_t colors[5][4];
     float color_scale;
     /* Skinned decode only: the vertex shader reference ("entry@resource",
@@ -76,6 +81,15 @@ struct px_bch_material {
      * command stream (+0xc8) writes. */
     struct px_bch_name shader;
     struct px_bch_uniforms uniforms;
+    /* Skinned decode only: fragment-lighting LUTs. lut_registers holds the
+     * values of the LUT config commands (+168..+191, SPICA LUTConfigCommands)
+     * for registers 0x1d0 (input absolute), 0x1d1 (input select) and 0x1d2
+     * (input scale), with lut_known bits 0..2 marking which were present.
+     * Per LUT slot (0 Distribution0, 1 Distribution1, 2 Fresnel, 3 ReflectR,
+     * 4 ReflectG, 5 ReflectB) the table set name (+0xd4 + 4k) and sampler
+     * name (+0xec + 4k), absent when null. */
+    uint32_t lut_registers[3], lut_known;
+    struct px_bch_name lut_table[6], lut_sampler[6];
 };
 struct px_bch_submesh {
     uint32_t first_index, index_count, index_width;
@@ -145,6 +159,8 @@ struct px_bch_model {
     float *inputs;
     struct px_bch_shader *shaders;
     uint32_t shader_count;
+    struct px_bch_lut *luts;
+    uint32_t lut_count;
     uint32_t *indices; /* Owned indices into the complete positions array. */
     struct px_bch_mesh *meshes;
     struct px_bch_submesh *submeshes;

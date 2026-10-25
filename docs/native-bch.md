@@ -676,3 +676,15 @@ gains soft shading and a rim light (right). Models whose combiners never read
 that color, like Zigzagoon, look the same. The camera and light the engine
 would set are approximated, so this is an option for now. See the
 [vertex lighting record](../native/reproduction/vertex-lighting/README.txt).
+
+<img src="images/native-bch-fragment-lighting.png" alt="The battle with vertex lighting only, and with the fragment lighting unit and its LUTs" width="600">
+
+The option now also runs the 3DS GPU's per-pixel lighting unit the way the
+hardware does, fed by those programs: their output tells it the light
+direction relative to each bit of surface, the bump map adds detail, and
+each material's lookup tables turn that into three ramps (a specular curve,
+a per-Pokémon table and a linear one) that the combiners mix in. Froakie's
+outline catches the light and Zigzagoon's fur lightens (below, before
+above). Which light the battle uses, and one flag in the game's light setup,
+are educated guesses for now. See the
+[fragment lighting record](../native/reproduction/fragment-lighting/README.txt).
