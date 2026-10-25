@@ -137,8 +137,8 @@ int main(void)
     assert(ui.page_event[0] == PX_LOG_STATUS);
     while (ui.phase == PX_UI_MESSAGES) px_battle_ui_input(&ui, &x, '.');
     assert(ui.phase == PX_UI_COMMAND);
-    px_battle_ui_input(&ui, &x, 'R'); px_battle_ui_input(&ui, &x, 'R'); px_battle_ui_input(&ui, &x, 'R');
-    assert(ui.cursor == 2 && px_battle_ui_input(&ui, &x, '.') == 1 && !strcmp(ui.pages[0], "Got away safely!"));
+    for (unsigned k = 0; k < 4; ++k) px_battle_ui_input(&ui, &x, 'R'); /* FIGHT BALL POKéMON RUN */
+    assert(ui.cursor == 3 && px_battle_ui_input(&ui, &x, '.') == 1 && !strcmp(ui.pages[0], "Got away safely!"));
     px_battle_ui_input(&ui, &x, '.');
     assert(ui.phase == PX_UI_DONE && x.state == PX_BATTLE_ESCAPED);
     /* BALL without balls: a message, back to the menu, no turn. */
@@ -151,6 +151,50 @@ int main(void)
     assert(ui.phase == PX_UI_COMMAND);
     static uint8_t rgba[400 * 240 * 4];
     px_battle_ui_draw(rgba, 400, 240, &ui, &x); /* draws without a page or menu */
+    {   /* The party: a switch is a turn; the list refuses the active and fainted ones. */
+        struct px_battler team[3], other;
+        assert(px_battler_make(&data, 2, 5, iv, 0, set, &other));
+        team[0] = a; team[1] = other; team[2] = other; team[2].hp = 0;
+        px_battle_start(&x, &data, &a, &b, 21);
+        assert(!px_battle_set_party(&x, team, 3, 2) && !px_battle_set_party(&x, team, 7, 0));
+        assert(px_battle_set_party(&x, team, 3, 0) && x.party_count == 3 && x.active == 0);
+        px_battle_ui_start(&ui, &x, species, 4, names, 6, NULL);
+        px_battle_ui_input(&ui, &x, '.'); px_battle_ui_input(&ui, &x, '.');
+        px_battle_ui_input(&ui, &x, 'R'); px_battle_ui_input(&ui, &x, 'R');
+        px_battle_ui_input(&ui, &x, '.');
+        assert(ui.phase == PX_UI_PARTY && !ui.forced && ui.cursor == 0);
+        px_battle_ui_draw(rgba, 400, 240, &ui, &x);
+        assert(px_battle_ui_input(&ui, &x, '.') == 0 && strstr(ui.note, "already in battle"));
+        px_battle_ui_input(&ui, &x, 'D'); px_battle_ui_input(&ui, &x, 'D');
+        assert(px_battle_ui_input(&ui, &x, '.') == 0 && strstr(ui.note, "no energy left"));
+        px_battle_ui_input(&ui, &x, 'x');
+        assert(ui.phase == PX_UI_COMMAND && ui.cursor == 2);
+        px_battle_ui_input(&ui, &x, '.'); px_battle_ui_input(&ui, &x, 'D');
+        assert(px_battle_ui_input(&ui, &x, '.') == 1 && x.active == 1 && x.side[0].species == 2 && x.turn == 1);
+        assert(!strcmp(ui.pages[0], "Come back, Froakie!") && !strcmp(ui.pages[1], "Go, Bunnelby!") &&
+               ui.page_event[1] == PX_LOG_SEND && ui.page_count >= 3); /* then the wild Pokémon moves */
+        assert(x.party[0].species == 1 && x.party[0].hp == a.hp && x.party[1].hp == x.side[0].hp);
+        /* A faint with another able Pokémon: the list must choose, no turn. */
+        x.side[0].hp = 1; x.side[0].stats[3] = 1; x.side[1].moves[0] = 5; x.side[1].moves[1] = 0;
+        x.side[1].moves[2] = x.side[1].moves[3] = 0;
+        while (ui.phase == PX_UI_MESSAGES) px_battle_ui_input(&ui, &x, '.');
+        px_battle_ui_input(&ui, &x, '.'); /* FIGHT */
+        px_battle_ui_input(&ui, &x, '.'); /* Pound; the wild never-miss move faints it */
+        assert(x.state == PX_BATTLE_SWITCH && x.party[1].hp == 0);
+        while (ui.phase == PX_UI_MESSAGES) px_battle_ui_input(&ui, &x, '.');
+        assert(ui.phase == PX_UI_PARTY && ui.forced && ui.cursor == 0);
+        px_battle_ui_input(&ui, &x, 'x');
+        assert(ui.phase == PX_UI_PARTY);
+        const uint32_t turn = x.turn;
+        assert(px_battle_ui_input(&ui, &x, '.') == 1 && x.active == 0 && x.turn == turn &&
+               x.state == PX_BATTLE_CHOOSING && ui.page_count == 1 && !strcmp(ui.pages[0], "Go, Froakie!"));
+        /* The last able one faints: lost. */
+        x.side[0].hp = 1; x.side[0].stats[3] = 1;
+        const int growled = px_battle_turn(&x, 2, species, 4, names, 6);
+        assert(growled && x.state == PX_BATTLE_LOST &&
+               !strcmp(x.log[x.log_count - 1], "You have no more Pokémon that can fight!"));
+        assert(!px_battle_send_out(&x, 1, species, 4, names, 6));
+    }
     /* Experience and levels: growth group 0 is level^3 (a/2/1/7 layout). */
     static uint32_t growth[1][101];
     for (unsigned l = 0; l <= 100; ++l) growth[0][l] = l * l * l;

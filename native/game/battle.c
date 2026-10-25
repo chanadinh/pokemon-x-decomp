@@ -254,8 +254,37 @@ void px_battle_start(struct px_battle *b, const struct px_battle_data *data, con
     memset(b, 0, sizeof *b);
     b->data = data;
     b->side[0] = *player; b->side[1] = *wild;
+    b->party[0] = *player; b->party_count = 1; b->active = 0;
     b->rng.state = seed ? seed : 1;
     b->state = PX_BATTLE_CHOOSING;
+}
+
+int px_battle_set_party(struct px_battle *b, const struct px_battler *party, uint32_t count, uint32_t active)
+{
+    if (!b || !party || !count || count > 6 || active >= count || !party[active].hp) return 0;
+    memcpy(b->party, party, count * sizeof *party);
+    b->party_count = count; b->active = active;
+    b->side[0] = party[active];
+    memset(b->side[0].stages, 0, sizeof b->side[0].stages);
+    return 1;
+}
+
+/* party[active] follows side[0]; stat stages belong to the battle only. */
+static void sync_party(struct px_battle *b)
+{
+    b->party[b->active] = b->side[0];
+    memset(b->party[b->active].stages, 0, sizeof b->party[b->active].stages);
+}
+
+/* The player's active Pokémon fainted: another must be sent out, or the
+ * battle is lost. */
+static void player_fainted(struct px_battle *b)
+{
+    sync_party(b);
+    for (uint32_t i = 0; i < b->party_count; ++i)
+        if (i != b->active && b->party[i].hp) { b->state = PX_BATTLE_SWITCH; return; }
+    say(b, "You have no more Pokémon that can fight!");
+    b->state = PX_BATTLE_LOST;
 }
 
 static int wild_choice(struct px_battle *b)
@@ -342,7 +371,8 @@ int px_battle_turn(struct px_battle *b, int player_move, const char *const *spec
         if (throw_ball(b, species_names, species_count)) { b->state = PX_BATTLE_CAUGHT; return 1; }
         const int w = wild_choice(b);
         if (w >= 0 && use_move(b, 1, (unsigned)w, species_names, species_count, move_names, move_count))
-            b->state = PX_BATTLE_LOST;
+            player_fainted(b);
+        sync_party(b);
         return 1;
     }
     if (player_move < 0) {
@@ -357,7 +387,8 @@ int px_battle_turn(struct px_battle *b, int player_move, const char *const *spec
         say(b, "You can't escape!");
         const int w = wild_choice(b);
         if (w >= 0 && use_move(b, 1, (unsigned)w, species_names, species_count, move_names, move_count))
-            b->state = PX_BATTLE_LOST;
+            player_fainted(b);
+        sync_party(b);
         return 1;
     }
     const int w = wild_choice(b);
@@ -374,10 +405,46 @@ int px_battle_turn(struct px_battle *b, int player_move, const char *const *spec
         if (side == 1 && w < 0) continue;
         const unsigned slot = side ? (unsigned)w : (unsigned)player_move;
         if (use_move(b, side, slot, species_names, species_count, move_names, move_count)) {
-            b->state = side == 0 ? PX_BATTLE_WON : PX_BATTLE_LOST;
-            if (side == 0) award(b, species_names, species_count, move_names, move_count);
+            if (side == 0) {
+                b->state = PX_BATTLE_WON;
+                award(b, species_names, species_count, move_names, move_count);
+            } else player_fainted(b);
             break;
         }
     }
+    sync_party(b);
+    return 1;
+}
+
+int px_battle_send_out(struct px_battle *b, uint32_t slot, const char *const *species_names, uint32_t species_count,
+                       const char *const *move_names, uint32_t move_count)
+{
+    if ((b->state != PX_BATTLE_CHOOSING && b->state != PX_BATTLE_SWITCH) || slot >= b->party_count ||
+        slot == b->active || !b->party[slot].hp) return 0;
+    const int forced = b->state == PX_BATTLE_SWITCH;
+    char name[64], line[96];
+    b->log_count = 0;
+    if (!forced) {
+        ++b->turn;
+        species_name(b, 0, species_names, species_count, name, sizeof name);
+        snprintf(line, sizeof line, "Come back, %s!", name);
+        say(b, line);
+    }
+    sync_party(b);
+    b->active = slot;
+    b->side[0] = b->party[slot];
+    memset(b->side[0].stages, 0, sizeof b->side[0].stages);
+    species_name(b, 0, species_names, species_count, name, sizeof name);
+    snprintf(line, sizeof line, "Go, %s!", name);
+    const uint32_t at = b->log_count;
+    say(b, line);
+    if (b->log_count > at) b->log_event[at] = PX_LOG_SEND;
+    b->state = PX_BATTLE_CHOOSING;
+    if (!forced) {
+        const int w = wild_choice(b);
+        if (w >= 0 && use_move(b, 1, (unsigned)w, species_names, species_count, move_names, move_count))
+            player_fainted(b);
+    }
+    sync_party(b);
     return 1;
 }

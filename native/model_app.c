@@ -1740,6 +1740,7 @@ struct game_session {
      * damage reaction waits for the attack), and whether its last frame holds. */
     struct { const struct px_gf_motion *motion; uint64_t start; int hold; } anim[2];
     uint64_t clock, anim_key;
+    struct options opts; int have_opts; /* the options battle models load with mid-battle (a switch) */
 };
 static struct game_session g_game;
 
@@ -1895,6 +1896,12 @@ static void print_battler(const char *what, const struct px_battler *b)
 /* After a completed step onto grass: roll, and on an encounter prepare the
  * wild Pokémon (g_game.pending). Returns 1 on an encounter. */
 static void battle_model_load(const struct options *o, unsigned side, uint16_t species);
+/* The party's first Pokémon that can fight leads (0 if none can). */
+static uint32_t first_able(void)
+{
+    for (uint32_t i = 0; i < g_game.party_count; ++i) if (g_game.party[i].hp) return i;
+    return 0;
+}
 /* The partner is made on first need (the first encounter, or a save). */
 static int ensure_partner(const struct options *o)
 {
@@ -2012,7 +2019,8 @@ static int maybe_encounter(const struct options *o, struct model_asset *asset)
     printf("encounter zone=%" PRIu32 " cell=%d,%d slot=%u species=%u level=%u\n", zs->zone, w->x, w->z, slot,
            s->species, level);
     print_battler("wild", &g_game.wild);
-    battle_model_load(o, 0, g_game.partner.species);
+    if (!g_game.have_opts) { g_game.opts = *o; g_game.have_opts = 1; }
+    battle_model_load(o, 0, g_game.party[first_able()].species);
     battle_model_load(o, 1, g_game.wild.species);
     g_game.pending = 1;
     return 1;
@@ -2128,7 +2136,9 @@ static void battle_begin(void)
     struct game_session *g = &g_game;
     g->pending = 0; g->active = 1; ++g->battles;
     memset(g->anim, 0, sizeof g->anim); g->anim_key = 0;
-    px_battle_start(&g->battle, &g->data, &g->partner, &g->wild, px_rng_next(&g->rng));
+    const uint32_t lead = first_able();
+    px_battle_start(&g->battle, &g->data, &g->party[lead], &g->wild, px_rng_next(&g->rng));
+    px_battle_set_party(&g->battle, g->party, g->party_count, lead);
     g->battle.balls = g->balls;
     px_battle_ui_start(&g->ui, &g->battle, (const char *const *)g->species_names, g->species_name_count,
                        (const char *const *)g->move_names, g->move_name_count, (const char *const *)g->type_names);
@@ -2144,16 +2154,23 @@ static void battle_input(char key)
         for (uint32_t i = before; i < g->ui.page_count; ++i)
             printf("battle turn=%" PRIu32 " message=\"%s\"\n", g->battle.turn, g->ui.pages[i]);
     if (g->ui.phase != PX_UI_DONE) return;
-    static const char *const result[] = {"choosing", "won", "lost", "escaped", "caught"};
-    g->partner = g->battle.side[0];
-    if (g->battle.state == PX_BATTLE_LOST) g->partner.hp = g->partner.stats[0];
-    memset(g->partner.stages, 0, sizeof g->partner.stages);
-    g->party[0] = g->partner;
+    static const char *const result[] = {"choosing", "won", "lost", "escaped", "caught", "switching"};
+    /* The party comes back as the battle left it; losing heals every member
+     * where the player stands (no Pokémon Center yet). */
+    memcpy(g->party, g->battle.party, g->battle.party_count * sizeof *g->party);
+    for (uint32_t i = 0; i < g->party_count; ++i) {
+        memset(g->party[i].stages, 0, sizeof g->party[i].stages);
+        if (g->battle.state == PX_BATTLE_LOST) g->party[i].hp = g->party[i].stats[0];
+    }
+    g->partner = g->party[0];
     g->balls = g->battle.balls;
     battle_model_free(1);
-    printf("battle_end result=%s turns=%" PRIu32 " partner_hp=%u/%u level=%u exp=%u wild_hp=%u/%u balls=%u\n",
-           result[g->battle.state], g->battle.turn, g->partner.hp, g->partner.stats[0], g->partner.level,
-           (unsigned)g->partner.exp, g->battle.side[1].hp, g->battle.side[1].stats[0], (unsigned)g->balls);
+    const struct px_battler *active = &g->party[g->battle.active];
+    printf("battle_end result=%s turns=%" PRIu32 " partner_hp=%u/%u level=%u exp=%u wild_hp=%u/%u balls=%u",
+           result[g->battle.state], g->battle.turn, active->hp, active->stats[0], active->level,
+           (unsigned)active->exp, g->battle.side[1].hp, g->battle.side[1].stats[0], (unsigned)g->balls);
+    if (g->battle.active) printf(" active=%" PRIu32, g->battle.active);
+    putchar('\n');
     if (g->battle.state == PX_BATTLE_CAUGHT) {
         /* The catch joins the party (a full party keeps it out: no PC boxes yet). */
         if (g->party_count < 6) {
@@ -2973,6 +2990,11 @@ static void battle_animate(void)
             const struct px_gf_motion *attack = g->anim[side].start == now ? g->anim[side].motion : NULL;
             if (e & PX_LOG_HIT) battle_play(!side, PX_MOTION_DAMAGE, now + (attack ? 2u * attack->frames : 0), 0);
         } else if (kind == PX_LOG_FAINT) battle_play(side, PX_MOTION_FAINT, now, 1);
+        else if (kind == PX_LOG_SEND && g->have_opts) {
+            /* "Go, Y!": the player's side now shows the Pokémon sent out. */
+            battle_model_load(&g->opts, 0, g->battle.side[0].species);
+            memset(&g->anim[0], 0, sizeof g->anim[0]);
+        }
     }
     g->anim_key = key;
     for (unsigned s = 0; s < 2; ++s) {

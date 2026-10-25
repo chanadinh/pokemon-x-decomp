@@ -503,3 +503,6 @@ resume the zone, position, party and balls; party Pokémon are stored as the gam
 party records through the reconstructed codec. See the
 [save record](reproduction/bch-save/README.txt).
 
+The battle menu's POKéMON entry switches party members, and a fainted Pokémon is
+replaced from the party; see the [party record](reproduction/bch-party/README.txt).
+

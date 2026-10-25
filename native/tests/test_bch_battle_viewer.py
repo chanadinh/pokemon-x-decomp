@@ -178,11 +178,11 @@ class BCHBattleViewerTests(unittest.TestCase):
             self.assertIn('Froakie grew to Lv. 6!', result.stdout)
             self.assertIn(' level=6 exp=234 ', end[0])
             # Running from the command menu (cursor right): the faster partner escapes.
-            run = self.run_viewer(root, *common, '--play', 'RR..RR..', '--frames', 200).stdout
+            run = self.run_viewer(root, *common, '--play', 'RR..RRR..', '--frames', 200).stdout
             self.assertIn('battle turn=1 message="Got away safely!"\n', run)
             self.assertIn('battle_end result=escaped turns=1 ', run)
             # The moves menu cancels back to the command menu ('x').
-            cancel = self.run_viewer(root, *common, '--play', 'RR...xRR..', '--frames', 200).stdout
+            cancel = self.run_viewer(root, *common, '--play', 'RR...xRRR..', '--frames', 200).stdout
             self.assertIn('battle_end result=escaped turns=1 ', cancel)
             # Throwing balls (cursor on BALL) until one holds; '.x' pads safely:
             # 'x' is ignored by pages and the command menu and cancels FIGHT.

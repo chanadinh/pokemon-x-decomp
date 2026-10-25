@@ -1,0 +1,18 @@
+Party battle validation, 2026-10-25
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video with the software renderer. Not run on the local
+WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (extended: test_battle, BCH battle and save viewers).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection under dummy video:
+   test_battle, the battle and save viewer suites and a Route 2 switch with
+   both models: no diagnostics.
+4. Earlier records unchanged; ../bch-catch/verify_catch.py and
+   ../bch-save/verify_save.py pass with this viewer.
+5. verify_party.py: the encounter and switch turn predicted from the saved
+   random state, printed exactly; the sent-out model loaded.
+
+Not established: the game's switching and replacement rules, and any
+running-game comparison.

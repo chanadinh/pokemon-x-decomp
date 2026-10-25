@@ -597,3 +597,19 @@ own; it is not a 3DS save file. An independent reader built from PKHeX's
 documentation of the format decodes the records, finds every value where it
 should be, and re-encodes them to the same bytes. See the
 [save record](../native/reproduction/bch-save/README.txt).
+
+## The whole party
+
+<img src="images/native-bch-switch.png" alt="The party list in battle, then Scatterbug sent out against a wild Bunnelby" width="800">
+
+Everyone you catch can now fight. The battle menu has a POKéMON entry that
+opens the party list: pick another Pokémon and it takes its place (that is
+your turn, so the wild Pokémon gets a move in). If the one in battle
+faints and someone else can still fight, the list opens and you choose who
+goes next; you only lose when nobody is left. The next battle starts with
+the first party member that can fight, and the new Pokémon's model and
+motions load as it is sent out.
+
+From a saved game, an independent model predicts the next wild encounter
+and every message of the switch turn, down to the damage, and the viewer
+matches it. See the [party record](../native/reproduction/bch-party/README.txt).

@@ -108,6 +108,13 @@ class BCHSaveViewerTests(unittest.TestCase):
             out = self.run_viewer(root, '--load', save, '--code-bin', code, '--inspect').stdout
             self.assertIn(' party=2 balls=', out)
             self.assertRegex(out, r'party_member slot=1 species=2 level=3 ')
+            # With two in the party, POKéMON switches (a turn): from the loaded file.
+            switch = 'RR' + '..' + 'RR.' + 'D.' + '....'
+            out = self.run_viewer(root, '--load', save, '--code-bin', code, '--software', '--encounter-rate', 100,
+                                  '--play', switch, '--frames', 120).stdout
+            self.assertIn('battle turn=1 message="Come back, Froakie!"\n', out)
+            self.assertIn('battle turn=1 message="Go, Bunnelby!"\n', out)
+            self.assertIn('battle_model side=partner species=2 model=none\n', out)
             # A damaged record is refused.
             damaged = bytearray(save.read_bytes())
             damaged[36 + 0x50] ^= 1

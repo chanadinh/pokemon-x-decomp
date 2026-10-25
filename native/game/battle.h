@@ -79,11 +79,17 @@ int px_battler_make(const struct px_battle_data *data, uint16_t species, uint8_t
  * of a move, the Pokémon that faints), and PX_LOG_HIT on a move's message
  * when the move then damaged the other side. */
 enum { PX_LOG_NONE = 0, PX_LOG_PHYSICAL = 1, PX_LOG_SPECIAL = 2, PX_LOG_STATUS = 3, PX_LOG_FAINT = 4,
+       PX_LOG_SEND = 5, /* "Go, Y!": the player's side now shows side[0] */
        PX_LOG_KIND = 7, PX_LOG_SIDE1 = 8, PX_LOG_HIT = 16 };
-enum px_battle_state { PX_BATTLE_CHOOSING = 0, PX_BATTLE_WON, PX_BATTLE_LOST, PX_BATTLE_ESCAPED, PX_BATTLE_CAUGHT };
+/* PX_BATTLE_SWITCH: the player's Pokémon fainted and another can still
+ * fight; px_battle_send_out must choose it before the battle goes on. */
+enum px_battle_state { PX_BATTLE_CHOOSING = 0, PX_BATTLE_WON, PX_BATTLE_LOST, PX_BATTLE_ESCAPED, PX_BATTLE_CAUGHT,
+                       PX_BATTLE_SWITCH };
 struct px_battle {
     const struct px_battle_data *data;
-    struct px_battler side[2]; /* 0 the player's, 1 the wild Pokémon */
+    struct px_battler side[2]; /* 0 the player's active Pokémon, 1 the wild one */
+    struct px_battler party[6]; /* the player's party; party[active] is kept equal to side[0] (stages aside) */
+    uint32_t party_count, active;
     struct px_rng rng;
     uint32_t turn, escape_attempts;
     uint32_t balls;            /* Poké Balls left; set by the caller after start */
@@ -94,6 +100,15 @@ struct px_battle {
 };
 void px_battle_start(struct px_battle *battle, const struct px_battle_data *data, const struct px_battler *player,
                      const struct px_battler *wild, uint32_t seed);
+/* After start: the whole party (1..6) with party[active] in battle (it must
+ * be able to fight). Returns 0 and changes nothing otherwise. */
+int px_battle_set_party(struct px_battle *battle, const struct px_battler *party, uint32_t count, uint32_t active);
+/* Party slot `slot` (another one that can fight) takes the active one's
+ * place. While choosing, this is the player's turn ("Come back, X!",
+ * "Go, Y!", then the wild Pokémon moves); after a faint (PX_BATTLE_SWITCH) it
+ * only sends Y out. 0 for an invalid choice. */
+int px_battle_send_out(struct px_battle *battle, uint32_t slot, const char *const *species_names,
+                       uint32_t species_count, const char *const *move_names, uint32_t move_count);
 /* One turn: the player's move slot 0..3, -1 to run or -2 to throw a Poké
  * Ball (needs balls). A move without PP
  * or a finished battle does nothing and returns 0. Names: species and move

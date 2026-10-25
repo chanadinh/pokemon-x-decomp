@@ -43,14 +43,23 @@ int px_battle_ui_input(struct px_battle_ui *ui, struct px_battle *b, char key)
         if (key != '.') return 0;
         if (++ui->page < ui->page_count) return 0;
         ui->page = ui->page_count = 0;
-        ui->phase = b->state == PX_BATTLE_CHOOSING ? PX_UI_COMMAND : PX_UI_DONE;
         ui->cursor = 0;
+        if (b->state == PX_BATTLE_SWITCH) {
+            ui->phase = PX_UI_PARTY; ui->forced = 1;
+            snprintf(ui->note, sizeof ui->note, "Choose a Pokémon to send out.");
+            while ((uint32_t)ui->cursor + 1 < b->party_count && !b->party[ui->cursor].hp) ++ui->cursor;
+        } else ui->phase = b->state == PX_BATTLE_CHOOSING ? PX_UI_COMMAND : PX_UI_DONE;
         return 0;
     case PX_UI_COMMAND:
         if ((key == 'L' || key == 'U') && ui->cursor > 0) --ui->cursor;
-        else if ((key == 'R' || key == 'D') && ui->cursor < 2) ++ui->cursor;
+        else if ((key == 'R' || key == 'D') && ui->cursor < 3) ++ui->cursor;
         else if (key == '.') {
             if (ui->cursor == 0) { ui->phase = PX_UI_MOVES; ui->cursor = 0; return 0; }
+            if (ui->cursor == 2) {
+                ui->phase = PX_UI_PARTY; ui->forced = 0; ui->cursor = (int)b->active;
+                snprintf(ui->note, sizeof ui->note, "Choose a Pokémon.");
+                return 0;
+            }
             if (ui->cursor == 1 && !b->balls) {
                 add_page(ui, "You have no Poké Balls left!");
                 ui->phase = PX_UI_MESSAGES;
@@ -72,6 +81,25 @@ int px_battle_ui_input(struct px_battle_ui *ui, struct px_battle *b, char key)
         else if (key == '.') {
             if (!px_battle_turn(b, ui->cursor, ui->species_names, ui->species_count, ui->move_names, ui->move_count))
                 return 0; /* no PP or no move in that slot */
+            for (uint32_t i = 0; i < b->log_count; ++i) add_page_event(ui, b->log[i], b->log_event[i]);
+            ui->phase = PX_UI_MESSAGES;
+            return 1;
+        }
+        return 0;
+    case PX_UI_PARTY:
+        if (key == 'x' && !ui->forced) { ui->phase = PX_UI_COMMAND; ui->cursor = 2; return 0; }
+        if ((key == 'U' || key == 'L') && ui->cursor > 0) --ui->cursor;
+        else if ((key == 'D' || key == 'R') && (uint32_t)ui->cursor + 1 < b->party_count) ++ui->cursor;
+        else if (key == '.') {
+            char buffer[16];
+            const struct px_battler *p = &b->party[ui->cursor];
+            const char *name = name_of(ui->species_names, ui->species_count, p->species, buffer, sizeof buffer);
+            if ((uint32_t)ui->cursor == b->active && b->state == PX_BATTLE_CHOOSING) {
+                snprintf(ui->note, sizeof ui->note, "%s is already in battle!", name); return 0;
+            }
+            if (!p->hp) { snprintf(ui->note, sizeof ui->note, "%s has no energy left to battle!", name); return 0; }
+            if (!px_battle_send_out(b, (uint32_t)ui->cursor, ui->species_names, ui->species_count, ui->move_names,
+                                    ui->move_count)) return 0;
             for (uint32_t i = 0; i < b->log_count; ++i) add_page_event(ui, b->log[i], b->log_event[i]);
             ui->phase = PX_UI_MESSAGES;
             return 1;
@@ -153,12 +181,31 @@ void px_battle_ui_draw_hud(uint8_t *rgba, uint32_t w, uint32_t h, const struct p
     char a[16], c[16];
     const char *wild = name_of(ui->species_names, ui->species_count, b->side[1].species, a, sizeof a);
     const char *mine = name_of(ui->species_names, ui->species_count, b->side[0].species, c, sizeof c);
-    info_box(rgba, w, h, 16, 14, &b->side[1], wild, 0);
-    info_box(rgba, w, h, (int)w - 166, (int)h * 3 / 5 - 30, &b->side[0], mine, 1);
+    if (ui->phase != PX_UI_PARTY) { /* the party list covers them */
+        info_box(rgba, w, h, 16, 14, &b->side[1], wild, 0);
+        info_box(rgba, w, h, (int)w - 166, (int)h * 3 / 5 - 30, &b->side[0], mine, 1);
+    }
     static const uint8_t frame[4] = {72, 80, 96, 255}, paper[4] = {250, 250, 246, 255}, ink[4] = {48, 48, 56, 255};
     static const uint8_t pick[4] = {224, 88, 64, 255};
     if (ui->phase == PX_UI_MESSAGES && ui->page < ui->page_count) {
         px_text_window(rgba, w, h, ui->pages[ui->page], ui->page + 1 < ui->page_count);
+    } else if (ui->phase == PX_UI_PARTY) {
+        /* The party list: one row per Pokémon, the prompt in the window. */
+        static const uint8_t grey[4] = {150, 150, 150, 255};
+        const int top = 10, row = 26, x0 = 40, x1 = (int)w - 40;
+        for (uint32_t i = 0; i < b->party_count; ++i) {
+            const struct px_battler *p = &b->party[i];
+            const int y = top + (int)i * row;
+            px_text_rect(rgba, w, h, x0, y, x1, y + row - 4, (int)i == ui->cursor ? pick : frame);
+            px_text_rect(rgba, w, h, x0 + 2, y + 2, x1 - 2, y + row - 6, paper);
+            char line[96], buffer[16];
+            snprintf(line, sizeof line, "%s%s  Lv%u  HP %u/%u", i == b->active ? "* " : "",
+                     name_of(ui->species_names, ui->species_count, p->species, buffer, sizeof buffer), p->level,
+                     p->hp, p->stats[0]);
+            px_text_draw(rgba, w, h, x0 + 14, y + 7, line, p->hp ? ink : grey, 1);
+            if ((int)i == ui->cursor) px_text_draw(rgba, w, h, x0 + 5, y + 7, ">", pick, 1);
+        }
+        px_text_window(rgba, w, h, ui->note, 0);
     } else if (ui->phase == PX_UI_COMMAND || ui->phase == PX_UI_MOVES) {
         const int y0 = (int)h - 50, y1 = (int)h - 4;
         px_text_rect(rgba, w, h, 8, y0, (int)w - 8, y1, frame);
@@ -169,11 +216,10 @@ void px_battle_ui_draw_hud(uint8_t *rgba, uint32_t w, uint32_t h, const struct p
             px_text_draw(rgba, w, h, 18, y0 + 9, line, ink, 1);
             char ball[32];
             snprintf(ball, sizeof ball, "BALL x%u", (unsigned)b->balls);
-            const int x[3] = {(int)w - 230, (int)w - 160, (int)w - 70};
-            px_text_draw(rgba, w, h, x[0], y0 + 25, "FIGHT", ui->cursor == 0 ? pick : ink, 1);
-            px_text_draw(rgba, w, h, x[1], y0 + 25, ball, ui->cursor == 1 ? pick : ink, 1);
-            px_text_draw(rgba, w, h, x[2], y0 + 25, "RUN", ui->cursor == 2 ? pick : ink, 1);
-            px_text_draw(rgba, w, h, x[ui->cursor >= 0 && ui->cursor < 3 ? ui->cursor : 0] - 10, y0 + 25, ">", pick, 1);
+            const int x[4] = {(int)w - 300, (int)w - 236, (int)w - 152, (int)w - 66};
+            const char *label[4] = {"FIGHT", ball, "POKéMON", "RUN"};
+            for (int k = 0; k < 4; ++k) px_text_draw(rgba, w, h, x[k], y0 + 25, label[k], ui->cursor == k ? pick : ink, 1);
+            px_text_draw(rgba, w, h, x[ui->cursor >= 0 && ui->cursor < 4 ? ui->cursor : 0] - 10, y0 + 25, ">", pick, 1);
         } else {
             for (unsigned k = 0; k < 4; ++k) {
                 const uint16_t id = b->side[0].moves[k];

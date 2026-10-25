@@ -1,0 +1,20 @@
+{
+ "date": "2026-10-25",
+ "baseline_commit": "fbef75ffe1f76dbee4b4ff18e56600ba401bddc1",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "8705723f07fa29f53c564920a8a7e4f02a1eda72f68628021fe0eba37da0f94a",
+  "game/battle.c": "70e07b86c93599287c6ec79e592c799c330987aa87041cea80d2a51a89ad78ea",
+  "game/battle.h": "bbde05592b3c40ff16fcd1ce8048f074263aca585ee387029c7d880dcc08ea6d",
+  "game/battle_ui.c": "8a0e1423f2507fbb81702c591a399811173f2c6f91bc1d2a41682afcb6216f28",
+  "game/battle_ui.h": "5587286457969b5b87e6061c7b22ff980229068f65dec2a4079c29bf583ab757",
+  "game/test_battle.c": "c8c1149500fc165e636b2e869b9aea325947da637c4a9fccb96ed5b45fb1dc15",
+  "tests/test_bch_save_viewer.py": "a3eebdee9f795b0e2d4b470e1924fd4ac964380a8c64b3e5af792f505af23599",
+  "tests/test_bch_battle_viewer.py": "d62b80f9a9e4fab36e9c394d45ec5d437bee021dbcdbcc10259028a1808d51f2",
+  "reproduction/bch-party/verify_party.py": "266fd320f80e25f5b8f8ca2951b7929ae9104bafddf2e594fb86ddbb38c83c3b"
+ },
+ "image": {
+  "docs/images/native-bch-switch.png": "7182313967435a8d3130d266fac7965a50210b1384c414095ef771c6ea5cef7a"
+ }
+}

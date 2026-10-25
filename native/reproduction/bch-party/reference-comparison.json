@@ -1,0 +1,38 @@
+{
+ "verifier_sha256": "266fd320f80e25f5b8f8ca2951b7929ae9104bafddf2e594fb86ddbb38c83c3b",
+ "party": [
+  {
+   "species": 656,
+   "level": 5,
+   "hp": 19
+  },
+  {
+   "species": 664,
+   "level": 3,
+   "hp": 15
+  }
+ ],
+ "switch_play": "D..RR.D..",
+ "predicted": {
+  "slot": 0,
+  "species": 659,
+  "level": 2,
+  "battle_seed": 1028688091,
+  "messages": [
+   "Come back, Froakie!",
+   "Go, Scatterbug!",
+   "The wild Bunnelby used Tackle!"
+  ],
+  "sent_hp_after": 12
+ },
+ "viewer_lines": [
+  "encounter zone=259 cell=100,90 slot=0 species=659 level=2",
+  "wild species=659 name=Bunnelby level=2 nature=16 iv=25,11,15,18,9,5 stats=14,6,5,7,6,6 moves=33,97,43,0",
+  "battle_model side=partner species=656 model=864 entry=6916 texture_entry=6918 meshes=10 vertices=25536 motion_entry=6921 motions=9 slots=1:30,2:40,4:15,5:15,6:20,9:65,13:54,17:20,18:50 pose=idle",
+  "battle_model side=wild species=659 model=867 entry=6940 texture_entry=6942 meshes=8 vertices=20064 motion_entry=6945 motions=8 slots=1:48,4:15,5:20,6:20,9:78,13:76,17:20,18:60 pose=idle",
+  "battle turn=1 message=\"Come back, Froakie!\"",
+  "battle turn=1 message=\"Go, Scatterbug!\"",
+  "battle turn=1 message=\"The wild Bunnelby used Tackle!\"",
+  "battle_model side=partner species=664 model=872 entry=6980 texture_entry=6982 meshes=9 vertices=12156 motion_entry=6985 motions=7 slots=1:56,4:15,5:20,6:20,13:60,17:20,18:55 pose=idle"
+ ]
+}

@@ -72,7 +72,8 @@ the next (Vaniville, Route 1, Aquacorde, Route 2), NPC dialogue from each
 zone's compiled script, region props, and wild battles in tall grass with the
 game's species, moves and type chart, with experience, level-ups and Poké Balls
 that add the catch to your party, and the Pokémon's own animated 3D models.
-You can save and come back later.
+Your whole party fights: switch with POKéMON, and send in the next one when
+one faints. You can save and come back later.
 What is missing: battle effects, items, switching, menus, story events and sound. See the
 [town record](native/reproduction/bch-town/README.txt) for exactly what was
 checked.
@@ -268,7 +269,7 @@ The next step is to connect these tested pieces into a game scene:
 - **Open the world:** stream map regions instead of reloading on each zone crossing, run zone-entry scripts, and honor the story flags that decide which NPCs appear.
 - **Complete the field renderer:** add the vertex shader's outputs, bump maps, point lights and the day/night selection, fog and projected textures; establish original culling and the game camera.
 - **Ground the player in the game's code:** reconstruct the game's own controller (spawn, speeds, terrain flags, collision response) and the remaining script natives.
-- **Finish the gameplay loop:** trace the damage, experience, catch and move effects in the game's battle module, add items, switching and evolution.
+- **Finish the gameplay loop:** trace the damage, experience, catch and move effects in the game's battle module, add items and evolution.
 - **Compare against the original:** capture a repeatable reference scenario and check behavior at each boundary.
 
 The [roadmap](ROADMAP.md) tracks dependencies. The

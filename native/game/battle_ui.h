@@ -7,13 +7,17 @@
 /* The viewer's battle screen and menu (self-authored, not the game's battle
  * scene or UI art; Pokémon without a loaded battle model are drawn as
  * type-coloured placeholders). Phases: messages (paged with confirm),
- * the command menu (FIGHT / BALL / RUN), the move menu (four moves; cancel goes
- * back), then the turn's messages; the battle ends after its last page. */
-enum px_battle_phase { PX_UI_MESSAGES = 0, PX_UI_COMMAND, PX_UI_MOVES, PX_UI_DONE };
+ * the command menu (FIGHT / BALL / POKéMON / RUN), the move menu (four
+ * moves; cancel goes back), the party list (switch; after a faint it must
+ * choose and cannot cancel), then the turn's messages; the battle ends after
+ * its last page. */
+enum px_battle_phase { PX_UI_MESSAGES = 0, PX_UI_COMMAND, PX_UI_MOVES, PX_UI_DONE, PX_UI_PARTY };
 enum { PX_UI_MAX_PAGES = 24 };
 struct px_battle_ui {
     enum px_battle_phase phase;
     int cursor;
+    int forced;     /* the party list after a faint */
+    char note[96];  /* the party list's prompt or refusal */
     char pages[PX_UI_MAX_PAGES][96];
     uint8_t page_event[PX_UI_MAX_PAGES]; /* the battle log's PX_LOG_* of each page (0 otherwise) */
     uint32_t page_count, page;
