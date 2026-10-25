@@ -1,0 +1,43 @@
+{
+  "input": {
+    "file": "code.bin",
+    "size": 5156864,
+    "sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a"
+  },
+  "verified_functions": [
+    {
+      "address": "00150064",
+      "instruction_bytes": 392,
+      "instruction_bytes_sha256": "f99bb1d3bff4b2d1fbb9d0ed22848dbbdb01abe16398f38988f618151d029600",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00150220",
+      "instruction_bytes": 60,
+      "instruction_bytes_sha256": "7a0ea240613e38f38538a6ad292cd357987a91608f2ad8fe7f2e912cabf9d319",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00168bbc",
+      "instruction_bytes": 564,
+      "instruction_bytes_sha256": "a07d786689b7f57accb0277192552b4ce8fc286fbfca8e529e4c1d7858558bdf",
+      "matches_original_input": true,
+      "decompiled": true
+    }
+  ],
+  "verified_literal_words": {
+    "0015025c": "1f85eb51",
+    "00168c4c": "6a020000",
+    "00168c50": "88185d00"
+  },
+  "instruction_bytes": 1016,
+  "literal_bytes": 12,
+  "notes": [
+    "Each instruction and exported PC-relative literal compared at address minus 0x00100000.",
+    "Read-only, noanalysis Ghidra export; no project repair or saved project mutation.",
+    "Exports include explicit external dependencies, not only implemented functions.",
+    "Static evidence and synthetic host tests do not establish original-game execution equivalence."
+  ]
+}

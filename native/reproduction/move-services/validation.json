@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-25",
+  "baseline_commit": "a28737ad23cdf0494fd04319f70abd54c2d5eaa2",
+  "environment": {
+    "platform": "Ubuntu 24.04 WSL2 x86_64",
+    "compiler": "GCC 13.2.0",
+    "python": "3.12.3",
+    "sdl": "2.30.0",
+    "setup": "source tools/native-sdl/activate.sh"
+  },
+  "evidence": {
+    "functions": 3,
+    "instruction_bytes_verified": 1016,
+    "literal_bytes_verified": 12,
+    "selector_5_dispatch_verified": true,
+    "division_numerators_verified": 15301
+  },
+  "synthetic": {
+    "maximum_pp_cases": 66048,
+    "insertion_codec_cases": 3072,
+    "callback_manager_swaps": 2,
+    "base_initialization_refresh_integration": true
+  },
+  "local_data": {
+    "move_records": 618,
+    "maximum_pp_cases": 3708,
+    "learnsets": 799,
+    "level_cases": 80699,
+    "corrected_order_cases": 53283,
+    "all_match": true
+  },
+  "preservation": {
+    "earlier_checkpoints": 8,
+    "reconstruction_hashes_verified": 539,
+    "earlier_native_reproduction_files_unchanged": 194
+  },
+  "tested_source_sha256": {
+    "reconstructed/pokemon_moves/Makefile": "c5d4ed6700b9dd60cb07dd4378d41505ac1b743e7b6b2e2a3c57a4b47d8d0669",
+    "reconstructed/pokemon_moves/README.md": "0cd525fc8341a18c6b2056e942705a7ae2bc58048925d79ace1bb5d0cd20edff",
+    "reconstructed/pokemon_moves/evidence/00150064.asm": "63e5616c2247d3e001dc5289518c249e7af3d0ccc7970fc142e14bd229e4a814",
+    "reconstructed/pokemon_moves/evidence/00150064.c": "e8363de1b50893fda9962d8d67e42c47da24db2e4fb5b72c70d569ec9397d574",
+    "reconstructed/pokemon_moves/evidence/00150220.asm": "e3291b67ac15be2544f323d138401a1de16e4ebf53e6cf8655277f1473cbb024",
+    "reconstructed/pokemon_moves/evidence/00150220.c": "4aeb8a4d866ac33fac28f306160fd54db0fc38ef1aed12412cdcee77fbab9837",
+    "reconstructed/pokemon_moves/evidence/00168bbc.asm": "0d3f49383ac3c7c2459492b49b5205260ef92971791d668f50caf04c28b17086",
+    "reconstructed/pokemon_moves/evidence/00168bbc.c": "7b795070e440d37ddc2478ec2a21c38cb4a360592e055b1a56495ec19baf11fb",
+    "reconstructed/pokemon_moves/evidence/functions.json": "e9def9502692cfe68554524a554121a48076dccb2cde6063213c6c412cc072c3",
+    "reconstructed/pokemon_moves/evidence/literals.json": "a1efba23168f69a99483c0d4f336ab571c6f0d19175a5d13690cefcd0be4e6c8",
+    "reconstructed/pokemon_moves/evidence/provenance.json": "68ea8e7590d3b240e48623be8dac05101c12a211cd46de20309b5ef8c390d15e",
+    "reconstructed/pokemon_moves/pokemon_moves.c": "3411b79e88c980eecc365d1a6618e287d152b98c71adf9e6b079ddc7fb4b0b2f",
+    "reconstructed/pokemon_moves/pokemon_moves.h": "dfc9151769f2eaf64639a1b524304af44c6f93f411ecbd67d3c3bacbc21db627",
+    "reconstructed/pokemon_moves/reproduction/README.txt": "8625ada24192481b02072b91810cc28c570ecf833ce1ce5c0e15e2bd40e399e9",
+    "reconstructed/pokemon_moves/reproduction/export_moves.py": "f1aac18494974784e5d1ec265b5eff5a4e27ce4ec2ec2213fcc738b37f80b7a5",
+    "reconstructed/pokemon_moves/reproduction/verify_moves.py": "7cf0eb68283dd245c3eb451b21ed3c6f3d8193e2659496d0cec57b6171cc1474",
+    "reconstructed/pokemon_moves/test_pokemon_moves.c": "c530eaa4f0121d512a6765b4ac976115b5650183cafdd4c35df24117022adbf1",
+    "native/assets/pokedata.c": "38b745155f2febfeac02b35af261a83c90bdfdfbbd53a8e5c4efd5027ef77689",
+    "native/assets/test_pokedata.c": "7bb55de22bc3f6ed3eea2b2b2b41e5a765a116d4adf9a8489e3b708564c3f3a9",
+    "native/game/battle.c": "c77214c58b34388c942788c4fc98e12f915bd4da1a6f26770d02a73da4cf7eb2",
+    "native/reproduction/move-services/check_moves.c": "7baa6d711feb389b4943e732a915e7a2b454e1ba54453fea309b007a02bdf079",
+    "native/Makefile": "ccf881ef34c55d234e535b859fa4911d8b57c377cac4bea0a227b7fe1e80ec34",
+    "reconstructed/Makefile": "949ae752390304f7984231121cf13c0faebba0ba9698cfa716f911647aef2038"
+  },
+  "limitations": [
+    "Host tests and static instruction evidence; no original ARM execution or running-game comparison.",
+    "ASan/UBSan passed for the new reconstructed suite with ASAN_OPTIONS=detect_leaks=0.",
+    "Optional PowerShell/3dstool extraction checks skipped; native Windows execution untested."
+  ],
+  "runs": [
+    {
+      "command": "make -C reconstructed test",
+      "exit_code": 0,
+      "log_sha256": "df42556543bd40c7e1c5eacd990c6efd747f3dc09ea4d716d14a938cc44b369e",
+      "c_suites": 9
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "log_sha256": "fa7aabe36d71d423d32c574689d0118f0547f507d0121f13b7c7c0bcf2b74486",
+      "python_tests": 38,
+      "optional_skips": 2
+    },
+    {
+      "command": "make -C native all test build/check_moves",
+      "exit_code": 0,
+      "log_sha256": "7d0033b6cc178f43aad8ac8135135b197f99c3eb552d5319ac3b18e327371374",
+      "python_tests": 43,
+      "c_suites": 31
+    },
+    {
+      "command": "make -C native test-runtime",
+      "exit_code": 0,
+      "log_sha256": "6080bcd727f23231d918974023b96dae7298ad3741a8d4b29b2a0e00af5d8ecc",
+      "python_tests": 72
+    },
+    {
+      "command": "ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-moves/test_pokemon_moves_sanitized",
+      "exit_code": 0,
+      "log_sha256": "710f682bf2ad72a06c064e223193c56fe870a6a058f915312e4677ef7e956026"
+    }
+  ],
+  "result": "passed"
+}

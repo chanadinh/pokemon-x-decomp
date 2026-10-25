@@ -1,0 +1,16 @@
+{
+  "move_records": 618,
+  "maximum_pp_cases": 3708,
+  "learnsets": 799,
+  "level_cases": 80699,
+  "corrected_order_cases": 53283,
+  "all_match": true,
+  "date": "2026-10-25",
+  "comparison": "Native learnset selector versus reconstructed 00150064, using native resource decoders and an invented identity block order",
+  "maximum_pp_reference": "(base_pp + floor(base_pp * min(unsigned_pp_ups, 3) / 5)) modulo 256",
+  "limitations": [
+    "Compares host paths; does not execute original ARM instructions or a running game.",
+    "Native resource decoding is shared; prior independent byte-layout checks remain in bch-battle.",
+    "PP Ups are tested in the reconstructed service; current native battlers do not store them."
+  ]
+}

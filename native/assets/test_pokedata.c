@@ -38,9 +38,14 @@ int main(void)
     assert(px_learnset_decode(l, 28, &ls) == PX_POKEDATA_OK && ls.count == 6 && ls.move[5] == 352 && ls.level[5] == 14);
     uint16_t at[4];
     assert(px_learnset_moves_at(&ls, 5, at) == 3 && at[0] == 1 && at[1] == 45 && at[2] == 145 && at[3] == 0);
-    /* Past four moves the slots are overwritten in turn: 122 replaces 1, 352 replaces 45. */
-    assert(px_learnset_moves_at(&ls, 14, at) == 4 && at[0] == 122 && at[1] == 352 && at[2] == 145 && at[3] == 98);
+    /* The original constructor shifts the oldest out and appends in order. */
+    assert(px_learnset_moves_at(&ls, 14, at) == 4 && at[0] == 145 && at[1] == 98 && at[2] == 122 && at[3] == 352);
     assert(px_learnset_moves_at(&ls, 0, at) == 0 && at[0] == 0);
+    const struct px_learnset duplicates = {.count = 8, .move = {1, 2, 3, 4, 5, 3, 6, 1},
+                                           .level = {1, 1, 1, 1, 2, 2, 3, 4}};
+    assert(px_learnset_moves_at(&duplicates, 3, at) == 4 && at[0] == 3 && at[1] == 4 && at[2] == 5 && at[3] == 6);
+    /* Once forgotten, the same move can be learned again at a later entry. */
+    assert(px_learnset_moves_at(&duplicates, 4, at) == 4 && at[0] == 4 && at[1] == 5 && at[2] == 6 && at[3] == 1);
     assert(px_learnset_decode(l, 24, &ls) == PX_POKEDATA_TRUNCATED && ls.count == 0); /* no terminator */
     put16(l + 6, 101);
     assert(px_learnset_decode(l, 28, &ls) == PX_POKEDATA_INVALID);

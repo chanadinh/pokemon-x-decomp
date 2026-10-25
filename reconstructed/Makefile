@@ -8,3 +8,4 @@ all test clean:
 	$(MAKE) -C pokemon_data $@
 	$(MAKE) -C pokemon_state $@
 	$(MAKE) -C pokemon_stats $@
+	$(MAKE) -C pokemon_moves $@

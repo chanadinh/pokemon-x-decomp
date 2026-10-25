@@ -1,0 +1,22 @@
+Move-service milestone validation, 2026-10-25
+
+make -C reconstructed test
+  exit 0; 9 C suites
+
+python3 -m unittest discover -s tests -v
+  exit 0; 38 Python tests; 2 optional extraction skips
+
+make -C native all test build/check_moves
+  exit 0; 31 C suites; 43 Python tests
+
+make -C native test-runtime
+  exit 0; 72 Python tests
+
+ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-moves/test_pokemon_moves_sanitized
+  exit 0
+
+Original-byte evidence: 3 exports, 1,016 instruction bytes, 12 literal bytes; selector-5 dispatch and all 15,301 division numerators verified.
+New suite: 66,048 maximum-PP cases; 3,072 insertion/codec cases; callback manager swaps and base-state initialization/refresh passed, also under ASan/UBSan (detect_leaks=0).
+Original local data: 618 move records, 3,708 maximum-PP cases, 799 learnsets at 101 levels (80,699 cases), all match. 53,283 slot orders corrected.
+Preservation: all 539 hashes of the eight prior reconstruction checkpoints match; all 194 earlier native reproduction files unchanged.
+No original ARM execution, running-game comparison or native Windows validation. Full logs stay in ignored outputs/pokemon-moves/.

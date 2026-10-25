@@ -72,14 +72,16 @@ enum px_pokedata_result px_learnset_decode(const uint8_t *d, size_t size, struct
 unsigned px_learnset_moves_at(const struct px_learnset *l, unsigned level, uint16_t out[4])
 {
     memset(out, 0, 4 * sizeof *out);
-    unsigned slot = 0, used = 0;
+    unsigned used = 0;
     for (uint32_t i = 0; l && i < l->count; ++i) {
         if ((unsigned)l->level[i] > level) break;
         const uint16_t move = l->move[i];
         if (out[0] == move || out[1] == move || out[2] == move || out[3] == move) continue;
-        out[slot] = move;
-        slot = (slot + 1) & 3;
-        if (used < 4) ++used;
+        /* Constructor insertion (00150064) retains slot order when full:
+         * discard the oldest move, then append. Known moves keep their slot. */
+        if (used == 4) memmove(out, out + 1, 3 * sizeof *out);
+        else ++used;
+        out[used - 1] = move;
     }
     return used;
 }

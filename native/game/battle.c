@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "../../reconstructed/pokemon_stats/stats_math.h"
+#include "../../reconstructed/pokemon_moves/pokemon_moves.h"
 #include "../platform/guest.h"
 
 uint32_t px_rng_next(struct px_rng *rng)
@@ -88,6 +89,14 @@ uint32_t px_battle_catch_threshold(const struct px_battle_data *d, const struct 
     return (uint32_t)floor(65536.0 / pow(255.0 / a, 0.1875));
 }
 
+/* Adapter for 00168bbc's selector 5. Resource caching/loading stays in the
+ * native data layer; the PP arithmetic runs through reconstructed 00150220. */
+static uint32_t move_pp_value(void *user, uint32_t move, uint32_t selector)
+{
+    const struct px_battle_data *d = user;
+    return selector == 5 && move < d->move_count ? d->moves[move].pp : 0;
+}
+
 int px_battler_make(const struct px_battle_data *d, uint16_t species, uint8_t level, const uint8_t iv[6],
                     uint8_t nature, const uint16_t moves[4], struct px_battler *out)
 {
@@ -100,10 +109,11 @@ int px_battler_make(const struct px_battle_data *d, uint16_t species, uint8_t le
     compute_stats(d, out);
     out->hp = out->stats[0];
     if (d->growth && p->growth < d->growth_count) out->exp = d->growth[p->growth][level];
+    const struct px_move_api move_api = {.user = (void *)d, .move_value = move_pp_value};
     for (unsigned k = 0; k < 4; ++k) {
         if (moves[k] >= d->move_count) { memset(out, 0, sizeof *out); return 0; }
         out->moves[k] = moves[k];
-        out->pp[k] = moves[k] ? d->moves[moves[k]].pp : 0;
+        out->pp[k] = moves[k] ? (uint8_t)px_pokemon_maximum_pp(moves[k], 0, &move_api) : 0;
     }
     return 1;
 }
