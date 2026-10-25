@@ -1,0 +1,29 @@
+Message-resource loading/decoding milestone, 2026-10-25
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6.
+Reviewed 0013a19c, 0013ff50 and 0014e984, plus external seek/read/release
+dependencies. All 1,336 instruction bytes (992 implemented) and eight literal
+bytes match live REA memory reads and the pinned original code.bin. Section
+addresses/permissions, source digests and uninitialized BSS also verify.
+
+All thirteen reconstructed C suites pass. Analysis-tool Python tests: 38 run,
+two optional extraction-tool skips. New suite: 131,396 unit/capacity cases,
+six maximum-capacity cases, all 65,536 token counts, 32 token/guard cases,
+2,051 plain lengths, adjacent tokens and stored-length wrapping. Inactive
+output, full-width input/language values, invalid indices, cached reuse,
+zero-size allocation and allocation failure are covered. Six mutation scenarios
+check captured/reloaded handles, heap, language, destination, entry and metadata.
+The name builder/token copier connects through all three loading modes.
+ASan/UBSan pass with ASAN_OPTIONS=detect_leaks=0.
+
+The original-data sweep compares 35,212 lines across 575 files in the English
+game/story archives in all three modes: 105,636 loads, 5,028,084 units and
+2,163 species-name builds. Units, token-aware lengths, entry metadata and guest
+fault status all agree. record-comparison.json includes the archive hashes.
+
+All 659 previous reconstruction checkpoint hashes remain unchanged, including
+the preceding move-resource module. Native implementation files are unchanged.
+The full local REA Evidence bundle and snapshot were exported before close.
+Archive I/O, allocator/lifetime services and resource construction remain
+external. Older fixtures/viewer adapters are retained. No original ARM or
+running-game execution comparison was performed.

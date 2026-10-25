@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-25",
+  "method": "Live REA stdio MCP; assembly-reviewed host C reconstruction of message loading/decoding/length",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "server": {
+    "name": "rea",
+    "version": "6.8.0",
+    "protocol": "2025-06-18",
+    "advertised_tools": 229
+  },
+  "analysis": {
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "profile_digest": "25c9482ccd43e5a70ea77eec30de0ef275ba3eb3f2a9d796b1d54d8402996960",
+    "implemented_functions": 3,
+    "reviewed_external_dependencies": 3,
+    "instruction_bytes_verified": 1336,
+    "implemented_instruction_bytes": 992,
+    "literal_bytes_verified": 8,
+    "complete_core_evidence_records_retained": 11,
+    "existing_ghidra_project_unchanged": true,
+    "full_bundle_exported": true,
+    "snapshot": {
+      "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-messages/analysis-snapshot.json",
+      "bytes": 5764875,
+      "primitive_entries": 14,
+      "workflow_entries": 0,
+      "evidence_records": 37
+    }
+  },
+  "tests": {
+    "reconstructed_modules_passed": 13,
+    "analysis_python_tests": 38,
+    "analysis_python_optional_skips": 2,
+    "decode_unit_capacity_cases": 131396,
+    "decode_maximum_capacity_cases": 6,
+    "length_all_token_counts": 65536,
+    "length_token_guard_cases": 32,
+    "length_plain_cases": 2051,
+    "length_adjacent_tokens": true,
+    "length_full_width_return_stored_halfword_wrap": true,
+    "loader_mode_language_invalid_index_cases": 118,
+    "loader_zero_size_and_allocation_failure": true,
+    "callback_mutation_scenarios": 6,
+    "name_builder_all_three_modes": true,
+    "asan": true,
+    "ubsan": true,
+    "sanitizer_options": "ASAN_OPTIONS=detect_leaks=0",
+    "original_data": {
+      "text_files": 575,
+      "empty_members": 0,
+      "text_lines": 35212,
+      "load_cases": 105636,
+      "decoded_units_compared": 5028084,
+      "longest_line_units": 954,
+      "name_builder_cases": 2163,
+      "archive_reads": 72910,
+      "allocations": 35933,
+      "all_match": true,
+      "archive_sha256": {
+        "a/0/7/4": "18c12ccb9baf48c9a33e46b77b372c3124a64ad84dae0c03ee50229650a26760",
+        "a/0/8/2": "16b9a70f11fd6ac5779a577a16e457b793028be612d279dab28d1abf59349999"
+      }
+    }
+  },
+  "preservation": {
+    "previous_reconstruction_file_hashes_verified": 659,
+    "previous_manifest_sha256": {
+      "reconstructed/battle_task/SHA256SUMS": "5e9434c27e94bbf43014bcc273f80cf26775dcbe1c51e8051183647c5009cdf1",
+      "reconstructed/call_wild_battle/SHA256SUMS": "a3acabefdeab4df63e6b9b7fc651fe55e1bd297a02d56476c0c122b4e3609bd9",
+      "reconstructed/encounter_builder/SHA256SUMS": "af4aa6a38b51a66e7d2c43aaca61109ebbc988bb3c673ed360257fe996d4abf6",
+      "reconstructed/pokemon_constructor/SHA256SUMS": "f8573547857c456fbd3acd57046378116cc77c3a51ce99d73297b4c095d1e143",
+      "reconstructed/pokemon_data/SHA256SUMS": "0405aba491f360b8e6d63d029fd9959205b7aa1baf96ddb3775ec096e3d481b7",
+      "reconstructed/pokemon_learnset/SHA256SUMS": "46467b590596d8a09fd486734e89256a37560eb6848818b36ce4e32f8013853a",
+      "reconstructed/pokemon_move_resource/SHA256SUMS": "2c88555c6749ca3eb15d12fd02659db31ddc757e7da59a484cdf2a473a62dfe4",
+      "reconstructed/pokemon_moves/SHA256SUMS": "132d2947267f8d4410bec4785df6b14fd51925fd4a880850845937774e7efb68",
+      "reconstructed/pokemon_names/SHA256SUMS": "1b10f524faa68d19dc9771de52e74705f4358050ab63587f04166a7a843d721b",
+      "reconstructed/pokemon_state/SHA256SUMS": "8b4558ec9f88813ab18e582bdffd0d79ca393f08f1d4d1ead90b057b5627ac7b",
+      "reconstructed/pokemon_stats/SHA256SUMS": "0e1b43210166c53462066dbdd1c6fc70d53d48aa6c5aae534568300573f72289",
+      "reconstructed/wild_battle_setup/SHA256SUMS": "aa1682d7073cc8623ce3941231451c88a81e7876aa890272b3fb328def0d5efa"
+    },
+    "native_implementation_changed": false
+  },
+  "source_hashes": {
+    "reconstructed/message_resources/message_resources.c": "661e5104ff920bfb2365d18e5112cc8cc3994f5aa15a29f4863ca38d8adfd2c3",
+    "reconstructed/message_resources/message_resources.h": "f4f9623736f3c9e21cd2f66fd4da802280ec263c894afbfb837a7e69630744ed",
+    "reconstructed/message_resources/test_message_resources.c": "4ddf2e8a2b46305d59452c3cde680de3e177f18bc5b426a978318892e9865cf3",
+    "reconstructed/message_resources/Makefile": "2133147c71ae72aadf115ac05eeb105d426174d1b3fba26a8a89f1867c1bba0d",
+    "reconstructed/message_resources/reproduction/check_messages.c": "344f6895ecf0d9ae11d06a525450cdcb92f689dcc7b9d328fd35ebf9da970d9e",
+    "reconstructed/message_resources/reproduction/verify_rea.py": "e3c608bd9b8a2e62b4474d78731dff96ba6cd4fb4458bf024531b069488ad67f",
+    "reconstructed/pokemon_names/pokemon_names.c": "c4570d993543e6f78375e7e4f9351e56dabd92c0189411d42b1b3826dfa9ee71",
+    "reconstructed/pokemon_names/pokemon_names.h": "b52fd7e74d6cc4889bd4c8c9ca425b61b22f6061c26c1010951febef82f69cee",
+    "reconstructed/pokemon_data/pokemon_codec.c": "5b0e65eb2a64628fbb4db29df0988223b33ddaf1686cbb3ef1d91198e495448e",
+    "reconstructed/pokemon_data/pokemon_data.h": "cc923499646553cdfb59be1b0d1eaf8156d8af2c147f793ab73f5807087ebb7b",
+    "reconstructed/pokemon_constructor/pokemon_constructor.c": "c8c2e856036c532a0c1955bd002406fa4f648b1448bc9cb7ffa616dbf442d727",
+    "reconstructed/pokemon_constructor/pokemon_parameters.c": "4c39d34abe71e9d5c3422c1d4a1b3dcd8dde901310dfee0fef190e4a0ffc92e9",
+    "reconstructed/pokemon_constructor/pokemon_constructor.h": "0f598822c8298c44bd52e424d2620a14fe18ceadfd4a2771992d168dfffdf6ad",
+    "native/assets/garc.c": "1303610c04e35c9e6ddf07c3db4e3780b5d8aab7fcc28dfca57f8271f1b359c4",
+    "native/assets/garc.h": "7b422f59721e28a86feafc3d3e4f0f7a5306456cd3a9cb3748246db08c6615b8",
+    "native/assets/gf_text.c": "2354b3bb022e6981d4128ab408c39af9e315a0217a09a1b843615b9ae9b49a61",
+    "native/assets/gf_text.h": "1abed86c2957861fb9de70235d364d99594025e461f42ad94ab0249e799d646e",
+    "native/platform/guest.c": "884ef7e89debac8f39f94c7a4d45a2633144f93be79217d3ce80f1f94a68a072",
+    "native/platform/guest.h": "15b44779b0c5dae6b538cfcaf88a628bf0fbe22a3a9207b68c507538f51aca0e"
+  },
+  "limits": [
+    "Archive seek/read, allocation/alignment/release, resource construction and language initialization remain external.",
+    "Older state/name fixtures and the native viewer retain their existing adapters.",
+    "No original ARM execution or running-game comparison was performed."
+  ]
+}
