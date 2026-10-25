@@ -60,9 +60,10 @@ enum px_pokedata_result px_move_decode(const uint8_t *data, size_t size, struct 
 /* Pairs up to the terminator; a missing terminator or more than 256 pairs
  * is invalid; level must be 0..100. */
 enum px_pokedata_result px_learnset_decode(const uint8_t *data, size_t size, struct px_learnset *out);
-/* The moves a wild Pokémon knows at `level` (pk3DS GetEncounterMoves: every
- * move learnt up to the level, skipping ones already known, written into
- * four slots in turn). Returns how many slots hold a move (unused are 0). */
+/* Constructor move ordering (00150064): keep unique eligible moves in order,
+ * shifting the oldest out when full. Pure native reference helper; the viewer
+ * uses game/battle.h's reconstructed path with the loader's 26-entry limit.
+ * Returns how many slots hold a move (unused are 0). */
 unsigned px_learnset_moves_at(const struct px_learnset *learnset, unsigned level, uint16_t out[4]);
 /* An empty section (no wild Pokémon) gives PX_POKEDATA_TRUNCATED. */
 enum px_pokedata_result px_encounter_table_decode(const uint8_t *data, size_t size, struct px_encounter_table *out);

@@ -1,0 +1,17 @@
+{
+  "learnsets": 799,
+  "max_raw_entries": 25,
+  "entry_cases": 29334,
+  "level_cases": 80699,
+  "species_form_selections": 885,
+  "repeat_cache_hits": 885,
+  "resource_loads": 885,
+  "all_match": true,
+  "date": "2026-10-25",
+  "comparison": "Reconstructed getters/load/cache through native resource callbacks; native initial moves through reconstructed accessors/insertion versus the pure native helper",
+  "limitations": [
+    "Native resource decoders are shared; the earlier independent layout checks are retained separately.",
+    "Form/resource lifecycle in the native viewer is not replaced by the reconstructed cache.",
+    "No original ARM execution or running-game reference comparison."
+  ]
+}

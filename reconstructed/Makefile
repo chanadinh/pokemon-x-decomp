@@ -9,3 +9,4 @@ all test clean:
 	$(MAKE) -C pokemon_state $@
 	$(MAKE) -C pokemon_stats $@
 	$(MAKE) -C pokemon_moves $@
+	$(MAKE) -C pokemon_learnset $@

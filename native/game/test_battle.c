@@ -42,6 +42,22 @@ int main(void)
     const struct px_battle_data data = {personal, 4, moves, 6, (const uint8_t (*)[PX_TYPE_COUNT])chart, NULL, NULL, 0, NULL, 0};
     const uint8_t iv[6] = {31, 31, 31, 31, 31, 31}, low[6] = {0, 0, 0, 0, 0, 0};
     const uint16_t set[4] = {1, 2, 3, 4};
+    /* Constructor selection runs the original learnset getters and insertion. */
+    const struct px_learnset initial = {.count = 7, .move = {1, 2, 3, 4, 5, 3, 1},
+                                        .level = {1, 1, 1, 1, 2, 2, 3}};
+    uint16_t selected[4];
+    assert(px_battle_initial_moves(&data, &initial, 1, selected) && !memcmp(selected, set, sizeof set));
+    assert(px_battle_initial_moves(&data, &initial, 2, selected) &&
+           selected[0] == 2 && selected[1] == 3 && selected[2] == 4 && selected[3] == 5);
+    assert(px_battle_initial_moves(&data, &initial, 3, selected) &&
+           selected[0] == 3 && selected[1] == 4 && selected[2] == 5 && selected[3] == 1);
+    assert(!px_battle_initial_moves(&data, &initial, 101, selected) && selected[0] == 0);
+    struct px_learnset bounded = {.count = 27};
+    for (unsigned k = 0; k < 27; ++k) { bounded.move[k] = 1; bounded.level[k] = 1; }
+    bounded.move[26] = 99; /* excluded by the original loader's 26-entry limit */
+    assert(px_battle_initial_moves(&data, &bounded, 5, selected) && selected[0] == 1);
+    bounded.move[0] = 99;
+    assert(!px_battle_initial_moves(&data, &bounded, 5, selected) && selected[0] == 0 && selected[3] == 0);
     struct px_battler a, b, g;
     /* Stats through the reconstructed formulas (neutral nature, no EVs). */
     assert(px_battler_make(&data, 1, 5, iv, 0, set, &a));

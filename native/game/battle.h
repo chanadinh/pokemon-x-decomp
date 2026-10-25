@@ -57,6 +57,14 @@ struct px_battle_data {
     const struct px_learnset *learnsets; uint32_t learnset_count; /* by species, or NULL */
 };
 
+/* Constructor moves from an already selected native learnset, through the
+ * reconstructed count/entry accessors and move insertion. The original
+ * loader's 26-entry limit applies. Native guards reject levels above 100,
+ * invalid resources or eligible moves outside the move table; out is zeroed
+ * on failure (when non-NULL). Resource selection/caching remains separate. */
+int px_battle_initial_moves(const struct px_battle_data *data, const struct px_learnset *learnset,
+                            uint32_t level, uint16_t out[4]);
+
 /* Stats in personal order: HP, Attack, Defense, Speed, Sp. Atk, Sp. Def.
  * stages: index by the move data's stat number (1 Attack, 2 Defense,
  * 3 Sp. Atk, 4 Sp. Def, 5 Speed, 6 accuracy, 7 evasion), -6..6. */

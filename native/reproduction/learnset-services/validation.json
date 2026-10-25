@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-25",
+  "result": "passed",
+  "baseline": "a28737ad23cdf0494fd04319f70abd54c2d5eaa2 plus the preceding uncommitted move-service milestone",
+  "environment": {
+    "host": "Ubuntu 24.04 WSL2 x86_64",
+    "compiler": "GCC 13.2.0",
+    "python": "3.12.3",
+    "SDL": "2.30.0",
+    "setup": "source tools/native-sdl/activate.sh"
+  },
+  "evidence": {
+    "exported_functions": 14,
+    "instruction_bytes_verified": 1924,
+    "literal_bytes_verified": 36,
+    "personal_selector_dispatch_words_verified": true
+  },
+  "synthetic": {
+    "accessor_cases": 66816,
+    "loader_cases": 25515,
+    "cache_hit_capacity_cursor_cases": 204,
+    "cache_replacement_capacity_cursor_cases": 36,
+    "callback_mutations": true,
+    "base_state_initialization_refresh_integration": true,
+    "native_initial_move_bridge": true
+  },
+  "original_data": {
+    "learnsets": 799,
+    "max_raw_entries": 25,
+    "entry_cases": 29334,
+    "level_cases": 80699,
+    "species_form_selections": 885,
+    "repeat_cache_hits": 885,
+    "resource_loads": 885,
+    "all_match": true
+  },
+  "preservation": {
+    "earlier_reconstruction_checkpoints": 9,
+    "earlier_checkpoint_hashes": 558,
+    "earlier_source_evidence_files_compared": 767,
+    "earlier_native_reproduction_files_unchanged": 200
+  },
+  "tested_source_sha256": {
+    "reconstructed/pokemon_learnset/Makefile": "fc05e7a174dd26976c630737c63de9c2c694e65a409bba7b7769439dc59e82b1",
+    "reconstructed/pokemon_learnset/README.md": "7660938fdc1951abdfd7517fe5f0c5c5c2be1dc6621626fec883edd2151189ef",
+    "reconstructed/pokemon_learnset/evidence/00138214.asm": "7d878c5bf6b57b0807701c465d476fa73c4d4f49b792f83c84ea2e99a4d67056",
+    "reconstructed/pokemon_learnset/evidence/00138214.c": "8f97a920838ef1b7c4b56ae5436b978eb02e25fe39a441c3fefdcb460f9a705b",
+    "reconstructed/pokemon_learnset/evidence/0014f294.asm": "228268d5a18fd50dee71566da0e4b6162983fbc5f7398358ece272e138aae706",
+    "reconstructed/pokemon_learnset/evidence/0014f294.c": "350e616a964566161bc24876ed11749568bc3b94bad941f88d4f4784801ebff0",
+    "reconstructed/pokemon_learnset/evidence/0014f2a4.asm": "c33070b5f70298ef9ae0db63883111354f1349e72ab8dc7548e3d8238f2b379d",
+    "reconstructed/pokemon_learnset/evidence/0014f2a4.c": "7ef9622e2e0d22066cf360f9f6d0920d1f2222e563cfb9c55fb91e60ca3505ec",
+    "reconstructed/pokemon_learnset/evidence/0014f2b8.asm": "7908421147309dba86a3c2e7d7043c4217a6dad8f1794f023d824e582786eafb",
+    "reconstructed/pokemon_learnset/evidence/0014f2b8.c": "ac0f8b8cc2c854eeba513e2b4d0e6fd45204302022ee08c891f3a524dfb7a95f",
+    "reconstructed/pokemon_learnset/evidence/0014f310.asm": "c417de3adeddc639f6a869bcf5986c0e882328f4aa2f2a0536df5717ce174d8e",
+    "reconstructed/pokemon_learnset/evidence/0014f310.c": "458d376bc6444a218ec19dee1f57c6b33ac6f479f7aaffd5867b51e3237bec4c",
+    "reconstructed/pokemon_learnset/evidence/0015e958.asm": "8abcc634ea83646abcc64373b5305df4e95712d69831d75b0db1e0cb3e9dece0",
+    "reconstructed/pokemon_learnset/evidence/0015e958.c": "f54d9b6f33e43ea8243e1b7f204b648a6aed7c11c82bcdcb23eaef5dc7f7591d",
+    "reconstructed/pokemon_learnset/evidence/00167ca4.asm": "d8b153506c8bf41f9be7097ab449c639deabf29ab3caa350142a381655a0f0a2",
+    "reconstructed/pokemon_learnset/evidence/00167ca4.c": "70943eda147c25de8ba4ce7f6cb290c6e20a0be3d237ee5e34a0fcb28147b854",
+    "reconstructed/pokemon_learnset/evidence/0016b1e8.asm": "700d2d5b330070c8873008b37802fb851982d6de3497082b27dfdc791c8eec8a",
+    "reconstructed/pokemon_learnset/evidence/0016b1e8.c": "733d9bb6cd8b0afa2d73b28752e0c477d68429b22340a5b8a4d58077429cb115",
+    "reconstructed/pokemon_learnset/evidence/0016b224.asm": "2801926069464d2b5f82981c159b824bd014475d23570e52413fc72c1d90b81b",
+    "reconstructed/pokemon_learnset/evidence/0016b224.c": "89e475449182e4c81658f4051bf785382948cc67e055b8653490ed1bcb87945c",
+    "reconstructed/pokemon_learnset/evidence/0016b25c.asm": "7672f52beb720855f1695137b7d7400344d58259bad47ce05ce10cc8a64201ee",
+    "reconstructed/pokemon_learnset/evidence/0016b25c.c": "650e3311645499118eb63e678bc5418952a014ac5be3d9d18044dc4f12cbee3f",
+    "reconstructed/pokemon_learnset/evidence/00174c0c.asm": "0342935c9fc9572cbc1531b36980c19e74c191bcc2ef294ac13e8e4d24b457e9",
+    "reconstructed/pokemon_learnset/evidence/00174c0c.c": "8d3145baa6fb8174aa517b83a57523eda850da0aecfbd334574eef62705ccf62",
+    "reconstructed/pokemon_learnset/evidence/00175c78.asm": "bf84835d2ad01cc98742e7775b29ae8478b9310d67a0db352cd373540f5de1fb",
+    "reconstructed/pokemon_learnset/evidence/00175c78.c": "1363bab2c85f85d9b32fba94c5881955ba72db9d8e7baae4c92ddff6b3623783",
+    "reconstructed/pokemon_learnset/evidence/00175fb4.asm": "a4d3367ecde5f109ad42f9669e99b2930156dd51ace212bb2b04d6b8fe024bb8",
+    "reconstructed/pokemon_learnset/evidence/00175fb4.c": "2da1fde068a1504b35e43809836fec3d1d3f032b186b2ef84e62b4488db3c4b6",
+    "reconstructed/pokemon_learnset/evidence/00300ef8.asm": "08f52fba98a8eec8754adf1305bb83301e1cd33e23f72414b6f60a439d180827",
+    "reconstructed/pokemon_learnset/evidence/00300ef8.c": "bdd37c0834b37720f216e75660554ea62840128c0f1baf603fa7e0eea777ebff",
+    "reconstructed/pokemon_learnset/evidence/functions.json": "ce7c31dfe742fd43fdb9762db364c20cc108b9ce764df0605cadd0eef6ae2528",
+    "reconstructed/pokemon_learnset/evidence/literals.json": "c92ea1ac0ea3ff42ff5ae7721f78a0730f2d2ece3d5430355333dc2b41003f39",
+    "reconstructed/pokemon_learnset/evidence/provenance.json": "052dc8a07d43e5a63c839acf0154549538675addb3088ff5c1d8caea224b06a9",
+    "reconstructed/pokemon_learnset/pokemon_learnset.c": "222e1795fa73f3f3429286edf7e51109ecf13f3bb4aeab076cc9152f41e0750d",
+    "reconstructed/pokemon_learnset/pokemon_learnset.h": "45ead233e5b03d666fd4f1971bfe129a3a11521c0cc511526c81a9c712206cd7",
+    "reconstructed/pokemon_learnset/reproduction/README.txt": "83d86f9414922387e1d14510f6748b9f4181f209dcb9a50078d0dc2e02e2669c",
+    "reconstructed/pokemon_learnset/reproduction/export_learnset.py": "4fb0b4b2a1d155b97f60abd6847f35fcb32518720eae028ee5e677a5455f408b",
+    "reconstructed/pokemon_learnset/reproduction/verify_learnset.py": "9cfb1b24b0b4fa91417c411682d71a56102d161008535f281fbde01df7de0296",
+    "reconstructed/pokemon_learnset/test_pokemon_learnset.c": "a4237fba1318fee8eb576a2e86d9c3819ee99056aeefe0b5e2dd5ddf301b1b31",
+    "native/game/learnset.c": "129c808bdb41df5578acf2943e560ab1f9187b794fdf956df13bec1f37ac673a",
+    "native/game/battle.h": "e2babd2a0abd73d726dd5d4d90d98dc05a576ec5d7641c2aefa5540593e71dd3",
+    "native/game/test_battle.c": "f55e8ae39fe32c08c8a71506687a263aaf20254ee8c8ad96f5a1536bcc59d20f",
+    "native/model_app.c": "9b76a2a0698bdb529f83161723fe8baca953049966f7c779462fd8b99545426e",
+    "native/Makefile": "3b9c967d1b40fd51446fcacc0d0bc45d574aba381cd6f3861d9066d494c544b5",
+    "native/assets/pokedata.h": "7da02c8df6dbbd50c8513a504ee881bbdb65ccee0906f60f069d15bbada14015",
+    "native/reproduction/learnset-services/check_learnsets.c": "9e9a38b1094677a6e48ec5060cb58403ee495d75f84aa0cf439994851e6c99bd",
+    "reconstructed/Makefile": "2a0d5b0eff3534349608f8391b2dec257807e52d3fee0a96e43586f69fde5f91"
+  },
+  "runs": [
+    {
+      "command": "make -C reconstructed test",
+      "exit_code": 0,
+      "log_sha256": "22b6b655454608ed503b3bcbc83fc3d6e7a5b4f9d5509d372c809bcc3d12a02b",
+      "c_suites": 10
+    },
+    {
+      "command": "make -C reconstructed/pokemon_learnset test",
+      "exit_code": 0,
+      "log_sha256": "e9a5fa80299861512c6db0cf6a3f9eb0069cc57ecd340769bc226777432ed261"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -v",
+      "exit_code": 0,
+      "log_sha256": "1ce8f669a91df364fb6c89369fd0c488de7b4778c2f466b6a796919eb5847379",
+      "python_tests": 38,
+      "optional_skips": 2
+    },
+    {
+      "command": "make -C native all test",
+      "exit_code": 0,
+      "log_sha256": "74cb53f156bd4b49b6da6743b804c8bb3fb54d560a00b077898aea36fe4d06b8",
+      "python_tests": 43,
+      "c_suites": 31
+    },
+    {
+      "command": "make -C native test-runtime",
+      "exit_code": 0,
+      "log_sha256": "9f24c2927b8eeeaaafbdaf91a67a0a0ab5d40ad7e1446ec4b981a4b0e92bab3c",
+      "python_tests": 72
+    },
+    {
+      "command": "ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-learnset/test_learnset_sanitized",
+      "exit_code": 0,
+      "log_sha256": "3355328dd1fefac9cb8b7cba69f9e22c9fc0b652ba0ea8f6922ea824fff79c7e"
+    },
+    {
+      "command": "ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-learnset/test_battle_sanitized",
+      "exit_code": 0,
+      "log_sha256": "ecfba865c1e1cbdf63905fce2917c2bb59e9730f8b69a422a5c059e8cc42e6b7"
+    }
+  ],
+  "limitations": [
+    "No original ARM execution or captured running-game comparison.",
+    "Resource initialization/allocation/disposal and the three personal/archive services remain external.",
+    "The native viewer uses an already selected resource; its cache lifecycle is not replaced.",
+    "ASan/UBSan leak detection disabled; native Windows ABI untested."
+  ]
+}

@@ -1,0 +1,5 @@
+0014f294  04009fe5  ldr r0,[0x14f2a0]
+0014f298  240090e5  ldr r0,[r0,#0x24]
+0014f29c  cf6f00ea  b 0x0016b1e0
+0016b1e0  0800d0e5  ldrb r0,[r0,#0x8]
+0016b1e4  1eff2fe1  bx lr

@@ -2059,7 +2059,7 @@ static int game_pokemon(const struct options *o, uint16_t species, uint8_t level
     free(member);
     if (lr != PX_POKEDATA_OK) return 0;
     uint16_t moves[4];
-    px_learnset_moves_at(&learnset, level, moves);
+    if (!px_battle_initial_moves(&g_game.data, &learnset, level, moves)) return 0;
     uint8_t iv[6];
     for (unsigned k = 0; k < 6; ++k) iv[k] = (uint8_t)px_rng_below(&g_game.rng, 32);
     const uint8_t nature = (uint8_t)px_rng_below(&g_game.rng, 25);

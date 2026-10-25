@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-25",
+  "baseline_commit": "a28737ad23cdf0494fd04319f70abd54c2d5eaa2",
+  "prior_worktree_checkpoint": "Includes the uncommitted pokemon_moves milestone from the preceding turn.",
+  "preserved_reconstruction_checkpoints": [
+    {
+      "name": "battle_task",
+      "entries": 60,
+      "manifest_sha256": "5e9434c27e94bbf43014bcc273f80cf26775dcbe1c51e8051183647c5009cdf1"
+    },
+    {
+      "name": "call_wild_battle",
+      "entries": 12,
+      "manifest_sha256": "a3acabefdeab4df63e6b9b7fc651fe55e1bd297a02d56476c0c122b4e3609bd9"
+    },
+    {
+      "name": "encounter_builder",
+      "entries": 59,
+      "manifest_sha256": "af4aa6a38b51a66e7d2c43aaca61109ebbc988bb3c673ed360257fe996d4abf6"
+    },
+    {
+      "name": "pokemon_constructor",
+      "entries": 56,
+      "manifest_sha256": "f8573547857c456fbd3acd57046378116cc77c3a51ce99d73297b4c095d1e143"
+    },
+    {
+      "name": "pokemon_data",
+      "entries": 104,
+      "manifest_sha256": "0405aba491f360b8e6d63d029fd9959205b7aa1baf96ddb3775ec096e3d481b7"
+    },
+    {
+      "name": "pokemon_moves",
+      "entries": 19,
+      "manifest_sha256": "132d2947267f8d4410bec4785df6b14fd51925fd4a880850845937774e7efb68"
+    },
+    {
+      "name": "pokemon_state",
+      "entries": 108,
+      "manifest_sha256": "8b4558ec9f88813ab18e582bdffd0d79ca393f08f1d4d1ead90b057b5627ac7b"
+    },
+    {
+      "name": "pokemon_stats",
+      "entries": 110,
+      "manifest_sha256": "0e1b43210166c53462066dbdd1c6fc70d53d48aa6c5aae534568300573f72289"
+    },
+    {
+      "name": "wild_battle_setup",
+      "entries": 30,
+      "manifest_sha256": "aa1682d7073cc8623ce3941231451c88a81e7876aa890272b3fb328def0d5efa"
+    }
+  ],
+  "prior_native_reproduction_files": 200,
+  "prior_files_compared": 767,
+  "prior_file_hash_list_sha256": "29677754985d72fa1f5fe52cb7f6734e1787dfae4213bbf3e1c343a2af72e08d",
+  "local_inputs": {
+    "a/2/1/8": {
+      "bytes": 118336,
+      "sha256": "d1bfcbc0fb6505210164f329843f29d435cc5aba9b8e4c77de68dd3095bf8933"
+    },
+    "a/2/1/2": {
+      "bytes": 34672,
+      "sha256": "2c47e7aea1fc9d434fb96f282e478d265d9c34c4ca0481eae3e4f6e3229fabe4"
+    },
+    "a/2/1/4": {
+      "bytes": 69364,
+      "sha256": "db997ccf93ef5520dac813af0def23be77fb373d83a211de80f2e298c59d60b0"
+    }
+  }
+}

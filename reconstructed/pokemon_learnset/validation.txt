@@ -1,0 +1,29 @@
+Learnset milestone validation, 2026-10-25
+
+make -C reconstructed test
+  exit 0; 10 C suites
+
+make -C reconstructed/pokemon_learnset test
+  exit 0
+
+python3 -m unittest discover -s tests -v
+  exit 0; 38 Python tests; 2 optional extraction skips
+
+make -C native all test
+  exit 0; 31 C suites; 43 Python tests
+
+make -C native test-runtime
+  exit 0; 72 Python tests
+
+ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-learnset/test_learnset_sanitized
+  exit 0
+
+ASAN_OPTIONS=detect_leaks=0 outputs/pokemon-learnset/test_battle_sanitized
+  exit 0
+
+Static evidence: 14 functions, 1,924 instruction bytes and 36 literal bytes verified; both personal-selector dispatch words verified.
+New suite: 66,816 accessor cases; 25,515 loader cases; cache copying/replacement, pointer mutation, base initialization/refresh. Final unit rerun adds indices whose low halfword is valid to catch premature index narrowing.
+ASan/UBSan: new reconstruction suite and native battle/initial-move bridge passed with detect_leaks=0.
+Local data: 799 learnsets, at most 25 entries, 29,334 entry/fallback cases, 80,699 level cases, 885 species/form selections and 885 repeat cache hits all agree.
+Preservation: 558 hashes across nine prior reconstruction checkpoints; 767 prior source/evidence files compared; all 200 prior native reproduction files unchanged.
+Original ARM execution, a running-game reference and native Windows remain unverified. Full logs: outputs/pokemon-learnset/.

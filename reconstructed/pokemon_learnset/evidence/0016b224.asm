@@ -1,0 +1,14 @@
+0016b224  10402de9  stmdb sp!,{r4,lr}
+0016b228  0040a0e1  cpy r4,r0
+0016b22c  0800d0e5  ldrb r0,[r0,#0x8]
+0016b230  010050e1  cmp r0,r1
+0016b234  0400008a  bhi 0x0016b24c
+0016b238  0020a0e3  mov r2,#0x0
+0016b23c  0210a0e1  cpy r1,r2
+0016b240  0200a0e1  cpy r0,r2
+0016b244  0000a0e1  cpy r0,r0
+0016b248  0010a0e3  mov r1,#0x0
+0016b24c  040094e5  ldr r0,[r4,#0x4]
+0016b250  010180e0  add r0,r0,r1, lsl #0x2
+0016b254  b000d0e1  ldrh r0,[r0,#0x0]
+0016b258  1080bde8  ldmia sp!,{r4,pc}

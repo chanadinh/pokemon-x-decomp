@@ -13,7 +13,9 @@ STATS_SOURCES = $(RECON)/pokemon_stats/stats_math.c $(RECON)/pokemon_data/pokemo
 # The platform layer (platform/): guest memory is part of every build that runs reconstructed code.
 MOVE_SOURCES = $(RECON)/pokemon_moves/pokemon_moves.c $(RECON)/pokemon_state/state_fields.c
 MOVE_HEADERS = $(RECON)/pokemon_moves/pokemon_moves.h $(RECON)/pokemon_state/state_fields.h
-GAME_CORE = $(STATS_SOURCES) $(MOVE_SOURCES) platform/guest.c platform/fs.c
+LEARNSET_SOURCES = $(RECON)/pokemon_learnset/pokemon_learnset.c game/learnset.c
+LEARNSET_HEADERS = $(RECON)/pokemon_learnset/pokemon_learnset.h game/battle.h assets/pokedata.h
+GAME_CORE = $(STATS_SOURCES) $(MOVE_SOURCES) $(LEARNSET_SOURCES) platform/guest.c platform/fs.c
 PLATFORM_SOURCES = platform/hid.c platform/clock.c platform/thread_sdl.c platform/audio.c platform/audio_sdl.c
 ASSET_SOURCES = assets/garc.c assets/lz.c assets/bclim.c assets/etc1.c assets/texture.c assets/cgfx.c assets/bch_texture.c assets/field.c
 ASSET_HEADERS = assets/garc.h assets/lz.h assets/bclim.h assets/etc1.h assets/texture.h assets/cgfx.h assets/bch_texture.h assets/field.h
@@ -32,7 +34,7 @@ check-sdl:
 build/pokemon_asset_viewer: app.c $(ASSET_SOURCES) $(ASSET_HEADERS) | build check-sdl
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) app.c $(ASSET_SOURCES) $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -lm -o $@
 
-build/pokemon_model_viewer: model_app.c $(MODEL_SOURCES) $(MODEL_HEADERS) $(MOVE_HEADERS) | build check-sdl
+build/pokemon_model_viewer: model_app.c $(MODEL_SOURCES) $(MODEL_HEADERS) $(MOVE_HEADERS) $(LEARNSET_HEADERS) | build check-sdl
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(SDL_CFLAGS) model_app.c $(MODEL_SOURCES) $(LDFLAGS) $(SDL_LIBS) $(LDLIBS) -lm -o $@
 
 build/pokemon_field_viewer: field_app.c $(FIELD_SOURCES) $(FIELD_HEADERS) | build check-sdl
@@ -77,10 +79,13 @@ build/test_gf_script: assets/gf_script.c assets/gf_script.h assets/zone_talk.c a
 build/test_pokedata: assets/pokedata.c assets/pokedata.h assets/test_pokedata.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) assets/pokedata.c assets/test_pokedata.c $(LDFLAGS) $(LDLIBS) -o $@
 
-build/check_moves: reproduction/move-services/check_moves.c assets/garc.c assets/garc.h assets/pokedata.c assets/pokedata.h $(GAME_CORE) $(MOVE_HEADERS) | build
+build/check_moves: reproduction/move-services/check_moves.c assets/garc.c assets/garc.h assets/pokedata.c assets/pokedata.h $(GAME_CORE) $(MOVE_HEADERS) $(LEARNSET_HEADERS) | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) reproduction/move-services/check_moves.c assets/garc.c assets/pokedata.c $(GAME_CORE) $(LDFLAGS) $(LDLIBS) -o $@
 
-build/test_battle: game/battle.c game/battle.h game/battle_ui.c game/battle_ui.h game/test_battle.c assets/pokedata.c render/text.c $(GAME_CORE) $(MOVE_HEADERS) | build
+build/check_learnsets: reproduction/learnset-services/check_learnsets.c assets/garc.c assets/garc.h assets/pokedata.c assets/pokedata.h $(GAME_CORE) $(MOVE_HEADERS) $(LEARNSET_HEADERS) | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) reproduction/learnset-services/check_learnsets.c assets/garc.c assets/pokedata.c $(GAME_CORE) $(LDFLAGS) $(LDLIBS) -o $@
+
+build/test_battle: game/battle.c game/battle.h game/battle_ui.c game/battle_ui.h game/test_battle.c assets/pokedata.c render/text.c $(GAME_CORE) $(MOVE_HEADERS) $(LEARNSET_HEADERS) | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) game/battle.c game/battle_ui.c game/test_battle.c assets/pokedata.c render/text.c $(GAME_CORE) $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/test_guest: platform/guest.c platform/guest.h platform/test_guest.c | build
@@ -113,7 +118,7 @@ build/test_pica_shader: platform/pica_shader.c platform/pica_shader.h platform/t
 build/test_audio: platform/audio.c platform/audio.h platform/test_audio.c | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) platform/audio.c platform/test_audio.c $(LDFLAGS) $(LDLIBS) -lm -o $@
 
-build/test_save: game/save.c game/save.h game/test_save.c game/battle.c game/battle.h assets/pokedata.c $(GAME_CORE) $(MOVE_HEADERS) | build
+build/test_save: game/save.c game/save.h game/test_save.c game/battle.c game/battle.h assets/pokedata.c $(GAME_CORE) $(MOVE_HEADERS) $(LEARNSET_HEADERS) | build
 	$(CC) $(CPPFLAGS) $(CFLAGS) game/save.c game/test_save.c game/battle.c assets/pokedata.c $(GAME_CORE) $(LDFLAGS) $(LDLIBS) -lm -o $@
 
 build/test_zone: assets/zone.c assets/zone.h assets/test_zone.c | build
@@ -209,4 +214,4 @@ test-runtime: build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemo
 	python3 -m unittest discover -s tests -p test_field_viewer.py -v
 
 clean:
-	rm -f build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/check_moves $(CORE_TESTS)
+	rm -f build/pokemon_asset_viewer build/pokemon_model_viewer build/pokemon_field_viewer build/check_moves build/check_learnsets $(CORE_TESTS)

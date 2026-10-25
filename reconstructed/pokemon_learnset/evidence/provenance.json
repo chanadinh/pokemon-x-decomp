@@ -1,0 +1,126 @@
+{
+  "input": {
+    "file": "code.bin",
+    "size": 5156864,
+    "sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a"
+  },
+  "verified_functions": [
+    {
+      "address": "0014f294",
+      "instruction_bytes": 20,
+      "instruction_bytes_sha256": "db0de1d65dbf4805cb1d98c147483b373a684e75287afaa8000280c635f5edea",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0014f2a4",
+      "instruction_bytes": 16,
+      "instruction_bytes_sha256": "98a9d5127ba4e359dfbbbdfa0064b916ec76c8ee68f2c525a86952b7b733f5ee",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0014f2b8",
+      "instruction_bytes": 244,
+      "instruction_bytes_sha256": "492320fc5bae74e614c5ce1c66091d5bc1dcf370214d83ab425c60c48a811d36",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0014f310",
+      "instruction_bytes": 16,
+      "instruction_bytes_sha256": "c36285052d023eea1c5f2965f3c919749131dac564869440529f84dbada26327",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0016b1e8",
+      "instruction_bytes": 60,
+      "instruction_bytes_sha256": "0204d6877ef5908551cf1393758154097e03292d02686b0613ca4fb63c0bc9ef",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0016b224",
+      "instruction_bytes": 56,
+      "instruction_bytes_sha256": "6d531307630aa25e2451f3e8797591a784a91cb449723ee8843cfcff97777069",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0016b25c",
+      "instruction_bytes": 144,
+      "instruction_bytes_sha256": "97b516882a6e93a415d46951101ca3b603853800d5104ff3732035734f7035c8",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00167ca4",
+      "instruction_bytes": 256,
+      "instruction_bytes_sha256": "9645bb3f834baa2b96b071fcbbe8713df98175b3be0e0447e1da0cdea10044ab",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00175fb4",
+      "instruction_bytes": 56,
+      "instruction_bytes_sha256": "7885b362843cccd074d6c86a8f3b6635cb1494b07c7975b071e26a46fe2579d3",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "0015e958",
+      "instruction_bytes": 48,
+      "instruction_bytes_sha256": "8b509a0937e07da3c9d36f05ba02bb36a2e3939437dcd54274ea65de1248f281",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00138214",
+      "instruction_bytes": 76,
+      "instruction_bytes_sha256": "0016e0b74b924f4761f64f20c40338dc45cb106fb7f332368140e8fb2bbf3e6c",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00174c0c",
+      "instruction_bytes": 152,
+      "instruction_bytes_sha256": "21a01d94acf63f6a7574f4f3a78cd13f784391abf7150e45207a90a5a3e8abec",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00175c78",
+      "instruction_bytes": 644,
+      "instruction_bytes_sha256": "b9c5ee19e49ba035006339c56307ace1b0c5fc9dc035368ca7fea95eb3afaab4",
+      "matches_original_input": true,
+      "decompiled": true
+    },
+    {
+      "address": "00300ef8",
+      "instruction_bytes": 136,
+      "instruction_bytes_sha256": "2a2057a5eddead5259bbbb2eebf72ea6e1b0a505d242c90b2468afb674e60546",
+      "matches_original_input": true,
+      "decompiled": true
+    }
+  ],
+  "verified_literal_words": {
+    "0014f2a0": "90175d00",
+    "0014f2b4": "90175d00",
+    "0014f30c": "90175d00",
+    "0014f320": "90175d00",
+    "00167da4": "e8175d00",
+    "00167da8": "d1020000",
+    "00167dac": "ffff0000",
+    "00174ca4": "78175d00",
+    "00174ca8": "d1020000"
+  },
+  "instruction_bytes": 1924,
+  "literal_bytes": 36,
+  "notes": [
+    "Each instruction and exported PC-relative literal compared at address minus 0x00100000.",
+    "Read-only, noanalysis Ghidra export; no project repair or saved project mutation.",
+    "Exports include explicit external dependencies, not only implemented functions.",
+    "Static evidence and synthetic host tests do not establish original-game execution equivalence."
+  ]
+}
