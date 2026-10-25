@@ -49,6 +49,11 @@ jobs:
             --demo --software --frames 3 --self-test-input \
             --screenshot native/build/demo.bmp
 
+      - name: Package native Linux executables
+        env:
+          RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+        run: bash scripts/package_native_release.sh "$RELEASE_TAG" release-assets
+
       - name: Package source archives
         env:
           RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
@@ -71,6 +76,7 @@ jobs:
 
           - Reconstructed C module sources and synthetic tests
           - Native GARC, LZ, BCLIM, ETC1, BCH, CGFX, and field-scene tooling
+          - Linux native viewer executables with self-contained demo modes
           - Reproducible ZIP and TAR.GZ source archives
           - SHA-256 checksums for both source archives
 
@@ -83,6 +89,8 @@ jobs:
           ## Scope
 
           This is an early research milestone, not a playable PC port. It does
-          not contain Nintendo game files or other copyrighted game assets.
+          not contain Nintendo game files or other copyrighted game assets. The
+          Linux executable bundle runs the synthetic demo; real-data viewing
+          requires a locally extracted RomFS.
           EOF
           )"
