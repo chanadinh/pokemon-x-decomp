@@ -8,7 +8,7 @@
 [![Language: C11](https://img.shields.io/badge/language-C11-60a5fa)](reconstructed/README.md)
 [![Stage: walkable field slice](https://img.shields.io/badge/stage-walkable_field_slice-38bdf8)](ROADMAP.md)
 
-[Play the slice](#play-the-field-slice) · [Get started](#get-started) · [See it running](#see-it-running) · [Explore the source](#rebuilding-the-rules) · [Next milestone](#the-road-to-a-playable-slice)
+[Play the slice](#play-the-field-slice) · [Watch the showcase](#watch-the-showcase) · [Get started](#get-started) · [See it running](#see-it-running) · [Explore the source](#rebuilding-the-rules) · [Next milestone](#the-road-to-a-playable-slice)
 
 <a href="docs/native-bch.md#vaniville-town"><img src="docs/images/native-bch-town.png" alt="The player standing on the cobbled square of Vaniville Town, between two street lamps" width="960"></a>
 
@@ -84,6 +84,23 @@ sound (the mixer is ready; the sound files have not been tried) and the field's
 shaders. See the
 [town record](native/reproduction/bch-town/README.txt) for exactly what was
 checked.
+
+## Watch the showcase
+
+This capture shows the native viewer loading Pokémon X's zone 5 from the game's
+own data: walk around the bedroom, run downstairs, talk to the NPC, and orbit
+the camera around the scene.
+
+<p align="center">
+  <video controls muted loop width="960" poster="docs/images/native-bch-zone-walk.png">
+    <source src="docs/images/pokemon-x-zone5-showcase.mp4" type="video/mp4">
+    <a href="docs/images/pokemon-x-zone5-showcase.mp4">Watch the Pokémon X zone 5 showcase video</a>
+  </video>
+</p>
+
+Use **W A S D** to walk, **Shift** to run, **Space** to talk, the **arrow keys**
+to orbit the camera, and **Esc** to exit. The [capture provenance](docs/images/README.md)
+records the local environment and controls.
 
 ## See it running
 

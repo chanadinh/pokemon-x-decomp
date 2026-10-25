@@ -4,6 +4,12 @@ These documentation images are unmodified PNG copies of existing captures from
 the local project workspace. They were selected for the main README at the
 project owner's request. No generated artwork or mockups are used.
 
+The showcase video is an unmodified capture from the local project workspace.
+
+| Video | Local source | What it shows |
+| --- | --- | --- |
+| [Pokémon X zone 5 showcase](pokemon-x-zone5-showcase.mp4) | Native viewer capture from Ubuntu, October 24, 2026 | Walking and running through zone 5, talking to the NPC, and orbiting the camera with the controls listed in the main README. |
+
 | Image | Local source | What it shows |
 | --- | --- | --- |
 | [BCH wireframe](native-bch-wireframe.png) | `outputs/native-bch-geometry-validated/field165-wireframe.png` | Region 165: 12 meshes, 2,356 vertices and 4,992 indices, displayed with an explicit triangle-list interpretation. All meshes are shown; materials are not executed. |
