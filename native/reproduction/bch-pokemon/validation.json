@@ -1,0 +1,39 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "f317b7427f05b7c5a4d13043518ae4a803b01c29",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "2761a8f6888b5b20b2dfb92a8ff8396041b5314cece6c6720bd4760036554336",
+  "assets/bch_model.c": "1171f5178f3ab9fe957a87308586f444bb6ba55ea7309e8daaaf9494e70029cf",
+  "assets/bch_material.c": "f89958a14a741473c1a90cf0b3f0c420b1809e3da2257ec437ca063ed3ba4967",
+  "assets/bch_material.h": "5978039838247120a18ceb448acb5f6d9e3f1408a9d16ca0f66cd597ccd33d9c",
+  "assets/test_bch_model.c": "4b301f48a5487cf682767124ec398ef9f1d09dfa06e7920a8600822ad994300e",
+  "assets/test_bch_material.c": "69f4b5a25dc0d77c062245402c082d4e74312cd64e5aa7b54a5d07020a99d1ac",
+  "game/battle_ui.c": "d74cc7c6e1139333855dda8b048645ea6f4850685f6b4882af00910412b08586",
+  "game/battle_ui.h": "da9c2072c14dc92838d5ea6603aa490da5c1f2e592a609652a0daa250322824e",
+  "tests/test_bch_battle_viewer.py": "5adf46fa5352cea91e7028fe06cbbe270a193b42c53d7e3e3dbca4093fd7f223",
+  "reproduction/bch-pokemon/verify_pokemon.py": "ed0e57be444ca55f2656efbda661c654a044337566eb80b1a342ce9184d780a6",
+  "tests/test_bch_combiner_viewer.py": "df9eaf907184638f02ffd76991f33002291bc874203a2a671f60ec4fb7a3d4b7"
+ },
+ "archive": {
+  "path": "a/0/0/7",
+  "bytes": 1041219296,
+  "entries": 7852,
+  "sha256": "10f9254d188b132fa0ff9c3bd4898df00e84c6a15b0d2dd3937d0ead3502b081",
+  "transfer": "four parts (3 x 314,572,800 + 97,500,896 bytes) concatenated; GARC header size matches"
+ },
+ "viewer_load_survey": {
+  "models": 981,
+  "loaded_with_textures_and_combiners": 977,
+  "empty_pc_pack": [
+   963,
+   964,
+   967,
+   968
+  ]
+ },
+ "image": {
+  "docs/images/native-bch-pokemon.png": "e25fcd837276a38d0ba41d20cc8647f20b3edc4a206db8b70e8d1dd87f9922ea"
+ }
+}

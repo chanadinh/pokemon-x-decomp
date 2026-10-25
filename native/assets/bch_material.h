@@ -67,10 +67,11 @@ struct px_bch_fragment_preview {
  * in register 0x80 becomes disabled_units: its input is (0,0,0,0), as in the
  * pinned emulator reference. Enabled units the chain reads must be named;
  * ordinary identity-UV units become sampled_units (with
- * the same sampler subset as below); projection-mapped units (mode 3) become
- * projected_units, which are NOT executed: the caller must supply a declared
- * substitute and should measure sensitivity. Texture 3 and other mapping
- * modes reject. sources is px_tev_sources of the chain. */
+ * the same sampler subset as below); units whose coordinates the vertex stage
+ * generates (camera cube 1 and sphere 2 environment maps, projection 3)
+ * become projected_units, which are NOT executed: the caller must supply a
+ * declared substitute and should measure sensitivity. Texture 3 and other
+ * mapping modes reject. sources is px_tev_sources of the chain. */
 struct px_bch_combiner_material {
     struct px_tev_config tev;
     uint32_t sources, sampled_units, projected_units, disabled_units;

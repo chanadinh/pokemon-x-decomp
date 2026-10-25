@@ -206,7 +206,14 @@ static void test_combiner_chain(void)
     REJECT(x.fragment.tev[3][0] = full(0x0fff0ff7), PX_BCH_MATERIAL_UNSUPPORTED_COMBINER);
     REJECT(x.fragment.tev[3][0] = full(0x0fff0ff6), PX_BCH_MATERIAL_UNSUPPORTED_COMBINER);
     REJECT(x.texture_names[1].present = 0, PX_BCH_MATERIAL_UNSUPPORTED_COMBINER);
-    REJECT(x.coordinators[0].packed = 0x00010001, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);
+    REJECT(x.coordinators[0].packed = 0x00040001, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);
+    /* Camera cube (1) and sphere (2) environment maps join the unexecuted units. */
+    for (uint32_t mapping = 1; mapping <= 2; ++mapping) {
+        struct px_bch_material x = full_chain();
+        x.coordinators[1].packed = mapping << 16 | 1;
+        assert(px_bch_material_combiners(&x, &out) == PX_BCH_MATERIAL_OK);
+        assert(out.sampled_units == 0 && out.projected_units == 3);
+    }
     REJECT(x.coordinators[1].translation[0] = .5f; x.coordinators[1].packed = 0x00000301,
            PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);  /* transform type 3 */
     REJECT(x.coordinators[1].translation[0] = NAN, PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES);

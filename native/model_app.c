@@ -687,8 +687,10 @@ static int read_resource(const char *romfs, const char *archive_path, uint32_t e
     out->size = out->decoded ? out->decoded_size : size;
     if (have_section) {
         if (out->size < 2 || (memcmp(out->data, "AD", 2) && memcmp(out->data, "GR", 2) &&
-                              memcmp(out->data, "BM", 2) && memcmp(out->data, "MM", 2))) {
-            snprintf(error, sizeof error, "--section requires an AD, GR, BM or MM minipack");
+                              memcmp(out->data, "BM", 2) && memcmp(out->data, "MM", 2) &&
+                              memcmp(out->data, "PC", 2) && memcmp(out->data, "PT", 2) &&
+                              memcmp(out->data, "PF", 2))) {
+            snprintf(error, sizeof error, "--section requires an AD, GR, BM, MM, PC, PT or PF minipack");
             goto failed;
         }
         struct px_field_span selected;
@@ -1697,6 +1699,13 @@ struct game_session {
     struct px_battle battle;
     struct px_battle_ui ui;
     uint32_t encounters, battles;
+    /* Battle models (a/0/0/7): the species index (entry 0) and the loaded
+     * model of each side (NULL: the placeholder), with its vertex buffers. */
+    uint8_t *model_index; size_t model_index_size; int model_index_tried;
+    struct model_asset *models[2];
+    uint16_t model_species[2];
+    struct px_raster_vertex *model_points[2];
+    double (*model_normals[2])[4];
 };
 static struct game_session g_game;
 
@@ -1850,6 +1859,7 @@ static void print_battler(const char *what, const struct px_battler *b)
 
 /* After a completed step onto grass: roll, and on an encounter prepare the
  * wild Pokémon (g_game.pending). Returns 1 on an encounter. */
+static void battle_model_load(const struct options *o, unsigned side, uint16_t species);
 static int maybe_encounter(const struct options *o, struct model_asset *asset)
 {
     const struct zone_state *zs = asset->zone;
@@ -1879,8 +1889,89 @@ static int maybe_encounter(const struct options *o, struct model_asset *asset)
     printf("encounter zone=%" PRIu32 " cell=%d,%d slot=%u species=%u level=%u\n", zs->zone, w->x, w->z, slot,
            s->species, level);
     print_battler("wild", &g_game.wild);
+    battle_model_load(o, 0, g_game.partner.species);
+    battle_model_load(o, 1, g_game.wild.species);
     g_game.pending = 1;
     return 1;
+}
+
+/* Pokémon battle models, a/0/0/7. Entry 0 indexes it by species: four bytes
+ * per species from 1 (u16 first model, u8 model count, u8 flags). Model m
+ * owns entries 4 + 8m .. 11 + 8m: a PC pack whose section 0 is the model BCH,
+ * a PF pack of 31 BCH (not read), PT packs holding the textures (+2) and the
+ * shiny textures (+3), and four more (not read). Layout observed in the
+ * file; the reading code of the game is not traced. The viewer draws the
+ * species' first model (no gender or form selection; Pumpkaboo's and
+ * Gourgeist's later size forms have empty PC packs), in the rest pose. */
+enum { PX_POKEMON_MODEL_FIRST_ENTRY = 4, PX_POKEMON_MODEL_FILES = 8 };
+static void battle_model_free(unsigned side)
+{
+    struct game_session *g = &g_game;
+    if (g->models[side]) { asset_free(g->models[side]); free(g->models[side]); }
+    free(g->model_points[side]); free(g->model_normals[side]);
+    g->models[side] = NULL; g->model_points[side] = NULL; g->model_normals[side] = NULL; g->model_species[side] = 0;
+}
+static void battle_model_load(const struct options *o, unsigned side, uint16_t species)
+{
+    struct game_session *g = &g_game;
+    static const char *const names[] = {"partner", "wild"};
+    if (g->models[side] && g->model_species[side] == species) return;
+    battle_model_free(side);
+    if (!g->model_index_tried) {
+        g->model_index_tried = 1;
+        struct resource r = {0};
+        char path[1024];
+        snprintf(path, sizeof path, "%s/a/0/0/7", o->romfs);
+        FILE *probe = fopen(path, "rb");
+        if (probe) {
+            fclose(probe);
+            if (read_resource(o->romfs, "a/0/0/7", 0, 0, 0, 0, "battle model index", &r) &&
+                (g->model_index = malloc(r.size ? r.size : 1))) {
+                memcpy(g->model_index, r.data, r.size); g->model_index_size = r.size;
+            }
+            resource_free(&r);
+        }
+    }
+    if (!g->model_index || !species || (size_t)species * 4 > g->model_index_size) {
+        if (!o->silent) printf("battle_model side=%s species=%u model=none\n", names[side], species);
+        return;
+    }
+    const uint8_t *rec = g->model_index + ((size_t)species - 1) * 4;
+    const uint32_t model = (uint32_t)rec[0] | (uint32_t)rec[1] << 8;
+    struct options po = *o;
+    po.have_zone = 0; po.have_arrive = 0; po.archive = "a/0/0/7"; po.have_entry = 1; po.subentry = 0; po.model = 0;
+    po.entry = PX_POKEMON_MODEL_FIRST_ENTRY + PX_POKEMON_MODEL_FILES * model;
+    po.have_section = 1; po.section = 0;
+    po.triangle_list = po.textured = po.combiners = 1;
+    po.texture_archive = "a/0/0/7"; po.texture_entry = po.entry + 2; po.have_texture_entry = 1;
+    po.texture_subentry = 0; po.have_texture_section = 1; po.texture_section = 0;
+    po.environment_archive = "a/0/0/3"; po.environment_entry = 137; po.have_environment_entry = 1;
+    po.environment_subentry = 0; po.have_environment_section = 1; po.environment_section = 0; po.scene = 0;
+    po.skinned = 1; po.allow_skeleton = 1; po.hide_invisible = 1;
+    po.walk = 0; po.steps = NULL; po.player_archive = NULL; po.quiet = 1; po.silent = 1;
+    po.have_motion_section = po.have_motion_slot = po.have_motion_frame = 0;
+    po.have_walk_motion = po.have_run_motion = 0;
+    struct model_asset *a = calloc(1, sizeof *a);
+    int ok = a && load(&po, a) && a->bch.mesh_count && a->bch_combiner;
+    if (ok) {
+        const size_t n = a->wire.vertex_count ? a->wire.vertex_count : 1;
+        g->model_points[side] = malloc(n * sizeof *g->model_points[side]);
+        g->model_normals[side] = malloc(n * sizeof *g->model_normals[side]);
+        ok = g->model_points[side] && g->model_normals[side];
+    }
+    if (!ok) {
+        if (a) { asset_free(a); free(a); }
+        free(g->model_points[side]); free(g->model_normals[side]);
+        g->model_points[side] = NULL; g->model_normals[side] = NULL;
+        if (!o->silent) printf("battle_model side=%s species=%u model=%" PRIu32 " entry=%" PRIu32 " failed\n",
+                               names[side], species, model, po.entry);
+        return;
+    }
+    g->models[side] = a; g->model_species[side] = species;
+    if (!o->silent)
+        printf("battle_model side=%s species=%u model=%" PRIu32 " entry=%" PRIu32 " texture_entry=%" PRIu32
+               " meshes=%" PRIu32 " vertices=%" PRIu32 " pose=rest\n", names[side], species, model, po.entry,
+               po.texture_entry, a->bch.mesh_count, a->wire.vertex_count);
 }
 
 static void battle_begin(void)
@@ -1909,6 +2000,7 @@ static void battle_input(char key)
     memset(g->partner.stages, 0, sizeof g->partner.stages);
     g->party[0] = g->partner;
     g->balls = g->battle.balls;
+    battle_model_free(1);
     printf("battle_end result=%s turns=%" PRIu32 " partner_hp=%u/%u level=%u exp=%u wild_hp=%u/%u balls=%u\n",
            result[g->battle.state], g->battle.turn, g->partner.hp, g->partner.stats[0], g->partner.level,
            (unsigned)g->partner.exp, g->battle.side[1].hp, g->battle.side[1].stats[0], (unsigned)g->balls);
@@ -2689,6 +2781,36 @@ static int band_thread(void *data)
     return 0;
 }
 
+/* The battle models on the stage of game/battle_ui.h. Viewer policy, not the
+ * game's battle camera: an orthographic view pitched 0.25 rad down, one
+ * world unit per pixel; each model scaled to fit a box (wild 64 x 110
+ * pixels, partner 96 x 150) with its lowest point on its platform's centre,
+ * the wild one turned toward the player's side, the partner seen from behind.
+ * Fainted and caught Pokémon are not drawn. */
+static int draw_battle_models(struct px_raster_target *target)
+{
+    struct game_session *g = &g_game;
+    for (unsigned s = 0; s < 2; ++s) {
+        const struct px_battler *p = &g->battle.side[s];
+        const struct model_asset *m = g->models[s];
+        if (!m || !p->hp || (s && g->battle.state == PX_BATTLE_CAUGHT)) continue;
+        const float *lo = m->wire.bounds_min, *hi = m->wire.bounds_max;
+        const double height = hi[1] - lo[1] > 1e-6 ? hi[1] - lo[1] : 1;
+        const double width = hi[0] - lo[0] > hi[2] - lo[2] ? hi[0] - lo[0] : hi[2] - lo[2];
+        double k = (s ? 64.0 : 96.0) / height;
+        if (width * k > (s ? 110.0 : 150.0)) k = (s ? 110.0 : 150.0) / width;
+        struct view v = {{0, 0, 0}, 1, 1, 1, 0, cos(0.25), sin(0.25), (int)target->width, (int)target->height};
+        const double w = target->width, h = target->height;
+        const double z = s ? -300 : 300, feet = s ? h * 9 / 20 : h * 3 / 4 - 8;
+        struct placement at = {(s ? w * 3 / 4 : w / 4) - w / 2 - k * (lo[0] + hi[0]) / 2, 0, z,
+                               s ? 0.4 : 3.14159265358979323846 - 0.6, 1, {k, k, k}};
+        at.y = (h / 2 + v.sp * z - feet) / v.cp - k * lo[1];
+        project_bch(m, &v, &at, g->model_points[s], g->model_normals[s]);
+        if (!draw_bch_meshes(m, g->model_points[s], g->model_normals[s], target, NULL)) return 0;
+    }
+    return 1;
+}
+
 static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *asset,
                              const struct camera *camera, const struct frame_buffers *b,
                              struct px_raster_target *target, SDL_Texture **frame,
@@ -2765,7 +2887,13 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
         jobs[0].ok = draw_scene(asset, &v, jobs[0].points, jobs[0].normals, jobs[0].player_points,
                                 jobs[0].player_normals, &jobs[0].target, counts);
         all = jobs[0].ok;
-    } else px_battle_ui_draw(target->rgba, target->width, target->height, &g_game.ui, &g_game.battle);
+    } else {
+        /* The battle: stage, models (depth-tested among themselves), HUD. */
+        const unsigned modeled = (g_game.models[0] ? 1u : 0) | (g_game.models[1] ? 2u : 0);
+        px_battle_ui_draw_stage(target->rgba, target->width, target->height, &g_game.battle, modeled);
+        all = draw_battle_models(target);
+        px_battle_ui_draw_hud(target->rgba, target->width, target->height, &g_game.ui, &g_game.battle);
+    }
     for (unsigned k = 1; k < bands; ++k) {
         if (threads[k]) SDL_WaitThread(threads[k], NULL);
         all &= jobs[k].ok;

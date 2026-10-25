@@ -119,7 +119,7 @@ static void info_box(uint8_t *rgba, uint32_t w, uint32_t h, int x, int y, const 
     }
 }
 
-void px_battle_ui_draw(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_battle_ui *ui, const struct px_battle *b)
+void px_battle_ui_draw_stage(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_battle *b, unsigned modeled)
 {
     /* Background: a vertical gradient, ground below the horizon. */
     for (uint32_t y = 0; y < h; ++y) {
@@ -128,15 +128,13 @@ void px_battle_ui_draw(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_ba
         px_text_rect(rgba, w, h, 0, (int)y, (int)w, (int)y + 1, y < h * 2 / 5 ? sky : ground);
     }
     static const uint8_t pad[4] = {96, 140, 72, 255};
-    char a[16], c[16];
-    const char *wild = name_of(ui->species_names, ui->species_count, b->side[1].species, a, sizeof a);
-    const char *mine = name_of(ui->species_names, ui->species_count, b->side[0].species, c, sizeof c);
     /* Wild Pokémon: far platform, upper right; the player's: near, lower left. */
     ellipse(rgba, w, h, (int)w * 3 / 4, (int)h * 9 / 20, 70, 16, pad);
     ellipse(rgba, w, h, (int)w / 4, (int)h * 3 / 4 - 8, 90, 20, pad);
     for (unsigned s = 0; s < 2; ++s) {
         const struct px_battler *p = &b->side[s];
         if (!p->hp || (s && b->state == PX_BATTLE_CAUGHT)) continue; /* fainted, or in the ball */
+        if ((modeled >> s) & 1) continue; /* its model is drawn instead */
         const uint8_t *t = type_colors[p->types[0] < PX_TYPE_COUNT ? p->types[0] : 0];
         const uint8_t body[4] = {t[0], t[1], t[2], 255};
         const uint8_t shade[4] = {(uint8_t)(t[0] * 3 / 4), (uint8_t)(t[1] * 3 / 4), (uint8_t)(t[2] * 3 / 4), 255};
@@ -145,6 +143,13 @@ void px_battle_ui_draw(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_ba
         ellipse(rgba, w, h, cx, cy, r, r, shade);
         ellipse(rgba, w, h, cx - 2, cy - 2, r - 3, r - 3, body);
     }
+}
+
+void px_battle_ui_draw_hud(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_battle_ui *ui, const struct px_battle *b)
+{
+    char a[16], c[16];
+    const char *wild = name_of(ui->species_names, ui->species_count, b->side[1].species, a, sizeof a);
+    const char *mine = name_of(ui->species_names, ui->species_count, b->side[0].species, c, sizeof c);
     info_box(rgba, w, h, 16, 14, &b->side[1], wild, 0);
     info_box(rgba, w, h, (int)w - 166, (int)h * 3 / 5 - 30, &b->side[0], mine, 1);
     static const uint8_t frame[4] = {72, 80, 96, 255}, paper[4] = {250, 250, 246, 255}, ink[4] = {48, 48, 56, 255};
@@ -181,4 +186,10 @@ void px_battle_ui_draw(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_ba
             }
         }
     }
+}
+
+void px_battle_ui_draw(uint8_t *rgba, uint32_t w, uint32_t h, const struct px_battle_ui *ui, const struct px_battle *b)
+{
+    px_battle_ui_draw_stage(rgba, w, h, b, 0);
+    px_battle_ui_draw_hud(rgba, w, h, ui, b);
 }

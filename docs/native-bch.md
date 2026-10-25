@@ -541,3 +541,23 @@ An independent check agrees with all eight growth tables and with the
 published experience formulas at every level, and on 266,514 level,
 experience and catch calculations. See the
 [catch record](../native/reproduction/bch-catch/README.txt).
+
+## The Pokémon themselves
+
+<img src="images/native-bch-pokemon.png" alt="A battle screen with the 3D models of Froakie and a wild Zigzagoon" width="440">
+
+With the 1 GB Pokémon model archive (`a/0/0/7`) in the RomFS, the coloured
+circles give way to the Pokémon's own 3D models with the game's textures,
+lit like the field. The archive starts with an index from species to model;
+each of its 981 models has eight files, of which the viewer reads the model
+and its textures. Two small decoder extensions were needed: model files
+reserve memory the game fills at load time, and some materials use
+environment maps, which are left white for now as projected textures are.
+
+The models stand in their rest pose: the battle animations sit in the same
+archive but are not decoded yet, so arms stick out and Scatterbug lies on its
+side. Each species shows its first model (no forms, genders or shinies), and
+the camera and scale are the viewer's own. An independent parser agrees with
+the native decoder on all 977 non-empty models, and on every vertex of the
+rest pose for 57 of them. See the
+[battle model record](../native/reproduction/bch-pokemon/README.txt).

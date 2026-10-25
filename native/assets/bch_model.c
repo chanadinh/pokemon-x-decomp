@@ -749,7 +749,10 @@ static enum px_bch_model_result decode(const uint8_t *data, size_t size,
     if (size > MAX_BYTES) return PX_BCH_MODEL_LIMIT_EXCEEDED;
     if (size < 56) return PX_BCH_MODEL_TRUNCATED;
     if (memcmp(data, "BCH\0", 4)) return PX_BCH_MODEL_INVALID_HEADER;
-    if (data[4] != 7 || data[5] != 7 || u32(data + 48) || u32(data + 52)) return PX_BCH_MODEL_UNSUPPORTED;
+    /* Words 48 and 52 size the uninitialized data and description areas the
+     * game reserves at load time (Pokémon models: 9,912 and 29,648 bytes);
+     * nothing in the file is stored there and no relocation targets them. */
+    if (data[4] != 7 || data[5] != 7) return PX_BCH_MODEL_UNSUPPORTED;
     struct reader r = {0};
     r.data = data;
     r.error = PX_BCH_MODEL_INVALID_HEADER;

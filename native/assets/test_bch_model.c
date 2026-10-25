@@ -356,7 +356,13 @@ static void test_malformed_and_limits(void)
     }
     reject(f, 8, 0); /* Header overlap. */
     reject(f, 12, CONTENT); /* Overlapping sections. */
-    reject(f, 48, 1); /* Unsupported address extension. */
+    {   /* Reserved uninitialized data and description sizes (Pokémon models) decode. */
+        struct fixture g = f;
+        word(g.data + 48, 9912); word(g.data + 52, 29648);
+        assert(px_bch_model_decode(g.data, g.size, 0, &model) == PX_BCH_MODEL_OK);
+        px_bch_model_free(&model);
+    }
+    reject(f, 4, 0x970d0708); /* Backward compatibility 8. */
     reject(f, MODEL, 1);
     reject(f, MODEL + 4, float_bits(2));
     reject(f, MODEL + 0x38, 1025);

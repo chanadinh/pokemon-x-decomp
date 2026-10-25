@@ -142,7 +142,7 @@ class BCHCombinerViewerTests(unittest.TestCase):
             ('bad operation', combiner_fixture([(0x00030003, 0, 10, 0, 0)] + [PASS] * 5)),
             ('unnamed enabled unit', combiner_fixture([(0x00040004, 0, 0, 0, 0)] + [PASS] * 5,
                                                       unit_config=0x11003)),
-            ('cube mapping', combiner_fixture(full, packed=(0x00010001, 1, 1))),
+            ('mapping mode 4', combiner_fixture(full, packed=(0x00040001, 1, 1))),  # 1-3 are unexecuted units
             ('stage-0 only fixture', textured_fixture()),
         ]
         with tempfile.TemporaryDirectory() as directory:

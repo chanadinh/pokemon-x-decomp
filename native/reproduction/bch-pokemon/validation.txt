@@ -1,0 +1,23 @@
+Pokémon battle model validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video with the software renderer. Not run on the local
+WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (extended: test_bch_model, test_bch_material, BCH battle viewer).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection under dummy video:
+   test_bch_model, test_bch_material, the battle viewer suite and a Route 2
+   run with three battles and their models: no diagnostics.
+4. Earlier records unchanged; ../bch-catch/verify_catch.py passes with this
+   viewer.
+5. verify_pokemon.py: index tiling, file kinds, 977 models identical to the
+   independent parser, 57 rest poses identical, the Route 2 battle_model
+   lines as derived.
+6. Load survey: for m in 0..980, the viewer with --archive a/0/0/7 --entry
+   4+8m --section 0 --triangle-list --skinned --textured --combiners
+   --texture-archive a/0/0/7 --texture-entry 6+8m --texture-section 0
+   --inspect: 977 load, the four empty packs fail.
+
+Not established: the game's own model selection, battle camera, scale and
+motions, its vertex shaders, and any running-game comparison.

@@ -12,7 +12,7 @@ import unittest
 from test_bch_lighting_viewer import lit_fixture
 from test_bch_talk_viewer import text_file, units
 from test_bch_walk_viewer import FLOOR
-from test_bch_zone_viewer import NPC, entities, write_romfs
+from test_bch_zone_viewer import NPC, entities, lit_skinned_bch, write_romfs
 from test_field_viewer import collision, garc, minipack
 from test_model_viewer import VIEWER
 from test_viewer import bmp_pixel
@@ -57,6 +57,17 @@ def move(kind, category, power, accuracy, pp, target=0, stat=0, stage=0):
 
 def learnset(*pairs):
     return b''.join(struct.pack('<Hh', m, l) for m, l in pairs) + struct.pack('<HH', 0xffff, 0xffff)
+
+
+def write_models(root):
+    """a/0/0/7: the species index (species 1 -> model 0, species 2 -> model 1),
+    then eight files per model. Model 0 is the skinned fixture with its own
+    textures (PC and PT packs); model 1's PC pack is empty, so species 2 keeps
+    its placeholder."""
+    index = struct.pack('<HBBHBB', 0, 1, 1, 1, 1, 1)
+    model = [minipack(b'PC', [lit_skinned_bch()]), b'\0', minipack(b'PT', [lit_skinned_bch()])] + [b'\0'] * 5
+    empty = [minipack(b'PC', [b'']), b'\0', minipack(b'PT', [b''])] + [b'\0'] * 5
+    (root / 'a/0/0/7').write_bytes(garc([index, b'\0', b'\0', b'\0'] + model + empty))
 
 
 def write_battle_romfs(root, rate_zone=True):
@@ -188,6 +199,21 @@ class BCHBattleViewerTests(unittest.TestCase):
             sky = bmp_pixel(shots['battle'], 400, SKY_ROW)
             self.assertGreater(sky[2], 200)  # blue sky
             self.assertNotEqual(bmp_pixel(shots['field'], 400, SKY_ROW), sky)
+            # Without a/0/0/7 both sides are placeholders; with it the
+            # partner's model replaces its circle, the wild one keeps it.
+            out = self.run_viewer(root, *common, '--play', 'RR', '--frames', 61).stdout
+            self.assertIn('battle_model side=partner species=1 model=none\n', out)
+            write_models(root)
+            out = self.run_viewer(root, *common, '--play', 'RR', '--frames', 61, '--capture-frame',
+                                  root / 'model.bmp', '--capture-at', 60).stdout
+            self.assertRegex(out, r'battle_model side=partner species=1 model=0 entry=4 texture_entry=6 '
+                                  r'meshes=1 vertices=\d+ pose=rest\n')
+            self.assertIn('battle_model side=wild species=2 model=1 entry=12 failed\n', out)
+            model = (root / 'model.bmp').read_bytes()
+            # Window pixels are twice the 400 x 240 frame: the partner's circle
+            # centre (100, 140) and the wild one's (300, 82).
+            self.assertNotEqual(bmp_pixel(model, 200, 280), bmp_pixel(shots['battle'], 200, 280))
+            self.assertEqual(bmp_pixel(model, 600, 164), bmp_pixel(shots['battle'], 600, 164))
 
 
 if __name__ == '__main__':

@@ -76,7 +76,9 @@ enum px_bch_material_result px_bch_material_combiners(
         if (!m->texture_names[unit].present) return PX_BCH_MATERIAL_UNSUPPORTED_COMBINER;
         const struct px_bch_coordinator *c = &m->coordinators[unit];
         const uint32_t mapping = (c->packed >> 16) & 255;
-        if (mapping == 3) { result.projected_units |= 1u << unit; continue; }
+        /* 1 camera cube and 2 camera sphere environment maps are, like 3
+         * (projection), coordinates the vertex stage generates: not executed. */
+        if (mapping >= 1 && mapping <= 3) { result.projected_units |= 1u << unit; continue; }
         if (mapping != 0) return PX_BCH_MATERIAL_UNSUPPORTED_COORDINATES;
         if (c->scale[0] != 1 || c->scale[1] != 1 || c->rotation != 0 ||
             c->translation[0] != 0 || c->translation[1] != 0) {

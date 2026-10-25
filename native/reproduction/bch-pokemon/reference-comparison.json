@@ -1,0 +1,46 @@
+{
+ "archive_bytes": 1041219296,
+ "entries": 7852,
+ "verifier_sha256": "ed0e57be444ca55f2656efbda661c654a044337566eb80b1a342ce9184d780a6",
+ "index": {
+  "species": 722,
+  "models": 981,
+  "tiled": true,
+  "bytes": 4850,
+  "bytes_after_species_records": 1962,
+  "species_with_several_models": 147,
+  "flags": [
+   1,
+   3,
+   5,
+   7
+  ],
+  "file_kinds": {
+   "PC PF PT PT PT PB PK PC": 981
+  }
+ },
+ "models": {
+  "compared": 977,
+  "identical": 977,
+  "rest_pose_compared": 57,
+  "max_position_difference": 0.0,
+  "max_normal_difference": 0.0,
+  "not_decoded": {
+   "963": "empty PC section 0",
+   "964": "empty PC section 0",
+   "967": "empty PC section 0",
+   "968": "empty PC section 0"
+  },
+  "species_first_models_decoded": 722
+ },
+ "runtime": {
+  "zone": 259,
+  "play": "RDDDDDDDDD....",
+  "lines": [
+   "partner species=656 name=Froakie level=5 nature=12 iv=11,23,10,14,21,17 stats=19,11,9,12,12,10 moves=1,45,145,0",
+   "wild species=664 name=Scatterbug level=3 nature=7 iv=15,17,16,26,18,5 stats=15,7,7,7,7,6 moves=33,81,0,0",
+   "battle_model side=partner species=656 model=864 entry=6916 texture_entry=6918 meshes=10 vertices=25536 pose=rest",
+   "battle_model side=wild species=664 model=872 entry=6980 texture_entry=6982 meshes=9 vertices=12156 pose=rest"
+  ]
+ }
+}
