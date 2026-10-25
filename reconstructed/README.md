@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains eleven connected, independently reviewed pieces:
+This source bundle contains thirteen connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -25,6 +25,10 @@ This source bundle contains eleven connected, independently reviewed pieces:
   terminator scanning, cache lookup/replacement and record copying.
 - `pokemon_names/`: shared UTF-16/control-token copying, species/form indices,
   name construction through a text service, and name storage through the codec.
+- `pokemon_move_resource/`: move-field dispatch, bounded resource selection,
+  payload copying and byte-sized cache lookup/replacement, reviewed through live REA MCP.
+- `message_resources/`: resident/cached/streamed text loading, language selection,
+  UTF-16 decoding and token-aware length, connected to the name builder.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -39,15 +43,19 @@ fixture also runs the reconstructed move-insertion and maximum-PP services.
 The learnset fixture adds reconstructed selection, access and caching to that
 state path. The name fixture adds reconstructed name building and storage,
 using a text-resource callback. Wider game-state setup, real personal/growth
-resources, underlying archive/message loading, and move-resource caching
-remain stand-ins in those fixtures.
+resources and underlying archive I/O/resource initialization remain stand-ins in those
+fixtures. The move-resource fixture connects its reconstructed selector/cache
+to maximum PP. The message-resource fixture connects reconstructed loading and
+decoding to the name builder; the older state fixtures retain their callbacks.
 This bundle does not run a Pokémon battle
 or provide a playable PC game. These are analyst-authored reconstructions,
 not recovered original source or builds that match the original machine code.
 
-The next targets are message loading, move-resource, personal, archive and growth-resource
+The next targets are personal, archive and growth-resource
 services and resource initialization. Details, assembly evidence, and limitations
-are in [the name milestone](pokemon_names/README.md),
+are in [the message-resource milestone](message_resources/README.md),
+[the move-resource milestone](pokemon_move_resource/README.md),
+[the name milestone](pokemon_names/README.md),
 [the learnset milestone](pokemon_learnset/README.md),
 [the move milestone](pokemon_moves/README.md),
 [the stats milestone](pokemon_stats/README.md),

@@ -7,22 +7,28 @@ systems. The native asset viewer and host tests do not yet provide a playable ga
 
 ## Current position
 
-Eleven source milestones connect wild-battle request preparation to Pokémon
+Thirteen source milestones connect wild-battle request preparation to Pokémon
 construction, payload storage, state initialization/refresh, and HP/stat
-calculation, constructor move insertion, maximum PP, learnset access/selection
-and name construction/storage. Growth-to-level lookup and nature adjustment
+calculation, constructor move insertion, maximum PP, learnset access/selection,
+name construction/storage, move-resource field dispatch/loading/caching,
+and message loading/decoding/token-aware length.
+Growth-to-level lookup and nature adjustment
 are reconstructed alongside the HP and five stat updates.
 Their tests still use synthetic personal/growth resources and callbacks for
-underlying archive/message loading and move-resource caching. Scope and
+underlying archive I/O and resource initialization. The move-resource fixture
+connects its selector/cache to maximum PP; the message-resource fixture connects
+loading/decoding to the name builder. Scope and
 validation are described in the [source overview](../reconstructed/README.md),
 [stats milestone](../reconstructed/pokemon_stats/README.md),
 [move milestone](../reconstructed/pokemon_moves/README.md),
-[learnset milestone](../reconstructed/pokemon_learnset/README.md), and
-[name milestone](../reconstructed/pokemon_names/README.md).
+[learnset milestone](../reconstructed/pokemon_learnset/README.md),
+[name milestone](../reconstructed/pokemon_names/README.md),
+[move-resource milestone](../reconstructed/pokemon_move_resource/README.md), and
+[message-resource milestone](../reconstructed/message_resources/README.md).
 
 | Requirement | Current state |
 | --- | --- |
-| Reviewed game logic | Eleven connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets and name construction/storage |
+| Reviewed game logic | Thirteen connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move-resource dispatch/caching and message loading/decoding |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |
@@ -192,7 +198,7 @@ services, and persistence work together.
 | Reference capture | Fix the base revision/update/language target and capture one candidate map, interaction, encounter, battle action, and return using a repeatable starting save and input sequence | Input/save identifiers, screenshots or video, recorded inputs, and selected observable state before/after; memory observations where available |
 | Native application | Extend the working texture viewer with explicit game-address/platform interfaces and bounded game-state initialization | Reconstructed logic can run from checked real resources inside the application with documented lifecycle and reference comparisons |
 | Asset decoding | Extend the bounded GARC/LZ/BCLIM path to required palette/model formats and scene bindings; identify candidate map/player/UI resources through loaders and reference observations | Documented paths/indices and supported formats, checksums for selected samples, and a visible comparison to the reference |
-| Game reconstruction | Replace personal/growth resources, archive/message loading, move-resource caching, resource initialization, and wider encounter/setup dependencies needed by the selected scenario | Reviewed instruction bytes, independent tests, explicit remaining services, and comparisons to captured reference values |
+| Game reconstruction | Replace personal/growth resources, archive I/O, resource initialization, and wider encounter/setup dependencies needed by the selected scenario | Reviewed instruction bytes, independent tests, explicit remaining services, and comparisons to captured reference values |
 | Slice integration | Connect movement/collision, interaction, battle, return, and save/load after their contracts are understood | One automated or recorded end-to-end scenario satisfying the acceptance criteria above |
 
 Continue the first three workstreams alongside bounded code reconstruction.

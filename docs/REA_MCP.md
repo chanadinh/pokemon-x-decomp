@@ -1,7 +1,9 @@
 # REA MCP in this workspace
 
 REA 6.8.0 now supplies live reverse engineering through its stdio MCP server
-and the existing Ghidra 12.1.4/JDK 21 installation. A local
+and the existing Ghidra 12.1.4/JDK 21 installation. The first completed review
+is [move resources](../reconstructed/pokemon_move_resource/README.md), followed
+by [message resources](../reconstructed/message_resources/README.md). A local
 JSON-RPC client performed MCP initialization, tool discovery, `open_binary`,
 function analysis, memory reads, evidence export and snapshot/close operations.
 This session did not change global agent configuration.
@@ -64,3 +66,11 @@ Reviewed core evidence is tracked in the milestone directory, with an executable
 verifier. Seeds supply analyst function names and entry assertions. Decompiler
 types still require assembly review. This workflow performs static analysis;
 it does not run the game or establish running-game equivalence.
+
+The message review is retained separately in `outputs/rea-messages/`. It
+reopened the same target/profile with the previous immutable snapshot, then
+queried uncached functions and memory through live MCP. Those queries start a
+fresh Ghidra Program and whole-image analysis; a provider-neutral snapshot
+retains observations rather than the live Ghidra database. Its core evidence
+and dependency extracts have their own tracked verifier. All twelve preceding
+reconstruction directories retain their recorded hashes.

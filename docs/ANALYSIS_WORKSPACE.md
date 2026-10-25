@@ -17,6 +17,19 @@ tests, reviewed evidence, and provenance. References below to `inputs/`,
 workspace artifacts; those files are excluded from Git. The host C tests
 use synthetic data and do not require the extracted game files.
 
+The twelfth milestone now uses [live REA MCP](REA_MCP.md) with the pinned
+Ghidra/JDK for [move-resource selection and caching](../reconstructed/pokemon_move_resource/README.md).
+It analyzes an original-byte ELF carrier in a fresh ephemeral database;
+the earlier saved project and eleven source checkpoints remain unchanged.
+The older direct-Ghidra commands below retain their historical meaning.
+
+The thirteenth milestone extends that workflow to
+[message resources](../reconstructed/message_resources/README.md): language
+selection, cached/streamed loading, decoding and token-aware length. Its
+original-data comparison checks all 35,212 lines of the English game/story
+archives in three modes, and connects the loader to the name builder. Seek/read
+and allocation/lifetime services remain external.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
