@@ -38,6 +38,7 @@ struct options {
     int have_player_entry, have_player_section;
     uint32_t motion_section, motion_slot, motion_frame, walk_motion_slot;
     int have_motion_section, have_motion_slot, have_motion_frame, have_walk_motion;
+    uint32_t motion_entry; int have_motion_entry; /* the motion pack's entry, else the model's */
     uint32_t zone, arrive, run_motion_slot, capture_at, threads;
     int have_zone, have_arrive, silent, have_run_motion, have_capture_at;
     /* --zone wild encounters: the partner Pokémon, the random seed, the
@@ -337,7 +338,8 @@ static void usage(FILE *stream, const char *program)
         "                     pose, its own textures) at the marker instead of a box;\n"
         "                     --player-entry N, --player-section N select it\n"
         "  --motion-section N  GF1 motion pack: this section of the skinned model's\n"
-        "                     entry (the player's with --player-archive)\n"
+        "                     entry (the player's with --player-archive), or of\n"
+        "                     --motion-entry N in the model's archive\n"
         "  --motion N         Pose with motion slot N (1..), one motion frame per two\n"
         "                     rendered frames, looping; --motion-frame N starts (and\n"
         "                     with --inspect reports) frame N\n"
@@ -424,7 +426,7 @@ static int parse(int argc, char **argv, struct options *o)
             strcmp(arg, "--environment-subentry") && strcmp(arg, "--environment-section") &&
             strcmp(arg, "--scene") && strcmp(arg, "--lighting") && strcmp(arg, "--steps") &&
             strcmp(arg, "--player-archive") && strcmp(arg, "--player-entry") &&
-            strcmp(arg, "--player-section") && strcmp(arg, "--motion-section") &&
+            strcmp(arg, "--player-section") && strcmp(arg, "--motion-section") && strcmp(arg, "--motion-entry") &&
             strcmp(arg, "--motion") && strcmp(arg, "--motion-frame") && strcmp(arg, "--walk-motion") &&
             strcmp(arg, "--zone") && strcmp(arg, "--arrive") && strcmp(arg, "--play") &&
             strcmp(arg, "--capture-at") && strcmp(arg, "--threads") && strcmp(arg, "--silly") &&
@@ -476,7 +478,10 @@ static int parse(int argc, char **argv, struct options *o)
                 o->environment_section = n; o->have_environment_section = 1;
             } else if (!strcmp(arg, "--scene")) { o->scene = n; o->have_scene = 1; }
             else if (!strcmp(arg, "--player-entry")) { o->player_entry = n; o->have_player_entry = 1; }
-            else if (!strcmp(arg, "--motion-section")) {
+            else if (!strcmp(arg, "--motion-entry")) {
+                if (o->have_motion_entry) return 0;
+                o->motion_entry = n; o->have_motion_entry = 1;
+            } else if (!strcmp(arg, "--motion-section")) {
                 if (n > 255 || o->have_motion_section) return 0;
                 o->motion_section = n; o->have_motion_section = 1;
             } else if (!strcmp(arg, "--motion")) {
@@ -541,7 +546,7 @@ static int parse(int argc, char **argv, struct options *o)
             o->environment_archive || o->have_environment_entry || o->have_environment_subentry ||
             o->have_environment_section || o->have_scene || o->walk || o->skinned || o->player_archive ||
             o->have_player_entry || o->have_player_section || o->have_motion_section || o->have_motion_slot ||
-            o->have_motion_frame || o->have_walk_motion) return 0;
+            o->have_motion_frame || o->have_walk_motion || o->have_motion_entry) return 0;
         if (o->inspect && (o->capture || o->frames || o->self_test || o->play)) return 0;
         if (o->self_test && !o->frames) o->frames = 3;
         if (!o->lighting) o->lighting = 1;
@@ -571,6 +576,7 @@ static int parse(int argc, char **argv, struct options *o)
         (!o->have_motion_section || !o->have_motion_slot || (!o->skinned && !o->player_archive)))
         return 0;
     if (o->have_walk_motion && (!o->player_archive || !o->have_motion_slot)) return 0;
+    if (o->have_motion_entry && (!o->have_motion_section || !o->skinned || o->player_archive)) return 0;
     if (o->inspect && (o->capture || o->frames || o->self_test)) return 0;
     if (o->self_test && !o->frames) o->frames = 3;
     return 1;
@@ -689,8 +695,9 @@ static int read_resource(const char *romfs, const char *archive_path, uint32_t e
         if (out->size < 2 || (memcmp(out->data, "AD", 2) && memcmp(out->data, "GR", 2) &&
                               memcmp(out->data, "BM", 2) && memcmp(out->data, "MM", 2) &&
                               memcmp(out->data, "PC", 2) && memcmp(out->data, "PT", 2) &&
-                              memcmp(out->data, "PF", 2))) {
-            snprintf(error, sizeof error, "--section requires an AD, GR, BM, MM, PC, PT or PF minipack");
+                              memcmp(out->data, "PF", 2) && memcmp(out->data, "PB", 2) &&
+                              memcmp(out->data, "PK", 2))) {
+            snprintf(error, sizeof error, "--section requires an AD, GR, BM, MM, PC, PT, PF, PB or PK minipack");
             goto failed;
         }
         struct px_field_span selected;
@@ -1034,7 +1041,8 @@ static int pose_motion(struct model_asset *asset, const struct px_gf_motion *mot
 static int load_motion(const struct options *o, const uint8_t *data, size_t size, struct model_asset *asset)
 {
     struct resource pack = {0};
-    if (!read_resource(o->romfs, o->archive, o->entry, o->subentry, 1, o->motion_section, "motion", &pack))
+    if (!read_resource(o->romfs, o->archive, o->have_motion_entry ? o->motion_entry : o->entry,
+                       o->have_motion_entry ? 0 : o->subentry, 1, o->motion_section, "motion", &pack))
         return 0;
     enum px_gf_motion_result status = px_gf_motion_pack_decode(pack.data, pack.size, &asset->motion_pack);
     resource_free(&pack);
@@ -1706,6 +1714,12 @@ struct game_session {
     uint16_t model_species[2];
     struct px_raster_vertex *model_points[2];
     double (*model_normals[2])[4];
+    float model_lo[2][3], model_hi[2][3]; /* bounds in the idle pose's first frame (else the rest pose) */
+    /* Battle motions: per side the motion playing (NULL: the idle loop), its
+     * start on the battle clock (rendered frames; it may lie ahead: the
+     * damage reaction waits for the attack), and whether its last frame holds. */
+    struct { const struct px_gf_motion *motion; uint64_t start; int hold; } anim[2];
+    uint64_t clock, anim_key;
 };
 static struct game_session g_game;
 
@@ -1899,10 +1913,13 @@ static int maybe_encounter(const struct options *o, struct model_asset *asset)
  * per species from 1 (u16 first model, u8 model count, u8 flags). Model m
  * owns entries 4 + 8m .. 11 + 8m: a PC pack whose section 0 is the model BCH,
  * a PF pack of 31 BCH (not read), PT packs holding the textures (+2) and the
- * shiny textures (+3), and four more (not read). Layout observed in the
+ * shiny textures (+3), a PT pack (+4, not read), a PB pack whose section 0
+ * is a GF1 motion pack (+5; 29 slots in 972 of 981 models, empty in the
+ * rest), then a PK and a PC pack (not read). Layout observed in the
  * file; the reading code of the game is not traced. The viewer draws the
  * species' first model (no gender or form selection; Pumpkaboo's and
- * Gourgeist's later size forms have empty PC packs), in the rest pose. */
+ * Gourgeist's later size forms have empty PC packs), animated by its PB
+ * pack's motions (below). */
 enum { PX_POKEMON_MODEL_FIRST_ENTRY = 4, PX_POKEMON_MODEL_FILES = 8 };
 static void battle_model_free(unsigned side)
 {
@@ -1949,10 +1966,19 @@ static void battle_model_load(const struct options *o, unsigned side, uint16_t s
     po.environment_subentry = 0; po.have_environment_section = 1; po.environment_section = 0; po.scene = 0;
     po.skinned = 1; po.allow_skeleton = 1; po.hide_invisible = 1;
     po.walk = 0; po.steps = NULL; po.player_archive = NULL; po.quiet = 1; po.silent = 1;
-    po.have_motion_section = po.have_motion_slot = po.have_motion_frame = 0;
-    po.have_walk_motion = po.have_run_motion = 0;
+    po.have_motion_frame = 0; po.have_walk_motion = po.have_run_motion = 0;
+    /* The battle motions: section 0 of the model's PB pack (+5), a GF1 pack;
+     * slot 1 loops as the idle motion. A model whose pack does not decode or
+     * lacks slot 1 stands in the rest pose. */
+    po.have_motion_entry = po.have_motion_section = po.have_motion_slot = 1;
+    po.motion_entry = po.entry + 5; po.motion_section = 0; po.motion_slot = 1;
     struct model_asset *a = calloc(1, sizeof *a);
     int ok = a && load(&po, a) && a->bch.mesh_count && a->bch_combiner;
+    if (!ok && a) {
+        asset_free(a); memset(a, 0, sizeof *a);
+        po.have_motion_entry = po.have_motion_section = po.have_motion_slot = 0;
+        ok = load(&po, a) && a->bch.mesh_count && a->bch_combiner;
+    }
     if (ok) {
         const size_t n = a->wire.vertex_count ? a->wire.vertex_count : 1;
         g->model_points[side] = malloc(n * sizeof *g->model_points[side]);
@@ -1968,16 +1994,31 @@ static void battle_model_load(const struct options *o, unsigned side, uint16_t s
         return;
     }
     g->models[side] = a; g->model_species[side] = species;
-    if (!o->silent)
+    for (uint32_t k = 0; k < a->wire.vertex_count; ++k)
+        for (unsigned c = 0; c < 3; ++c) {
+            const float v = a->wire.positions[(size_t)k * 3 + c];
+            if (!k || v < g->model_lo[side][c]) g->model_lo[side][c] = v;
+            if (!k || v > g->model_hi[side][c]) g->model_hi[side][c] = v;
+        }
+    if (!o->silent) {
         printf("battle_model side=%s species=%u model=%" PRIu32 " entry=%" PRIu32 " texture_entry=%" PRIu32
-               " meshes=%" PRIu32 " vertices=%" PRIu32 " pose=rest\n", names[side], species, model, po.entry,
+               " meshes=%" PRIu32 " vertices=%" PRIu32, names[side], species, model, po.entry,
                po.texture_entry, a->bch.mesh_count, a->wire.vertex_count);
+        if (a->motion_ready) {
+            printf(" motion_entry=%" PRIu32 " motions=%" PRIu32 " slots=", po.motion_entry, a->motion_pack.motion_count);
+            for (uint32_t k = 0; k < a->motion_pack.motion_count; ++k)
+                printf("%s%" PRIu32 ":%" PRIu32, k ? "," : "", a->motion_pack.motions[k].slot,
+                       a->motion_pack.motions[k].frames);
+            printf(" pose=idle\n");
+        } else printf(" pose=rest\n");
+    }
 }
 
 static void battle_begin(void)
 {
     struct game_session *g = &g_game;
     g->pending = 0; g->active = 1; ++g->battles;
+    memset(g->anim, 0, sizeof g->anim); g->anim_key = 0;
     px_battle_start(&g->battle, &g->data, &g->partner, &g->wild, px_rng_next(&g->rng));
     g->battle.balls = g->balls;
     px_battle_ui_start(&g->ui, &g->battle, (const char *const *)g->species_names, g->species_name_count,
@@ -2786,15 +2827,79 @@ static int band_thread(void *data)
  * world unit per pixel; each model scaled to fit a box (wild 64 x 110
  * pixels, partner 96 x 150) with its lowest point on its platform's centre,
  * the wild one turned toward the player's side, the partner seen from behind.
- * Fainted and caught Pokémon are not drawn. */
+ * Caught Pokémon, and fainted ones once their page has passed, are not drawn. */
+/* Battle motion slots, inferred by viewing Froakie's motions and from how
+ * many of the 972 packs hold each slot (not traced in the game's battle
+ * code): 1 the idle loop (972 packs), 4 / 5 / 6 a physical, special and
+ * status move (661 each), 17 the damage reaction (971), 18 fainting (921).
+ * A missing slot plays the idle loop instead (fainting: the model is hidden
+ * when its page passes, as without motions). One motion frame per two
+ * rendered frames, as in the field. */
+enum { PX_MOTION_IDLE = 1, PX_MOTION_PHYSICAL = 4, PX_MOTION_SPECIAL = 5, PX_MOTION_STATUS = 6,
+       PX_MOTION_DAMAGE = 17, PX_MOTION_FAINT = 18 };
+static void battle_play(unsigned side, uint32_t slot, uint64_t start, int hold)
+{
+    struct game_session *g = &g_game;
+    if (!g->models[side] || !g->models[side]->motion_ready) return;
+    const struct px_gf_motion *m = px_gf_motion_find(&g->models[side]->motion_pack, slot);
+    if (!m || !m->frames) return;
+    g->anim[side].motion = m; g->anim[side].start = start; g->anim[side].hold = hold;
+}
+/* Advance the battle clock; a page that becomes current starts its motions. */
+static void battle_animate(void)
+{
+    struct game_session *g = &g_game;
+    const struct px_battle_ui *ui = &g->ui;
+    const uint64_t now = ++g->clock;
+    const uint64_t key = ui->phase == PX_UI_MESSAGES && ui->page < ui->page_count ?
+        ((uint64_t)g->battle.turn << 32 | (uint64_t)ui->page << 1 | 1) : 0;
+    if (key && key != g->anim_key) {
+        const uint8_t e = ui->page_event[ui->page];
+        const unsigned side = (e & PX_LOG_SIDE1) ? 1 : 0, kind = e & PX_LOG_KIND;
+        if (kind >= PX_LOG_PHYSICAL && kind <= PX_LOG_STATUS) {
+            static const uint32_t slot[] = {0, PX_MOTION_PHYSICAL, PX_MOTION_SPECIAL, PX_MOTION_STATUS};
+            battle_play(side, slot[kind], now, 0);
+            const struct px_gf_motion *attack = g->anim[side].start == now ? g->anim[side].motion : NULL;
+            if (e & PX_LOG_HIT) battle_play(!side, PX_MOTION_DAMAGE, now + (attack ? 2u * attack->frames : 0), 0);
+        } else if (kind == PX_LOG_FAINT) battle_play(side, PX_MOTION_FAINT, now, 1);
+    }
+    g->anim_key = key;
+    for (unsigned s = 0; s < 2; ++s) {
+        struct model_asset *m = g->models[s];
+        if (!m || !m->motion_ready || !m->motion) continue;
+        const struct px_gf_motion *motion = g->anim[s].motion;
+        uint32_t frame = 0;
+        if (motion && now >= g->anim[s].start) {
+            const uint64_t t = (now - g->anim[s].start) / 2;
+            if (t < motion->frames || g->anim[s].hold) frame = (uint32_t)(t < motion->frames ? t : motion->frames);
+            else motion = g->anim[s].motion = NULL;
+        } else motion = NULL;
+        if (!motion) {
+            motion = m->motion;
+            frame = motion->frames ? (uint32_t)((now / 2) % motion->frames) : 0;
+        }
+        pose_motion(m, motion, frame);
+    }
+}
+/* A fainted Pokémon stays on the stage until its fainting page has passed. */
+static int battle_shown(unsigned s)
+{
+    struct game_session *g = &g_game;
+    if (s && g->battle.state == PX_BATTLE_CAUGHT) return 0;
+    if (g->battle.side[s].hp) return 1;
+    if (g->ui.phase != PX_UI_MESSAGES) return 0;
+    for (uint32_t i = g->ui.page; i < g->ui.page_count; ++i)
+        if ((g->ui.page_event[i] & PX_LOG_KIND) == PX_LOG_FAINT && ((g->ui.page_event[i] & PX_LOG_SIDE1) ? 1u : 0u) == s)
+            return 1;
+    return 0;
+}
 static int draw_battle_models(struct px_raster_target *target)
 {
     struct game_session *g = &g_game;
     for (unsigned s = 0; s < 2; ++s) {
-        const struct px_battler *p = &g->battle.side[s];
         const struct model_asset *m = g->models[s];
-        if (!m || !p->hp || (s && g->battle.state == PX_BATTLE_CAUGHT)) continue;
-        const float *lo = m->wire.bounds_min, *hi = m->wire.bounds_max;
+        if (!m || !battle_shown(s)) continue;
+        const float *lo = g->model_lo[s], *hi = g->model_hi[s];
         const double height = hi[1] - lo[1] > 1e-6 ? hi[1] - lo[1] : 1;
         const double width = hi[0] - lo[0] > hi[2] - lo[2] ? hi[0] - lo[0] : hi[2] - lo[2];
         double k = (s ? 64.0 : 96.0) / height;
@@ -2891,6 +2996,7 @@ static int draw_bch_textured(SDL_Renderer *renderer, const struct model_asset *a
         /* The battle: stage, models (depth-tested among themselves), HUD. */
         const unsigned modeled = (g_game.models[0] ? 1u : 0) | (g_game.models[1] ? 2u : 0);
         px_battle_ui_draw_stage(target->rgba, target->width, target->height, &g_game.battle, modeled);
+        battle_animate();
         all = draw_battle_models(target);
         px_battle_ui_draw_hud(target->rgba, target->width, target->height, &g_game.ui, &g_game.battle);
     }

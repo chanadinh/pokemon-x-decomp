@@ -29,6 +29,7 @@ project owner's request. No generated artwork or mockups are used.
 | [Wild battle](native-bch-battle.png) | The same run, frame 228 | The battle screen with the move menu: a wild Scatterbug against Froakie. Placeholders, not battle models. |
 | [Catch](native-bch-catch.png) | `outputs/new-catch-check` run: the catch play of `../native/reproduction/bch-catch/verify_catch.py` with three rounds, frame 247 (lossless PNG conversion) | The second Poké Ball holds: "Gotcha! Scatterbug was caught!". Placeholders, not battle models. |
 | [Battle models](native-bch-pokemon.png) | `--zone 259 --seed 4 --play RDDDDDDDDD` + 40 `.` `--encounter-rate 100 --code-bin … --software --frames 229 --capture-at 228` (lossless PNG conversion) | Froakie and a wild Zigzagoon as their own a/0/0/7 models, rest pose. The stage and HUD are the viewer's own. |
+| [Attack](native-bch-attack.gif) | `--zone 259 --seed 4 --play RDDDDDDDDD.... --encounter-rate 100 --code-bin … --software`, frames 224..290 every second frame (one run each, `--capture-at`), 400 x 240, 15 frames per second | Froakie's Pound motion, then the wild Zigzagoon's damage reaction. |
 | [Textured CGFX model](native-textured-model.png) | `outputs/native-textured-model/model-frame.png` | Archive `a/1/0/2`, entry 0: six materials and textures in an unlit software preview. Lighting, complete shaders and original-game visual equivalence are not reproduced. |
 | [Terrain/collision inspector](native-field-inspector.png) | `outputs/native-field-scene/field-collision-frame.png` | Zone 5 → matrix 12 → region 165, with collision edges and a restricted inspection marker. This earlier capture's footer predates the separate BCH wireframe milestone; it is not the current status of BCH decoding. |
 
@@ -53,6 +54,7 @@ Evidence and reproduction instructions:
 - [Battle comparison](../../native/reproduction/bch-battle/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-battle/README.txt).
 - [Catch comparison](../../native/reproduction/bch-catch/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-catch/README.txt).
 - [Battle model comparison](../../native/reproduction/bch-pokemon/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-pokemon/README.txt).
+- [Battle motion comparison](../../native/reproduction/bch-battle-motion/reference-comparison.json) and [viewer commands](../../native/reproduction/bch-battle-motion/README.txt).
 - [Textured CGFX capture record](../../native/reproduction/textured-model/rendered-sample.json).
 - [Field inspector scope and reproduction](../../native/reproduction/field-scene/README.txt).
 
@@ -82,6 +84,7 @@ a6d50709637b89aba1d671d5e1735c7fc18f0a6f82395dfabd6d55a09fd91acf  native-bch-moo
 454c5c3e336f947d2ce1c0954ec78e00a7a4d7ae01464eedde7153501f212085  native-bch-battle.png
 e92763a8b528b0845707e9eed493ddd828636a680e129fe2ca99c005d433808c  native-bch-catch.png
 e25fcd837276a38d0ba41d20cc8647f20b3edc4a206db8b70e8d1dd87f9922ea  native-bch-pokemon.png
+94946f6bc576ff5625f98fb5daef8f7b401106341f79c7764b03fa38a0b883d1  native-bch-attack.gif
 b987693a363ff84bf009c6d537b7e2937e9e8d4fdba4d4855bcb2f11ae0a0f45  native-textured-model.png
 2335afaea29641d0c037bd082ec54963cdb2ea3099030a5d5a1e7a24862032de  native-field-inspector.png
 ```

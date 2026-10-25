@@ -12,7 +12,7 @@ import unittest
 from test_bch_lighting_viewer import lit_fixture
 from test_bch_talk_viewer import text_file, units
 from test_bch_walk_viewer import FLOOR
-from test_bch_zone_viewer import NPC, entities, lit_skinned_bch, write_romfs
+from test_bch_zone_viewer import NPC, character_pack, entities, lit_skinned_bch, write_romfs
 from test_field_viewer import collision, garc, minipack
 from test_model_viewer import VIEWER
 from test_viewer import bmp_pixel
@@ -59,13 +59,23 @@ def learnset(*pairs):
     return b''.join(struct.pack('<Hh', m, l) for m, l in pairs) + struct.pack('<HH', 0xffff, 0xffff)
 
 
-def write_models(root):
+def motion_pack():
+    """The GF1 pack of the zone fixture's character (slots 1, 3 and 4 over the
+    bone Arm), taken from its MM section 1."""
+    pack = character_pack()
+    start, end = struct.unpack_from('<II', pack, 8)
+    return bytes(pack[start:end])
+
+
+def write_models(root, motions=False):
     """a/0/0/7: the species index (species 1 -> model 0, species 2 -> model 1),
     then eight files per model. Model 0 is the skinned fixture with its own
-    textures (PC and PT packs); model 1's PC pack is empty, so species 2 keeps
-    its placeholder."""
+    textures (PC and PT packs) and, with motions, a PB pack (+5) holding
+    motion_pack(); model 1's PC pack is empty, so species 2 keeps its
+    placeholder."""
     index = struct.pack('<HBBHBB', 0, 1, 1, 1, 1, 1)
-    model = [minipack(b'PC', [lit_skinned_bch()]), b'\0', minipack(b'PT', [lit_skinned_bch()])] + [b'\0'] * 5
+    model = [minipack(b'PC', [lit_skinned_bch()]), b'\0', minipack(b'PT', [lit_skinned_bch()]), b'\0', b'\0',
+             minipack(b'PB', [motion_pack()]) if motions else b'\0', b'\0', b'\0']
     empty = [minipack(b'PC', [b'']), b'\0', minipack(b'PT', [b''])] + [b'\0'] * 5
     (root / 'a/0/0/7').write_bytes(garc([index, b'\0', b'\0', b'\0'] + model + empty))
 
@@ -214,6 +224,13 @@ class BCHBattleViewerTests(unittest.TestCase):
             # centre (100, 140) and the wild one's (300, 82).
             self.assertNotEqual(bmp_pixel(model, 200, 280), bmp_pixel(shots['battle'], 200, 280))
             self.assertEqual(bmp_pixel(model, 600, 164), bmp_pixel(shots['battle'], 600, 164))
+            # With a PB pack (+5) the model idles on slot 1; its other slots are listed.
+            write_models(root, motions=True)
+            out = self.run_viewer(root, *common, '--play', 'RR', '--frames', 61).stdout
+            self.assertRegex(out, r'battle_model side=partner species=1 model=0 entry=4 texture_entry=6 '
+                                  r'meshes=1 vertices=\d+ motion_entry=9 motions=3 slots=1:2,3:4,4:4 pose=idle\n')
+            won = self.run_viewer(root, *common, '--play', play, '--frames', 400).stdout
+            self.assertIn('battle_end result=won ', won)
 
 
 if __name__ == '__main__':

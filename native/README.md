@@ -493,6 +493,8 @@ learnset. BALL throws a Poké Ball (`--balls N`, default 10) and a catch joins a
 party of up to six. See the [catch record](reproduction/bch-catch/README.txt).
 
 With `a/0/0/7` in the RomFS the battle draws both Pokémon's own skinned models
-(rest pose, game textures, the field's lighting) instead of placeholders; see the
-[battle model record](reproduction/bch-pokemon/README.txt).
+(game textures, the field's lighting) instead of placeholders, playing their own
+idle, attack, damage and faint motions; see the
+[battle model record](reproduction/bch-pokemon/README.txt) and the
+[battle motion record](reproduction/bch-battle-motion/README.txt).
 

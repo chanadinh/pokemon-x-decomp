@@ -1,0 +1,18 @@
+Battle motion validation, 2026-10-24
+Environment: Ubuntu 24.04 x86_64 cloud container (2 CPUs), cc 13.3.0, Python
+3.13, SDL 2.30.0, dummy video with the software renderer. Not run on the local
+WSL host or native Windows. Tested hashes are in validation.json.
+
+1. make -C native clean; make -C native all test test-runtime: passed
+   (extended: test_battle, BCH battle viewer).
+2. make -C reconstructed test and the root test suite: passed.
+3. ASan/UBSan (halt on error) with leak detection under dummy video:
+   test_battle, the battle viewer suite and a Route 2 battle with both
+   models animated: no diagnostics.
+4. Earlier records unchanged; ../bch-catch/verify_catch.py passes;
+   ../bch-pokemon/verify_pokemon.py step 3 differs by design (README.txt).
+5. verify_battle_motion.py: 972 packs identical; 7 sampled models' played
+   slots identical at every frame; the Route 2 lines as derived.
+
+Not established: the game's battle sequencing and slot roles, and any
+running-game comparison.

@@ -561,3 +561,21 @@ the camera and scale are the viewer's own. An independent parser agrees with
 the native decoder on all 977 non-empty models, and on every vertex of the
 rest pose for 57 of them. See the
 [battle model record](../native/reproduction/bch-pokemon/README.txt).
+
+## Battle motions
+
+<img src="images/native-bch-attack.gif" alt="Froakie leaps to use Pound and the wild Zigzagoon flinches" width="400">
+
+The Pokémon now move. Next to each model the archive keeps a pack of battle
+motions in the same format as the player's walking motions, so the existing
+decoder plays them: an idle loop, a motion for physical, special and status
+moves, a flinch when hit, and a fall when fainting. The battle log now marks
+which message is an attack, a hit or a faint, and that starts the matching
+motion. Which motion slot means what was worked out by watching them and by
+counting how many Pokémon have each one; the game's own battle code has not
+been traced yet.
+
+All 972 motion packs decode identically in the independent reader of the
+player's motions, and for the Route 2 Pokémon every frame of the motions the
+viewer plays agrees exactly. See the
+[battle motion record](../native/reproduction/bch-battle-motion/README.txt).

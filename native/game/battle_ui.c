@@ -5,10 +5,13 @@
 
 #include "../render/text.h"
 
-static void add_page(struct px_battle_ui *ui, const char *text)
+static void add_page_event(struct px_battle_ui *ui, const char *text, uint8_t event)
 {
-    if (ui->page_count < PX_UI_MAX_PAGES) snprintf(ui->pages[ui->page_count++], sizeof ui->pages[0], "%s", text);
+    if (ui->page_count >= PX_UI_MAX_PAGES) return;
+    ui->page_event[ui->page_count] = event;
+    snprintf(ui->pages[ui->page_count++], sizeof ui->pages[0], "%s", text);
 }
+static void add_page(struct px_battle_ui *ui, const char *text) { add_page_event(ui, text, 0); }
 
 static const char *name_of(const char *const *names, uint32_t count, uint32_t id, char *buffer, size_t size)
 {
@@ -55,7 +58,7 @@ int px_battle_ui_input(struct px_battle_ui *ui, struct px_battle *b, char key)
             }
             px_battle_turn(b, ui->cursor == 1 ? -2 : -1, ui->species_names, ui->species_count, ui->move_names,
                            ui->move_count);
-            for (uint32_t i = 0; i < b->log_count; ++i) add_page(ui, b->log[i]);
+            for (uint32_t i = 0; i < b->log_count; ++i) add_page_event(ui, b->log[i], b->log_event[i]);
             ui->phase = PX_UI_MESSAGES;
             return 1;
         }
@@ -69,7 +72,7 @@ int px_battle_ui_input(struct px_battle_ui *ui, struct px_battle *b, char key)
         else if (key == '.') {
             if (!px_battle_turn(b, ui->cursor, ui->species_names, ui->species_count, ui->move_names, ui->move_count))
                 return 0; /* no PP or no move in that slot */
-            for (uint32_t i = 0; i < b->log_count; ++i) add_page(ui, b->log[i]);
+            for (uint32_t i = 0; i < b->log_count; ++i) add_page_event(ui, b->log[i], b->log_event[i]);
             ui->phase = PX_UI_MESSAGES;
             return 1;
         }

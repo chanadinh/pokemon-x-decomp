@@ -74,6 +74,11 @@ struct px_battler {
 int px_battler_make(const struct px_battle_data *data, uint16_t species, uint8_t level, const uint8_t iv[6],
                     uint8_t nature, const uint16_t moves[4], struct px_battler *out);
 
+/* log_event: the kind in bits 0..2, the side it concerns in bit 3 (the user
+ * of a move, the Pokémon that faints), and PX_LOG_HIT on a move's message
+ * when the move then damaged the other side. */
+enum { PX_LOG_NONE = 0, PX_LOG_PHYSICAL = 1, PX_LOG_SPECIAL = 2, PX_LOG_STATUS = 3, PX_LOG_FAINT = 4,
+       PX_LOG_KIND = 7, PX_LOG_SIDE1 = 8, PX_LOG_HIT = 16 };
 enum px_battle_state { PX_BATTLE_CHOOSING = 0, PX_BATTLE_WON, PX_BATTLE_LOST, PX_BATTLE_ESCAPED, PX_BATTLE_CAUGHT };
 struct px_battle {
     const struct px_battle_data *data;
@@ -83,6 +88,7 @@ struct px_battle {
     uint32_t balls;            /* Poké Balls left; set by the caller after start */
     enum px_battle_state state;
     char log[16][96];          /* this turn's messages, in order */
+    uint8_t log_event[16];     /* what each message shows (PX_LOG_*), for animation */
     uint32_t log_count;
 };
 void px_battle_start(struct px_battle *battle, const struct px_battle_data *data, const struct px_battler *player,

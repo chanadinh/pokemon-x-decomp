@@ -1,0 +1,19 @@
+{
+ "date": "2026-10-24",
+ "baseline_commit": "c0deb80aa1f42c5b848f8ee3971cdc6705f28cba",
+ "result": "passed",
+ "environment": "Ubuntu 24.04 x86_64 cloud container; cc 13.3.0; Python 3.13; SDL 2.30.0 dummy video, software renderer; 2 CPUs; local WSL host and native Windows untested",
+ "tested_source_sha256": {
+  "model_app.c": "83025002e8af12c5b19eb052987d4f950d54abc9b6aa2e2e2007da03f03d9d6a",
+  "game/battle.c": "cacb06c4deb9de70347babf5e05262841a5dfb741a71d04235817467376cc85a",
+  "game/battle.h": "f6db172dd257b57c815b91254fd62ff45956815d1f5af63942c25f69ae04e599",
+  "game/battle_ui.c": "8491fef4ac767d6241505a7f206082b9657b36d1997c15e820fdfb794c5fb637",
+  "game/battle_ui.h": "e32e126d16d1ed8da9802222ecc83ee31da53ddb45097242d501220494c08862",
+  "game/test_battle.c": "d356dd9030424a2156a293c4206b1b0107e6d11fab51f6cbe3caf2b93d03083a",
+  "tests/test_bch_battle_viewer.py": "7ec521b7f291191866d9ed654c674e80ab227a64ced477748c929fa7106537af",
+  "reproduction/bch-battle-motion/verify_battle_motion.py": "6b110ce39f4466f5e6126ba14572184c6e05ab059ba31113aaaba567e454b42d"
+ },
+ "image": {
+  "docs/images/native-bch-attack.gif": "94946f6bc576ff5625f98fb5daef8f7b401106341f79c7764b03fa38a0b883d1"
+ }
+}

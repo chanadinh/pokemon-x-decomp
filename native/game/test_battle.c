@@ -83,6 +83,7 @@ int main(void)
     px_battle_start(&y, &data, &a, &b, 99);
     assert(px_battle_turn(&x, 2, NULL, 0, NULL, 0) && x.side[0].pp[2] == 39 && x.side[1].stages[1] == -1);
     assert(!strcmp(x.log[0], "#1 used move 3!") && !strcmp(x.log[1], "The wild #2's Attack fell!"));
+    assert(x.log_event[0] == PX_LOG_STATUS && x.log_event[1] == PX_LOG_NONE); /* a status move, no damage */
     assert(px_battle_turn(&x, 3, NULL, 0, NULL, 0) && x.side[0].stages[2] == 1);
     assert(!px_battle_turn(&x, 4, NULL, 0, NULL, 0));         /* no such slot */
     x.side[0].pp[0] = 0;
@@ -91,6 +92,14 @@ int main(void)
     while (x.state == PX_BATTLE_CHOOSING && x.turn < 100) px_battle_turn(&x, 0, NULL, 0, NULL, 0);
     assert(x.state == PX_BATTLE_WON || x.state == PX_BATTLE_LOST);
     assert(x.side[x.state == PX_BATTLE_WON ? 1 : 0].hp == 0);
+    {   /* The last turn's events: a damaging move flagged as hitting, then the faint of the loser. */
+        int hit = 0, faint = -1;
+        for (uint32_t i = 0; i < x.log_count; ++i) {
+            if ((x.log_event[i] & PX_LOG_KIND) == PX_LOG_PHYSICAL && (x.log_event[i] & PX_LOG_HIT)) hit = 1;
+            if ((x.log_event[i] & PX_LOG_KIND) == PX_LOG_FAINT) faint = (x.log_event[i] & PX_LOG_SIDE1) ? 1 : 0;
+        }
+        assert(hit && faint == (x.state == PX_BATTLE_WON ? 1 : 0));
+    }
     assert(!px_battle_turn(&x, 0, NULL, 0, NULL, 0));         /* over */
     px_battle_turn(&y, 2, NULL, 0, NULL, 0); px_battle_turn(&y, 3, NULL, 0, NULL, 0);
     while (y.state == PX_BATTLE_CHOOSING && y.turn < 100) px_battle_turn(&y, 0, NULL, 0, NULL, 0);
@@ -125,6 +134,7 @@ int main(void)
     px_battle_ui_input(&ui, &x, '.'); px_battle_ui_input(&ui, &x, 'D');
     assert(ui.cursor == 2 && px_battle_ui_input(&ui, &x, '.') == 1); /* Growl */
     assert(ui.phase == PX_UI_MESSAGES && !strcmp(ui.pages[0], "Froakie used Growl!"));
+    assert(ui.page_event[0] == PX_LOG_STATUS);
     while (ui.phase == PX_UI_MESSAGES) px_battle_ui_input(&ui, &x, '.');
     assert(ui.phase == PX_UI_COMMAND);
     px_battle_ui_input(&ui, &x, 'R'); px_battle_ui_input(&ui, &x, 'R'); px_battle_ui_input(&ui, &x, 'R');

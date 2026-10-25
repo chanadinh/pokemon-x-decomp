@@ -152,8 +152,10 @@ static const char *species_name(const struct px_battle *b, unsigned side, const 
 
 static void say(struct px_battle *b, const char *text)
 {
-    if (b->log_count < sizeof b->log / sizeof b->log[0])
+    if (b->log_count < sizeof b->log / sizeof b->log[0]) {
+        b->log_event[b->log_count] = PX_LOG_NONE;
         snprintf(b->log[b->log_count++], sizeof b->log[0], "%s", text);
+    }
 }
 
 static void change_stats(struct px_battle *b, unsigned target, const struct px_move *m, unsigned k,
@@ -193,7 +195,11 @@ static int use_move(struct px_battle *b, unsigned side, unsigned slot, const cha
     if (a->pp[slot]) --a->pp[slot];
     if (move_names && id < move_count) snprintf(line, sizeof line, "%s used %s!", user_name, move_names[id]);
     else snprintf(line, sizeof line, "%s used move %u!", user_name, id);
+    const uint32_t used = b->log_count;
     say(b, line);
+    uint8_t unlogged = 0, *event = b->log_count > used ? &b->log_event[used] : &unlogged;
+    *event = (uint8_t)((m->category == 1 ? PX_LOG_PHYSICAL : m->category == 2 ? PX_LOG_SPECIAL : PX_LOG_STATUS) |
+                       (side ? PX_LOG_SIDE1 : 0));
     if (m->accuracy != 101) {
         const int s = a->stages[6] - t->stages[7] > 6 ? 6 : a->stages[6] - t->stages[7] < -6 ? -6 :
                       a->stages[6] - t->stages[7];
@@ -224,12 +230,15 @@ static int use_move(struct px_battle *b, unsigned side, unsigned slot, const cha
         return 0;
     }
     t->hp = damage >= t->hp ? 0 : (uint16_t)(t->hp - damage);
+    if (damage) *event |= PX_LOG_HIT;
     if (critical) say(b, "A critical hit!");
     if (effectiveness > 16) say(b, "It's super effective!");
     else if (effectiveness < 16) say(b, "It's not very effective...");
     if (t->hp == 0) {
         snprintf(line, sizeof line, "%s fainted!", target_name);
+        const uint32_t at = b->log_count;
         say(b, line);
+        if (b->log_count > at) b->log_event[at] = (uint8_t)(PX_LOG_FAINT | (side ? 0 : PX_LOG_SIDE1));
         return 1;
     }
     for (unsigned k = 0; k < 3; ++k) /* secondary stat changes on the target */

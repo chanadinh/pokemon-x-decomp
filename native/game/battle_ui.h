@@ -15,6 +15,7 @@ struct px_battle_ui {
     enum px_battle_phase phase;
     int cursor;
     char pages[PX_UI_MAX_PAGES][96];
+    uint8_t page_event[PX_UI_MAX_PAGES]; /* the battle log's PX_LOG_* of each page (0 otherwise) */
     uint32_t page_count, page;
     const char *const *species_names, *const *move_names, *const *type_names;
     uint32_t species_count, move_count;
