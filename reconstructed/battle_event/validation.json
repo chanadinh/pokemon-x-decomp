@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-30",
+  "method": "Live REA stdio MCP over a main+DllBattle carrier, ARM assembly review and synthetic tests",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "module": {
+      "file": "DllBattle.cro",
+      "size": 1040384,
+      "sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "text_file_offset": 384,
+      "text_analysis_address": "0x10800180"
+    },
+    "carrier_sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1",
+    "implemented_functions": 9,
+    "instruction_bytes_verified": 1864,
+    "literal_bytes_verified": 40,
+    "relocations_verified": 10,
+    "complete_evidence_records_retained": 12,
+    "original_project_unchanged": true
+  },
+  "tests": {
+    "reconstructed_modules_passed": 24,
+    "synthetic_cases": 3994,
+    "mutations_detected": 29,
+    "asan": true,
+    "ubsan": true,
+    "live": "not run"
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 981,
+    "native_source_changed": false,
+    "prior_manifest_sha256": {
+      "reconstructed/archive_index/SHA256SUMS": "503f6df93165c6471c85c3774016a40f40992badd4b7dcc0328b184f6204a2c2",
+      "reconstructed/archive_io/SHA256SUMS": "9fa4fd6dfe7974163f5ff7642bff9836decd08a56bdb3b2849d7be50a47f5685",
+      "reconstructed/battle_damage/SHA256SUMS": "e963c1ed162463732cbd85cc950f12cb4c5681594844a65ad27212b12c13fc14",
+      "reconstructed/battle_matchup/SHA256SUMS": "e5204e7a06fa1d7a600ff064cf7c84defd50b89913f21b0fa83322d7c7f0c630",
+      "reconstructed/battle_stats/SHA256SUMS": "b86f0d510313270849bb938b9375587aa9b3113e336589feb2bef591aae5705c",
+      "reconstructed/battle_task/SHA256SUMS": "5e9434c27e94bbf43014bcc273f80cf26775dcbe1c51e8051183647c5009cdf1",
+      "reconstructed/battle_types/SHA256SUMS": "b85660a34baff9528e353afca3df929a78c37d77f8d8cfcbbba86704135422aa",
+      "reconstructed/call_wild_battle/SHA256SUMS": "a3acabefdeab4df63e6b9b7fc651fe55e1bd297a02d56476c0c122b4e3609bd9",
+      "reconstructed/encounter_builder/SHA256SUMS": "af4aa6a38b51a66e7d2c43aaca61109ebbc988bb3c673ed360257fe996d4abf6",
+      "reconstructed/message_construction/SHA256SUMS": "1ed98b9c145d88f792d7a5b8590c8ee6c82f1e43b070bdfe693cda6341202428",
+      "reconstructed/message_resources/SHA256SUMS": "60af55af559b069347994a3a1204f7b9ce3d2045f81952e43e3c6627139fc577",
+      "reconstructed/pokemon_constructor/SHA256SUMS": "f8573547857c456fbd3acd57046378116cc77c3a51ce99d73297b4c095d1e143",
+      "reconstructed/pokemon_data/SHA256SUMS": "0405aba491f360b8e6d63d029fd9959205b7aa1baf96ddb3775ec096e3d481b7",
+      "reconstructed/pokemon_growth/SHA256SUMS": "d59ee78af48596e7d1061851421e800b8de6b7d6e937741675ca5eaf0b5a0cbd",
+      "reconstructed/pokemon_learnset/SHA256SUMS": "46467b590596d8a09fd486734e89256a37560eb6848818b36ce4e32f8013853a",
+      "reconstructed/pokemon_move_resource/SHA256SUMS": "2c88555c6749ca3eb15d12fd02659db31ddc757e7da59a484cdf2a473a62dfe4",
+      "reconstructed/pokemon_moves/SHA256SUMS": "132d2947267f8d4410bec4785df6b14fd51925fd4a880850845937774e7efb68",
+      "reconstructed/pokemon_names/SHA256SUMS": "1b10f524faa68d19dc9771de52e74705f4358050ab63587f04166a7a843d721b",
+      "reconstructed/pokemon_personal/SHA256SUMS": "637c4b0ed470ec942aa93f5cbeef289a943af46a43c02ef67de5acabacebf15c",
+      "reconstructed/pokemon_resources/SHA256SUMS": "58534029acc54ea260f792ab2bad15f995630b2afcadd79833c30f469f46eef0",
+      "reconstructed/pokemon_state/SHA256SUMS": "8b4558ec9f88813ab18e582bdffd0d79ca393f08f1d4d1ead90b057b5627ac7b",
+      "reconstructed/pokemon_stats/SHA256SUMS": "0e1b43210166c53462066dbdd1c6fc70d53d48aa6c5aae534568300573f72289",
+      "reconstructed/wild_battle_setup/SHA256SUMS": "aa1682d7073cc8623ce3941231451c88a81e7876aa890272b3fb328def0d5efa"
+    }
+  },
+  "source_hashes": {
+    "reconstructed/battle_event/battle_event.c": "c8fc0ed4b70198157054cfd23ec737be5eac3f006c83583c844d855f0f8bd2ce",
+    "reconstructed/battle_event/battle_event.h": "f13fa2815b73a32ad09633303df9fe187f313f2faf96c21cb15615188b3f77a2",
+    "reconstructed/battle_event/test_battle_event.c": "70c2ca84785f9d2c28ea0c8824373530b90f4778c93235ca4aa38878d7b5c64c",
+    "reconstructed/battle_event/Makefile": "aa88877329add47cb36b36dcdce332b9d8383f8ee60bbca4bae1d162ab815bc0",
+    "reconstructed/battle_event/reproduction/verify_rea.py": "9cedc2c7b331f34c7c1be58bb5f3ea5ea4d72dafdf9e11087a31dfe86e65981a"
+  },
+  "limits": [
+    "Handler functions, the blocking helper (108c59b4), the overflow (108003a4) and abort (10800394) helpers and handler registration remain external.",
+    "The original never advances its successor search when a removed handler is followed by an unregistered one; this endless loop is reproduced, not tested.",
+    "No running-game comparison of these routines has been made.",
+    "No matching original build is claimed."
+  ]
+}

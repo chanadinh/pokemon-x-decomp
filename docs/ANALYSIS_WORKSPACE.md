@@ -85,6 +85,9 @@ The twenty-third milestone adds the [type matchup](../reconstructed/battle_match
 packed types with Roost, the per-type event, every defending type, airborne Ground
 immunity and the immunity message.
 
+The twenty-fourth milestone adds the [event system](../reconstructed/battle_event/README.md):
+the event variable stack, dispatch and the handler walk with deferred removal.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

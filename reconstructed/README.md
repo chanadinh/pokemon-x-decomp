@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains twenty-three connected, independently reviewed pieces:
+This source bundle contains twenty-four connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -46,6 +46,7 @@ This source bundle contains twenty-three connected, independently reviewed piece
 - `battle_stats/`: the attack and defense values the damage calculation uses.
 - `battle_types/`: type-chart lookup, dual-type combination and damage scaling.
 - `battle_matchup/`: a move against a battler's types, with Roost and Ground immunity.
+- `battle_event/`: the event variable stack, dispatch and handler walk.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -73,7 +74,8 @@ not recovered original source or builds that match the original machine code.
 
 The next targets are the archive object constructors and the configuration
 table. Details, assembly evidence, and limitations
-are in [the battle type-matchup milestone](battle_matchup/README.md),
+are in [the battle event-system milestone](battle_event/README.md),
+[the battle type-matchup milestone](battle_matchup/README.md),
 [the battle type-effectiveness milestone](battle_types/README.md),
 [the battle attack/defense milestone](battle_stats/README.md),
 [the battle-damage milestone](battle_damage/README.md),

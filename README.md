@@ -244,7 +244,7 @@ native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
 
 ## Rebuilding the rules
 
-The visual tools sit alongside twenty-three connected C reconstruction milestones.
+The visual tools sit alongside twenty-four connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -273,6 +273,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle attack/defense](reconstructed/battle_stats/README.md) | Attack and defense values: substitution, critical-hit stages, stat swap, sandstorm, final multipliers |
 | [Battle type effectiveness](reconstructed/battle_types/README.md) | Type-chart lookup with Inverse Battle, dual-type combination and damage scaling, checked against the original chart |
 | [Battle type matchup](reconstructed/battle_matchup/README.md) | A move against all defending types: Roost, ability events, airborne Ground immunity and the immunity message |
+| [Battle event system](reconstructed/battle_event/README.md) | The event variable stack, dispatch and handler walk that every battle routine uses |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

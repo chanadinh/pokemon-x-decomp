@@ -1,0 +1,20 @@
+Battle event-system milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (same session as the three
+earlier battle milestones). Implemented: DllBattle 1086bb84, 1086b880,
+1086bac0, 1086b9fc, 1086b520, 10867c9c, 1086b91c, 1086b9a4 and 10864e98. All
+1,864 instruction bytes match live REA bytes and the original DllBattle.cro;
+the ten literals are ABS32 relocations whose original words match and whose
+values equal symbol plus addend.
+
+All twenty-four reconstruction suites pass. New suite: 3,994 cases covering
+the stack layout, 400 random operation sequences against an independent frame
+model, reserved keys, duplicates, overflow and pop endings, handler
+eligibility, entry search, blocking, call order, the visit mark, removal and
+dispatch depth. Twenty-nine mutations are each detected. ASan/UBSan pass.
+
+The 981 hashes of milestones 1-23 remain unchanged. Native implementation
+files are unchanged. Handler functions, the blocking, overflow and abort
+helpers and handler registration remain external. No running-game comparison
+was made; no matching original build is claimed.
