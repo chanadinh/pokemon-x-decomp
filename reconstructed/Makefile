@@ -15,3 +15,4 @@ all test clean:
 	$(MAKE) -C message_resources $@
 	$(MAKE) -C pokemon_personal $@
 	$(MAKE) -C pokemon_growth $@
+	$(MAKE) -C archive_io $@

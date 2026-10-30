@@ -1,0 +1,187 @@
+[
+  {
+    "source_evidence_id": "ev_6881d4a86ce9811220d62a021aa2df780fbb1e3908f016e2740ced2ef450b367",
+    "purpose": "Reviewed dependency only, not implemented as a separate host routine. Fatal-result reporter; external callback.",
+    "procedure": {
+      "address": "0x124504",
+      "name": "FUN_00124504",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x124504",
+            "end": "0x12452b"
+          }
+        ],
+        "total_bytes": 40,
+        "span_bytes": 40,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_00124504()",
+      "locals": []
+    },
+    "pseudocode": "\nvoid FUN_00124504(undefined4 param_1,undefined4 param_2)\n\n{\n  uint uVar1;\n  bool bVar2;\n  int aiStack_20 [2];\n  \n  DAT_006224b9 = 0;\n  DAT_006224ba = 0xc8e1;\n  DAT_006224b8 = 0;\n  DAT_006224bc = param_1;\n  DAT_006224c0 = param_2;\n  while( true ) {\n    FUN_0015f828(&DAT_00622538);\n    if ((DAT_005d0c48 != 0) || (uVar1 = FUN_001231fc(&DAT_005d0c48,\"err:f\"), -1 < (int)uVar1)) {\n      uVar1 = 0;\n    }\n    if (-1 < (int)uVar1) break;\n    bVar2 = uVar1 == 0xd0401834;\n    if (bVar2) {\n      uVar1 = (uint)DAT_006224b8;\n    }\n    if (!bVar2 || uVar1 != 2) goto LAB_001187fc;\n    FUN_00133bd0(&LAB_004c4b40,0);\n    FUN_0015f8f0(&DAT_00622538);\n  }\n  FUN_00123214(&DAT_006224c4,0xffff8001);\n  aiStack_20[0] = DAT_005d0c48;\n  FUN_00124534(aiStack_20,&DAT_006224b8);\n  if (DAT_005d0c48 != 0) {\n    software_interrupt(0x23);\n    DAT_005d0c48 = 0;\n  }\nLAB_001187fc:\n  FUN_0015f8f0(&DAT_00622538);\n  if (DAT_006224b8 != 2 && DAT_006224b8 != 5) {\n    aiStack_20[0] = 0;\n    aiStack_20[1] = 0;\n    FUN_001465e8(aiStack_20,1);\n    FUN_0015f698(aiStack_20);\n  }\n  return;\n}\n\n",
+    "assembly": [
+      "0x124504: cpy r2, r0",
+      "0x124508: ldr r0, [0x12452c]",
+      "0x12450c: ldr r12, [0x124530]",
+      "0x124510: mov r3, #0x0",
+      "0x124514: strb r3, [r0,#0x1]",
+      "0x124518: strh r12, [r0,#0x2]",
+      "0x12451c: strb r3, [r0,#0x0]",
+      "0x124520: str r1, [r0,#0x8]",
+      "0x124524: str r2, [r0,#0x4]",
+      "0x124528: b 0x0011875c"
+    ],
+    "original_body_sha256": "fed40069aca205637467bf12f6e05843bdd3923e75e5755f2ac86dea373bca7c",
+    "byte_source": "pinned original code.bin; no live read_bytes query"
+  },
+  {
+    "source_evidence_id": "ev_c1ab2420f7377e8ffa2ae86c86084ddeb800eb5a397a38145ad37d52ab9ef6b9",
+    "purpose": "Reviewed dependency only, not implemented as a separate host routine. Platform file read dispatcher; external callback.",
+    "procedure": {
+      "address": "0x146588",
+      "name": "FUN_00146588",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x146588",
+            "end": "0x1465e3"
+          }
+        ],
+        "total_bytes": 92,
+        "span_bytes": 92,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_00146588()",
+      "locals": [
+        {
+          "description": "undefined4 local_28 @ Stack[-0x28]:4",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\nundefined1 *\nFUN_00146588(undefined4 param_1,undefined4 *param_2,undefined4 param_3,undefined4 param_4,\n            int param_5,undefined4 param_6)\n\n{\n  undefined1 *puVar1;\n  \n  if (param_2 == (undefined4 *)0x0 || param_5 == 0) {\n    puVar1 = &DAT_e0e046bc;\n  }\n  else {\n    FUN_0015f5d0(1);\n    puVar1 = (undefined1 *)(**(code **)*param_2)(param_2,param_1,param_3,param_4,param_5,param_6);\n  }\n  return puVar1;\n}\n\n",
+    "assembly": [
+      "0x146588: stmdb sp!,{r4,r5,r6,r7,r8,r9,lr}",
+      "0x14658c: sub sp, sp, #0xc",
+      "0x146590: cpy r8, r0",
+      "0x146594: add r0, sp, #0x28",
+      "0x146598: movs r4, r1",
+      "0x14659c: ldmia r0,{r5,r9}",
+      "0x1465a0: cpy r6, r2",
+      "0x1465a4: cpy r7, r3",
+      "0x1465a8: cmpne r5, #0x0",
+      "0x1465ac: ldreq r0, [0x1465e4]",
+      "0x1465b0: beq 0x001465dc",
+      "0x1465b4: mov r0, #0x1",
+      "0x1465b8: bl 0x0015f5d0",
+      "0x1465bc: stmia sp,{r5,r9}",
+      "0x1465c0: ldr r0, [r4,#0x0]",
+      "0x1465c4: cpy r2, r6",
+      "0x1465c8: cpy r3, r7",
+      "0x1465cc: cpy r1, r8",
+      "0x1465d0: ldr r12, [r0,#0x0]",
+      "0x1465d4: cpy r0, r4",
+      "0x1465d8: blx r12",
+      "0x1465dc: add sp, sp, #0xc",
+      "0x1465e0: ldmia sp!,{r4,r5,r6,r7,r8,r9,pc}"
+    ],
+    "original_body_sha256": "acc418d5c236e230338e4ce04ed2a1d98ffc42d2e5ad5b6477d75452d0d165bd",
+    "byte_source": "pinned original code.bin; no live read_bytes query"
+  },
+  {
+    "source_evidence_id": "ev_df3514c737365587c1dd46580dec12ae0e6b32ad5ef4988614dee229e7c14b85",
+    "purpose": "Reviewed dependency only, not implemented as a separate host routine. Allocation helper reached only by the external non-resident information path.",
+    "procedure": {
+      "address": "0x128134",
+      "name": "FUN_00128134",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x128134",
+            "end": "0x128187"
+          }
+        ],
+        "total_bytes": 84,
+        "span_bytes": 84,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_00128134()",
+      "locals": []
+    },
+    "pseudocode": "\nvoid FUN_00128134(undefined4 param_1,int *param_2)\n\n{\n  undefined4 uVar1;\n  undefined4 *puVar2;\n  \n  uVar1 = (**(code **)(*param_2 + 0x1c))(param_2);\n  puVar2 = (undefined4 *)FUN_0012b0c8(param_2,0x14,uVar1,1);\n  if (puVar2 != (undefined4 *)0x0) {\n    *puVar2 = &PTR_LAB_00597728;\n    puVar2[1] = 0;\n    puVar2[2] = 0;\n    puVar2[3] = 0;\n    puVar2[4] = 0;\n  }\n  return;\n}\n\n",
+    "assembly": [
+      "0x128134: stmdb sp!,{r4,r5,r6,lr}",
+      "0x128138: cpy r4, r1",
+      "0x12813c: ldr r0, [r1,#0x0]",
+      "0x128140: mov r5, #0x14",
+      "0x128144: ldr r1, [r0,#0x1c]",
+      "0x128148: cpy r0, r4",
+      "0x12814c: blx r1",
+      "0x128150: cpy r2, r0",
+      "0x128154: mov r3, #0x1",
+      "0x128158: cpy r1, r5",
+      "0x12815c: cpy r0, r4",
+      "0x128160: bl 0x0012b0c8",
+      "0x128164: cmp r0, #0x0",
+      "0x128168: beq 0x00128184",
+      "0x12816c: ldr r1, [0x128188]",
+      "0x128170: mov r2, #0x0",
+      "0x128174: stmia r0,{r1,r2}",
+      "0x128178: str r2, [r0,#0x8]",
+      "0x12817c: str r2, [r0,#0xc]",
+      "0x128180: str r2, [r0,#0x10]",
+      "0x128184: ldmia sp!,{r4,r5,r6,pc}"
+    ],
+    "original_body_sha256": "470b67eca68585fffba7128f16c33941fa114061a322136912e9de23c575efbd",
+    "byte_source": "pinned original code.bin; no live read_bytes query"
+  }
+]

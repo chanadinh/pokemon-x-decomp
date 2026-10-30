@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Fifteen connected host-source milestones now exist: the `CallWildBattle`
+Sixteen connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -21,7 +21,7 @@ base/extra/derived/refresh state orchestration, HP/stat calculation,
 constructor move insertion/maximum PP, learnset selection/access/caching,
 Pokémon name construction/storage, move-resource field dispatch/loading/caching,
 message loading/decoding/token-aware length, personal-data selection/fields,
-and growth-resource selection/loading/caching.
+growth-resource selection/loading/caching, and archive member/file-stream I/O.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
 creation-parameter preparation, weighted optional-value selection, random
@@ -29,12 +29,13 @@ parameter resolution, allocation/manager setup, 26 data-field setters,
 checksum/XOR storage transforms, block selection, 13 state-field accessors,
 move initialization, auxiliary clearing, HP/PP refresh, HP and five stat updates,
 nature adjustment, growth-to-level resolution, and a final script-state write.
-Wider setup, personal-table loading, archive I/O and
+Wider setup, personal-table loading, archive construction/platform calls and
 resource initialization still use stand-ins in the reconstruction fixtures.
 The move-resource fixture connects the newly reconstructed service to maximum PP.
 The message-resource fixture connects text loading to the reconstructed name builder.
 The personal-data fixture connects species/form selection and field access to learnsets.
 The growth fixture connects growth selection/caching to level resolution.
+The archive fixture runs that path through reconstructed member reads and file streams.
 The native asset viewer now opens a window, handles pan/zoom input, and displays
 selected original raw, ETC1, and ETC1A4 textures through bounded GARC/LZ/BCLIM
 and CGFX loading. A separate native model viewer now previews a checked
@@ -92,8 +93,12 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
 
 ## Immediate sequence for this workspace
 
-1. Reconstruct the remaining archive services, personal-table loading and
-   resource initialization. Growth selection `0x00167db0`, cache lookup/store
+1. Reconstruct archive construction, personal-table loading and resource
+   initialization. Archive member reads/seeks `0x00138214`/`0x001381c4`, member
+   information `0x00127ccc` (resident path) and file-stream read/seek/position
+   `0x00133634`/`0x001336bc`/`0x0013358c` now have host implementations in
+   [archive_io](reconstructed/archive_io/README.md), checked against all 271
+   original GARC archives. Platform calls and locking remain external. Growth selection `0x00167db0`, cache lookup/store
    `0x00175fec`/`0x00174cac`, loader `0x00174dd8` and copy `0x0017c5b0` now have
    host implementations in [pokemon_growth](reconstructed/pokemon_growth/README.md),
    connected to level resolution and checked against all eight original curves.

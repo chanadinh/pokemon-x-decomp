@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains fifteen connected, independently reviewed pieces:
+This source bundle contains sixteen connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -33,6 +33,8 @@ This source bundle contains fifteen connected, independently reviewed pieces:
   46 field selectors and current-record wrappers, connected to learnset loading.
 - `pokemon_growth/`: growth-rate selection through personal data, curve loading,
   cache lookup/replacement and grouped 404-byte copying, connected to level resolution.
+- `archive_io/`: resident member information, locked member reads/seeks and
+  64-bit file-stream read/seek/position, connected through growth loading.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -52,15 +54,16 @@ fixtures. The move-resource fixture connects its reconstructed selector/cache
 to maximum PP. The message-resource fixture connects reconstructed loading and
 decoding to the name builder. The personal-data fixture connects record/field
 services to learnset form selection. The growth fixture connects the
-reconstructed selector/cache to level resolution; older state fixtures retain
-their callbacks.
+reconstructed selector/cache to level resolution, and the archive fixture runs
+it through reconstructed member reads; older state fixtures retain their callbacks.
 This bundle does not run a Pokémon battle
 or provide a playable PC game. These are analyst-authored reconstructions,
 not recovered original source or builds that match the original machine code.
 
-The next targets are archive services, personal-table loading and resource
+The next targets are archive construction, personal-table loading and resource
 initialization. Details, assembly evidence, and limitations
-are in [the growth-resource milestone](pokemon_growth/README.md),
+are in [the archive milestone](archive_io/README.md),
+[the growth-resource milestone](pokemon_growth/README.md),
 [the personal-data milestone](pokemon_personal/README.md),
 [the message-resource milestone](message_resources/README.md),
 [the move-resource milestone](pokemon_move_resource/README.md),

@@ -1,0 +1,22 @@
+Archive-service milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6.
+Nine implemented functions: 00138214, 001381c4, 00127c5c, 00127b6c,
+00127ccc (resident path), 00133634, 001336bc, 0013358c and 00133130. All
+1,360 instruction bytes and 20 literal bytes match live REA read_bytes and the
+pinned original executable. Helper bodies 00124504, 00146588 and 00128134
+match original code. Ranges, assembly, pseudocode and sections also verify.
+
+All sixteen reconstruction suites pass. New suite: 460 stream cases, 64
+archive cases and 816 integration cases through reconstructed growth
+selection and level resolution. Ten order/width/bound mutations are each
+detected. ASan/UBSan pass with leak detection disabled.
+
+The original-data sweep reads all 271 GARC archives under romfs/a: 44,512
+members and 43,228 seek-plus-partial reads, 1,589,162,407 bytes, all matching
+the independent native reader. Counts are in reproduction/record-comparison.json.
+
+All 738 earlier reconstruction hashes remain unchanged. Native implementation
+files are unchanged. Archive construction, the non-resident path, locking,
+platform calls and fatal/panic handling remain external.
+No original ARM or running-game execution comparison was performed.

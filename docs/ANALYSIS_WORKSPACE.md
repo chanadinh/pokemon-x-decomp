@@ -44,6 +44,12 @@ resolver now has an integration fixture using them. The original-data sweep
 checks 1,607 selections, 163,914 thresholds and 482,100 level resolutions over
 all eight curves. Archive access and allocation remain external.
 
+The sixteenth milestone adds [archive member access and file streams](../reconstructed/archive_io/README.md).
+Nine routines look up resident member information, lock/seek/read members and
+manage a 64-bit stream position against a cached file size. The original-data
+sweep reads all 44,512 members of 271 GARC archives through that path. Archive
+construction, platform calls and locking remain external.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

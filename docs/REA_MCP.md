@@ -87,3 +87,9 @@ whole-image analysis; later queries returned in under a second. Five host
 routines and two reviewed helper bodies are recorded in
 [pokemon_growth](../reconstructed/pokemon_growth/README.md). The preceding
 fourteen reconstruction checkpoints remain unchanged.
+
+The archive review is in `outputs/rea-archive/`. Its first analysis again
+waited about 7.5 minutes for whole-image analysis; later queries took under
+0.3 seconds. Nine routines and three helper bodies are recorded in
+[archive_io](../reconstructed/archive_io/README.md). The preceding fifteen
+reconstruction checkpoints remain unchanged.

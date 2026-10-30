@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-30",
+  "method": "Live REA stdio MCP plus ARM assembly review and independent synthetic/original-resource checks",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "profile_digest": "bfc814036989b2aabfb2122070898d0521e51b769b9ebb588fd2aadabec3923c",
+    "implemented_functions": 9,
+    "instruction_bytes_verified": 1360,
+    "literal_bytes_verified": 20,
+    "reviewed_dependency_bodies": 3,
+    "complete_evidence_records_retained": 22,
+    "original_project_unchanged": true
+  },
+  "tests": {
+    "reconstructed_modules_passed": 16,
+    "stream_cases": 460,
+    "archive_cases": 64,
+    "growth_integration_cases": 816,
+    "mutations_detected": 10,
+    "asan": true,
+    "ubsan": true,
+    "sanitizer_options": "ASAN_OPTIONS=detect_leaks=0",
+    "original_data": {
+      "garc_archives": 271,
+      "members": 44512,
+      "seek_partial_reads": 43228,
+      "platform_reads": 1173323,
+      "bytes_read": 1589162407,
+      "all_match": true,
+      "romfs_a_files": 271,
+      "romfs_a_manifest_sha256": "301a3201379e77de6796e9ecd89960096b90125c20f0bdf9d2ba6c56f64023f9",
+      "manifest_method": "sha256 of sha256sum output for find a -type f | LC_ALL=C sort, run in romfs"
+    }
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 738,
+    "native_source_changed": false,
+    "prior_manifest_sha256": {
+      "reconstructed/battle_task/SHA256SUMS": "5e9434c27e94bbf43014bcc273f80cf26775dcbe1c51e8051183647c5009cdf1",
+      "reconstructed/call_wild_battle/SHA256SUMS": "a3acabefdeab4df63e6b9b7fc651fe55e1bd297a02d56476c0c122b4e3609bd9",
+      "reconstructed/encounter_builder/SHA256SUMS": "af4aa6a38b51a66e7d2c43aaca61109ebbc988bb3c673ed360257fe996d4abf6",
+      "reconstructed/message_resources/SHA256SUMS": "60af55af559b069347994a3a1204f7b9ce3d2045f81952e43e3c6627139fc577",
+      "reconstructed/pokemon_constructor/SHA256SUMS": "f8573547857c456fbd3acd57046378116cc77c3a51ce99d73297b4c095d1e143",
+      "reconstructed/pokemon_data/SHA256SUMS": "0405aba491f360b8e6d63d029fd9959205b7aa1baf96ddb3775ec096e3d481b7",
+      "reconstructed/pokemon_growth/SHA256SUMS": "d59ee78af48596e7d1061851421e800b8de6b7d6e937741675ca5eaf0b5a0cbd",
+      "reconstructed/pokemon_learnset/SHA256SUMS": "46467b590596d8a09fd486734e89256a37560eb6848818b36ce4e32f8013853a",
+      "reconstructed/pokemon_move_resource/SHA256SUMS": "2c88555c6749ca3eb15d12fd02659db31ddc757e7da59a484cdf2a473a62dfe4",
+      "reconstructed/pokemon_moves/SHA256SUMS": "132d2947267f8d4410bec4785df6b14fd51925fd4a880850845937774e7efb68",
+      "reconstructed/pokemon_names/SHA256SUMS": "1b10f524faa68d19dc9771de52e74705f4358050ab63587f04166a7a843d721b",
+      "reconstructed/pokemon_personal/SHA256SUMS": "637c4b0ed470ec942aa93f5cbeef289a943af46a43c02ef67de5acabacebf15c",
+      "reconstructed/pokemon_state/SHA256SUMS": "8b4558ec9f88813ab18e582bdffd0d79ca393f08f1d4d1ead90b057b5627ac7b",
+      "reconstructed/pokemon_stats/SHA256SUMS": "0e1b43210166c53462066dbdd1c6fc70d53d48aa6c5aae534568300573f72289",
+      "reconstructed/wild_battle_setup/SHA256SUMS": "aa1682d7073cc8623ce3941231451c88a81e7876aa890272b3fb328def0d5efa"
+    }
+  },
+  "source_hashes": {
+    "reconstructed/archive_io/archive_io.c": "0a31ed8268232eb2c3c939ffa8645a9b790fb7526af0b7e2d460410bc5e27b52",
+    "reconstructed/archive_io/archive_io.h": "1cb9b5b03b95b2147d73babeb71e0fc87c763ee9418ab68c400468b19a178cc9",
+    "reconstructed/archive_io/test_archive_io.c": "506dc7b8df5f5eb5228fd9d33fa6a6fddea78368c914b3ed2908ca430965a34c",
+    "reconstructed/archive_io/Makefile": "ac1d8c2216c4980722fc62ca01c5430003b2b6310123ab5bafda506d8bf355de",
+    "reconstructed/archive_io/reproduction/check_archives.c": "b057617c22508dc62b6b35f88835090f10e026526bee01f693d41b53c273a4e5",
+    "reconstructed/archive_io/reproduction/verify_rea.py": "77661e7c441a23e721f06a1a416dca849561b5e704b3a2bf6e7876bc005519cc",
+    "reconstructed/pokemon_growth/pokemon_growth.c": "4dca47dcfd8bb88cd67fadfb7438dc3ca847f0bc491bac2e7ede66e33b67614c",
+    "reconstructed/pokemon_constructor/pokemon_constructor.h": "0f598822c8298c44bd52e424d2620a14fe18ceadfd4a2771992d168dfffdf6ad",
+    "native/assets/garc.c": "1303610c04e35c9e6ddf07c3db4e3780b5d8aab7fcc28dfca57f8271f1b359c4",
+    "native/platform/guest.c": "884ef7e89debac8f39f94c7a4d45a2633144f93be79217d3ce80f1f94a68a072",
+    "native/platform/guest.h": "15b44779b0c5dae6b538cfcaf88a628bf0fbe22a3a9207b68c507538f51aca0e"
+  },
+  "limits": [
+    "Archive construction, the non-resident information path 00127d3c..00127ea8, locking, platform read/size virtual calls, the fatal reporter and panic hook remain external.",
+    "Original-data rows are built from GARC tables, not the game initializer; the middle information word is not interpreted.",
+    "Older fixtures keep their archive callbacks; native viewer adapters are unchanged.",
+    "No original ARM or running-game execution comparison."
+  ]
+}
