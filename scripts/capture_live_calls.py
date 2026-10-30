@@ -104,11 +104,28 @@ def growth_exit(stub, entry_regs, r):
 def nothing(stub, entry_regs, r):
     return {}
 
+def stack_entry(stub, r):
+    """Fifth argument from the stack (EV for HP, nature for stats)."""
+    return {'stack': stub.u32(r[13])}
+
+def stat_entry(stub, r):
+    nature = stub.u32(r[13])
+    row = 0x00570f6c + 5 * nature
+    return {'stack': nature, 'nature_row': stub.read(row & 0xffffffff, 5).hex() if nature < 0x1000 else ''}
+
 TARGETS = {
     0x00174c0c: ('load_personal_record', 3, personal_entry, personal_exit),
     0x00175c78: ('personal_field', 2, field_entry, nothing),
     0x00167db0: ('select_growth', 2, growth_entry, growth_exit),
     0x00168b3c: ('level_from_growth', 3, growth_entry, nothing),
+    0x00168b84: ('hp_value', 4, stack_entry, nothing),
+    0x0014ffa4: ('attack_value', 4, stat_entry, nothing),
+    0x0014ffd4: ('defense_value', 4, stat_entry, nothing),
+    0x0014ff74: ('speed_value', 4, stat_entry, nothing),
+    0x00150004: ('special_attack_value', 4, stat_entry, nothing),
+    0x00150034: ('special_defense_value', 4, stat_entry, nothing),
+    0x00168bbc: ('move_value', 2, growth_entry, nothing),
+    0x00150220: ('maximum_pp', 2, growth_entry, nothing),
 }
 
 
@@ -120,10 +137,11 @@ def main():
     parser.add_argument('--per-routine', type=int, default=40)
     parser.add_argument('--output', required=True)
     parser.add_argument('--distinct', action='store_true', help='skip calls whose arguments were already recorded')
+    parser.add_argument('--only', help='comma-separated routine names to capture (default: all)')
     args = parser.parse_args()
     stub = Stub(args.host, args.port)
-    counts = {name: 0 for name, *_ in TARGETS.values()}
-    active = set(TARGETS)
+    active = {a for a, t in TARGETS.items() if not args.only or t[0] in args.only.split(',')}
+    counts = {TARGETS[a][0]: 0 for a in active}
     pending = {}  # return address -> list of (sp, entry address, entry regs, entry data)
     inserted = set()
     seen = set()

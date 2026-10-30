@@ -79,16 +79,27 @@ python3 scripts/replay_live_calls.py outputs/live-calls.jsonl outputs/live/calls
 outputs/live/replay_live_calls inputs/romfs TABLE_ADDRESS outputs/live/calls.txt
 ```
 
-On 2026-10-30, while the party menu, summary pages and a wild battle were
-used in Azahar, two capture windows recorded 49 calls. Every replayed result
-matched the game:
+On 2026-10-30, while the party menu, summary pages and wild battles (with
+level-ups) were used in Azahar, three capture windows recorded 115 distinct
+calls. Every replayed result matched the game:
 
 | Routine | Calls | Match |
 | --- | --- | --- |
 | `00174c0c` personal record load (species 0, 653, 656) | 11 | 11 |
 | `00175c78` personal field (21 selectors, including abilities 66/67/168) | 31 | 31 |
 | `00167db0` growth selection (species 0, 653, 656) | 3 | 3 |
-| `00168b3c` level from growth (totals 0, 135, 179, 199 → levels 1, 5, 6, 6) | 4 | 4 |
+| `00168b3c` level from growth (species 0, 16, 653, 656, 659, 661; levels 1–7) | 12 | 12 |
+| `00168b84` HP formula (species 0, 16, 656, 659, 661) | 8 | 8 |
+| `0014ffa4`/`0014ffd4`/`0014ff74`/`00150004`/`00150034` stat formulas with natures 0, 1, 7, 11, 18 and 22 | 42 | 42 |
+| `00168bbc` move field (moves 0, 1, 33, 145; base PP) | 4 | 4 |
+| `00150220` maximum PP | 4 | 4 |
+
+Stat captures also record the nature row the routine reads at
+`00570f6c + 5 × nature`; the replay places it at that address. Move fields and
+maximum PP run through the reconstructed move-resource service with archive
+reads served from `a/2/1/2`. An early replay reported two level differences;
+they came from the harness, which left the personal table unmapped when a
+capture had no record loads, and disappeared once the table was always mapped.
 
 Captures contain game data and stay in the ignored `outputs/` directory.
 
