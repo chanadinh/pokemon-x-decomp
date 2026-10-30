@@ -303,7 +303,11 @@ suite builds every original text resource and loads all 70,424 lines through it.
 - The area-consumer trace checks **1,348 instructions** against original executable bytes across thirteen functions.
 - All **868 earlier reconstruction checkpoint files** retain their recorded hashes.
 
-These results validate specific boundaries. They do not establish running-game
+A read-only [running-game check](docs/RUNNING_GAME_CHECKS.md) against Azahar
+matches the reconstructed boot-time resource state in 20 of 20 checks,
+including every archive member table and the loaded personal table.
+
+These results validate specific boundaries. Beyond that state check, they do not establish running-game
 behavior or visual equivalence. The analysis baseline's 133 CRO modules, 44,279
 candidate functions and 230 exported pseudocode functions are inventory counts,
 not a completion percentage.
