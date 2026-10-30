@@ -77,6 +77,10 @@ The twenty-first milestone adds the [attack and defense helpers](../reconstructe
 that supply the formula's A and D terms, including battler substitution, the
 critical-hit stage rule, the stat swap and sandstorm. Its live trace is prepared.
 
+The twenty-second milestone adds [type effectiveness](../reconstructed/battle_types/README.md):
+the chart lookup with Inverse Battle, the dual-type combination and damage scaling,
+compared over all 324 type pairs with the chart decoded from the original module.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

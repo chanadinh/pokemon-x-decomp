@@ -115,3 +115,9 @@ image plus relocated module blocks from `scripts/prepare_cro_analysis.py` at the
 synthetic addresses. The battle review is in `outputs/rea-battle/`; its first query
 took about 9.4 minutes because more code is analysed. See
 [battle_damage](../reconstructed/battle_damage/README.md).
+
+One later session (`outputs/rea-battle-2/`) stayed open across two milestones,
+[battle_stats](../reconstructed/battle_stats/README.md) and
+[battle_types](../reconstructed/battle_types/README.md), so the whole-image analysis
+ran once. Relocated literals and jump-table words are checked against the CRO
+relocation records (original word and symbol plus addend).

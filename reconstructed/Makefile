@@ -21,3 +21,4 @@ all test clean:
 	$(MAKE) -C message_construction $@
 	$(MAKE) -C battle_damage $@
 	$(MAKE) -C battle_stats $@
+	$(MAKE) -C battle_types $@

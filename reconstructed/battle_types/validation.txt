@@ -1,0 +1,24 @@
+Battle type-effectiveness milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (same session as the
+attack/defense milestone). Implemented: DllBattle 10860c80, 10860b80 and
+1089e7f0. All 552 instruction bytes match live REA bytes and the original
+DllBattle.cro. The 3 literals and 14 jump-table words are ABS32 relocations
+whose original words match and whose values equal symbol plus addend. The
+type chart (324 bytes) and power table (56 bytes) equal the module bytes.
+
+All twenty-two reconstruction suites pass. New suite: 2,974 cases covering the
+chart lookup in normal and inverse mode, typeless, invalid chart bytes,
+unchecked indices, every code combination with both clamps and the aborts,
+wraparound, the lowest-bit rule and every application code. Seventeen
+mutations are each detected. ASan/UBSan pass.
+
+Original data: all 324 type pairs in normal and inverse mode match the native
+decoder px_type_chart_decode over DllBattle.cro (8 immunities, 61 resisted, 51
+super effective), and all 196 combinations match the dual-type rule.
+
+The 936 hashes of milestones 1-21 remain unchanged. Native implementation
+files are unchanged. The matchup wrappers and the abort helper remain
+external. No running-game comparison was made; no matching original build is
+claimed.
