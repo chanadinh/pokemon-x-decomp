@@ -16,3 +16,4 @@ all test clean:
 	$(MAKE) -C pokemon_personal $@
 	$(MAKE) -C pokemon_growth $@
 	$(MAKE) -C archive_io $@
+	$(MAKE) -C archive_index $@

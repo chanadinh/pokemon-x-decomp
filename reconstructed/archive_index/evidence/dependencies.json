@@ -1,0 +1,495 @@
+[
+  {
+    "source_evidence_id": "ev_57d8352807c1cae0b82b5b5c985f6c56ec8056b2abfd739b4d310a1f814e4f3a",
+    "purpose": "Reviewed dependency only, not implemented. Archive constructor; external construct callback.",
+    "procedure": {
+      "address": "0x128288",
+      "name": "FUN_00128288",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x128288",
+            "end": "0x12837b"
+          }
+        ],
+        "total_bytes": 244,
+        "span_bytes": 244,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_00128288()",
+      "locals": []
+    },
+    "pseudocode": "\nint FUN_00128288(undefined4 *param_1,undefined4 param_2,undefined4 param_3,uint param_4)\n\n{\n  int iVar1;\n  int iVar2;\n  \n  *param_1 = &DAT_00597774;\n  param_1[1] = param_2;\n  iVar1 = FUN_00128484(param_1 + 2);\n  *(undefined4 *)(iVar1 + 0x28) = param_3;\n  *(undefined2 *)(iVar1 + 0x2c) = 0;\n  *(undefined4 *)(iVar1 + 0x30) = 0;\n  *(undefined4 *)(iVar1 + 0x34) = 0;\n  *(undefined4 *)(iVar1 + 0x38) = 0;\n  *(undefined4 *)(iVar1 + 0x3c) = 0;\n  *(undefined4 *)(iVar1 + 0x40) = 0;\n  *(undefined4 *)(iVar1 + 0x44) = 0;\n  *(undefined4 *)(iVar1 + 0x48) = 0;\n  *(undefined4 *)(iVar1 + 0x4c) = 0;\n  *(undefined4 *)(iVar1 + 0x50) = 0;\n  *(undefined4 *)(iVar1 + 0x54) = 0xffffffff;\n  *(undefined4 *)(iVar1 + 0x58) = 0;\n  *(undefined4 *)(iVar1 + 0x5c) = 0;\n  *(undefined4 *)(iVar1 + 0x60) = 0xffffffff;\n  *(undefined4 *)(iVar1 + 100) = 0;\n  *(undefined4 *)(iVar1 + 0x68) = 0;\n  *(undefined4 *)(iVar1 + 0x6c) = 0xffffffff;\n  FUN_001465e8(iVar1 + 0x3c,1);\n  FUN_001465e8(iVar1 + 0x44,1);\n  FUN_0014663c(iVar1 + 0x4c);\n  FUN_0014663c(iVar1 + 0x58);\n  FUN_0014663c(iVar1 + 100);\n  if ((((param_4 & 1) != 0) && (iVar2 = FUN_00123a6c(iVar1 + 0x4c), iVar2 != 0)) &&\n     (iVar2 = FUN_00128380(iVar1,*(undefined4 *)(iVar1 + 0x28),0), iVar2 != 0)) {\n    FUN_0016f1e8(iVar1 + 0x3c);\n  }\n  if ((~param_4 & 5) == 0) {\n    FUN_00127efc(iVar1 + -8,*(undefined4 *)(iVar1 + -4));\n  }\n  return iVar1 + -8;\n}\n\n",
+    "assembly": [
+      "0x128288: stmdb sp!,{r4,r5,r6,lr}",
+      "0x12828c: cpy r6, r2",
+      "0x128290: ldr r2, [0x12837c]",
+      "0x128294: cpy r5, r3",
+      "0x128298: str r2, [r0],#0x4",
+      "0x12829c: str r1, [r0],#0x4",
+      "0x1282a0: bl 0x00128484",
+      "0x1282a4: mov r1, #0x0",
+      "0x1282a8: str r6, [r0,#0x28]",
+      "0x1282ac: strh r1, [r0,#0x2c]",
+      "0x1282b0: str r1, [r0,#0x30]",
+      "0x1282b4: str r1, [r0,#0x34]",
+      "0x1282b8: sub r4, r0, #0x8",
+      "0x1282bc: str r1, [r0,#0x38]",
+      "0x1282c0: str r1, [r0,#0x3c]!",
+      "0x1282c4: str r1, [r0,#0x4]",
+      "0x1282c8: str r1, [r4,#0x4c]",
+      "0x1282cc: str r1, [r4,#0x50]",
+      "0x1282d0: str r1, [r4,#0x54]",
+      "0x1282d4: add r0, r4, #0x58",
+      "0x1282d8: mvn r2, #0x0",
+      "0x1282dc: stmia r0,{r1,r2}",
+      "0x1282e0: str r1, [r4,#0x60]",
+      "0x1282e4: add r0, r4, #0x64",
+      "0x1282e8: stmia r0,{r1,r2}",
+      "0x1282ec: str r1, [r4,#0x6c]",
+      "0x1282f0: add r0, r4, #0x70",
+      "0x1282f4: stmia r0,{r1,r2}",
+      "0x1282f8: mov r1, #0x1",
+      "0x1282fc: add r0, r4, #0x44",
+      "0x128300: bl 0x001465e8",
+      "0x128304: mov r1, #0x1",
+      "0x128308: add r0, r4, #0x4c",
+      "0x12830c: bl 0x001465e8",
+      "0x128310: add r0, r4, #0x54",
+      "0x128314: bl 0x0014663c",
+      "0x128318: add r0, r4, #0x60",
+      "0x12831c: bl 0x0014663c",
+      "0x128320: add r0, r4, #0x6c",
+      "0x128324: bl 0x0014663c",
+      "0x128328: tst r5, #0x1",
+      "0x12832c: beq 0x0012835c",
+      "0x128330: add r0, r4, #0x54",
+      "0x128334: bl 0x00123a6c",
+      "0x128338: cmp r0, #0x0",
+      "0x12833c: beq 0x0012835c",
+      "0x128340: ldr r1, [r4,#0x30]",
+      "0x128344: mov r2, #0x0",
+      "0x128348: add r0, r4, #0x8",
+      "0x12834c: bl 0x00128380",
+      "0x128350: cmp r0, #0x0",
+      "0x128354: addne r0, r4, #0x44",
+      "0x128358: blne 0x0016f1e8",
+      "0x12835c: mov r0, #0x5",
+      "0x128360: bics r0, r0, r5",
+      "0x128364: bne 0x00128374",
+      "0x128368: ldr r1, [r4,#0x4]",
+      "0x12836c: cpy r0, r4",
+      "0x128370: bl 0x00127efc",
+      "0x128374: cpy r0, r4",
+      "0x128378: ldmia sp!,{r4,r5,r6,pc}"
+    ],
+    "original_body_sha256": "2c970261454264e76c1769be175c24a2800bcefe477e2d81c565c2992d7fdf82",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_ee6d3d2a2a3bba04e1f2a00a5f6278fbb982e8b02e99e49d6924b13a036a6ac1",
+    "purpose": "Reviewed dependency only, not implemented. Recursive critical-section try-enter; external.",
+    "procedure": {
+      "address": "0x123a6c",
+      "name": "FUN_00123a6c",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x123a6c",
+            "end": "0x123aaf"
+          }
+        ],
+        "total_bytes": 68,
+        "span_bytes": 68,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_00123a6c()",
+      "locals": []
+    },
+    "pseudocode": "\nundefined4 FUN_00123a6c(int param_1)\n\n{\n  int iVar1;\n  undefined4 uVar2;\n  \n  iVar1 = coproc_movefrom_User_R_Thread_and_Process_ID();\n  if (iVar1 != *(int *)(param_1 + 4)) {\n    iVar1 = FUN_0012393c(param_1);\n    if (iVar1 == 0) {\n      return 0;\n    }\n    uVar2 = coproc_movefrom_User_R_Thread_and_Process_ID();\n    *(undefined4 *)(param_1 + 4) = uVar2;\n  }\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 1;\n  return 1;\n}\n\n",
+    "assembly": [
+      "0x123a6c: stmdb sp!,{r4,lr}",
+      "0x123a70: cpy r4, r0",
+      "0x123a74: mrc p15,0x0,r0,cr13,cr0,0x3",
+      "0x123a78: ldr r1, [r4,#0x4]",
+      "0x123a7c: cmp r0, r1",
+      "0x123a80: beq 0x00123a9c",
+      "0x123a84: cpy r0, r4",
+      "0x123a88: bl 0x0012393c",
+      "0x123a8c: cmp r0, #0x0",
+      "0x123a90: mrcne p15,0x0,r0,cr13,cr0,0x3",
+      "0x123a94: strne r0, [r4,#0x4]",
+      "0x123a98: beq 0x00123aac",
+      "0x123a9c: ldr r0, [r4,#0x8]",
+      "0x123aa0: add r0, r0, #0x1",
+      "0x123aa4: str r0, [r4,#0x8]",
+      "0x123aa8: mov r0, #0x1",
+      "0x123aac: ldmia sp!,{r4,pc}"
+    ],
+    "original_body_sha256": "7635bbf215ec03296c0c114c39a1d1e6dc9e3571adbc791b5a6745fef68106fe",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_bab08229bcd9dc4c1ad7ba28f5e853d39d8d4d32162846b7f1755ac8e68c3a26",
+    "purpose": "Reviewed dependency only, not implemented. Light-event signal; external.",
+    "procedure": {
+      "address": "0x16f1e8",
+      "name": "FUN_0016f1e8",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x16f1e8",
+            "end": "0x16f29b"
+          }
+        ],
+        "total_bytes": 180,
+        "span_bytes": 180,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_0016f1e8()",
+      "locals": [
+        {
+          "description": "undefined4 local_10 @ Stack[-0x10]:4",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined4 local_18 @ Stack[-0x18]:4",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\nvoid FUN_0016f1e8(int *param_1)\n\n{\n  bool bVar1;\n  int iVar2;\n  int iVar3;\n  undefined4 unaff_r4;\n  int *piVar4;\n  undefined4 in_lr;\n  \n  if (*param_1 == -1) {\n    do {\n      bVar1 = (bool)hasExclusiveAccess(param_1);\n    } while (!bVar1);\n    *param_1 = 0;\n    FUN_0015e894(DAT_005e44f4,param_1,0,1,0,0);\n  }\n  else if (*param_1 == -2) {\n    piVar4 = param_1 + 1;\n    FUN_0012396c(piVar4);\n    do {\n      bVar1 = (bool)hasExclusiveAccess(param_1);\n    } while (!bVar1);\n    *param_1 = 1;\n    FUN_0015e894(DAT_005e44f4,param_1,0,0xffffffff,0,0);\n    do {\n      iVar3 = *piVar4;\n      iVar2 = -iVar3;\n      bVar1 = (bool)hasExclusiveAccess(piVar4);\n    } while (!bVar1);\n    *piVar4 = iVar2;\n    if (iVar3 != -1 && 0 < iVar2) {\n      FUN_0015e894(DAT_005e44f4,piVar4,0,1,0,0,unaff_r4,in_lr);\n    }\n    return;\n  }\n  return;\n}\n\n",
+    "assembly": [
+      "0x16f1e8: stmdb sp!,{r4,r5,r6,lr}",
+      "0x16f1ec: cpy r4, r0",
+      "0x16f1f0: ldr r0, [r0,#0x0]",
+      "0x16f1f4: sub sp, sp, #0x8",
+      "0x16f1f8: ldr r5, [0x16f29c]",
+      "0x16f1fc: cmn r0, #0x1",
+      "0x16f200: moveq r3, #0x0",
+      "0x16f204: beq 0x0016f264",
+      "0x16f208: ldr r0, [r4,#0x0]",
+      "0x16f20c: cmn r0, #0x2",
+      "0x16f210: bne 0x0016f294",
+      "0x16f214: add r6, r4, #0x4",
+      "0x16f218: cpy r0, r6",
+      "0x16f21c: bl 0x0012396c",
+      "0x16f220: mov r3, #0x1",
+      "0x16f224: ldrex r2, r4",
+      "0x16f228: strex r2, r3, r4",
+      "0x16f22c: cmp r2, #0x0",
+      "0x16f230: bne 0x0016f224",
+      "0x16f234: mov r2, #0x0",
+      "0x16f238: cpy r1, r4",
+      "0x16f23c: ldr r0, [r5,#0x0]",
+      "0x16f240: cpy r4, r2",
+      "0x16f244: cpy r12, r2",
+      "0x16f248: mvn r3, #0x0",
+      "0x16f24c: stmia sp,{r4,r12}",
+      "0x16f250: bl 0x0015e894",
+      "0x16f254: add sp, sp, #0x8",
+      "0x16f258: cpy r0, r6",
+      "0x16f25c: ldmia sp!,{r4,r5,r6,lr}",
+      "0x16f260: b 0x001339b8",
+      "0x16f264: ldrex r2, r4",
+      "0x16f268: strex r2, r3, r4",
+      "0x16f26c: cmp r2, #0x0",
+      "0x16f270: bne 0x0016f264",
+      "0x16f274: mov r2, #0x0",
+      "0x16f278: cpy r1, r4",
+      "0x16f27c: ldr r0, [r5,#0x0]",
+      "0x16f280: cpy r4, r2",
+      "0x16f284: cpy r12, r2",
+      "0x16f288: mov r3, #0x1",
+      "0x16f28c: stmia sp,{r4,r12}",
+      "0x16f290: bl 0x0015e894",
+      "0x16f294: add sp, sp, #0x8",
+      "0x16f298: ldmia sp!,{r4,r5,r6,pc}"
+    ],
+    "original_body_sha256": "254226027150c9944233ad1dfa39be303b98476c161a31c9394ba14c92fe7000",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_45fd2df1ed67b52610e5cac55ff95cca0e8a126977999da6ea8870e55bd1f640",
+    "purpose": "Reviewed dependency only, not implemented. Aligned heap allocation; external.",
+    "procedure": {
+      "address": "0x12b0c8",
+      "name": "FUN_0012b0c8",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x12b0c8",
+            "end": "0x12b22b"
+          }
+        ],
+        "total_bytes": 356,
+        "span_bytes": 356,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_0012b0c8()",
+      "locals": []
+    },
+    "pseudocode": "\nint FUN_0012b0c8(int *param_1,int param_2,int param_3,int param_4)\n\n{\n  int *piVar1;\n  int iVar2;\n  undefined4 uVar3;\n  code *pcVar4;\n  int iVar5;\n  int iVar6;\n  \n  if ((0 < DAT_005d11a4) && ((*(uint *)(DAT_005d11a0 + 4) & 1) != 0)) {\n    piVar1 = (int *)FUN_0012b284(0);\n    (**(code **)(*piVar1 + 0x18))();\n  }\n  iVar2 = param_3;\n  if (param_3 < 0) {\n    iVar2 = -param_3;\n  }\n  iVar5 = 0x20;\n  if ((0x20 < iVar2) && (iVar5 = param_3, param_3 < 0)) {\n    iVar5 = -param_3;\n  }\n  iVar2 = (**(code **)(*param_1 + 0x58))(param_1,param_2 + iVar5,param_3);\n  if ((0 < DAT_005d11a4) && ((*(uint *)(DAT_005d11a0 + 4) & 1) != 0)) {\n    piVar1 = (int *)FUN_0012b284(0);\n    (**(code **)(*piVar1 + 0x18))();\n  }\n  if (iVar2 != 0) {\n    if (param_4 != 0) {\n      FUN_0015e914(iVar2,param_2 + iVar5);\n    }\n    iVar6 = iVar2 + iVar5;\n    uVar3 = (**(code **)(*param_1 + 0x20))(param_1);\n    *(undefined4 *)(iVar6 + -0x20) = uVar3;\n    *(short *)(iVar6 + -0x1c) = (short)iVar5;\n    (**(code **)(*param_1 + 100))(param_1,iVar6 + -0x1a);\n    if (0x20 < iVar5) {\n      FUN_00300ef8(iVar2,iVar6 + -0x20,0x20);\n    }\n    (**(code **)(*param_1 + 0x48))(param_1);\n    return iVar6;\n  }\n  pcVar4 = *(code **)(*param_1 + 0xc);\n  do {\n    (*pcVar4)(param_1);\n    do {\n    } while (DAT_005d1144 == (code *)0x0);\n    param_1 = (int *)&DAT_00563574;\n    pcVar4 = DAT_005d1144;\n  } while( true );\n}\n\n",
+    "assembly": [
+      "0x12b0c8: stmdb sp!,{r4,r5,r6,r7,r8,r9,r10,lr}",
+      "0x12b0cc: cpy r5, r0",
+      "0x12b0d0: cpy r7, r1",
+      "0x12b0d4: cpy r6, r2",
+      "0x12b0d8: ldr r10, [0x12b22c]",
+      "0x12b0dc: cpy r9, r3",
+      "0x12b0e0: ldr r0, [r10,#0xcc]",
+      "0x12b0e4: cmp r0, #0x0",
+      "0x12b0e8: ble 0x0012b110",
+      "0x12b0ec: ldr r0, [r10,#0xc8]",
+      "0x12b0f0: ldr r0, [r0,#0x4]",
+      "0x12b0f4: tst r0, #0x1",
+      "0x12b0f8: beq 0x0012b110",
+      "0x12b0fc: mov r0, #0x0",
+      "0x12b100: bl 0x0012b284",
+      "0x12b104: ldr r1, [r0,#0x0]",
+      "0x12b108: ldr r1, [r1,#0x18]",
+      "0x12b10c: blx r1",
+      "0x12b110: cmp r6, #0x0",
+      "0x12b114: rsb r0, r6, #0x0",
+      "0x12b118: cpyge r1, r6",
+      "0x12b11c: cpylt r1, r0",
+      "0x12b120: cmp r1, #0x20",
+      "0x12b124: mov r4, #0x20",
+      "0x12b128: ble 0x0012b138",
+      "0x12b12c: subs r1, r6, #0x0",
+      "0x12b130: cpyge r4, r1",
+      "0x12b134: cpylt r4, r0",
+      "0x12b138: ldr r0, [r5,#0x0]",
+      "0x12b13c: add r1, r7, r4",
+      "0x12b140: cpy r7, r1",
+      "0x12b144: cpy r2, r6",
+      "0x12b148: ldr r3, [r0,#0x58]",
+      "0x12b14c: cpy r0, r5",
+      "0x12b150: blx r3",
+      "0x12b154: cpy r8, r0",
+      "0x12b158: ldr r0, [r10,#0xcc]",
+      "0x12b15c: cmp r0, #0x0",
+      "0x12b160: ble 0x0012b188",
+      "0x12b164: ldr r0, [r10,#0xc8]",
+      "0x12b168: ldr r0, [r0,#0x4]",
+      "0x12b16c: tst r0, #0x1",
+      "0x12b170: beq 0x0012b188",
+      "0x12b174: mov r0, #0x0",
+      "0x12b178: bl 0x0012b284",
+      "0x12b17c: ldr r1, [r0,#0x0]",
+      "0x12b180: ldr r1, [r1,#0x18]",
+      "0x12b184: blx r1",
+      "0x12b188: cmp r8, #0x0",
+      "0x12b18c: beq 0x0012b208",
+      "0x12b190: cmp r9, #0x0",
+      "0x12b194: beq 0x0012b1a4",
+      "0x12b198: cpy r1, r7",
+      "0x12b19c: cpy r0, r8",
+      "0x12b1a0: bl 0x0015e914",
+      "0x12b1a4: ldr r0, [r5,#0x0]",
+      "0x12b1a8: add r7, r8, r4",
+      "0x12b1ac: sub r6, r7, #0x20",
+      "0x12b1b0: ldr r1, [r0,#0x20]",
+      "0x12b1b4: cpy r0, r5",
+      "0x12b1b8: blx r1",
+      "0x12b1bc: str r0, [r6,#0x0]",
+      "0x12b1c0: strh r4, [r6,#0x4]",
+      "0x12b1c4: ldr r0, [r5,#0x0]",
+      "0x12b1c8: add r1, r6, #0x6",
+      "0x12b1cc: ldr r2, [r0,#0x64]",
+      "0x12b1d0: cpy r0, r5",
+      "0x12b1d4: blx r2",
+      "0x12b1d8: cmp r4, #0x20",
+      "0x12b1dc: ble 0x0012b1f0",
+      "0x12b1e0: cpy r0, r8",
+      "0x12b1e4: sub r1, r7, #0x20",
+      "0x12b1e8: mov r2, #0x20",
+      "0x12b1ec: bl 0x00300ef8",
+      "0x12b1f0: ldr r0, [r5,#0x0]",
+      "0x12b1f4: ldr r1, [r0,#0x48]",
+      "0x12b1f8: cpy r0, r5",
+      "0x12b1fc: blx r1",
+      "0x12b200: cpy r0, r7",
+      "0x12b204: ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,pc}",
+      "0x12b208: ldr r0, [r5,#0x0]",
+      "0x12b20c: ldr r1, [r0,#0xc]",
+      "0x12b210: cpy r0, r5",
+      "0x12b214: blx r1",
+      "0x12b218: ldr r1, [r10,#0x6c]",
+      "0x12b21c: cmp r1, #0x0",
+      "0x12b220: ldrne r0, [0x12b230]",
+      "0x12b224: bne 0x0012b214",
+      "0x12b228: b 0x0012b218"
+    ],
+    "original_body_sha256": "14e4b5f689f99714aa1d6fa25b9f56d2373ca56cadea430a80c369253cbefc57",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_6ed2642233bf3995fbb2692a903188516dc60b8fd80941280cd8eb96aa49ddb8",
+    "purpose": "Reviewed dependency only, not implemented. Critical-section initializer used by the constructor; external.",
+    "procedure": {
+      "address": "0x14663c",
+      "name": "FUN_0014663c",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x14663c",
+            "end": "0x146657"
+          }
+        ],
+        "total_bytes": 28,
+        "span_bytes": 28,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_0014663c()",
+      "locals": []
+    },
+    "pseudocode": "\nvoid FUN_0014663c(int param_1)\n\n{\n  FUN_00123924();\n  *(undefined4 *)(param_1 + 4) = 0;\n  *(undefined4 *)(param_1 + 8) = 0;\n  return;\n}\n\n",
+    "assembly": [
+      "0x14663c: stmdb sp!,{r4,lr}",
+      "0x146640: cpy r4, r0",
+      "0x146644: bl 0x00123924",
+      "0x146648: mov r0, #0x0",
+      "0x14664c: str r0, [r4,#0x4]",
+      "0x146650: str r0, [r4,#0x8]",
+      "0x146654: ldmia sp!,{r4,pc}"
+    ],
+    "original_body_sha256": "ba7d6d6d4b59f61301ae05340a3a04bc4e15720a2b33b9029d4c0d5af8bf6022",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_791f116a54670c872dee49cbebecaeb153f9ec78b7aa26aa55c7fdffc1bff77f",
+    "purpose": "Reviewed dependency only, not implemented. Light-event initializer (-1 or -2); external.",
+    "procedure": {
+      "address": "0x1465e8",
+      "name": "FUN_001465e8",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x1465e8",
+            "end": "0x14661b"
+          }
+        ],
+        "total_bytes": 52,
+        "span_bytes": 52,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_001465e8()",
+      "locals": []
+    },
+    "pseudocode": "\nundefined4 FUN_001465e8(undefined4 *param_1,int param_2)\n\n{\n  bool bVar1;\n  undefined4 uVar2;\n  undefined4 uVar3;\n  \n  FUN_00123924(param_1 + 1);\n  if (param_2 == 0) {\n    uVar3 = 0xffffffff;\n  }\n  else {\n    uVar3 = 0xfffffffe;\n  }\n  do {\n    uVar2 = *param_1;\n    bVar1 = (bool)hasExclusiveAccess(param_1);\n  } while (!bVar1);\n  *param_1 = uVar3;\n  return uVar2;\n}\n\n",
+    "assembly": [
+      "0x1465e8: stmdb sp!,{r4,r5,r6,lr}",
+      "0x1465ec: cpy r4, r0",
+      "0x1465f0: cpy r5, r1",
+      "0x1465f4: add r0, r0, #0x4",
+      "0x1465f8: bl 0x00123924",
+      "0x1465fc: cmp r5, #0x0",
+      "0x146600: mvnne r1, #0x1",
+      "0x146604: mvneq r1, #0x0",
+      "0x146608: ldrex r0, r4",
+      "0x14660c: strex r3, r1, r4",
+      "0x146610: cmp r3, #0x0",
+      "0x146614: bne 0x00146608",
+      "0x146618: ldmia sp!,{r4,r5,r6,pc}"
+    ],
+    "original_body_sha256": "4274082ec5c719439597684fd207a26452e9970f6eb8d6c9cf353fcce265dd68",
+    "byte_source": "pinned original code.bin"
+  }
+]

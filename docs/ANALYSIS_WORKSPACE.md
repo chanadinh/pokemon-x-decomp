@@ -50,6 +50,12 @@ manage a 64-bit stream position against a cached file size. The original-data
 sweep reads all 44,512 members of 271 GARC archives through that path. Archive
 construction, platform calls and locking remain external.
 
+The seventeenth milestone adds [archive index construction](../reconstructed/archive_index/README.md).
+It parses the GARC index, builds the resident member rows (padded span, record
+length, absolute offset) for a language-like selector, and opens the growth
+and move archives. Rebuilding all 271 original indexes matches an independent
+FATB reading in all 45,824 rows. The constructor and OS services remain external.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

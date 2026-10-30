@@ -93,3 +93,9 @@ waited about 7.5 minutes for whole-image analysis; later queries took under
 0.3 seconds. Nine routines and three helper bodies are recorded in
 [archive_io](../reconstructed/archive_io/README.md). The preceding fifteen
 reconstruction checkpoints remain unchanged.
+
+The archive-index review is in `outputs/rea-archive-init/`. It used `xrefs`
+and `procedure_callers` to find the archive initializers. Ghidra had not created
+functions at the GARC parser vtable targets, so those methods were decoded with
+`inspect_native_instruction` one instruction at a time and retained with live
+bytes. See [archive_index](../reconstructed/archive_index/README.md).

@@ -1,0 +1,25 @@
+Archive-index milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6.
+Thirteen implemented routines: five Ghidra functions (00127efc, 00128134,
+00127eb4, 0011ecf8, 0011ee68) and eight GARC parser vtable methods retained
+as per-instruction REA decodes. All 1,436 instruction bytes and 48 literal and
+vtable bytes match live REA read_bytes and the pinned original executable.
+Six reviewed helper bodies match original code.
+
+All seventeen reconstruction suites pass. New suite: 736 parser cases, 262
+builder/read cases and 144 integration level resolutions from synthetic GARC
+bytes through index building and growth loading. Twelve width/shift/heap/
+order/offset mutations are each detected. ASan/UBSan pass with leak detection
+disabled.
+
+The original-data sweep builds the index of all 271 GARC archives under
+romfs/a (847 builds across selectors). All 45,824 rows match an independent
+FATB reading; 44,256 member reads through the built tables match the native
+reader. Resident row word 0 is the padded span (end - start), larger than the
+length in 14,782 rows; word 1 is the record length.
+
+All 773 earlier reconstruction hashes remain unchanged. Native implementation
+files are unchanged. The constructor, OS synchronization, heaps and selector
+meaning remain external. No original ARM or running-game execution comparison
+was performed.

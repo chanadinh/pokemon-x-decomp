@@ -31,7 +31,7 @@ not there yet, so this is not yet a playable port.**
 
 | Zones that load | Townspeople who speak | Wild battles | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
-| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **738** earlier reconstruction file hashes |
+| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **773** earlier reconstruction file hashes |
 
 ## Play the field slice
 
@@ -244,7 +244,7 @@ native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
 
 ## Rebuilding the rules
 
-The visual tools sit alongside sixteen connected C reconstruction milestones.
+The visual tools sit alongside seventeen connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -266,8 +266,9 @@ construction, payload storage, state refresh and stat calculations.
 | [Personal data](reconstructed/pokemon_personal/README.md) | Species/form record selection, 46 field selectors and current-record wrappers |
 | [Growth resources](reconstructed/pokemon_growth/README.md) | Growth-rate selection, curve loading, cache lookup/replacement and 404-byte copying |
 | [Archive I/O](reconstructed/archive_io/README.md) | Member lookup, locked member reads/seeks and 64-bit file-stream read/seek/position |
+| [Archive index](reconstructed/archive_index/README.md) | GARC index parsing, resident member-table construction and resource-archive opening |
 
-Personal-table loading, archive construction/platform file calls and resource initialization
+Personal-table loading, archive object construction/platform file calls and resource initialization
 still use synthetic resources or callbacks where their
 dependencies remain unresolved. These are analyst-authored reconstructions, not
 recovered original source or builds that match the original machine code.
@@ -279,7 +280,8 @@ checks all 799 records and connects form selection to reconstructed learnsets.
 The growth suite replaces the stats callback with the reconstructed selector and
 checks 482,100 level resolutions against all eight original growth curves.
 The archive suite reads all 44,512 members of the 271 original GARC archives
-through the reconstructed member/stream path.
+through the reconstructed member/stream path, and the index suite rebuilds
+every archive's member table from its original bytes.
 
 <details>
 <summary><strong>What the validation establishes</strong></summary>
@@ -294,7 +296,7 @@ through the reconstructed member/stream path.
 - The selected area's **100,608 texture pixels** match an independent decoder and separately implemented alpha/tile reconstruction.
 - The selected field's **positions, UVs and indices** match an independent geometry reference at the native renderer's documented precision.
 - The area-consumer trace checks **1,348 instructions** against original executable bytes across thirteen functions.
-- All **738 earlier reconstruction checkpoint files** retain their recorded hashes.
+- All **773 earlier reconstruction checkpoint files** retain their recorded hashes.
 
 These results validate specific boundaries. They do not establish running-game
 behavior or visual equivalence. The analysis baseline's 133 CRO modules, 44,279

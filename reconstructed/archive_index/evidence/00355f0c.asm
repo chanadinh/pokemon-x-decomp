@@ -1,0 +1,16 @@
+00355f0c  1c2081e2  add r2,r1,#0x1c
+00355f10  041080e5  str r1,[r0,#0x4]
+00355f14  082080e5  str r2,[r0,#0x8]
+00355f18  b412d1e1  ldrh r1,[r1,#0x24]
+00355f1c  0c30a0e3  mov r3,#0xc
+00355f20  013183e0  add r3,r3,r1, lsl #0x2
+00355f24  032082e0  add r2,r2,r3
+00355f28  0c2080e5  str r2,[r0,#0xc]
+00355f2c  083092e5  ldr r3,[r2,#0x8]
+00355f30  0111a0e1  mov r1,r1, lsl #0x2
+00355f34  833083e0  add r3,r3,r3, lsl #0x1
+00355f38  031181e0  add r1,r1,r3, lsl #0x2
+00355f3c  0c1081e2  add r1,r1,#0xc
+00355f40  021081e0  add r1,r1,r2
+00355f44  101080e5  str r1,[r0,#0x10]
+00355f48  1eff2fe1  bx lr

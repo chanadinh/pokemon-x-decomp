@@ -1,0 +1,49 @@
+00495b60  f0012de9  stmdb sp!,{r4,r5,r6,r7,r8}
+00495b64  7130ffe6  uxth r3,r1
+00495b68  0150a0e3  mov r5,#0x1
+00495b6c  081090e5  ldr r1,[r0,#0x8]
+00495b70  0cc090e5  ldr r12,[r0,#0xc]
+00495b74  1562a0e1  mov r6,r5, lsl r2
+00495b78  0c1081e2  add r1,r1,#0xc
+00495b7c  031191e7  ldr r1,[r1,r3,lsl #0x2]
+00495b80  0c0081e2  add r0,r1,#0xc
+00495b84  00308ce0  add r3,r12,r0
+00495b88  100081e2  add r0,r1,#0x10
+00495b8c  00408ce0  add r4,r12,r0
+00495b90  00c093e5  ldr r12,[r3,#0x0]
+00495b94  0000a0e3  mov r0,#0x0
+00495b98  06001ce1  tst r12,r6
+00495b9c  0030a001  cpyeq r3,r0
+00495ba0  0a00000a  beq 0x00495bd0
+00495ba4  0030a0e3  mov r3,#0x0
+00495ba8  000052e3  cmp r2,#0x0
+00495bac  0310a0e1  cpy r1,r3
+00495bb0  0600009a  bls 0x00495bd0
+00495bb4  15011ce1  tst r12,r5, lsl r1
+00495bb8  01308312  addne r3,r3,#0x1
+00495bbc  011081e2  add r1,r1,#0x1
+00495bc0  7330ff16  uxthne r3,r3
+00495bc4  7110ffe6  uxth r1,r1
+00495bc8  020051e1  cmp r1,r2
+00495bcc  f8ffff3a  bcc 0x00495bb4
+00495bd0  833083e0  add r3,r3,r3, lsl #0x1
+00495bd4  06001ce1  tst r12,r6
+00495bd8  033194e7  ldr r3,[r4,r3,lsl #0x2]
+00495bdc  0a00000a  beq 0x00495c0c
+00495be0  0000a0e3  mov r0,#0x0
+00495be4  000052e3  cmp r2,#0x0
+00495be8  0010a0e1  cpy r1,r0
+00495bec  0600009a  bls 0x00495c0c
+00495bf0  15011ce1  tst r12,r5, lsl r1
+00495bf4  01008012  addne r0,r0,#0x1
+00495bf8  011081e2  add r1,r1,#0x1
+00495bfc  7000ff16  uxthne r0,r0
+00495c00  7110ffe6  uxth r1,r1
+00495c04  020051e1  cmp r1,r2
+00495c08  f8ffff3a  bcc 0x00495bf0
+00495c0c  800080e0  add r0,r0,r0, lsl #0x1
+00495c10  000184e0  add r0,r4,r0, lsl #0x2
+00495c14  040090e5  ldr r0,[r0,#0x4]
+00495c18  f001bde8  ldmia sp!,{r4,r5,r6,r7,r8}
+00495c1c  030040e0  sub r0,r0,r3
+00495c20  1eff2fe1  bx lr

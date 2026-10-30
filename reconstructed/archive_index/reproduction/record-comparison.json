@@ -1,0 +1,14 @@
+{
+  "garc_archives": 271,
+  "index_builds": 847,
+  "rows_checked": 45824,
+  "multi_record_rows": 1353,
+  "padded_rows": 14782,
+  "member_reads": 44256,
+  "all_match": true,
+  "archives_with_multi_record_entries": 18,
+  "multi_record_bitmaps": ["0x101", "0x1bd", "0x1bf"],
+  "romfs_a_files": 271,
+  "romfs_a_manifest_sha256": "301a3201379e77de6796e9ecd89960096b90125c20f0bdf9d2ba6c56f64023f9",
+  "manifest_method": "sha256 of sha256sum output for find a -type f | LC_ALL=C sort, run in romfs"
+}

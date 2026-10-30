@@ -1,0 +1,148 @@
+{
+  "input": {
+    "file": "code.bin",
+    "size": 5156864,
+    "sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a"
+  },
+  "rea_server": {
+    "name": "rea",
+    "version": "6.8.0"
+  },
+  "provider": {
+    "id": "ghidra",
+    "name": "Ghidra",
+    "version": "12.1.4"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "parameters": {
+      "target_kind": "executable",
+      "target_format": "elf",
+      "architecture": "arm",
+      "available_architectures": [
+        "arm"
+      ],
+      "import_mode": "ephemeral-source-immutable",
+      "annotation_policy": "atomic-function-entry-metadata-v1",
+      "load_image_observations": "source-mappings-entry-context-v2",
+      "function_body_evidence": "complete-inclusive-ranges-v1",
+      "function_references": "complete-body-and-entry-reference-manager-v2",
+      "call_relationship_coverage": "function-body-call-coverage-v5",
+      "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+      "string_inventory_evidence": "defined-data-coverage-v1",
+      "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+      "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+      "instruction_flow_evidence": "decoded-return-pcode-v1",
+      "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+      "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+      "no_return_repair": "returning-imports-decoded-return-v2",
+      "process_launch": "inspected-jvm-launch-support-v1",
+      "jump_table_evidence": "typed-case-default-blocks-v1",
+      "decompiler_jump_loads": true,
+      "loader": "auto-from-header",
+      "language_id": "ARM:LE:32:v6",
+      "compiler_spec_id": "default",
+      "language_selection": "configured-v1",
+      "analyzer_preset": "ghidra-default",
+      "function_coordinate_context": {
+        "kind": "native-function-coordinate-context-v1",
+        "selected_image": null,
+        "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+      },
+      "analysis_seeds": {
+        "format": "rea-ghidra-seeds-v1",
+        "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-live/seeds.tsv",
+        "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-live/seeds.tsv",
+        "sha256": "bfdedb60cdbaa0888216b18b2606484ca6068dd0f63c0b286ddecc6cfe0a7c6b",
+        "entries": {
+          "function": 7,
+          "code": 0,
+          "label": 0
+        }
+      }
+    },
+    "digest": "25c9482ccd43e5a70ea77eec30de0ef275ba3eb3f2a9d796b1d54d8402996960"
+  },
+  "target_sha256": "fe2a17e1009d2b8d46b160ace54702aaf104d4092b2c04eff9edd261ac631bba",
+  "verified_functions": [
+    {
+      "address": "0011ecf8",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "8981966abba0eb3097dd1679b7e049d4b17acf9812dd026103a275ab40c8c2db"
+    },
+    {
+      "address": "0011ee68",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "ae71696777a69b08ee817b036fa5576f1ebc97f1557d54539d6eb78fdf49f795"
+    },
+    {
+      "address": "00127eb4",
+      "instruction_bytes": 72,
+      "instruction_bytes_sha256": "05749f9650e6e67945c02bfe0a6494a63c20f659a2a8ad690ab74769f218c4a4"
+    },
+    {
+      "address": "00127efc",
+      "instruction_bytes": 564,
+      "instruction_bytes_sha256": "4e26f1efa14fde29988dce8e88df2df821986ab47706c7bffab6e85a88483760"
+    },
+    {
+      "address": "00128134",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "470b67eca68585fffba7128f16c33941fa114061a322136912e9de23c575efbd"
+    },
+    {
+      "address": "00355f0c",
+      "instruction_bytes": 64,
+      "instruction_bytes_sha256": "3f116ab7a283d156ef68474edc7e212fe4d45ad6b93453e92dcd5df2744e56e8"
+    },
+    {
+      "address": "00355f4c",
+      "instruction_bytes": 12,
+      "instruction_bytes_sha256": "44fea71d50a55a43b23d696abe93da19ba17f6a33bb81d5da3c3351bd0281ec0"
+    },
+    {
+      "address": "00495b60",
+      "instruction_bytes": 196,
+      "instruction_bytes_sha256": "411a35bb074b02f73f23dc2571de7f1e563dfbf22898442dc790524414f07d3e"
+    },
+    {
+      "address": "00495c24",
+      "instruction_bytes": 12,
+      "instruction_bytes_sha256": "aa7603c4c28d0cd22a0f1445e0b3b1e9f7efdcf89396278a53d43716bdfeebe4"
+    },
+    {
+      "address": "00495c30",
+      "instruction_bytes": 12,
+      "instruction_bytes_sha256": "1b3328c5e19c69e74522f98a67fcf31e3708095d100d084e96d670779cb328bd"
+    },
+    {
+      "address": "00495c3c",
+      "instruction_bytes": 128,
+      "instruction_bytes_sha256": "dbb9eaed1ad9181250daf910921ebc9562349628c2a0259dbbaa38a08c4b7a85"
+    },
+    {
+      "address": "00495cbc",
+      "instruction_bytes": 116,
+      "instruction_bytes_sha256": "a59951d8d357a5d5daa261ed01b539d9b7b1919821b749ef6d39e3ceccf9384c"
+    },
+    {
+      "address": "00495d40",
+      "instruction_bytes": 8,
+      "instruction_bytes_sha256": "705b7734f4666818e8402c1879d90d2874d87ebbefa22943a419b7b4f2eb86b5"
+    }
+  ],
+  "instruction_bytes": 1436,
+  "literal_bytes": 48,
+  "notes": [
+    "Live REA stdio MCP analyze_function, inspect_native_instruction, xrefs/procedure_callers and read_bytes queries over the verified ELF32 carrier.",
+    "Ghidra did not create functions at the GARC parser vtable targets; those eight methods are retained as per-instruction REA decodes.",
+    "Vtable 00597728 slots +8, +0x0c, +0x10, +0x14, +0x18, +0x1c and +0x20 are retained as literals.",
+    "Every implemented instruction and literal byte compared against live REA memory and pinned original code.bin; six reviewed helper bodies are compared against code.bin.",
+    "The original project and all 773 prior reconstructed checkpoint files remain unchanged.",
+    "Static analysis and host/resource comparisons do not establish original ARM or running-game equivalence."
+  ]
+}
