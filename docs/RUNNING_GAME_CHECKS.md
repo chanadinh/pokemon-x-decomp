@@ -80,7 +80,7 @@ outputs/live/replay_live_calls inputs/romfs TABLE_ADDRESS outputs/live/calls.txt
 ```
 
 On 2026-10-30, while the party menu, summary pages and wild battles (with
-level-ups) were used in Azahar, three capture windows recorded 115 distinct
+level-ups) were used in Azahar, four capture windows recorded 220 distinct
 calls. Every replayed result matched the game:
 
 | Routine | Calls | Match |
@@ -93,11 +93,25 @@ calls. Every replayed result matched the game:
 | `0014ffa4`/`0014ffd4`/`0014ff74`/`00150004`/`00150034` stat formulas with natures 0, 1, 7, 11, 18 and 22 | 42 | 42 |
 | `00168bbc` move field (moves 0, 1, 33, 145; base PP) | 4 | 4 |
 | `00150220` maximum PP | 4 | 4 |
+| `0013aa84` HP and `0014fb00`/`0014fbd4`/`0014fda4`/`0014fe78`/`0014fa2c` stat updates on 7 Pokémon objects (level-ups, modes 0 and 1) | 100 | 100 |
+| `0014f2b8` learnset selection (species 0, 263, 656, 659, 661) | 5 | 5 |
 
 Stat captures also record the nature row the routine reads at
 `00570f6c + 5 × nature`; the replay places it at that address. Move fields and
 maximum PP run through the reconstructed move-resource service with archive
-reads served from `a/2/1/2`. An early replay reported two level differences;
+reads served from `a/2/1/2`. Object updates are captured as before/after snapshots of the object, its
+manager, the 0xe8-byte Pokémon data and the 0x1c-byte auxiliary block, plus the
+nature table. The replay runs the reconstructed update on the entry snapshot,
+with the reconstructed personal and growth services, and requires every exit
+byte to match. In the game these data were stored unencrypted but
+block-shuffled. The replay reads the block-permutation table (`00570eec`) and
+nature table (`00570f6c`) from the pinned `code.bin`; the live nature table
+equals that copy.
+
+Two early replay differences came from the harness, not the reconstruction.
+Object updates first differed in 72 of 100 calls because the harness did not
+supply the block-permutation table, so every block resolved to position zero;
+supplying the table made all 100 match. An early replay also reported two level differences;
 they came from the harness, which left the personal table unmapped when a
 capture had no record loads, and disappeared once the table was always mapped.
 

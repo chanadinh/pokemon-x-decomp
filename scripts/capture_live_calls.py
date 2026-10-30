@@ -113,7 +113,41 @@ def stat_entry(stub, r):
     row = 0x00570f6c + 5 * nature
     return {'stack': nature, 'nature_row': stub.read(row & 0xffffffff, 5).hex() if nature < 0x1000 else ''}
 
+def object_regions(stub, obj):
+    """Pokemon object, its manager, encrypted data and auxiliary block."""
+    raw = stub.read(obj, 0x10)
+    manager = struct.unpack_from('<I', raw, 0x0c)[0]
+    man = stub.read(manager, 0x10)
+    extra, data = struct.unpack_from('<II', man, 4)
+    return {'object': obj, 'manager': manager, 'data': data, 'extra': extra,
+            'object_bytes': raw.hex(), 'manager_bytes': man.hex(), 'data_bytes': stub.read(data, 0xe8).hex(),
+            'extra_bytes': stub.read(extra, 0x1c).hex() if extra else ''}
+
+def object_entry(stub, r):
+    regions = object_regions(stub, r[0])
+    regions['natures'] = stub.read(0x00570f6c, 125).hex()
+    return regions
+
+def object_exit(stub, entry_regs, r):
+    raw = stub.read(entry_regs[0], 0x10)
+    manager = struct.unpack_from('<I', raw, 0x0c)[0]
+    man = stub.read(manager, 0x10)
+    extra, data = struct.unpack_from('<II', man, 4)
+    return {'object_bytes': raw.hex(), 'manager_bytes': man.hex(), 'data_bytes': stub.read(data, 0xe8).hex(),
+            'extra_bytes': stub.read(extra, 0x1c).hex() if extra else ''}
+
+def learnset_exit(stub, entry_regs, r):
+    record = stub.read(stub.u32(0x5d17b4), 12)
+    return {'record': record.hex(), 'payload': stub.read(struct.unpack_from('<I', record, 4)[0], 104).hex()}
+
 TARGETS = {
+    0x0013aa84: ('update_hp', 2, object_entry, object_exit),
+    0x0014fb00: ('update_attack', 1, object_entry, object_exit),
+    0x0014fbd4: ('update_defense', 1, object_entry, object_exit),
+    0x0014fda4: ('update_special_attack', 1, object_entry, object_exit),
+    0x0014fe78: ('update_special_defense', 1, object_entry, object_exit),
+    0x0014fa2c: ('update_speed', 1, object_entry, object_exit),
+    0x0014f2b8: ('select_learnset', 2, growth_entry, learnset_exit),
     0x00174c0c: ('load_personal_record', 3, personal_entry, personal_exit),
     0x00175c78: ('personal_field', 2, field_entry, nothing),
     0x00167db0: ('select_growth', 2, growth_entry, growth_exit),
@@ -182,7 +216,8 @@ def main():
                         name, argc, _, on_exit = TARGETS[entry]
                         # Personal routines are keyed by species/form or selector, not record address.
                         key = (name, tuple(entry_regs[1:argc]) if name.startswith('load') or name == 'personal_field'
-                               else tuple(entry_regs[:argc]))
+                               else (entry_data.get('data_bytes'), entry_data.get('extra_bytes'), entry_regs[1] if argc > 1 else 0)
+                               if name.startswith('update') else tuple(entry_regs[:argc]))
                         if not (args.distinct and key in seen):
                             seen.add(key)
                             record = {'routine': name, 'address': '%08x' % entry,
