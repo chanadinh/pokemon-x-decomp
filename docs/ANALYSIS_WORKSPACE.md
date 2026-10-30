@@ -73,6 +73,10 @@ the main image plus relocated battle modules was analysed through REA; the routi
 found by the damage formula's constants and matched in the running game, where two
 attacks replay call by call through the reconstruction.
 
+The twenty-first milestone adds the [attack and defense helpers](../reconstructed/battle_stats/README.md)
+that supply the formula's A and D terms, including battler substitution, the
+critical-hit stage rule, the stat swap and sandstorm. Its live trace is prepared.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

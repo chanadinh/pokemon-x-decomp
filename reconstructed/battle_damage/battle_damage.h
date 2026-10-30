@@ -27,7 +27,7 @@ struct px_battle_damage_api {
     uint32_t (*defense)(void *user, uint32_t context, uint32_t attacker, uint32_t defender,
                         uint32_t move, uint32_t critical);                 /* 10822330 */
     uint32_t (*pokemon_value)(void *user, uint32_t pokemon, uint32_t key); /* 10874420; key 0xf is level */
-    uint32_t (*attacker_types)(void *user, uint32_t pokemon);              /* 1086f960 */
+    uint32_t (*has_type)(void *user, uint32_t pokemon, uint32_t type);     /* 1086f960 */
     uint32_t (*pokemon_status)(void *user, uint32_t pokemon);              /* 1086d8ac; 4 is burn */
     uint32_t (*apply_effectiveness)(void *user, uint32_t damage, uint32_t effectiveness); /* 1089e7f0 */
     /* Main-executable services reached through import veneers. */

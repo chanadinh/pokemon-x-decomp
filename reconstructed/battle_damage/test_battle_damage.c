@@ -46,7 +46,7 @@ static uint32_t attack(void *u,uint32_t c,uint32_t a,uint32_t d,uint32_t m,uint3
 { (void)u;(void)crit;CHECK(c==CTX&&a==ATTACKER&&d==DEFENDER&&m==MOVE&&f==FLAG);note("A ");w8(NULL,FLAG,(uint8_t)sc.flag);return sc.attack; }
 static uint32_t defense(void *u,uint32_t c,uint32_t a,uint32_t d,uint32_t m,uint32_t crit) { (void)u;(void)c;(void)a;(void)d;(void)m;(void)crit;note("D ");return sc.defense; }
 static uint32_t pokemon_value(void *u,uint32_t p,uint32_t k) { (void)u;CHECK(p==ATTACKER&&k==0xf);note("L ");return sc.level; }
-static uint32_t attacker_types(void *u,uint32_t p) { (void)u;CHECK(p==ATTACKER);note("T ");return sc.types; }
+static uint32_t has_type(void *u,uint32_t p,uint32_t t) { (void)u;CHECK(p==ATTACKER&&t==r8(NULL,MOVE+6));note("T ");return sc.types; }
 static uint32_t status(void *u,uint32_t p) { (void)u;CHECK(p==ATTACKER);note("S ");return sc.status; }
 static uint32_t effectiveness(void *u,uint32_t d,uint32_t e) { (void)u;(void)e;note("X ");return d*sc.effectiveness_mult/4; }
 static uint32_t category(void *u,uint32_t m) { (void)u;CHECK(m==33);note("C ");return sc.category; }
@@ -54,7 +54,7 @@ static uint32_t power(void *u,uint32_t m) { (void)u;CHECK(m==33);note("P ");retu
 static uint32_t rule(void *u,uint32_t w,uint32_t f) { (void)u;CHECK(w==0xabcd&&f==7);note("R ");return sc.rule; }
 static uint32_t random_value(void *u,uint32_t g,uint32_t r) { (void)u;CHECK(g==0x1234&&r==0x10);note("N ");return sc.random; }
 static const struct px_battle_damage_api api={&memory,NULL,push,pop,set_id,set_value,set_scaled,set_multiplier,dispatch,get,
-    attack,defense,pokemon_value,attacker_types,status,effectiveness,category,power,rule,random_value,OWNER,FLAG};
+    attack,defense,pokemon_value,has_type,status,effectiveness,category,power,rule,random_value,OWNER,FLAG};
 static void defaults(void)
 {
     memset(&sc,0,sizeof sc);memset(mem,0,sizeof mem);

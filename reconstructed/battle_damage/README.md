@@ -55,8 +55,9 @@ event value and the 16-bit output pointer. A battle Pokémon's id byte is at
 8. Unless rule flag 7 is set, the roll multiplies by `100 − random(16)` (or 85
    with the fixed-roll flag) and divides by 100. The generator is the word at
    `+0x54` of a battle data object (relocated literal `1086a6dc`).
-9. Except for type `0x12`, events `0x48`/`0x49` decide same-type bonus (1.5×
-   by default when key `0x53` is set) and apply the resulting multiplier.
+9. Except for type `0x12`, key `0x53` starts as `1086f960(attacker, move type)`
+   (whether the attacker has that type); events `0x48`/`0x49` may change it and
+   the resulting multiplier (1.5× by default when set) is applied.
 10. Type effectiveness is applied by `1089e7f0`.
 11. Physical moves (category 1) from a burned attacker (status 4) are halved
     unless the attack helper's flag is set.

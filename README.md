@@ -244,7 +244,7 @@ native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
 
 ## Rebuilding the rules
 
-The visual tools sit alongside twenty connected C reconstruction milestones.
+The visual tools sit alongside twenty-one connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -270,6 +270,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Resource initialization](reconstructed/pokemon_resources/README.md) | Boot-time personal-table load, archives, descriptors, records and caches |
 | [Message construction](reconstructed/message_construction/README.md) | Message-resource construction/opening/destruction and move-resource boot |
 | [Battle damage](reconstructed/battle_damage/README.md) | The battle engine's damage calculation from `DllBattle.cro`, checked call by call in live battles |
+| [Battle attack/defense](reconstructed/battle_stats/README.md) | Attack and defense values: substitution, critical-hit stages, stat swap, sandstorm, final multipliers |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

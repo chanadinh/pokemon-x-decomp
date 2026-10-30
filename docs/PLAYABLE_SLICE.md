@@ -7,13 +7,13 @@ systems. The native asset viewer and host tests do not yet provide a playable ga
 
 ## Current position
 
-Twenty source milestones connect wild-battle request preparation to Pokémon
+Twenty-one source milestones connect wild-battle request preparation to Pokémon
 construction, payload storage, state initialization/refresh, and HP/stat
 calculation, constructor move insertion, maximum PP, learnset access/selection,
 name construction/storage, move-resource field dispatch/loading/caching,
 message loading/decoding/token-aware length, personal-data selection/fields
 growth-resource selection/caching, archive member/file-stream I/O and
-GARC index construction, boot-time resource initialization, message-resource construction, and the battle damage calculation.
+GARC index construction, boot-time resource initialization, message-resource construction, and the battle damage calculation with its attack and defense helpers.
 Growth-to-level lookup and nature adjustment
 are reconstructed alongside the HP and five stat updates.
 Their tests still use synthetic resources and callbacks for table loading,
@@ -38,11 +38,12 @@ validation are described in the [source overview](../reconstructed/README.md),
 [archive-index milestone](../reconstructed/archive_index/README.md),
 [resource milestone](../reconstructed/pokemon_resources/README.md), and
 [message-construction milestone](../reconstructed/message_construction/README.md), and
-[battle-damage milestone](../reconstructed/battle_damage/README.md).
+[battle-damage milestone](../reconstructed/battle_damage/README.md), and
+[battle attack/defense milestone](../reconstructed/battle_stats/README.md).
 
 | Requirement | Current state |
 | --- | --- |
-| Reviewed game logic | Twenty connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction and the battle damage calculation |
+| Reviewed game logic | Twenty-one connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction and the battle damage calculation |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |

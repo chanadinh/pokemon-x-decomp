@@ -16,6 +16,10 @@ with all 318 instruction words identical. Two damage calculations traced call
 by call (Thunder Shock and Pound) replay with the same 59/60 calls, arguments
 and damage (6 and 6).
 
+Correction (same day): the same-type callback 1086f960 takes the attacker and the
+move type; the reconstruction now passes the type and the live replay checks
+it. Both traced attacks still match.
+
 All 901 earlier reconstruction hashes remain unchanged. Native implementation
 files are unchanged. The event system, battle helpers, RNG and rule services
 remain external. No matching original build is claimed.

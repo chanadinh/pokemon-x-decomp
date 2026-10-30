@@ -70,7 +70,7 @@ static uint32_t attack(void *u, uint32_t ctx, uint32_t at, uint32_t df, uint32_t
 }
 static uint32_t defense(void *u, uint32_t ctx, uint32_t at, uint32_t df, uint32_t mv, uint32_t crit) { (void)u; return CALL(0x10822330, ctx, at, df, mv, crit)->result; }
 static uint32_t pokemon_value(void *u, uint32_t p, uint32_t k) { (void)u; return CALL(0x10874420, p, k)->result; }
-static uint32_t attacker_types(void *u, uint32_t p) { (void)u; return CALL(0x1086f960, p)->result; }
+static uint32_t has_type(void *u, uint32_t p, uint32_t t) { (void)u; return CALL(0x1086f960, p, t)->result; }
 static uint32_t status(void *u, uint32_t p) { (void)u; return CALL(0x1086d8ac, p)->result; }
 static uint32_t effectiveness(void *u, uint32_t d, uint32_t e) { (void)u; return CALL(0x1089e7f0, d, e)->result; }
 static uint32_t category(void *u, uint32_t m) { (void)u; return CALL(0x108007dc, m)->result; }
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
         set_word(owner + 0x54, generator);
         char label[64]; snprintf(label, sizeof label, "damage call %u", done); where = label;
         const struct px_battle_damage_api api = {&memory, NULL, push, pop, set_id, set_value, set_scaled, set_multiplier, dispatch, get,
-                                                 attack, defense, pokemon_value, attacker_types, status, effectiveness,
+                                                 attack, defense, pokemon_value, has_type, status, effectiveness,
                                                  category, power, rule, random_value, owner, FLAG};
         const uint32_t got = px_battle_calculate_damage(&a, &api);
         while (next_call < call_count && calls[next_call].target == 0x1080041c) ++next_call;

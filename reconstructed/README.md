@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains twenty connected, independently reviewed pieces:
+This source bundle contains twenty-one connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -43,6 +43,7 @@ This source bundle contains twenty connected, independently reviewed pieces:
   destruction, plus move-resource boot.
 - `battle_damage/`: the DllBattle damage calculation, the first CRO-module
   reconstruction, checked call by call against live battles.
+- `battle_stats/`: the attack and defense values the damage calculation uses.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -70,7 +71,8 @@ not recovered original source or builds that match the original machine code.
 
 The next targets are the archive object constructors and the configuration
 table. Details, assembly evidence, and limitations
-are in [the battle-damage milestone](battle_damage/README.md),
+are in [the battle attack/defense milestone](battle_stats/README.md),
+[the battle-damage milestone](battle_damage/README.md),
 [the message-construction milestone](message_construction/README.md),
 [the resource milestone](pokemon_resources/README.md),
 [the archive-index milestone](archive_index/README.md),

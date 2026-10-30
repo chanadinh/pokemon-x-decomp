@@ -20,3 +20,4 @@ all test clean:
 	$(MAKE) -C pokemon_resources $@
 	$(MAKE) -C message_construction $@
 	$(MAKE) -C battle_damage $@
+	$(MAKE) -C battle_stats $@

@@ -1,0 +1,17 @@
+Battle attack/defense milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier. Implemented: DllBattle
+108202d8 and 10822330. All 1,240 instruction bytes and 20 literal bytes match
+live REA bytes and the original DllBattle.cro; no relocations apply.
+
+All twenty-one reconstruction suites pass. New suite: 364 cases covering call
+sequences, stage/critical/ignore rules, substitution and aborts, multipliers,
+the burn-exception flag, the stat swap and sandstorm. Eleven mutations are each
+detected. ASan/UBSan pass.
+
+The damage milestone's same-type callback was corrected to pass the move type
+to 1086f960; its two live traces replay identically with that argument checked,
+and its checksums were regenerated. The 901 hashes of milestones 1-19 remain
+unchanged. A live trace of these two routines is prepared but not yet run.
+The event system and stat services remain external.

@@ -96,9 +96,11 @@ uint32_t px_battle_calculate_damage(const struct px_battle_damage_args *a, const
         damage = (damage * roll) / UINT32_C(100);
     }
 
-    /* Same-type bonus through events 0x48/0x49, except for type 0x12. */
-    if (m->load8(m->user, a->move + UINT32_C(6)) != 0x12) {
-        const uint32_t types = api->attacker_types(u, a->attacker);
+    /* Same-type bonus through events 0x48/0x49, except for type 0x12: key 0x53
+     * starts as whether the attacker has the move's type. */
+    const uint32_t move_type = m->load8(m->user, a->move + UINT32_C(6));
+    if (move_type != 0x12) {
+        const uint32_t types = api->has_type(u, a->attacker, move_type);
         api->event_push(u);
         api->event_set_id(u, 0x02, m->load8(m->user, a->attacker + UINT32_C(0x19)));
         api->event_set_value(u, 0x53, types);

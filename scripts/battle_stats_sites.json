@@ -1,0 +1,271 @@
+{
+ "module_delta": "-0x1015b000",
+ "functions": [
+  {
+   "name": "attack",
+   "entry": "0x108202d8",
+   "stack_words": 2,
+   "reads": [
+    "r1+0x19:1",
+    "r2+0x19:1",
+    "r3:8",
+    "r0+8:4",
+    "[r0+8]+0x84:96",
+    "r1+0x104:4",
+    "r2+0x104:4"
+   ],
+   "sites": [
+    {
+     "site": "0x108202f4",
+     "target": "0x108007dc"
+    },
+    {
+     "site": "0x10820304",
+     "target": "0x1086bb84"
+    },
+    {
+     "site": "0x10820310",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x1082031c",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10820328",
+     "target": "0x1086b520"
+    },
+    {
+     "site": "0x10820334",
+     "target": "0x1086b520"
+    },
+    {
+     "site": "0x10820340",
+     "target": "0x1086b9a4"
+    },
+    {
+     "site": "0x10820348",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x10820370",
+     "target": "0x10800394"
+    },
+    {
+     "site": "0x10820390",
+     "target": "0x10800394"
+    },
+    {
+     "site": "0x1082039c",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108203bc",
+     "target": "0x108620d4"
+    },
+    {
+     "site": "0x1082043c",
+     "target": "0x108743a8"
+    },
+    {
+     "site": "0x10820454",
+     "target": "0x10874420"
+    },
+    {
+     "site": "0x10820464",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10820470",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x1082047c",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10820488",
+     "target": "0x1086b520"
+    },
+    {
+     "site": "0x1082049c",
+     "target": "0x10867c9c"
+    },
+    {
+     "site": "0x108204a8",
+     "target": "0x1086b9fc"
+    },
+    {
+     "site": "0x108204b4",
+     "target": "0x1086b9a4"
+    },
+    {
+     "site": "0x108204bc",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108204c8",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108204ec",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108204fc",
+     "target": "0x1086b880"
+    }
+   ],
+   "exit_reads": [
+    "s1:1"
+   ]
+  },
+  {
+   "name": "defense",
+   "entry": "0x10822330",
+   "stack_words": 2,
+   "reads": [
+    "r1+0x19:1",
+    "r2+0x19:1",
+    "r3:8",
+    "r0+0x1c:4",
+    "[r0+0x1c]+1:1",
+    "r2+0x104:4"
+   ],
+   "sites": [
+    {
+     "site": "0x1082234c",
+     "target": "0x108007dc"
+    },
+    {
+     "site": "0x10822360",
+     "target": "0x1086bb84"
+    },
+    {
+     "site": "0x1082236c",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10822378",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10822384",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10822390",
+     "target": "0x1086b520"
+    },
+    {
+     "site": "0x1082239c",
+     "target": "0x1086b9fc"
+    },
+    {
+     "site": "0x108223a8",
+     "target": "0x1086b9a4"
+    },
+    {
+     "site": "0x108223b0",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108223d4",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108223e0",
+     "target": "0x1086b880"
+    },
+    {
+     "site": "0x10822400",
+     "target": "0x108620d4"
+    },
+    {
+     "site": "0x10822474",
+     "target": "0x108743a8"
+    },
+    {
+     "site": "0x1082248c",
+     "target": "0x10874420"
+    },
+    {
+     "site": "0x10822498",
+     "target": "0x1086bb84"
+    },
+    {
+     "site": "0x108224a4",
+     "target": "0x1086b9fc"
+    },
+    {
+     "site": "0x108224b0",
+     "target": "0x1086b9a4"
+    },
+    {
+     "site": "0x108224b8",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108224c4",
+     "target": "0x1086b880"
+    },
+    {
+     "site": "0x108224d0",
+     "target": "0x1086b880"
+    },
+    {
+     "site": "0x108224ec",
+     "target": "0x1086f960"
+    },
+    {
+     "site": "0x10822528",
+     "target": "0x1086bb84"
+    },
+    {
+     "site": "0x10822534",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10822540",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x1082254c",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10822558",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10822564",
+     "target": "0x1086bac0"
+    },
+    {
+     "site": "0x10822570",
+     "target": "0x1086b520"
+    },
+    {
+     "site": "0x10822584",
+     "target": "0x10867c9c"
+    },
+    {
+     "site": "0x10822590",
+     "target": "0x1086b9a4"
+    },
+    {
+     "site": "0x1082259c",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108225a8",
+     "target": "0x1086b91c"
+    },
+    {
+     "site": "0x108225b4",
+     "target": "0x1086b880"
+    }
+   ]
+  }
+ ]
+}
