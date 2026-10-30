@@ -31,7 +31,7 @@ not there yet, so this is not yet a playable port.**
 
 | Zones that load | Townspeople who speak | Wild battles | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
-| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **659** earlier reconstruction file hashes |
+| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **688** earlier reconstruction file hashes |
 
 ## Play the field slice
 
@@ -244,7 +244,7 @@ native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
 
 ## Rebuilding the rules
 
-The visual tools sit alongside thirteen connected C reconstruction milestones.
+The visual tools sit alongside fourteen connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -263,15 +263,17 @@ construction, payload storage, state refresh and stat calculations.
 | [Pokémon names](reconstructed/pokemon_names/README.md) | UTF-16/control-token copy, form indices, name building and storage |
 | [Move resources](reconstructed/pokemon_move_resource/README.md) | Field dispatch, ID fallback, payload copying and cache lookup/replacement, reviewed through live REA MCP |
 | [Message resources](reconstructed/message_resources/README.md) | Resident/cached/streamed text loading, language selection, UTF-16 decoding and token-aware length |
+| [Personal data](reconstructed/pokemon_personal/README.md) | Species/form record selection, 46 field selectors and current-record wrappers |
 
-Personal/growth resources, archive I/O and resource initialization
+Personal-table/growth-resource loading, archive I/O and resource initialization
 still use synthetic resources or callbacks where their
 dependencies remain unresolved. These are analyst-authored reconstructions, not
 recovered original source or builds that match the original machine code.
 The [REA MCP workflow](docs/REA_MCP.md) now supplies live analysis; the
 move-resource suite connects the new service to reconstructed maximum PP. The
 message suite connects loading/decoding to the name builder and checks 105,636
-loads against the original English game/story text.
+loads against the original English game/story text. The personal-data suite
+checks all 799 records and connects form selection to reconstructed learnsets.
 
 <details>
 <summary><strong>What the validation establishes</strong></summary>
@@ -286,7 +288,7 @@ loads against the original English game/story text.
 - The selected area's **100,608 texture pixels** match an independent decoder and separately implemented alpha/tile reconstruction.
 - The selected field's **positions, UVs and indices** match an independent geometry reference at the native renderer's documented precision.
 - The area-consumer trace checks **1,348 instructions** against original executable bytes across thirteen functions.
-- All **659 earlier reconstruction checkpoint files** retain their recorded hashes.
+- All **688 earlier reconstruction checkpoint files** retain their recorded hashes.
 
 These results validate specific boundaries. They do not establish running-game
 behavior or visual equivalence. The analysis baseline's 133 CRO modules, 44,279

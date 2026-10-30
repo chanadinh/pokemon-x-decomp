@@ -30,6 +30,13 @@ original-data comparison checks all 35,212 lines of the English game/story
 archives in three modes, and connects the loader to the name builder. Seek/read
 and allocation/lifetime services remain external.
 
+The fourteenth milestone adds [personal-data selection and fields](../reconstructed/pokemon_personal/README.md).
+Its four routines copy a selected 64-byte species/form row, dispatch 46 fields,
+and follow the current-record cell. The learnset loader now has an integration
+fixture using those real implementations. The original-data sweep checks all
+799 rows, 1,607 form/boundary selections and 24,675 learnset entries. Table
+loading, allocation and resource initialization remain external.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

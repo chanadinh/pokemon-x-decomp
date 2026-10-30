@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains thirteen connected, independently reviewed pieces:
+This source bundle contains fourteen connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -29,6 +29,8 @@ This source bundle contains thirteen connected, independently reviewed pieces:
   payload copying and byte-sized cache lookup/replacement, reviewed through live REA MCP.
 - `message_resources/`: resident/cached/streamed text loading, language selection,
   UTF-16 decoding and token-aware length, connected to the name builder.
+- `pokemon_personal/`: species/form row selection, 64-byte grouped copying,
+  46 field selectors and current-record wrappers, connected to learnset loading.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -46,14 +48,16 @@ using a text-resource callback. Wider game-state setup, real personal/growth
 resources and underlying archive I/O/resource initialization remain stand-ins in those
 fixtures. The move-resource fixture connects its reconstructed selector/cache
 to maximum PP. The message-resource fixture connects reconstructed loading and
-decoding to the name builder; the older state fixtures retain their callbacks.
+decoding to the name builder. The personal-data fixture connects record/field
+services to learnset form selection; older state fixtures retain their callbacks.
 This bundle does not run a Pokémon battle
 or provide a playable PC game. These are analyst-authored reconstructions,
 not recovered original source or builds that match the original machine code.
 
-The next targets are personal, archive and growth-resource
-services and resource initialization. Details, assembly evidence, and limitations
-are in [the message-resource milestone](message_resources/README.md),
+The next targets are archive and growth-resource services, personal-table
+loading and resource initialization. Details, assembly evidence, and limitations
+are in [the personal-data milestone](pokemon_personal/README.md),
+[the message-resource milestone](message_resources/README.md),
 [the move-resource milestone](pokemon_move_resource/README.md),
 [the name milestone](pokemon_names/README.md),
 [the learnset milestone](pokemon_learnset/README.md),

@@ -74,3 +74,9 @@ fresh Ghidra Program and whole-image analysis; a provider-neutral snapshot
 retains observations rather than the live Ghidra database. Its core evidence
 and dependency extracts have their own tracked verifier. All twelve preceding
 reconstruction directories retain their recorded hashes.
+
+The personal-data review is in `outputs/rea-personal/`, using the same target,
+language/profile and a fresh Program for uncached queries. Its four implemented
+routines and original-data validation are recorded in
+[pokemon_personal](../reconstructed/pokemon_personal/README.md). The preceding
+thirteen reconstruction checkpoints remain unchanged.

@@ -1,0 +1,24 @@
+Personal-data milestone, 2026-10-25
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6.
+Four implemented routines: 00174c0c, 00175c78, 00167e18 and 00167e2c.
+All 832 instruction bytes and 200 literal/jump-table bytes match live REA
+read_bytes and the pinned original executable. Function ranges, assembly,
+pseudocode and mapped section addresses/permissions/BSS also verify.
+
+All fourteen reconstruction suites pass. New suite: 536,064 field cases,
+864 species/form boundary cases, form-index arithmetic above 65,535,
+current-pointer reloads, invalid-selector non-access, descriptor preservation,
+unconditional row copying and five overlapping layouts of the two-group copy.
+Learnset integration uses reconstructed personal selection/field services.
+ASan/UBSan pass with leak detection disabled.
+
+The original-data sweep verifies all 799 personal rows and that the final
+51,136-byte flat member matches their concatenation. All 36,754 selectors,
+1,607 species/form boundary selections and 24,675 learnset entries match.
+Archive hashes and counts are in reproduction/record-comparison.json.
+
+All 688 earlier reconstruction hashes remain unchanged. Native implementation
+files are unchanged. Table/resource construction, archive loading, allocation
+and lifetime remain external; older fixtures/viewer adapters are retained.
+No original ARM or running-game execution comparison was performed.
