@@ -56,6 +56,12 @@ length, absolute offset) for a language-like selector, and opens the growth
 and move archives. Rebuilding all 271 original indexes matches an independent
 FATB reading in all 45,824 rows. The constructor and OS services remain external.
 
+The eighteenth milestone adds [resource initialization](../reconstructed/pokemon_resources/README.md).
+It boots the Pokémon data resources: the personal table from the flat final
+member, the learnset/growth archives, descriptors, records and caches. From that
+state alone the reconstructed services match the original data for all 884
+species/form selections. Message resources and the archive constructor remain external.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

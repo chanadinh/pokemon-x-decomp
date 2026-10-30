@@ -7,13 +7,13 @@ systems. The native asset viewer and host tests do not yet provide a playable ga
 
 ## Current position
 
-Seventeen source milestones connect wild-battle request preparation to Pokémon
+Eighteen source milestones connect wild-battle request preparation to Pokémon
 construction, payload storage, state initialization/refresh, and HP/stat
 calculation, constructor move insertion, maximum PP, learnset access/selection,
 name construction/storage, move-resource field dispatch/loading/caching,
 message loading/decoding/token-aware length, personal-data selection/fields
 growth-resource selection/caching, archive member/file-stream I/O and
-GARC index construction.
+GARC index construction, and boot-time resource initialization.
 Growth-to-level lookup and nature adjustment
 are reconstructed alongside the HP and five stat updates.
 Their tests still use synthetic resources and callbacks for table loading,
@@ -23,7 +23,7 @@ loading/decoding to the name builder. The personal-data fixture replaces the
 learnset loader's personal selection/value services; the growth fixture
 replaces the level resolver's growth callback, and the archive fixture runs it
 through reconstructed member reads; the index fixture builds that archive from
-GARC bytes. Scope and
+GARC bytes, and the resource fixture boots all Pokémon data resources. Scope and
 validation are described in the [source overview](../reconstructed/README.md),
 [stats milestone](../reconstructed/pokemon_stats/README.md),
 [move milestone](../reconstructed/pokemon_moves/README.md),
@@ -33,12 +33,13 @@ validation are described in the [source overview](../reconstructed/README.md),
 [message-resource milestone](../reconstructed/message_resources/README.md),
 [personal-data milestone](../reconstructed/pokemon_personal/README.md),
 [growth-resource milestone](../reconstructed/pokemon_growth/README.md),
-[archive milestone](../reconstructed/archive_io/README.md), and
-[archive-index milestone](../reconstructed/archive_index/README.md).
+[archive milestone](../reconstructed/archive_io/README.md),
+[archive-index milestone](../reconstructed/archive_index/README.md), and
+[resource milestone](../reconstructed/pokemon_resources/README.md).
 
 | Requirement | Current state |
 | --- | --- |
-| Reviewed game logic | Seventeen connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O and archive indexes |
+| Reviewed game logic | Eighteen connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes and resource initialization |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |
@@ -208,7 +209,7 @@ services, and persistence work together.
 | Reference capture | Fix the base revision/update/language target and capture one candidate map, interaction, encounter, battle action, and return using a repeatable starting save and input sequence | Input/save identifiers, screenshots or video, recorded inputs, and selected observable state before/after; memory observations where available |
 | Native application | Extend the working texture viewer with explicit game-address/platform interfaces and bounded game-state initialization | Reconstructed logic can run from checked real resources inside the application with documented lifecycle and reference comparisons |
 | Asset decoding | Extend the bounded GARC/LZ/BCLIM path to required palette/model formats and scene bindings; identify candidate map/player/UI resources through loaders and reference observations | Documented paths/indices and supported formats, checksums for selected samples, and a visible comparison to the reference |
-| Game reconstruction | Replace personal-table loading, archive object construction/platform calls, resource initialization, and wider encounter/setup dependencies needed by the selected scenario | Reviewed instruction bytes, independent tests, explicit remaining services, and comparisons to captured reference values |
+| Game reconstruction | Replace the archive object constructor, message resources, platform calls, resource initialization, and wider encounter/setup dependencies needed by the selected scenario | Reviewed instruction bytes, independent tests, explicit remaining services, and comparisons to captured reference values |
 | Slice integration | Connect movement/collision, interaction, battle, return, and save/load after their contracts are understood | One automated or recorded end-to-end scenario satisfying the acceptance criteria above |
 
 Continue the first three workstreams alongside bounded code reconstruction.

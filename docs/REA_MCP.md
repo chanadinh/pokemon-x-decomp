@@ -99,3 +99,8 @@ and `procedure_callers` to find the archive initializers. Ghidra had not created
 functions at the GARC parser vtable targets, so those methods were decoded with
 `inspect_native_instruction` one instruction at a time and retained with live
 bytes. See [archive_index](../reconstructed/archive_index/README.md).
+
+The resource-initialization review is in `outputs/rea-resources/`. Cross
+references to every resource cell led to `0x00112368`; its constructors,
+caches and the non-resident member lookup are recorded in
+[pokemon_resources](../reconstructed/pokemon_resources/README.md).

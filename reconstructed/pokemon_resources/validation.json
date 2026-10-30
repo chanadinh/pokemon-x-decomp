@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-30",
+  "method": "Live REA stdio MCP plus ARM assembly review and independent synthetic/original-resource checks",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "profile_digest": "bfc814036989b2aabfb2122070898d0521e51b769b9ebb588fd2aadabec3923c",
+    "implemented_routines": 22,
+    "ghidra_functions": 21,
+    "vtable_methods_decoded_per_instruction": 1,
+    "instruction_bytes_verified": 3184,
+    "literal_bytes_verified": 80,
+    "reviewed_dependency_bodies": 5,
+    "complete_evidence_records_retained": 66,
+    "original_project_unchanged": true
+  },
+  "tests": {
+    "reconstructed_modules_passed": 18,
+    "constructor_cases": 16,
+    "archive_loader_cases": 15,
+    "boot_cases": 769,
+    "mutations_detected": 13,
+    "asan": true,
+    "ubsan": true,
+    "sanitizer_options": "ASAN_OPTIONS=detect_leaks=0",
+    "original_data": {
+      "personal_rows_loaded": 799,
+      "personal_table_bytes": 51136,
+      "tail_member_bytes": 1444,
+      "species_form_selections": 884,
+      "personal_fields": 5304,
+      "growth_levels": 10608,
+      "learnset_entries": 13435,
+      "heap_bytes": 214608,
+      "all_match": true,
+      "configuration_mapping": {
+        "word_0": "a/2/1/8",
+        "word_1": "a/2/1/4",
+        "word_2": "a/2/1/7",
+        "word_3": "a/2/1/5 (stand-in)",
+        "word_4": "a/2/1/6 (stand-in)",
+        "word_6": "a/2/1/9"
+      },
+      "romfs_a_manifest_sha256": "301a3201379e77de6796e9ecd89960096b90125c20f0bdf9d2ba6c56f64023f9"
+    }
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 808,
+    "native_source_changed": false,
+    "prior_manifest_sha256": {
+      "reconstructed/archive_index/SHA256SUMS": "503f6df93165c6471c85c3774016a40f40992badd4b7dcc0328b184f6204a2c2",
+      "reconstructed/archive_io/SHA256SUMS": "9fa4fd6dfe7974163f5ff7642bff9836decd08a56bdb3b2849d7be50a47f5685",
+      "reconstructed/battle_task/SHA256SUMS": "5e9434c27e94bbf43014bcc273f80cf26775dcbe1c51e8051183647c5009cdf1",
+      "reconstructed/call_wild_battle/SHA256SUMS": "a3acabefdeab4df63e6b9b7fc651fe55e1bd297a02d56476c0c122b4e3609bd9",
+      "reconstructed/encounter_builder/SHA256SUMS": "af4aa6a38b51a66e7d2c43aaca61109ebbc988bb3c673ed360257fe996d4abf6",
+      "reconstructed/message_resources/SHA256SUMS": "60af55af559b069347994a3a1204f7b9ce3d2045f81952e43e3c6627139fc577",
+      "reconstructed/pokemon_constructor/SHA256SUMS": "f8573547857c456fbd3acd57046378116cc77c3a51ce99d73297b4c095d1e143",
+      "reconstructed/pokemon_data/SHA256SUMS": "0405aba491f360b8e6d63d029fd9959205b7aa1baf96ddb3775ec096e3d481b7",
+      "reconstructed/pokemon_growth/SHA256SUMS": "d59ee78af48596e7d1061851421e800b8de6b7d6e937741675ca5eaf0b5a0cbd",
+      "reconstructed/pokemon_learnset/SHA256SUMS": "46467b590596d8a09fd486734e89256a37560eb6848818b36ce4e32f8013853a",
+      "reconstructed/pokemon_move_resource/SHA256SUMS": "2c88555c6749ca3eb15d12fd02659db31ddc757e7da59a484cdf2a473a62dfe4",
+      "reconstructed/pokemon_moves/SHA256SUMS": "132d2947267f8d4410bec4785df6b14fd51925fd4a880850845937774e7efb68",
+      "reconstructed/pokemon_names/SHA256SUMS": "1b10f524faa68d19dc9771de52e74705f4358050ab63587f04166a7a843d721b",
+      "reconstructed/pokemon_personal/SHA256SUMS": "637c4b0ed470ec942aa93f5cbeef289a943af46a43c02ef67de5acabacebf15c",
+      "reconstructed/pokemon_state/SHA256SUMS": "8b4558ec9f88813ab18e582bdffd0d79ca393f08f1d4d1ead90b057b5627ac7b",
+      "reconstructed/pokemon_stats/SHA256SUMS": "0e1b43210166c53462066dbdd1c6fc70d53d48aa6c5aae534568300573f72289",
+      "reconstructed/wild_battle_setup/SHA256SUMS": "aa1682d7073cc8623ce3941231451c88a81e7876aa890272b3fb328def0d5efa"
+    }
+  },
+  "source_hashes": {
+    "reconstructed/pokemon_resources/pokemon_resources.c": "fa095361d1a832b7c1910fc01e147784adc6ad20bbca33a45d92730a820e019c",
+    "reconstructed/pokemon_resources/pokemon_resources.h": "3bc6fe59a27a83eecf31a6e37042211020bfe616917f20e3e3a8a31d5ddb5985",
+    "reconstructed/pokemon_resources/test_pokemon_resources.c": "c530ad0f4632ec355aa245823168a54b0e6487904ee5259f611b684d8c1d3814",
+    "reconstructed/pokemon_resources/Makefile": "ffa19028540f5f17fff7065574c37cf1c2467daddb17d26c8b183e4dbacc6163",
+    "reconstructed/pokemon_resources/reproduction/check_resources.c": "b09d94085a01b3ec5ef91aa3a1702dd12ad93d05421a95f334428f59e0e1f635",
+    "reconstructed/pokemon_resources/reproduction/verify_rea.py": "0e573aad8a854c866f75daacecaf8741e08b065836274ce43dd32ab6ee8c2160",
+    "reconstructed/archive_index/archive_index.c": "1735913eeee3e68e148f77d675ec570d46905bb2eb0043c412dd09d60eaca4b4",
+    "reconstructed/archive_io/archive_io.c": "0a31ed8268232eb2c3c939ffa8645a9b790fb7526af0b7e2d460410bc5e27b52",
+    "reconstructed/pokemon_learnset/pokemon_learnset.c": "222e1795fa73f3f3429286edf7e51109ecf13f3bb4aeab076cc9152f41e0750d",
+    "native/assets/garc.c": "1303610c04e35c9e6ddf07c3db4e3780b5d8aab7fcc28dfca57f8271f1b359c4",
+    "native/assets/pokedata.c": "38b745155f2febfeac02b35af261a83c90bdfdfbbd53a8e5c4efd5027ef77689",
+    "native/platform/guest.c": "884ef7e89debac8f39f94c7a4d45a2633144f93be79217d3ce80f1f94a68a072",
+    "native/platform/guest.h": "15b44779b0c5dae6b538cfcaf88a628bf0fbe22a3a9207b68c507538f51aca0e"
+  },
+  "limits": [
+    "Configuration-table contents come from elsewhere at run time; the sweep maps words 0, 1, 2 and 6 by the data each consumer reads, and words 3 and 4 use stand-in archives.",
+    "Message-resource construction 0011e264/0012ad74, the archive constructor, heap block allocation and OS services remain external.",
+    "Clear helpers are represented by byte stores.",
+    "No original ARM or running-game execution comparison."
+  ]
+}

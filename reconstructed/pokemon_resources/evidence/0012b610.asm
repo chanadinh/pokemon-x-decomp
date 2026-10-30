@@ -1,0 +1,15 @@
+0012b610  70402de9  stmdb sp!,{r4,r5,r6,lr}
+0012b614  0040a0e1  cpy r4, r0
+0012b618  0000a0e3  mov r0, #0x0
+0012b61c  28209fe5  ldr r2, [0x12b64c]
+0012b620  b400c4e1  strh r0, [r4,#0x4]
+0012b624  080084e5  str r0, [r4,#0x8]
+0012b628  3000a0e3  mov r0, #0x30
+0012b62c  002084e5  str r2, [r4,#0x0]
+0012b630  badcffeb  bl 0x00122920
+0012b634  0050b0e1  movs r5, r0
+0012b638  3010a013  movne r1, #0x30
+0012b63c  b4cc001b  blne 0x0015e914
+0012b640  0400a0e1  cpy r0, r4
+0012b644  085084e5  str r5, [r4,#0x8]
+0012b648  7080bde8  ldmia sp!,{r4,r5,r6,pc}

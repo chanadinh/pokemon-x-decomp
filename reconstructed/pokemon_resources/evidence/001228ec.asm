@@ -1,0 +1,13 @@
+001228ec  70402de9  stmdb sp!,{r4,r5,r6,lr}
+001228f0  0050a0e1  cpy r5, r0
+001228f4  000091e5  ldr r0, [r1,#0x0]
+001228f8  0140a0e1  cpy r4, r1
+001228fc  1c1090e5  ldr r1, [r0,#0x1c]
+00122900  0400a0e1  cpy r0, r4
+00122904  31ff2fe1  blx r1
+00122908  0020a0e1  cpy r2, r0
+0012290c  0510a0e1  cpy r1, r5
+00122910  0400a0e1  cpy r0, r4
+00122914  7040bde8  ldmia sp!,{r4,r5,r6,lr}
+00122918  0130a0e3  mov r3, #0x1
+0012291c  e92100ea  b 0x0012b0c8

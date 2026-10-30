@@ -1,0 +1,67 @@
+{
+  "purpose": "Analysis-only ELF32 carrier of original decompressed 3DS main image. The ELF metadata is generated, not original game metadata. CROs and runtime initialization are absent.",
+  "code": {
+    "path": "/mnt/d/projects/pokemon-x-decomp-local/inputs/pokemon-x-0f6d3e1d66cb/code.bin",
+    "sha256": "0f6d3e1d66cbcd55d46fa453db4b6aa489e03c3537c6b24026f2a53af142797a",
+    "size": 5156864
+  },
+  "exheader": {
+    "path": "/mnt/d/projects/pokemon-x-decomp-local/inputs/pokemon-x-0f6d3e1d66cb/exheader.bin",
+    "sha256": "ae8bbde2babb4a0222cdf08d2e71daba27ea4deb3c4fa9d17600d2068901f4db",
+    "size": 2048
+  },
+  "elf": {
+    "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-live/pokemon-x-main.elf",
+    "sha256": "fe2a17e1009d2b8d46b160ace54702aaf104d4092b2c04eff9edd261ac631bba",
+    "size": 5161236
+  },
+  "language": "ARM:LE:32:v6",
+  "entry_point": "0x100000",
+  "mapping": [
+    {
+      "section": ".text",
+      "address": "0x100000",
+      "size": 4439772,
+      "elf_offset": 4096,
+      "code_offset": 0,
+      "sha256": "1db666915f9bea2306b4f617945d975c1e621299a53fd95c25d89f030ab4ee7c",
+      "read": true,
+      "write": false,
+      "execute": true
+    },
+    {
+      "section": ".rodata",
+      "address": "0x53c000",
+      "size": 432708,
+      "elf_offset": 4444160,
+      "code_offset": 4440064,
+      "sha256": "56c5b34649c3e614284ea6832e8d669386a8cd576de68a80d66ab71828c03975",
+      "read": true,
+      "write": false,
+      "execute": false
+    },
+    {
+      "section": ".data",
+      "address": "0x5a6000",
+      "size": 278720,
+      "elf_offset": 4878336,
+      "code_offset": 4874240,
+      "sha256": "991be3f0b794e3be1caa41eb0357934245f1c16cc3362701752f904d63c9d7de",
+      "read": true,
+      "write": true,
+      "execute": false
+    },
+    {
+      "section": ".bss",
+      "address": "0x5ea0c0",
+      "size": 485464,
+      "elf_offset": 5160960,
+      "code_offset": null,
+      "sha256": null,
+      "read": true,
+      "write": true,
+      "execute": false
+    }
+  ],
+  "all_file_backed_bytes_verified": true
+}

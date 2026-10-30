@@ -1,0 +1,24 @@
+Pokemon resource-initialization milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6.
+Twenty-two routines: 21 Ghidra function bodies, including 00112368, the
+personal/learnset loaders, constructors, caches and the non-resident path of
+00127ccc, plus parser method 00495d38 as a per-instruction decode. All 3,184
+instruction bytes and 80 literal bytes match live REA read_bytes and the
+pinned original executable. Five reviewed helper bodies match original code.
+
+All eighteen reconstruction suites pass. New suite: 16 constructor/cache
+cases, 15 archive/loader cases and 769 boot cases including exact allocation
+order and end-to-end personal, growth and learnset services. Thirteen
+mutations are each detected. ASan/UBSan pass with leak detection disabled.
+
+The original-data sweep boots from a/2/1/8, a/2/1/4, a/2/1/7 and a/2/1/9 (with
+a/2/1/5 and a/2/1/6 as stand-ins). The 51,136-byte personal table matches all
+799 rows; the 1,444-byte final member matches. From the booted state, 884
+selections, 5,304 personal fields, 10,608 growth levels and 13,435 learnset
+entries match independent decoders.
+
+All 808 earlier reconstruction hashes remain unchanged. Native implementation
+files are unchanged. Configuration contents, message resources, the archive
+constructor, heap blocks and OS services remain external.
+No original ARM or running-game execution comparison was performed.

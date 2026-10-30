@@ -1,0 +1,419 @@
+[
+  {
+    "source_evidence_id": "ev_d4d28f47bf5ffff2af845499265c6f16ea4f8b9632afa1260b479ee7c86ef552",
+    "purpose": "Reviewed dependency only, not implemented. Message-resource object constructor; external construct_message callback.",
+    "procedure": {
+      "address": "0x11e264",
+      "name": "FUN_0011e264",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x11e264",
+            "end": "0x11e303"
+          }
+        ],
+        "total_bytes": 160,
+        "span_bytes": 160,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_0011e264()",
+      "locals": []
+    },
+    "pseudocode": "\nundefined4 *\nFUN_0011e264(undefined4 *param_1,undefined4 param_2,undefined4 param_3,int *param_4,\n            undefined4 param_5,undefined4 param_6)\n\n{\n  undefined4 uVar1;\n  int iVar2;\n  \n  param_1[2] = 0;\n  *param_1 = &DAT_005985b4;\n  param_1[1] = param_4;\n  *(char *)(param_1 + 3) = (char)param_5;\n  param_1[4] = 0;\n  param_1[5] = 0;\n  param_1[6] = 0;\n  param_1[7] = 0;\n  uVar1 = (**(code **)(*param_4 + 0x1c))(param_4);\n  iVar2 = FUN_0012b0c8(param_4,0x78,uVar1,1);\n  uVar1 = 0;\n  if (iVar2 != 0) {\n    uVar1 = FUN_00128288(iVar2,param_4,param_2,param_6);\n  }\n  param_1[2] = uVar1;\n  FUN_0012ad74(param_1,param_3,param_4,param_5);\n  return param_1;\n}\n\n",
+    "assembly": [
+      "0x11e264: stmdb sp!,{r4,r5,r6,r7,r8,r9,r10,lr}",
+      "0x11e268: cpy r4, r0",
+      "0x11e26c: add r0, sp, #0x20",
+      "0x11e270: cpy r9, r1",
+      "0x11e274: ldmia r0,{r6,r8}",
+      "0x11e278: mov r0, #0x0",
+      "0x11e27c: ldr r1, [0x11e304]",
+      "0x11e280: cpy r5, r3",
+      "0x11e284: str r0, [r4,#0x8]",
+      "0x11e288: stmia r4,{r1,r5}",
+      "0x11e28c: cpy r10, r2",
+      "0x11e290: strb r6, [r4,#0xc]",
+      "0x11e294: str r0, [r4,#0x10]",
+      "0x11e298: str r0, [r4,#0x14]",
+      "0x11e29c: str r0, [r4,#0x18]",
+      "0x11e2a0: str r0, [r4,#0x1c]",
+      "0x11e2a4: ldr r0, [r3,#0x0]",
+      "0x11e2a8: mov r7, #0x78",
+      "0x11e2ac: ldr r1, [r0,#0x1c]",
+      "0x11e2b0: cpy r0, r5",
+      "0x11e2b4: blx r1",
+      "0x11e2b8: cpy r2, r0",
+      "0x11e2bc: mov r3, #0x1",
+      "0x11e2c0: cpy r1, r7",
+      "0x11e2c4: cpy r0, r5",
+      "0x11e2c8: bl 0x0012b0c8",
+      "0x11e2cc: cmp r0, #0x0",
+      "0x11e2d0: beq 0x0011e2e4",
+      "0x11e2d4: cpy r3, r8",
+      "0x11e2d8: cpy r2, r9",
+      "0x11e2dc: cpy r1, r5",
+      "0x11e2e0: bl 0x00128288",
+      "0x11e2e4: str r0, [r4,#0x8]",
+      "0x11e2e8: cpy r3, r6",
+      "0x11e2ec: cpy r2, r5",
+      "0x11e2f0: cpy r1, r10",
+      "0x11e2f4: cpy r0, r4",
+      "0x11e2f8: bl 0x0012ad74",
+      "0x11e2fc: cpy r0, r4",
+      "0x11e300: ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,pc}"
+    ],
+    "original_body_sha256": "77e46cc080f839f9c04c84422ac281482b6397b7235ac7cbb87f02128ccaa115",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_44ebd562593a87948ddefc74a5585f9581769f9cbf675f1e69c0ba84c7d2973e",
+    "purpose": "Reviewed dependency only, not implemented. Heap block allocation for loaded tables; external allocate_block callback.",
+    "procedure": {
+      "address": "0x12b094",
+      "name": "FUN_0012b094",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x12b094",
+            "end": "0x12b0c7"
+          }
+        ],
+        "total_bytes": 52,
+        "span_bytes": 52,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_0012b094()",
+      "locals": [
+        {
+          "description": "undefined4 local_10 @ Stack[-0x10]:4",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\nint FUN_0012b094(int *param_1,int param_2)\n\n{\n  int iVar1;\n  int *piVar2;\n  undefined4 uVar3;\n  code *pcVar4;\n  undefined4 unaff_r4;\n  int iVar5;\n  undefined4 unaff_r5;\n  undefined4 unaff_r6;\n  int iVar6;\n  \n  iVar1 = (**(code **)(*param_1 + 0x1c))(param_1);\n  if ((0 < DAT_005d11a4) && ((*(uint *)(DAT_005d11a0 + 4) & 1) != 0)) {\n    piVar2 = (int *)FUN_0012b284(0);\n    (**(code **)(*piVar2 + 0x18))();\n  }\n  iVar6 = iVar1;\n  if (iVar1 < 0) {\n    iVar6 = -iVar1;\n  }\n  iVar5 = 0x20;\n  if ((0x20 < iVar6) && (iVar5 = iVar1, iVar1 < 0)) {\n    iVar5 = -iVar1;\n  }\n  iVar1 = (**(code **)(*param_1 + 0x58))\n                    (param_1,param_2 + iVar5,iVar1,*(code **)(*param_1 + 0x58),unaff_r4,unaff_r5,\n                     unaff_r6);\n  if ((0 < DAT_005d11a4) && ((*(uint *)(DAT_005d11a0 + 4) & 1) != 0)) {\n    piVar2 = (int *)FUN_0012b284(0);\n    (**(code **)(*piVar2 + 0x18))();\n  }\n  if (iVar1 != 0) {\n    FUN_0015e914(iVar1,param_2 + iVar5);\n    iVar6 = iVar1 + iVar5;\n    uVar3 = (**(code **)(*param_1 + 0x20))(param_1);\n    *(undefined4 *)(iVar6 + -0x20) = uVar3;\n    *(short *)(iVar6 + -0x1c) = (short)iVar5;\n    (**(code **)(*param_1 + 100))(param_1,iVar6 + -0x1a);\n    if (0x20 < iVar5) {\n      FUN_00300ef8(iVar1,iVar6 + -0x20,0x20);\n    }\n    (**(code **)(*param_1 + 0x48))(param_1);\n    return iVar6;\n  }\n  pcVar4 = *(code **)(*param_1 + 0xc);\n  do {\n    (*pcVar4)(param_1);\n    do {\n    } while (DAT_005d1144 == (code *)0x0);\n    param_1 = (int *)&DAT_00563574;\n    pcVar4 = DAT_005d1144;\n  } while( true );\n}\n\n",
+    "assembly": [
+      "0x12b094: stmdb sp!,{r4,r5,r6,lr}",
+      "0x12b098: cpy r4, r0",
+      "0x12b09c: ldr r0, [r0,#0x0]",
+      "0x12b0a0: cpy r5, r1",
+      "0x12b0a4: ldr r1, [r0,#0x1c]",
+      "0x12b0a8: cpy r0, r4",
+      "0x12b0ac: blx r1",
+      "0x12b0b0: cpy r2, r0",
+      "0x12b0b4: cpy r1, r5",
+      "0x12b0b8: cpy r0, r4",
+      "0x12b0bc: ldmia sp!,{r4,r5,r6,lr}",
+      "0x12b0c0: mov r3, #0x1",
+      "0x12b0c4: cpy r0, r0"
+    ],
+    "original_body_sha256": "c524ec977e5679f61eb660e7bc482e4349ca90cc3ac3463e6114d8d2e2594d5c",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_12e60b9e5956eaf4b78f7bf275f87a11d366a724b10c2aa531db4a634b171e7a",
+    "purpose": "Reviewed dependency only, not implemented. Word clear helper used by the growth record constructor; represented by byte stores.",
+    "procedure": {
+      "address": "0x301a9c",
+      "name": "FUN_00301a9c",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x301a9c",
+            "end": "0x301aef"
+          }
+        ],
+        "total_bytes": 84,
+        "span_bytes": 84,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_00301a9c()",
+      "locals": [
+        {
+          "description": "undefined4 local_4 @ Stack[-0x4]:4",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\nundefined4 * FUN_00301a9c(undefined4 *param_1,uint param_2)\n\n{\n  uint uVar1;\n  undefined4 *puVar2;\n  undefined4 *puVar3;\n  bool bVar4;\n  \n  bVar4 = 0x1f < param_2;\n  param_2 = param_2 - 0x20;\n  do {\n    if (bVar4) {\n      *param_1 = 0;\n      param_1[1] = 0;\n      param_1[2] = 0;\n      param_1[3] = 0;\n      param_1[4] = 0;\n      param_1[5] = 0;\n      param_1[6] = 0;\n      param_1[7] = 0;\n      param_1 = param_1 + 8;\n      bVar4 = 0x1f < param_2;\n      param_2 = param_2 - 0x20;\n    }\n  } while (bVar4);\n  if ((bool)((byte)(param_2 >> 4) & 1)) {\n    *param_1 = 0;\n    param_1[1] = 0;\n    param_1[2] = 0;\n    param_1[3] = 0;\n    param_1 = param_1 + 4;\n  }\n  if ((int)(param_2 << 0x1c) < 0) {\n    *param_1 = 0;\n    param_1[1] = 0;\n    param_1 = param_1 + 2;\n  }\n  uVar1 = param_2 << 0x1e;\n  puVar3 = param_1;\n  if ((bool)((byte)((param_2 << 0x1c) >> 0x1e) & 1)) {\n    puVar3 = param_1 + 1;\n    *param_1 = 0;\n  }\n  if (uVar1 != 0) {\n    puVar2 = puVar3;\n    if ((int)uVar1 < 0) {\n      puVar2 = (undefined4 *)((int)puVar3 + 2);\n      *(undefined2 *)puVar3 = 0;\n    }\n    puVar3 = puVar2;\n    if ((uVar1 & 0x40000000) != 0) {\n      puVar3 = (undefined4 *)((int)puVar2 + 1);\n      *(undefined1 *)puVar2 = 0;\n    }\n    return puVar3;\n  }\n  return puVar3;\n}\n\n",
+    "assembly": [
+      "0x301a9c: mov r2, #0x0",
+      "0x301aa0: stmdb sp!,{lr}",
+      "0x301aa4: cpy r3, r2",
+      "0x301aa8: cpy r12, r2",
+      "0x301aac: cpy lr, r2",
+      "0x301ab0: subs r1, r1, #0x20",
+      "0x301ab4: stmiacs r0!,{r2,r3,r12,lr}",
+      "0x301ab8: stmiacs r0!,{r2,r3,r12,lr}",
+      "0x301abc: subcss r1, r1, #0x20",
+      "0x301ac0: bcs 0x00301ab4",
+      "0x301ac4: movs r1, r1, lsl #0x1c",
+      "0x301ac8: stmiacs r0!,{r2,r3,r12,lr}",
+      "0x301acc: stmiami r0!,{r2,r3}",
+      "0x301ad0: ldmia sp!,{lr}",
+      "0x301ad4: movs r1, r1, lsl #0x2",
+      "0x301ad8: strcs r2, [r0],#0x4",
+      "0x301adc: bxeq lr",
+      "0x301ae0: strhmi r2, [r0],#0x2",
+      "0x301ae4: tst r1, #0x40000000",
+      "0x301ae8: strbne r2, [r0],#0x1",
+      "0x301aec: bx lr"
+    ],
+    "original_body_sha256": "f8983c95a4b6480c8eeadde47960b19928542adc0c610c1e3b7e499b3606cda8",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_e50a96d99562f38322d2bada077afde9dfaf552ed251fb08ecbc6040088e8303",
+    "purpose": "Reviewed dependency only, not implemented. Message-resource loading reached from 0011e264; external.",
+    "procedure": {
+      "address": "0x12ad74",
+      "name": "FUN_0012ad74",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x12ad74",
+            "end": "0x12aefb"
+          }
+        ],
+        "total_bytes": 392,
+        "span_bytes": 392,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_0012ad74()",
+      "locals": [
+        {
+          "description": "undefined4 local_20 @ Stack[-0x20]:4",
+          "provenance": "ghidra-function-database"
+        },
+        {
+          "description": "undefined4 local_30 @ Stack[-0x30]:4",
+          "provenance": "ghidra-function-database"
+        }
+      ]
+    },
+    "pseudocode": "\nvoid FUN_0012ad74(int param_1,undefined4 param_2,int *param_3)\n\n{\n  uint uVar1;\n  undefined4 uVar2;\n  uint *puVar3;\n  int iVar4;\n  int iVar5;\n  uint local_30;\n  uint uStack_2c;\n  uint uStack_28;\n  \n  iVar5 = *(int *)(param_1 + 8);\n  if (iVar5 == 0) {\n    do {\n      do {\n      } while (DAT_005d1144 == (code *)0x0);\n      (*DAT_005d1144)(&DAT_00563574);\n    } while( true );\n  }\n  *(undefined2 *)(param_1 + 0x24) = 0;\n  *(undefined4 *)(param_1 + 0x20) = 0;\n  *(undefined2 *)(param_1 + 0x26) = 0;\n  FUN_001381c4(iVar5,param_2,0);\n  FUN_00127b6c(iVar5,0xc,&local_30);\n  uVar1 = local_30 & 0xffff;\n  uVar2 = (**(code **)(*param_3 + 0x1c))(param_3);\n  puVar3 = (uint *)FUN_0012b0c8(param_3,uVar1 * 4 + 0xc,uVar2,1);\n  if (puVar3 != (uint *)0x0) {\n    *puVar3 = local_30;\n    puVar3[1] = uStack_2c;\n    puVar3[2] = uStack_28;\n    FUN_00127b6c(iVar5,(uint)(ushort)*puVar3 << 2,puVar3 + 3);\n  }\n  *(uint **)(param_1 + 0x18) = puVar3;\n  *(undefined4 *)(param_1 + 0x10) = param_2;\n  uVar1 = DAT_005d113c;\n  if ((ushort)*puVar3 <= DAT_005d113c) {\n    uVar1 = 0;\n  }\n  *(uint *)(param_1 + 0x14) = uVar1;\n  if (*(char *)(param_1 + 0xc) == '\\0') {\n    *(undefined4 *)(param_1 + 0x1c) = 0;\n  }\n  else {\n    uVar1 = puVar3[1];\n    uVar2 = (**(code **)(*param_3 + 0x1c))(param_3);\n    uVar2 = FUN_0012b0c8(param_3,uVar1,uVar2,1);\n    *(undefined4 *)(param_1 + 0x1c) = uVar2;\n    iVar5 = *(int *)(param_1 + 8);\n    uVar2 = *(undefined4 *)(param_1 + 0x10);\n    iVar4 = *(int *)(*(int *)(param_1 + 0x18) + *(int *)(param_1 + 0x14) * 4 + 0xc);\n    if (iVar5 != 0) {\n      FUN_001381c4(iVar5,uVar2,iVar4);\n      FUN_00127b6c(iVar5,4,*(undefined4 *)(param_1 + 0x1c));\n      FUN_001381c4(iVar5,uVar2,iVar4);\n      FUN_00127b6c(iVar5,**(undefined4 **)(param_1 + 0x1c));\n      return;\n    }\n    *(int *)(param_1 + 0x1c) = *(int *)(param_1 + 0x18) + iVar4;\n  }\n  return;\n}\n\n",
+    "assembly": [
+      "0x12ad74: stmdb sp!,{r4,r5,r6,r7,r8,r9,r10,lr}",
+      "0x12ad78: sub sp, sp, #0x10",
+      "0x12ad7c: cpy r4, r0",
+      "0x12ad80: cpy r7, r1",
+      "0x12ad84: ldr r10, [r0,#0x8]",
+      "0x12ad88: ldr r8, [0x12aefc]",
+      "0x12ad8c: cpy r6, r2",
+      "0x12ad90: cmp r10, #0x0",
+      "0x12ad94: beq 0x0012aee0",
+      "0x12ad98: mov r9, #0x0",
+      "0x12ad9c: strh r9, [r4,#0x24]",
+      "0x12ada0: str r9, [r4,#0x20]",
+      "0x12ada4: cpy r2, r9",
+      "0x12ada8: cpy r0, r10",
+      "0x12adac: strh r9, [r4,#0x26]",
+      "0x12adb0: bl 0x001381c4",
+      "0x12adb4: cpy r2, sp",
+      "0x12adb8: mov r1, #0xc",
+      "0x12adbc: cpy r0, r10",
+      "0x12adc0: bl 0x00127b6c",
+      "0x12adc4: ldrh r0, [sp,#0x0]",
+      "0x12adc8: mov r1, #0xc",
+      "0x12adcc: add r5, r1, r0, lsl #0x2",
+      "0x12add0: ldr r0, [r6,#0x0]",
+      "0x12add4: ldr r1, [r0,#0x1c]",
+      "0x12add8: cpy r0, r6",
+      "0x12addc: blx r1",
+      "0x12ade0: cpy r2, r0",
+      "0x12ade4: mov r3, #0x1",
+      "0x12ade8: cpy r1, r5",
+      "0x12adec: cpy r0, r6",
+      "0x12adf0: bl 0x0012b0c8",
+      "0x12adf4: movs r5, r0",
+      "0x12adf8: beq 0x0012ae18",
+      "0x12adfc: ldmia sp,{r0,r1,r2}",
+      "0x12ae00: stmia r5,{r0,r1,r2}",
+      "0x12ae04: add r2, r5, #0xc",
+      "0x12ae08: ldrh r0, [r5,#0x0]",
+      "0x12ae0c: mov r1, r0, lsl #0x2",
+      "0x12ae10: cpy r0, r10",
+      "0x12ae14: bl 0x00127b6c",
+      "0x12ae18: str r5, [r4,#0x18]",
+      "0x12ae1c: str r7, [r4,#0x10]",
+      "0x12ae20: ldrh r1, [r5,#0x0]",
+      "0x12ae24: ldr r0, [r8,#0x64]",
+      "0x12ae28: cmp r1, r0",
+      "0x12ae2c: ldrb r1, [r4,#0xc]",
+      "0x12ae30: movls r0, #0x0",
+      "0x12ae34: str r0, [r4,#0x14]",
+      "0x12ae38: cmp r1, #0x0",
+      "0x12ae3c: streq r9, [r4,#0x1c]",
+      "0x12ae40: beq 0x0012aef4",
+      "0x12ae44: ldr r0, [r6,#0x0]",
+      "0x12ae48: ldr r5, [r5,#0x4]",
+      "0x12ae4c: ldr r1, [r0,#0x1c]",
+      "0x12ae50: cpy r0, r6",
+      "0x12ae54: blx r1",
+      "0x12ae58: cpy r2, r0",
+      "0x12ae5c: mov r3, #0x1",
+      "0x12ae60: cpy r1, r5",
+      "0x12ae64: cpy r0, r6",
+      "0x12ae68: bl 0x0012b0c8",
+      "0x12ae6c: str r0, [r4,#0x1c]",
+      "0x12ae70: ldr r1, [r4,#0x14]",
+      "0x12ae74: ldr r0, [r4,#0x18]",
+      "0x12ae78: ldr r5, [r4,#0x8]",
+      "0x12ae7c: ldr r7, [r4,#0x10]",
+      "0x12ae80: add r1, r0, r1, lsl #0x2",
+      "0x12ae84: cmp r5, #0x0",
+      "0x12ae88: ldr r6, [r1,#0xc]",
+      "0x12ae8c: addeq r0, r0, r6",
+      "0x12ae90: streq r0, [r4,#0x1c]",
+      "0x12ae94: beq 0x0012aef4",
+      "0x12ae98: cpy r2, r6",
+      "0x12ae9c: cpy r1, r7",
+      "0x12aea0: cpy r0, r5",
+      "0x12aea4: bl 0x001381c4",
+      "0x12aea8: ldr r2, [r4,#0x1c]",
+      "0x12aeac: mov r1, #0x4",
+      "0x12aeb0: cpy r0, r5",
+      "0x12aeb4: bl 0x00127b6c",
+      "0x12aeb8: cpy r2, r6",
+      "0x12aebc: cpy r1, r7",
+      "0x12aec0: cpy r0, r5",
+      "0x12aec4: bl 0x001381c4",
+      "0x12aec8: ldr r2, [r4,#0x1c]",
+      "0x12aecc: cpy r0, r5",
+      "0x12aed0: ldr r1, [r2,#0x0]",
+      "0x12aed4: add sp, sp, #0x10",
+      "0x12aed8: ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,lr}",
+      "0x12aedc: b 0x00127b6c",
+      "0x12aee0: ldr r1, [r8,#0x6c]",
+      "0x12aee4: cmp r1, #0x0",
+      "0x12aee8: ldrne r0, [0x12af00]",
+      "0x12aeec: blxne r1",
+      "0x12aef0: b 0x0012aee0",
+      "0x12aef4: add sp, sp, #0x10",
+      "0x12aef8: ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,pc}"
+    ],
+    "original_body_sha256": "5804e38057f7895208563cc3f1af0184e655cc669ca7b7103f7573dfeadbb3d9",
+    "byte_source": "pinned original code.bin"
+  },
+  {
+    "source_evidence_id": "ev_323600a3ab73ae094895bd27035b460032355a117f20b754a2b456083b99307d",
+    "purpose": "Reviewed dependency only, not implemented. Compiler clear helper; represented by byte stores.",
+    "procedure": {
+      "address": "0x15e914",
+      "name": "FUN_0015e914",
+      "symbol": {
+        "primary": true,
+        "dynamic": false,
+        "external": false,
+        "type": "function",
+        "source": "default"
+      },
+      "classification": {
+        "external": false,
+        "thunk": false,
+        "thunk_target": null,
+        "provenance": "ghidra-function-manager"
+      },
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x15e914",
+            "end": "0x15e953"
+          }
+        ],
+        "total_bytes": 64,
+        "span_bytes": 64,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "signature": "undefined FUN_0015e914()",
+      "locals": []
+    },
+    "pseudocode": "\nundefined4 * FUN_0015e914(undefined4 *param_1,uint param_2)\n\n{\n  uint uVar1;\n  undefined4 *puVar2;\n  undefined1 *puVar3;\n  undefined4 *puVar4;\n  int iVar5;\n  bool bVar6;\n  \n  if (param_2 < 4) {\n    if ((bool)((byte)(param_2 >> 1) & 1)) {\n      puVar3 = (undefined1 *)((int)param_1 + 1);\n      *(undefined1 *)param_1 = 0;\n      param_1 = (undefined4 *)((int)param_1 + 2);\n      *puVar3 = 0;\n    }\n    puVar2 = param_1;\n    if ((int)(param_2 << 0x1f) < 0) {\n      puVar2 = (undefined4 *)((int)param_1 + 1);\n      *(undefined1 *)param_1 = 0;\n    }\n    return puVar2;\n  }\n  if (((uint)param_1 & 3) != 0) {\n    iVar5 = 4 - ((uint)param_1 & 3);\n    puVar2 = param_1;\n    if (iVar5 != 2) {\n      puVar2 = (undefined4 *)((int)param_1 + 1);\n      *(undefined1 *)param_1 = 0;\n    }\n    param_2 = param_2 - iVar5;\n    param_1 = puVar2;\n    if (1 < iVar5) {\n      param_1 = (undefined4 *)((int)puVar2 + 2);\n      *(undefined2 *)puVar2 = 0;\n    }\n  }\n  bVar6 = 0x1f < param_2;\n  param_2 = param_2 - 0x20;\n  do {\n    if (bVar6) {\n      *param_1 = 0;\n      param_1[1] = 0;\n      param_1[2] = 0;\n      param_1[3] = 0;\n      param_1[4] = 0;\n      param_1[5] = 0;\n      param_1[6] = 0;\n      param_1[7] = 0;\n      param_1 = param_1 + 8;\n      bVar6 = 0x1f < param_2;\n      param_2 = param_2 - 0x20;\n    }\n  } while (bVar6);\n  if ((bool)((byte)(param_2 >> 4) & 1)) {\n    *param_1 = 0;\n    param_1[1] = 0;\n    param_1[2] = 0;\n    param_1[3] = 0;\n    param_1 = param_1 + 4;\n  }\n  if ((int)(param_2 << 0x1c) < 0) {\n    *param_1 = 0;\n    param_1[1] = 0;\n    param_1 = param_1 + 2;\n  }\n  uVar1 = param_2 << 0x1e;\n  puVar2 = param_1;\n  if ((bool)((byte)((param_2 << 0x1c) >> 0x1e) & 1)) {\n    puVar2 = param_1 + 1;\n    *param_1 = 0;\n  }\n  if (uVar1 == 0) {\n    return puVar2;\n  }\n  puVar4 = puVar2;\n  if ((int)uVar1 < 0) {\n    puVar4 = (undefined4 *)((int)puVar2 + 2);\n    *(undefined2 *)puVar2 = 0;\n  }\n  puVar2 = puVar4;\n  if ((uVar1 & 0x40000000) != 0) {\n    puVar2 = (undefined4 *)((int)puVar4 + 1);\n    *(undefined1 *)puVar4 = 0;\n  }\n  return puVar2;\n}\n\n",
+    "assembly": [
+      "0x15e914: mov r2, #0x0",
+      "0x15e918: cmp r1, #0x4",
+      "0x15e91c: bcc 0x0015e940",
+      "0x15e920: ands r12, r0, #0x3",
+      "0x15e924: beq 0x00301aa0",
+      "0x15e928: rsb r12, r12, #0x4",
+      "0x15e92c: cmp r12, #0x2",
+      "0x15e930: strbne r2, [r0],#0x1",
+      "0x15e934: sub r1, r1, r12",
+      "0x15e938: strhge r2, [r0],#0x2",
+      "0x15e93c: b 0x00301aa0",
+      "0x15e940: movs r12, r1, lsl #0x1f",
+      "0x15e944: strbcs r2, [r0],#0x1",
+      "0x15e948: strbcs r2, [r0],#0x1",
+      "0x15e94c: strbmi r2, [r0],#0x1",
+      "0x15e950: bx lr"
+    ],
+    "original_body_sha256": "c83e79aaca782ee17b4744ed164adc8c1ebb03fe2c0d7e3774cc96bca9a4e00d",
+    "byte_source": "pinned original code.bin"
+  }
+]
