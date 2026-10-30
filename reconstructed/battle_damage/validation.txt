@@ -1,0 +1,21 @@
+Battle-damage milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over a carrier
+of the main image plus relocated DllBattle and DllBackGround blocks.
+Implemented: DllBattle 1086a1e0. All 1,268 instruction bytes and 12 literal
+bytes match live REA bytes and the original DllBattle.cro, except one ABS32
+relocation (literal 1086a6dc), whose value equals symbol plus addend.
+
+All twenty reconstruction suites pass. New suite: 547 cases covering call
+order, fixed damage, weather, critical hits, spread, rolls, rule flag 7,
+same-type bonus, burn, power narrowing, 32-bit wrap and the minimum of one.
+Twelve mutations are each detected. ASan/UBSan pass.
+
+In the running game (Azahar) the module was at static address - 0x1015b000
+with all 318 instruction words identical. Two damage calculations traced call
+by call (Thunder Shock and Pound) replay with the same 59/60 calls, arguments
+and damage (6 and 6).
+
+All 901 earlier reconstruction hashes remain unchanged. Native implementation
+files are unchanged. The event system, battle helpers, RNG and rule services
+remain external. No matching original build is claimed.

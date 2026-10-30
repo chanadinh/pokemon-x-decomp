@@ -67,6 +67,12 @@ It builds, opens and destroys message resources and boots the move resources.
 Every original text member is constructed in both modes, and all 70,424 lines
 load through it identically to the native decoder. Archive constructors remain external.
 
+The twentieth milestone is the first from a CRO module: the [battle damage
+calculation](../reconstructed/battle_damage/README.md) in `DllBattle.cro`. A carrier of
+the main image plus relocated battle modules was analysed through REA; the routine was
+found by the damage formula's constants and matched in the running game, where two
+attacks replay call by call through the reconstruction.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

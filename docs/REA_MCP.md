@@ -109,3 +109,9 @@ The message-construction review is in `outputs/rea-messages-init/`. Each REA
 session starts a fresh, ephemeral Ghidra project and repeats whole-image
 analysis (about seven to eight minutes here); later queries take well under a
 second. See [message_construction](../reconstructed/message_construction/README.md).
+
+CRO modules use the carrier from `scripts/prepare_rea_module_target.py`: the main
+image plus relocated module blocks from `scripts/prepare_cro_analysis.py` at their
+synthetic addresses. The battle review is in `outputs/rea-battle/`; its first query
+took about 9.4 minutes because more code is analysed. See
+[battle_damage](../reconstructed/battle_damage/README.md).

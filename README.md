@@ -31,7 +31,7 @@ not there yet, so this is not yet a playable port.**
 
 | Zones that load | Townspeople who speak | Wild battles | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
-| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **868** earlier reconstruction file hashes |
+| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **901** earlier reconstruction file hashes |
 
 ## Play the field slice
 
@@ -244,7 +244,7 @@ native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
 
 ## Rebuilding the rules
 
-The visual tools sit alongside nineteen connected C reconstruction milestones.
+The visual tools sit alongside twenty connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -269,6 +269,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Archive index](reconstructed/archive_index/README.md) | GARC index parsing, resident member-table construction and resource-archive opening |
 | [Resource initialization](reconstructed/pokemon_resources/README.md) | Boot-time personal-table load, archives, descriptors, records and caches |
 | [Message construction](reconstructed/message_construction/README.md) | Message-resource construction/opening/destruction and move-resource boot |
+| [Battle damage](reconstructed/battle_damage/README.md) | The battle engine's damage calculation from `DllBattle.cro`, checked call by call in live battles |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their
@@ -301,7 +302,7 @@ suite builds every original text resource and loads all 70,424 lines through it.
 - The selected area's **100,608 texture pixels** match an independent decoder and separately implemented alpha/tile reconstruction.
 - The selected field's **positions, UVs and indices** match an independent geometry reference at the native renderer's documented precision.
 - The area-consumer trace checks **1,348 instructions** against original executable bytes across thirteen functions.
-- All **868 earlier reconstruction checkpoint files** retain their recorded hashes.
+- All **901 earlier reconstruction checkpoint files** retain their recorded hashes.
 
 A read-only [running-game check](docs/RUNNING_GAME_CHECKS.md) against Azahar
 matches the reconstructed boot-time resource state in 20 of 20 checks,

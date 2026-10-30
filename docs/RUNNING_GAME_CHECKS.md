@@ -122,6 +122,15 @@ called this loader only three times; both replayable calls (member 80 of
 used a resource without an archive. Most visible game text therefore goes
 through other code, which is not yet reconstructed.
 
+### Battle damage, call by call
+
+[`scripts/trace_live_damage.py`](../scripts/trace_live_damage.py) traces the DllBattle
+damage routine at its runtime address (static − `0x1015b000`), recording every
+internal call's arguments and results. Two attacks in a wild battle, Thunder Shock
+and Pound, replay through the reconstruction with identical calls (59 and 60),
+arguments and damage (6 and 6). See
+[battle_damage](../reconstructed/battle_damage/README.md).
+
 Two early replay differences came from the harness, not the reconstruction.
 Object updates first differed in 72 of 100 calls because the harness did not
 supply the block-permutation table, so every block resolved to position zero;
