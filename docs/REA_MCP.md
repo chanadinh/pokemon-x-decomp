@@ -80,3 +80,10 @@ language/profile and a fresh Program for uncached queries. Its four implemented
 routines and original-data validation are recorded in
 [pokemon_personal](../reconstructed/pokemon_personal/README.md). The preceding
 thirteen reconstruction checkpoints remain unchanged.
+
+The growth-resource review is in `outputs/rea-growth/`, using the same target,
+language/profile and seeds. Its first provider query again waited for
+whole-image analysis; later queries returned in under a second. Five host
+routines and two reviewed helper bodies are recorded in
+[pokemon_growth](../reconstructed/pokemon_growth/README.md). The preceding
+fourteen reconstruction checkpoints remain unchanged.

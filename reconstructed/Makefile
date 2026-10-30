@@ -14,3 +14,4 @@ all test clean:
 	$(MAKE) -C pokemon_move_resource $@
 	$(MAKE) -C message_resources $@
 	$(MAKE) -C pokemon_personal $@
+	$(MAKE) -C pokemon_growth $@

@@ -1,0 +1,56 @@
+00167db0  70402de9  stmdb sp!,{r4,r5,r6,lr}
+00167db4  0120a0e1  cpy r2, r1
+00167db8  54609fe5  ldr r6, [0x167e14]
+00167dbc  0010a0e1  cpy r1, r0
+00167dc0  184086e2  add r4, r6, #0x18
+00167dc4  110094e8  ldmia r4,{r0,r4}
+00167dc8  8f3300eb  bl 0x00174c0c
+00167dcc  180096e5  ldr r0, [r6,#0x18]
+00167dd0  1710a0e3  mov r1, #0x17
+00167dd4  a73700eb  bl 0x00175c78
+00167dd8  0050a0e1  cpy r5, r0
+00167ddc  0010a0e1  cpy r1, r0
+00167de0  200096e5  ldr r0, [r6,#0x20]
+00167de4  0420a0e1  cpy r2, r4
+00167de8  7f3800eb  bl 0x00175fec
+00167dec  000050e3  cmp r0, #0x0
+00167df0  0600001a  bne 0x00167e10
+00167df4  0510a0e1  cpy r1, r5
+00167df8  0400a0e1  cpy r0, r4
+00167dfc  f53300eb  bl 0x00174dd8
+00167e00  200096e5  ldr r0, [r6,#0x20]
+00167e04  0410a0e1  cpy r1, r4
+00167e08  7040bde8  ldmia sp!,{r4,r5,r6,lr}
+00167e0c  a63300ea  b 0x00174cac
+00167e10  7080bde8  ldmia sp!,{r4,r5,r6,pc}
+00174cac  f0412de9  stmdb sp!,{r4,r5,r6,r7,r8,lr}
+00174cb0  0050a0e1  cpy r5, r0
+00174cb4  0170a0e1  cpy r7, r1
+00174cb8  0100a0e1  cpy r0, r1
+00174cbc  040090e5  ldr r0, [r0,#0x4]
+00174cc0  0060a0e1  cpy r6, r0
+00174cc4  0800d5e5  ldrb r0, [r5,#0x8]
+00174cc8  0040a0e3  mov r4, #0x0
+00174ccc  000050e3  cmp r0, #0x0
+00174cd0  090000da  ble 0x00174cfc
+00174cd4  040095e5  ldr r0, [r5,#0x4]
+00174cd8  040190e7  ldr r0, [r0,r4,lsl #0x2]
+00174cdc  040090e5  ldr r0, [r0,#0x4]
+00174ce0  060050e1  cmp r0, r6
+00174ce4  00f020e3  nop
+00174ce8  0d00000a  beq 0x00174d24
+00174cec  0800d5e5  ldrb r0, [r5,#0x8]
+00174cf0  014084e2  add r4, r4, #0x1
+00174cf4  040050e1  cmp r0, r4
+00174cf8  f5ffffca  bgt 0x00174cd4
+00174cfc  040095e5  ldr r0, [r5,#0x4]
+00174d00  0910d5e5  ldrb r1, [r5,#0x9]
+00174d04  011190e7  ldr r1, [r0,r1,lsl #0x2]
+00174d08  0700a0e1  cpy r0, r7
+00174d0c  271e00eb  bl 0x0017c5b0
+00174d10  0900d5e5  ldrb r0, [r5,#0x9]
+00174d14  0810d5e5  ldrb r1, [r5,#0x8]
+00174d18  010080e2  add r0, r0, #0x1
+00174d1c  0da7ffeb  bl 0x0015e958
+00174d20  0910c5e5  strb r1, [r5,#0x9]
+00174d24  f081bde8  ldmia sp!,{r4,r5,r6,r7,r8,pc}

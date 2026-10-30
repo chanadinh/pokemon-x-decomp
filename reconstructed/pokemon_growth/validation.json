@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-30",
+  "method": "Live REA stdio MCP plus ARM assembly review and independent synthetic/original-resource checks",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "profile_digest": "bfc814036989b2aabfb2122070898d0521e51b769b9ebb588fd2aadabec3923c",
+    "implemented_function_bodies": 4,
+    "host_routines": 5,
+    "instruction_bytes_verified": 428,
+    "literal_bytes_verified": 8,
+    "reviewed_dependency_bodies": 2,
+    "complete_evidence_records_retained": 14,
+    "original_project_unchanged": true
+  },
+  "tests": {
+    "reconstructed_modules_passed": 15,
+    "transfer_trace": true,
+    "overlap_layouts": 13,
+    "lookup_cases": 84,
+    "store_cases": 243,
+    "loader_cases": 18,
+    "selection_cases": 8,
+    "level_integration_cases": 2400,
+    "mutations_detected": 5,
+    "asan": true,
+    "ubsan": true,
+    "sanitizer_options": "ASAN_OPTIONS=detect_leaks=0",
+    "original_data": {
+      "personal_records": 799,
+      "growth_curves": 8,
+      "growth_curve_bytes": 404,
+      "species_form_selections": 1607,
+      "threshold_cases": 163914,
+      "level_from_growth_cases": 482100,
+      "archive_loads": 78,
+      "cache_slots": 3,
+      "all_match": true,
+      "archive_sha256": {
+        "a/2/1/8": "d1bfcbc0fb6505210164f329843f29d435cc5aba9b8e4c77de68dd3095bf8933",
+        "a/2/1/7": "fda817fb9b48083913785730e57bb14a89ad0b87ddf36400754f28475c58b98f"
+      }
+    }
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 713,
+    "native_source_changed": false,
+    "prior_manifest_sha256": {
+      "reconstructed/battle_task/SHA256SUMS": "5e9434c27e94bbf43014bcc273f80cf26775dcbe1c51e8051183647c5009cdf1",
+      "reconstructed/call_wild_battle/SHA256SUMS": "a3acabefdeab4df63e6b9b7fc651fe55e1bd297a02d56476c0c122b4e3609bd9",
+      "reconstructed/encounter_builder/SHA256SUMS": "af4aa6a38b51a66e7d2c43aaca61109ebbc988bb3c673ed360257fe996d4abf6",
+      "reconstructed/message_resources/SHA256SUMS": "60af55af559b069347994a3a1204f7b9ce3d2045f81952e43e3c6627139fc577",
+      "reconstructed/pokemon_constructor/SHA256SUMS": "f8573547857c456fbd3acd57046378116cc77c3a51ce99d73297b4c095d1e143",
+      "reconstructed/pokemon_data/SHA256SUMS": "0405aba491f360b8e6d63d029fd9959205b7aa1baf96ddb3775ec096e3d481b7",
+      "reconstructed/pokemon_learnset/SHA256SUMS": "46467b590596d8a09fd486734e89256a37560eb6848818b36ce4e32f8013853a",
+      "reconstructed/pokemon_move_resource/SHA256SUMS": "2c88555c6749ca3eb15d12fd02659db31ddc757e7da59a484cdf2a473a62dfe4",
+      "reconstructed/pokemon_moves/SHA256SUMS": "132d2947267f8d4410bec4785df6b14fd51925fd4a880850845937774e7efb68",
+      "reconstructed/pokemon_names/SHA256SUMS": "1b10f524faa68d19dc9771de52e74705f4358050ab63587f04166a7a843d721b",
+      "reconstructed/pokemon_personal/SHA256SUMS": "637c4b0ed470ec942aa93f5cbeef289a943af46a43c02ef67de5acabacebf15c",
+      "reconstructed/pokemon_state/SHA256SUMS": "8b4558ec9f88813ab18e582bdffd0d79ca393f08f1d4d1ead90b057b5627ac7b",
+      "reconstructed/pokemon_stats/SHA256SUMS": "0e1b43210166c53462066dbdd1c6fc70d53d48aa6c5aae534568300573f72289",
+      "reconstructed/wild_battle_setup/SHA256SUMS": "aa1682d7073cc8623ce3941231451c88a81e7876aa890272b3fb328def0d5efa"
+    }
+  },
+  "source_hashes": {
+    "reconstructed/pokemon_growth/pokemon_growth.c": "4dca47dcfd8bb88cd67fadfb7438dc3ca847f0bc491bac2e7ede66e33b67614c",
+    "reconstructed/pokemon_growth/pokemon_growth.h": "d42ffa63d4b828437402fd4ac464816550f3fd5a8b72e86909cb4f305919f5ce",
+    "reconstructed/pokemon_growth/test_pokemon_growth.c": "c5cc15f5ccf5f7005f77136093effe98cd815df2725b2b175627f1e03356f00f",
+    "reconstructed/pokemon_growth/Makefile": "40a4ca29508289b03faf334852c1e1380f3552a0b22cbf6b4d8d40102bf855d3",
+    "reconstructed/pokemon_growth/reproduction/check_growth.c": "54c18792d5a834b0abf55b2927f7aaf54559e4bf9a1261c949be949b91bfb807",
+    "reconstructed/pokemon_growth/reproduction/verify_rea.py": "2aecf3ea86013cfbed507748feeaa0a14de4027e349a9f526e49afeda6e1fd0c",
+    "reconstructed/pokemon_personal/pokemon_personal.c": "5bea0c5c400ffcda842abcd796764b96ccd630f80aae9254b5c4715f95b13bc3",
+    "reconstructed/pokemon_stats/stats_math.c": "f90dbe881b8aaa6e52e7710d1af0aeca87ac64a4181ccac64d63a0a9a113c58d",
+    "reconstructed/pokemon_data/pokemon_data.c": "e70eff9a87afc53bc310e1c06b99fc688ac207dfcaa41659d67e1e2e7483a188",
+    "reconstructed/pokemon_constructor/pokemon_constructor.h": "0f598822c8298c44bd52e424d2620a14fe18ceadfd4a2771992d168dfffdf6ad",
+    "native/assets/garc.c": "1303610c04e35c9e6ddf07c3db4e3780b5d8aab7fcc28dfca57f8271f1b359c4",
+    "native/assets/pokedata.c": "38b745155f2febfeac02b35af261a83c90bdfdfbbd53a8e5c4efd5027ef77689",
+    "native/platform/guest.c": "884ef7e89debac8f39f94c7a4d45a2633144f93be79217d3ce80f1f94a68a072",
+    "native/platform/guest.h": "15b44779b0c5dae6b538cfcaf88a628bf0fbe22a3a9207b68c507538f51aca0e"
+  },
+  "limits": [
+    "Archive access 00138214, allocation and growth record/cache/descriptor construction and lifetime remain external.",
+    "The 00144f34 transfer is modeled only for length 0x194; growth curves 6 and 7 are not interpreted.",
+    "Older fixtures keep their select_growth callback; native viewer adapters are unchanged.",
+    "No original ARM or running-game execution comparison."
+  ]
+}

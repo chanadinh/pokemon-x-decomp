@@ -1,0 +1,25 @@
+Growth-resource milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6.
+Four Ghidra bodies (five host routines): 00167db0 including 00174cac,
+00175fec, 00174dd8 and 0017c5b0. All 428 instruction bytes and 8 literal
+bytes match live REA read_bytes and the pinned original executable. The
+00144f34 copy and 0015e958 division helper bodies match original code.
+Function ranges, assembly, pseudocode and mapped sections also verify.
+
+All fifteen reconstruction suites pass. New suite: grouped 404-byte transfer
+trace, 13 overlap layouts, 84 lookup, 243 store, 18 loader and 8 selection
+cases including cell/capacity/cursor/slot reloads, plus 2,400 integration
+cases through the reconstructed level-from-growth and threshold routines.
+Five order/width mutations are each detected. ASan/UBSan pass with leak
+detection disabled.
+
+The original-data sweep loads all eight 404-byte a/2/1/7 curves. All 1,607
+species/form selections, 163,914 threshold reads and 482,100 level
+resolutions match independent references through a three-slot cache.
+Archive hashes and counts are in reproduction/record-comparison.json.
+
+All 713 earlier reconstruction hashes remain unchanged. Native implementation
+files are unchanged. Archive access, allocation and record/cache construction
+remain external; older fixtures keep their growth callback.
+No original ARM or running-game execution comparison was performed.

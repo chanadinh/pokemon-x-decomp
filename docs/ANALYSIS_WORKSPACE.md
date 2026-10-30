@@ -37,6 +37,13 @@ fixture using those real implementations. The original-data sweep checks all
 799 rows, 1,607 form/boundary selections and 24,675 learnset entries. Table
 loading, allocation and resource initialization remain external.
 
+The fifteenth milestone adds [growth-resource selection and caching](../reconstructed/pokemon_growth/README.md).
+Its five host routines read a species/form growth rate through the personal
+service, then find, load or store a 404-byte experience curve. The level
+resolver now has an integration fixture using them. The original-data sweep
+checks 1,607 selections, 163,914 thresholds and 482,100 level resolutions over
+all eight curves. Archive access and allocation remain external.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
