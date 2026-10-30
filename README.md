@@ -305,7 +305,9 @@ suite builds every original text resource and loads all 70,424 lines through it.
 
 A read-only [running-game check](docs/RUNNING_GAME_CHECKS.md) against Azahar
 matches the reconstructed boot-time resource state in 20 of 20 checks,
-including every archive member table and the loaded personal table.
+including every archive member table and the loaded personal table. Breakpoint
+captures of 49 live calls to personal, growth and level routines replay through
+the reconstruction with identical results.
 
 These results validate specific boundaries. Beyond that state check, they do not establish running-game
 behavior or visual equivalence. The analysis baseline's 133 CRO modules, 44,279

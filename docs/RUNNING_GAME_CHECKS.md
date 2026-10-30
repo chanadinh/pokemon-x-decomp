@@ -55,9 +55,46 @@ The resource milestones' sweeps already used this mapping. The milestone
 documents that call words 3 and 4 stand-ins predate this check and are kept
 unchanged with their recorded hashes.
 
+## Call-by-call replay
+
+[`scripts/capture_live_calls.py`](../scripts/capture_live_calls.py) sets software
+breakpoints at reconstructed routine entries. For each call it records the
+arguments and the memory the routine reads, then catches the matching return
+(a temporary breakpoint at the return address with the same stack pointer) and
+records the result and output memory. It removes every breakpoint before
+detaching and never writes game memory. `--distinct` skips calls whose
+arguments were already recorded.
+
+[`scripts/replay_live_calls.py`](../scripts/replay_live_calls.py) converts the
+captures, and [`scripts/replay_live_calls.c`](../scripts/replay_live_calls.c)
+feeds the same inputs to the reconstructed routines and compares the outputs.
+Growth selection and level resolution run through the reconstructed
+`px_select_growth_resource` with archive reads served from the original curves.
+
+```sh
+python3 scripts/capture_live_calls.py --distinct --seconds 300 --output outputs/live-calls.jsonl
+python3 scripts/replay_live_calls.py outputs/live-calls.jsonl outputs/live/calls.txt
+# build replay_live_calls.c with the personal, growth, stats, data and constructor
+# sources plus native/assets/garc.c (see the file header), then:
+outputs/live/replay_live_calls inputs/romfs TABLE_ADDRESS outputs/live/calls.txt
+```
+
+On 2026-10-30, while the party menu, summary pages and a wild battle were
+used in Azahar, two capture windows recorded 49 calls. Every replayed result
+matched the game:
+
+| Routine | Calls | Match |
+| --- | --- | --- |
+| `00174c0c` personal record load (species 0, 653, 656) | 11 | 11 |
+| `00175c78` personal field (21 selectors, including abilities 66/67/168) | 31 | 31 |
+| `00167db0` growth selection (species 0, 653, 656) | 3 | 3 |
+| `00168b3c` level from growth (totals 0, 135, 179, 199 → levels 1, 5, 6, 6) | 4 | 4 |
+
+Captures contain game data and stay in the ignored `outputs/` directory.
+
 ## Scope
 
-This verifies resulting state, not each instruction's execution. It does not
-yet compare call-by-call behavior with breakpoints, and it does not check a
-fresh boot or other game builds. The emulator and game copy are the user's own;
+These checks verify resulting state and the inputs/outputs of selected calls,
+not each instruction's execution. They cover the routines and situations
+exercised so far, not a fresh boot, other game builds or every input. The emulator and game copy are the user's own;
 no game data is stored by the script beyond the comparison summary.
