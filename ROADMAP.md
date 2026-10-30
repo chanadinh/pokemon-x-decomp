@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Twenty-two connected host-source milestones now exist: the `CallWildBattle`
+Twenty-three connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -24,7 +24,7 @@ message loading/decoding/token-aware length, personal-data selection/fields,
 growth-resource selection/loading/caching, archive member/file-stream I/O,
 GARC index parsing/resident-table construction, boot-time Pokémon resource
 initialization, message-resource construction with move-resource boot, and the first CRO
-milestone: the battle damage calculation with its attack and defense helpers and type effectiveness.
+milestone: the battle damage calculation with its attack and defense helpers, type effectiveness and the type matchup.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
 creation-parameter preparation, weighted optional-value selection, random
@@ -104,7 +104,8 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    checked call by call against live battles; its attack and defense helpers now
    have host implementations in [battle_stats](reconstructed/battle_stats/README.md), and the
    type-chart lookup, combination and application in [battle_types](reconstructed/battle_types/README.md).
-   The matchup wrappers (abilities, airborne Ground immunity) and the event system are the next targets. Reconstruct the archive object
+   The matchup routines (Roost, events, airborne Ground immunity) are in
+   [battle_matchup](reconstructed/battle_matchup/README.md). The event system is the next target. Reconstruct the archive object
    constructors and the boot code that fills the resource configuration table. Message construction `0x0011e264`, member opening
    `0x0012ad74`, destruction and move-resource boot `0x00112894` now have host
    implementations in [message_construction](reconstructed/message_construction/README.md).

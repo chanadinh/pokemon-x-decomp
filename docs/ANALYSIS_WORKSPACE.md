@@ -81,6 +81,10 @@ The twenty-second milestone adds [type effectiveness](../reconstructed/battle_ty
 the chart lookup with Inverse Battle, the dual-type combination and damage scaling,
 compared over all 324 type pairs with the chart decoded from the original module.
 
+The twenty-third milestone adds the [type matchup](../reconstructed/battle_matchup/README.md):
+packed types with Roost, the per-type event, every defending type, airborne Ground
+immunity and the immunity message.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

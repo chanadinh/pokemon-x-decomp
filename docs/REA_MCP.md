@@ -116,8 +116,9 @@ synthetic addresses. The battle review is in `outputs/rea-battle/`; its first qu
 took about 9.4 minutes because more code is analysed. See
 [battle_damage](../reconstructed/battle_damage/README.md).
 
-One later session (`outputs/rea-battle-2/`) stayed open across two milestones,
-[battle_stats](../reconstructed/battle_stats/README.md) and
-[battle_types](../reconstructed/battle_types/README.md), so the whole-image analysis
+One later session (`outputs/rea-battle-2/`) stayed open across three milestones,
+[battle_stats](../reconstructed/battle_stats/README.md),
+[battle_types](../reconstructed/battle_types/README.md) and
+[battle_matchup](../reconstructed/battle_matchup/README.md), so the whole-image analysis
 ran once. Relocated literals and jump-table words are checked against the CRO
 relocation records (original word and symbol plus addend).

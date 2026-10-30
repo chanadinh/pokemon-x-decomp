@@ -1,0 +1,19 @@
+Battle type-matchup milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (same session as the
+attack/defense and type-effectiveness milestones). Implemented: DllBattle
+10870994, 1086094c, 10826264 and 10863d44. All 1,496 instruction bytes and 8
+literal bytes match live REA bytes and the original DllBattle.cro; no
+relocations apply.
+
+All twenty-three reconstruction suites pass. New suite: 19,629 cases covering
+packed types with Roost, the single-matchup event and its four handler keys,
+every defending type combination, Ground immunity with the field word,
+airborne checks, grounding and overrides, the immunity message and its
+suppression, and the index path with replacement, nesting counter and aborts.
+Twenty-four mutations are each detected. ASan/UBSan pass.
+
+The 959 hashes of milestones 1-22 remain unchanged. Native implementation
+files are unchanged. Event handlers and battle helpers remain external. No
+running-game comparison was made; no matching original build is claimed.
