@@ -31,7 +31,7 @@ not there yet, so this is not yet a playable port.**
 
 | Zones that load | Townspeople who speak | Wild battles | Preserved checkpoints |
 | :---: | :---: | :---: | :---: |
-| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **808** earlier reconstruction file hashes |
+| **328** of 360, every placement checked independently | **1,183** NPCs run their own script | **799** species, **618** moves, **53** encounter tables checked | **868** earlier reconstruction file hashes |
 
 ## Play the field slice
 
@@ -244,7 +244,7 @@ native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
 
 ## Rebuilding the rules
 
-The visual tools sit alongside eighteen connected C reconstruction milestones.
+The visual tools sit alongside nineteen connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -268,8 +268,9 @@ construction, payload storage, state refresh and stat calculations.
 | [Archive I/O](reconstructed/archive_io/README.md) | Member lookup, locked member reads/seeks and 64-bit file-stream read/seek/position |
 | [Archive index](reconstructed/archive_index/README.md) | GARC index parsing, resident member-table construction and resource-archive opening |
 | [Resource initialization](reconstructed/pokemon_resources/README.md) | Boot-time personal-table load, archives, descriptors, records and caches |
+| [Message construction](reconstructed/message_construction/README.md) | Message-resource construction/opening/destruction and move-resource boot |
 
-The archive object constructor, message resources, platform file calls and OS services
+The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their
 dependencies remain unresolved. These are analyst-authored reconstructions, not
 recovered original source or builds that match the original machine code.
@@ -284,7 +285,8 @@ The archive suite reads all 44,512 members of the 271 original GARC archives
 through the reconstructed member/stream path, and the index suite rebuilds
 every archive's member table from its original bytes. The resource suite boots
 the Pokémon data system from the original archives and runs the personal,
-growth and learnset services from that state alone.
+growth and learnset services from that state alone. The message-construction
+suite builds every original text resource and loads all 70,424 lines through it.
 
 <details>
 <summary><strong>What the validation establishes</strong></summary>
@@ -299,7 +301,7 @@ growth and learnset services from that state alone.
 - The selected area's **100,608 texture pixels** match an independent decoder and separately implemented alpha/tile reconstruction.
 - The selected field's **positions, UVs and indices** match an independent geometry reference at the native renderer's documented precision.
 - The area-consumer trace checks **1,348 instructions** against original executable bytes across thirteen functions.
-- All **808 earlier reconstruction checkpoint files** retain their recorded hashes.
+- All **868 earlier reconstruction checkpoint files** retain their recorded hashes.
 
 These results validate specific boundaries. They do not establish running-game
 behavior or visual equivalence. The analysis baseline's 133 CRO modules, 44,279

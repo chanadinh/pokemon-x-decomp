@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Eighteen connected host-source milestones now exist: the `CallWildBattle`
+Nineteen connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -22,8 +22,8 @@ constructor move insertion/maximum PP, learnset selection/access/caching,
 Pokémon name construction/storage, move-resource field dispatch/loading/caching,
 message loading/decoding/token-aware length, personal-data selection/fields,
 growth-resource selection/loading/caching, archive member/file-stream I/O,
-GARC index parsing/resident-table construction, and boot-time Pokémon resource
-initialization.
+GARC index parsing/resident-table construction, boot-time Pokémon resource
+initialization, and message-resource construction with move-resource boot.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
 creation-parameter preparation, weighted optional-value selection, random
@@ -31,7 +31,7 @@ parameter resolution, allocation/manager setup, 26 data-field setters,
 checksum/XOR storage transforms, block selection, 13 state-field accessors,
 move initialization, auxiliary clearing, HP/PP refresh, HP and five stat updates,
 nature adjustment, growth-to-level resolution, and a final script-state write.
-Wider setup, archive object construction/platform calls, message resources and
+Wider setup, archive object construction/platform calls and
 resource initialization still use stand-ins in the reconstruction fixtures.
 The move-resource fixture connects the newly reconstructed service to maximum PP.
 The message-resource fixture connects text loading to the reconstructed name builder.
@@ -40,6 +40,7 @@ The growth fixture connects growth selection/caching to level resolution.
 The archive fixture runs that path through reconstructed member reads and file streams.
 The index fixture opens the growth archive from GARC bytes and builds its table.
 The resource fixture boots every Pokémon data resource and runs the services from it.
+The message-construction fixture builds text resources and boots move resources.
 The native asset viewer now opens a window, handles pan/zoom input, and displays
 selected original raw, ETC1, and ETC1A4 textures through bounded GARC/LZ/BCLIM
 and CGFX loading. A separate native model viewer now previews a checked
@@ -97,7 +98,10 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
 
 ## Immediate sequence for this workspace
 
-1. Reconstruct the archive object constructor and message-resource construction.
+1. Reconstruct the archive object constructors and the boot code that fills the
+   resource configuration table. Message construction `0x0011e264`, member opening
+   `0x0012ad74`, destruction and move-resource boot `0x00112894` now have host
+   implementations in [message_construction](reconstructed/message_construction/README.md).
    Resource initialization `0x00112368`, personal-table loading `0x0011e884`,
    learnset opening `0x0011e960`, the record/cache constructors and the
    non-resident member lookup now have host implementations in

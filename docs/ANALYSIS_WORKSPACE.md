@@ -62,6 +62,11 @@ member, the learnset/growth archives, descriptors, records and caches. From that
 state alone the reconstructed services match the original data for all 884
 species/form selections. Message resources and the archive constructor remain external.
 
+The nineteenth milestone adds [message construction](../reconstructed/message_construction/README.md).
+It builds, opens and destroys message resources and boots the move resources.
+Every original text member is constructed in both modes, and all 70,424 lines
+load through it identically to the native decoder. Archive constructors remain external.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

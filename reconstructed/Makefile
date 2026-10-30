@@ -18,3 +18,4 @@ all test clean:
 	$(MAKE) -C archive_io $@
 	$(MAKE) -C archive_index $@
 	$(MAKE) -C pokemon_resources $@
+	$(MAKE) -C message_construction $@

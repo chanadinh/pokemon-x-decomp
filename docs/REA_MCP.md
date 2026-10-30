@@ -104,3 +104,8 @@ The resource-initialization review is in `outputs/rea-resources/`. Cross
 references to every resource cell led to `0x00112368`; its constructors,
 caches and the non-resident member lookup are recorded in
 [pokemon_resources](../reconstructed/pokemon_resources/README.md).
+
+The message-construction review is in `outputs/rea-messages-init/`. Each REA
+session starts a fresh, ephemeral Ghidra project and repeats whole-image
+analysis (about seven to eight minutes here); later queries take well under a
+second. See [message_construction](../reconstructed/message_construction/README.md).

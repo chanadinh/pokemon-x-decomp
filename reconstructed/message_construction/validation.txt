@@ -1,0 +1,21 @@
+Message-construction milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6.
+Eight implemented functions: 0011e264, 0011e308, 0012ad74, 0038fc20,
+0038fbc4, 00112894, 0012b968 and 0011edec. All 1,272 instruction bytes and 40
+literal bytes match live REA read_bytes and the pinned original executable.
+Three reviewed helper bodies match original code.
+
+All nineteen reconstruction suites pass. New suite: 195 construction and
+line-load cases, 3 destroy cases and 24 move-boot cases. Eleven mutations are
+each detected. ASan/UBSan pass with leak detection disabled.
+
+The original-data sweep constructs every text member of a/0/7/4 and a/0/8/2 in
+both modes (1,150 constructions); all 70,424 lines and 3,352,056 units match
+the native text decoder, and every resource is destroyed. Booting move
+resources from a/2/1/2 gives 3,090 matching field reads across 618 moves.
+
+All 868 earlier reconstruction hashes remain unchanged. Native implementation
+files are unchanged. Archive constructors, block release, object free and the
+configuration table remain external.
+No original ARM or running-game execution comparison was performed.

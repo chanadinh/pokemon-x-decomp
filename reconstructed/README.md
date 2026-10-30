@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains eighteen connected, independently reviewed pieces:
+This source bundle contains nineteen connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -39,6 +39,8 @@ This source bundle contains eighteen connected, independently reviewed pieces:
   partial reads and growth/move archive opening.
 - `pokemon_resources/`: boot-time personal-table loading, archive opening,
   descriptor/record/cache construction and non-resident member lookup.
+- `message_construction/`: message-resource construction, member opening and
+  destruction, plus move-resource boot.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -64,9 +66,10 @@ This bundle does not run a Pokémon battle
 or provide a playable PC game. These are analyst-authored reconstructions,
 not recovered original source or builds that match the original machine code.
 
-The next targets are the archive object constructor and message-resource
-construction. Details, assembly evidence, and limitations
-are in [the resource milestone](pokemon_resources/README.md),
+The next targets are the archive object constructors and the configuration
+table. Details, assembly evidence, and limitations
+are in [the message-construction milestone](message_construction/README.md),
+[the resource milestone](pokemon_resources/README.md),
 [the archive-index milestone](archive_index/README.md),
 [the archive milestone](archive_io/README.md),
 [the growth-resource milestone](pokemon_growth/README.md),
