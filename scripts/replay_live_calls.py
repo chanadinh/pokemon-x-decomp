@@ -25,7 +25,7 @@ def main():
         sys.exit('usage: replay_live_calls.py CAPTURES.jsonl CALLS.txt')
     code = (ROOT / 'inputs/pokemon-x-0f6d3e1d66cb/code.bin').read_bytes()
     mapping = json.loads((ROOT / 'outputs/rea-live/target.json').read_text())['mapping']
-    lines, tables = [], set()
+    lines, tables, text_lines = [], set(), []
     for address, size in RODATA.items():
         lines.append('R %d %s' % (address, rodata(code, mapping, address, size).hex()))
     for raw in open(sys.argv[1]):
@@ -60,9 +60,24 @@ def main():
                 x['object_bytes'], x['manager_bytes'], x['data_bytes'], x['extra_bytes'] or '-', e['natures']))
         elif c['routine'] == 'select_learnset':
             lines.append('N %d %d %s %s' % (args[0], args[1], exit_['record'], exit_['payload']))
+        elif c['routine'] == 'load_message' and entry['path']:
+            r = bytes.fromhex(entry['resource']); d = bytes.fromhex(exit_['string']); s = bytes.fromhex(entry['string'])
+            member = int.from_bytes(r[0x10:0x14], 'little')
+            capacity = int.from_bytes(s[8:10], 'little'); length = int.from_bytes(d[10:12], 'little')
+            text_lines.append('T %s %d %d %d %d %d %d %d %d %s' % (
+                entry['path'], member, r[0x0c], entry['language'], args[1], capacity, s[12],
+                c['result'], length, exit_['units'] or '-'))
+        elif c['routine'] == 'build_name' and entry['path']:
+            r = bytes.fromhex(entry['resource'])
+            text_lines.append('B %s %d %d %d %d %d %s' % (
+                entry['path'], int.from_bytes(r[0x10:0x14], 'little'), r[0x0c], entry['language'],
+                args[1], c['result'], exit_['units']))
         elif c['routine'] == 'level_from_growth':
             lines.append('L %d %d %d %d' % (args[0], args[1], args[2], c['result']))
     open(sys.argv[2], 'w').write('\n'.join(lines) + '\n')
+    text = Path(sys.argv[2]).with_suffix('.text.txt')
+    text.write_text('\n'.join(text_lines) + '\n')
+    print('%d text calls -> %s' % (len(text_lines), text))
     print('table address: %s' % ' '.join('%#x' % t for t in sorted(tables)) if tables else 'no personal-record calls')
 
 

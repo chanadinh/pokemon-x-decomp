@@ -140,7 +140,36 @@ def learnset_exit(stub, entry_regs, r):
     record = stub.read(stub.u32(0x5d17b4), 12)
     return {'record': record.hex(), 'payload': stub.read(struct.unpack_from('<I', record, 4)[0], 104).hex()}
 
+def archive_path(stub, archive):
+    """The archive constructor keeps a UTF-16 path pointer at +0x30."""
+    if not archive:
+        return ''
+    raw = stub.read(stub.u32(archive + 0x30), 128)
+    return raw.decode('utf-16-le', 'replace').split('\0')[0]
+
+def message_entry(stub, r):
+    resource = stub.read(r[0], 0x28)
+    return {'resource': resource.hex(), 'path': archive_path(stub, struct.unpack_from('<I', resource, 8)[0]),
+            'string': stub.read(r[2], 0x10).hex(), 'language': stub.u32(0x5d113c)}
+
+def message_exit(stub, entry_regs, r):
+    desc = stub.read(entry_regs[2], 0x10)
+    buffer, capacity, length = struct.unpack_from('<IHH', desc, 4)
+    units = min(capacity, 512)
+    return {'string': desc.hex(), 'units': stub.read(buffer, 2 * units).hex() if buffer and units else ''}
+
+def name_entry(stub, r):
+    names = stub.u32(0x5d1794)
+    resource = stub.read(names, 0x28)
+    return {'resource': resource.hex(), 'path': archive_path(stub, struct.unpack_from('<I', resource, 8)[0]),
+            'language': stub.u32(0x5d113c)}
+
+def name_exit(stub, entry_regs, r):
+    return {'units': stub.read(entry_regs[0], 64).hex()}
+
 TARGETS = {
+    0x0013a19c: ('load_message', 3, message_entry, message_exit),
+    0x0014f224: ('build_name', 2, name_entry, name_exit),
     0x0013aa84: ('update_hp', 2, object_entry, object_exit),
     0x0014fb00: ('update_attack', 1, object_entry, object_exit),
     0x0014fbd4: ('update_defense', 1, object_entry, object_exit),
@@ -217,7 +246,10 @@ def main():
                         # Personal routines are keyed by species/form or selector, not record address.
                         key = (name, tuple(entry_regs[1:argc]) if name.startswith('load') or name == 'personal_field'
                                else (entry_data.get('data_bytes'), entry_data.get('extra_bytes'), entry_regs[1] if argc > 1 else 0)
-                               if name.startswith('update') else tuple(entry_regs[:argc]))
+                               if name.startswith('update')
+                               else (entry_data.get('path'), entry_data.get('resource', '')[32:40], entry_regs[1])
+                               if name == 'load_message' else (entry_regs[1],) if name == 'build_name'
+                               else tuple(entry_regs[:argc]))
                         if not (args.distinct and key in seen):
                             seen.add(key)
                             record = {'routine': name, 'address': '%08x' % entry,

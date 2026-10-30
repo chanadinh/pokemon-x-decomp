@@ -108,6 +108,20 @@ block-shuffled. The replay reads the block-permutation table (`00570eec`) and
 nature table (`00570f6c`) from the pinned `code.bin`; the live nature table
 equals that copy.
 
+### Text loading and name building
+
+[`scripts/replay_live_text.c`](../scripts/replay_live_text.c) replays captured
+`0013a19c` message loads and `0014f224` name builds. For each call it opens the
+captured archive file (the archive object's path at `+0x30`), constructs a
+fresh message resource for the captured member, mode and language through the
+reconstructed message-construction, archive-index and file-stream chain, then
+loads the line or builds the name and compares metadata, stored length and
+UTF-16 units. In a five-minute window of dialogue, menus and a battle, the game
+called this loader only three times; both replayable calls (member 80 of
+`a/0/7/4`, line 0, and the species-0 name build, both "Egg") matched. The third
+used a resource without an archive. Most visible game text therefore goes
+through other code, which is not yet reconstructed.
+
 Two early replay differences came from the harness, not the reconstruction.
 Object updates first differed in 72 of 100 calls because the harness did not
 supply the block-permutation table, so every block resolved to position zero;
