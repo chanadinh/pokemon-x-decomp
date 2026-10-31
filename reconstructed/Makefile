@@ -24,3 +24,4 @@ all test clean:
 	$(MAKE) -C battle_types $@
 	$(MAKE) -C battle_matchup $@
 	$(MAKE) -C battle_event $@
+	$(MAKE) -C battle_handler $@

@@ -242,9 +242,29 @@ native/build/pokemon_asset_viewer --romfs /path/to/romfs \
 native/build/pokemon_field_viewer --romfs /path/to/romfs --zone 5
 ```
 
+## Progress toward the full game
+
+How much of the game's own code has been rebuilt in C, measured in machine-code
+bytes of reconstructed functions that are checked against the original:
+
+| Code | Reconstructed | Total | Share |
+| --- | --- | --- | --- |
+| Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
+| Battle module (`DllBattle.cro` text) | 35 functions, 10,196 bytes | 840,188 bytes | 1.21% |
+| **All game code** (main + 133 CRO modules) | **254 functions, 36,220 bytes** | **8,782,284 bytes** | **0.41%** |
+
+So roughly **0.4%** of the original program has been reconstructed so far
+(25 milestones). The figure counts each implemented function once, by its
+body size in the evidence files; reviewed helpers that were only compared are
+not counted. It measures code, not effort or playability: the native field
+viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
+are a separate host track that reuses original data rather than original code,
+and are not part of the percentage. Code size is also uneven in difficulty;
+the battle and Pokémon systems done so far are among the denser parts.
+
 ## Rebuilding the rules
 
-The visual tools sit alongside twenty-four connected C reconstruction milestones.
+The visual tools sit alongside twenty-five connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -274,6 +294,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle type effectiveness](reconstructed/battle_types/README.md) | Type-chart lookup with Inverse Battle, dual-type combination and damage scaling, checked against the original chart |
 | [Battle type matchup](reconstructed/battle_matchup/README.md) | A move against all defending types: Roost, ability events, airborne Ground immunity and the immunity message |
 | [Battle event system](reconstructed/battle_event/README.md) | The event variable stack, dispatch and handler walk that every battle routine uses |
+| [Battle handler registration](reconstructed/battle_handler/README.md) | Handler pool, sorted registration and removal, and ability, item, move and field handler lookup, checked over every original table row |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their
@@ -316,8 +337,8 @@ Pokémon objects, replay through the reconstruction byte for byte.
 
 These results validate specific boundaries. Beyond that state check, they do not establish running-game
 behavior or visual equivalence. The analysis baseline's 133 CRO modules, 44,279
-candidate functions and 230 exported pseudocode functions are inventory counts,
-not a completion percentage.
+candidate functions and 230 exported pseudocode functions are inventory counts;
+the completion share is in [Progress toward the full game](#progress-toward-the-full-game).
 
 </details>
 

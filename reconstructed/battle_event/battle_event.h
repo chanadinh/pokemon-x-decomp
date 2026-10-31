@@ -10,8 +10,9 @@
  * 1 frame marker), values +0xc4 + 4i, maxima +0x244 + 4i, minima +0x3c4 + 4i,
  * kind bytes +0x544 + i (4 id, 1 value, 0 scaled, 3 multiplier).
  *
- * Battle state object: +0x60 first handler, +0x64 free handler count, +0x68
- * dispatch depth. Handler (0x3c bytes): +0 previous, +4 next, +8 entries
+ * Battle state object: +0x60 first handler, +0x64 handlers in use (the pool
+ * array holds free handlers from that index on), +0x68 dispatch depth.
+ * Handler (0x3c bytes): +0 previous, +4 next, +8 entries
  * (8 bytes each: event byte, function word +4), byte +0x10 owner, flags
  * +0x18, work area +0x1c, byte +0x3a value. Flags: low 16 bits registration
  * depth, bits 16..23 entry count, 0x1000000 running, 0x2000000 and 0x40000000
@@ -34,7 +35,7 @@ struct px_battle_event_api {
                  uint32_t value, uint32_t work);
     uint32_t stack;           /* variable stack */
     uint32_t battle;          /* battle state object */
-    uint32_t free_handlers;   /* free handler pointer array */
+    uint32_t free_handlers;   /* handler pool array (free from index +0x64 on) */
 };
 
 void px_battle_event_push(const struct px_battle_event_api *api);                     /* 1086bb84 */

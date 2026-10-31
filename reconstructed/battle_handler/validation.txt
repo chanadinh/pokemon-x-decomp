@@ -1,0 +1,27 @@
+Battle handler-registration milestone, 2026-10-30
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (same session as the four
+earlier battle milestones). Implemented: DllBattle 1084cfc0, 1084d1cc,
+1088164c, 1084d3c0, 1084d370, 1084cf8c, 108678f8, 108abe30, 10869dd4 and
+108a5aac. All 1,956 instruction bytes match live REA bytes and the original
+DllBattle.cro; the eleven literals are ABS32 relocations whose original words
+match and whose values equal symbol plus addend.
+
+All twenty-five reconstruction suites pass. New suite: 1,204 cases covering
+registration fields, bounds, the pool, 300 random sorted-insertion sequences
+against an independent model, removal, owner-6 removal, search, work words and
+the four registrars. Twenty-seven mutations are each detected (one further
+mutation is equivalent). ASan/UBSan pass.
+
+Original data: all 664 rows of the ability, item, move and field tables (603
+table functions, 1,154 handler entries, 926 handler functions over 155 events)
+are decoded from DllBattle.cro and registered through the reconstruction with
+every field matching.
+
+The 1,013 hashes of milestones 1-24 remain unchanged except the event-system
+milestone, whose header comments, README and validation note were corrected
+(battle state +0x64 counts handlers in use); its code is unchanged. Native
+implementation files are unchanged. Handler functions, value services, pool
+initialization and the abort helper remain external. No running-game
+comparison was made; no matching original build is claimed.

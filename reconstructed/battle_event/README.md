@@ -18,7 +18,7 @@ reviewed through live REA MCP/Ghidra and ARM instructions.
 | `10864e98` | `px_battle_event_run_handlers` | Walk the handler list and call every match |
 
 Runtime addresses are static − `0x1015b000`. Names are analyst
-interpretations. The stack (`10b07350`) and the free handler array
+interpretations. The stack (`10b07350`) and the handler pool array
 (`10b1196c`) are in the module's uninitialized segment and the battle state
 object (`108fca00`, the same object whose byte `+1` selects an Inverse
 Battle) is in its data segment; all three are reached through relocated
@@ -52,8 +52,9 @@ milestones.
 
 ## Handlers
 
-The battle state keeps the handler list at `+0x60`, the free handler count
-at `+0x64` and the dispatch depth at `+0x68`. A handler (0x3c bytes) links
+The battle state keeps the handler list at `+0x60`, the number of handlers
+in use at `+0x64` (the pool array holds free handlers from that index on;
+see the [registration milestone](../battle_handler/README.md)) and the dispatch depth at `+0x68`. A handler (0x3c bytes) links
 to its previous and next handler, points to entries of 8 bytes (event byte,
 function word), and has an owner byte `+0x10`, flags `+0x18`, a work area
 `+0x1c` and a value byte `+0x3a`. The flags hold a registration depth (low
@@ -76,9 +77,9 @@ the handler, the context, the value byte and the work area, and afterwards
 the re-entry bit is cleared if set, else the running bit.
 
 A handler that asked for its removal is unlinked, cleared and pushed onto the
-free array (the count is lowered first). One that is still running (a nested
-call) only keeps the request until the outer call finishes. With no free
-slot the abort helper runs and the handler stays unlinked but uncleared.
+pool at the index below the lowered count. One that is still running (a nested
+call) only keeps the request until the outer call finishes. With a count of
+zero the abort helper runs and the handler stays unlinked but uncleared.
 Before that, an unregistered successor is replaced by the handler's current
 link; the original never advances this search, so an unregistered handler
 found there loops forever, and the reconstruction does the same.
@@ -95,8 +96,8 @@ step; frame visibility; reserved keys, duplicates, a full stack, overflow
 bounds and both pop endings; 2,592 flag, event, owner and depth combinations
 for one handler against an independent eligibility rule; the entry search,
 entry counts up to 255 and the blocking check; call order, arguments and the
-visit mark; relinking; removal of the head, middle and tail, without a free
-slot, of an unregistered handler and from a nested call; and dispatch depth
+visit mark; relinking; removal of the head, middle and tail, with a zero
+count, of an unregistered handler and from a nested call; and dispatch depth
 counting and clearing (3,994 cases). ASan/UBSan pass; 29 mutations are each
 detected.
 

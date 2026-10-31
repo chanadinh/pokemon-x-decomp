@@ -18,3 +18,7 @@ The 981 hashes of milestones 1-23 remain unchanged. Native implementation
 files are unchanged. Handler functions, the blocking, overflow and abort
 helpers and handler registration remain external. No running-game comparison
 was made; no matching original build is claimed.
+
+Correction (same day, battle_handler milestone): battle state word +0x64 counts
+handlers in use and the pool array holds free handlers from that index on; it
+was first described as a free count. Only comments and documentation changed.
