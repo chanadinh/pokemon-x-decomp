@@ -107,6 +107,9 @@ The twenty-ninth milestone adds every [type-change handler](../reconstructed/bat
 The thirtieth milestone adds every [immunity handler](../reconstructed/battle_immunity/README.md)
 (event 0x31): the absorbing abilities, Wonder Guard, Soundproof, Magic Bounce and others.
 
+The thirty-first milestone adds every [stat-stage handler](../reconstructed/battle_stage/README.md)
+(events 0x63-0x66): Simple, Contrary, the drop blockers, Defiant and Competitive.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

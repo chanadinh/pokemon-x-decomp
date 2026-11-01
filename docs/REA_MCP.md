@@ -142,3 +142,6 @@ continued in the same session.
 
 The immunity review ([battle_immunity](../reconstructed/battle_immunity/README.md))
 continued in the same session.
+
+The stat-stage review ([battle_stage](../reconstructed/battle_stage/README.md))
+continued in the same session.
