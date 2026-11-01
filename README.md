@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 217 functions, 39,488 bytes | 840,188 bytes | 4.70% |
-| **All game code** (main + 133 CRO modules) | **436 functions, 65,512 bytes** | **8,782,284 bytes** | **0.75%** |
+| Battle module (`DllBattle.cro` text) | 221 functions, 41,384 bytes | 840,188 bytes | 4.93% |
+| **All game code** (main + 133 CRO modules) | **440 functions, 67,408 bytes** | **8,782,284 bytes** | **0.77%** |
 
-So roughly **0.75%** of the original program has been reconstructed so far
-(39 milestones). The figure counts each implemented function once, by its
+So roughly **0.77%** of the original program has been reconstructed so far
+(40 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside thirty-nine connected C reconstruction milestones.
+The visual tools sit alongside forty connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -309,6 +309,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle kind routines](reconstructed/battle_kinds/README.md) | The processor's stat-stage, weather and ability-change routines, completing the path from handler to effect |
 | [Battle effect routines](reconstructed/battle_effects/README.md) | Six more kind routines: values, stage setting and clearing, field flags, side entries, transfer |
 | [Battle outcome routines](reconstructed/battle_outcomes/README.md) | Five more kind routines: stat values, fainting, leaving, healing, swapping |
+| [Battle change routines](reconstructed/battle_changes/README.md) | Four more kind routines: conditions, HP changes, status, types |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

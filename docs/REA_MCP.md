@@ -169,3 +169,6 @@ were reviewed in the same session.
 
 Five more kind routines ([battle_outcomes](../reconstructed/battle_outcomes/README.md))
 were reviewed in the same session.
+
+Four more kind routines ([battle_changes](../reconstructed/battle_changes/README.md))
+were reviewed in the same session.
