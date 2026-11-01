@@ -157,3 +157,6 @@ were reviewed in the same session.
 
 The shared action services ([battle_action](../reconstructed/battle_action/README.md))
 were reviewed in the same session.
+
+The action processor ([battle_process](../reconstructed/battle_process/README.md))
+was reviewed in the same session.

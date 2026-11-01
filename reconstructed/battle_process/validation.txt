@@ -1,0 +1,21 @@
+Battle action-processor milestone, 2026-11-01
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (session outputs/rea-battle-4).
+Implemented: the action processor 10819600. All 5,696 instruction bytes and
+264 literal bytes match live REA bytes and the original DllBattle.cro; the
+63 jump-table words 108196bc-108197b4 are ABS32 relocations whose original
+words match and whose values equal symbol plus addend.
+
+All thirty-six reconstruction suites pass. New suite: 286 cases, covering
+every kind, the gating bits and an end-to-end sequence through
+battle_action. Thirty-six mutations are each detected. ASan/UBSan pass.
+
+Original data: the jump table's 63 cases decode to exactly the 27 routine
+kinds of the C table (four with the stack word's low bits), 34 inline kinds
+and the two fault kinds 0xc and 0x3d.
+
+The 1,510 hashes of milestones 1-35 remain unchanged. Native implementation
+files are unchanged. The 27 kind routines, the command and message routines
+and the other callees remain external. No running-game comparison was made;
+no matching original build is claimed.

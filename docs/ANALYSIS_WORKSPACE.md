@@ -122,6 +122,9 @@ Download, Forewarn, Anticipation and Frisk, completing event 0x94.
 The thirty-fifth milestone adds the [action services](../reconstructed/battle_action/README.md) those
 handlers share: the action stack, commit, ability popup, message builders and temporary buffer.
 
+The thirty-sixth milestone adds the [action processor](../reconstructed/battle_process/README.md)
+`10819600`, which runs every committed record.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

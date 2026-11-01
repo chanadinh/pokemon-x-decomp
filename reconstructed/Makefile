@@ -35,3 +35,4 @@ all test clean:
 	$(MAKE) -C battle_switchin $@
 	$(MAKE) -C battle_insight $@
 	$(MAKE) -C battle_action $@
+	$(MAKE) -C battle_process $@
