@@ -28,3 +28,4 @@ all test clean:
 	$(MAKE) -C battle_ability $@
 	$(MAKE) -C battle_power $@
 	$(MAKE) -C battle_modifier $@
+	$(MAKE) -C battle_typechange $@

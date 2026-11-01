@@ -101,6 +101,9 @@ The twenty-seventh milestone adds every [move-power ability handler](../reconstr
 The twenty-eighth milestone adds every [final-damage handler](../reconstructed/battle_modifier/README.md)
 (event 0x4f): resist berries, damage items, abilities and the Dig/Dive/Minimize moves.
 
+The twenty-ninth milestone adds every [type-change handler](../reconstructed/battle_typechange/README.md)
+(event 0x28), from Normalize to Judgment and Techno Blast.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

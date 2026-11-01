@@ -136,3 +136,6 @@ against every REA listing.
 
 The damage-modifier review ([battle_modifier](../reconstructed/battle_modifier/README.md))
 continued in the same `outputs/rea-battle-4/` session.
+
+The type-change review ([battle_typechange](../reconstructed/battle_typechange/README.md))
+continued in the same session.
