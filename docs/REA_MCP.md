@@ -154,3 +154,6 @@ continued in the same session.
 
 The remaining switch-in handlers ([battle_insight](../reconstructed/battle_insight/README.md))
 were reviewed in the same session.
+
+The shared action services ([battle_action](../reconstructed/battle_action/README.md))
+were reviewed in the same session.

@@ -1,0 +1,23 @@
+Battle action-service milestone, 2026-11-01
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (session outputs/rea-battle-4).
+Implemented: the action stack (10869f7c, 10869f88), commit (10867b48),
+ability popup (1084c948), message builders (1084d2d4, 1084d29c) and the
+temporary buffer (1084c7d0). All 620 instruction bytes and 8 literal bytes
+match live REA bytes and the original DllBattle.cro; literal 1086a0cc is an
+ABS32 relocation (the record-size table 108d1ed8) whose original word
+matches and whose value equals symbol plus addend.
+
+All thirty-five reconstruction suites pass. New suite: 378 cases, including
+Download, Frisk and Forewarn end to end on the real services.
+Twenty-four mutations are each detected. ASan/UBSan pass.
+
+Original data: the size table's 61 kinds are distinct with nonzero sizes;
+every kind the reconstructed handlers allocate is large enough, and kinds
+3, 0x20 and 0x3a are exactly long enough for an eight-argument message.
+
+The 1,480 hashes of milestones 1-34 remain unchanged. Native implementation
+files are unchanged. The action processor 10819600, the fault routine and
+random numbers remain external. No running-game comparison was made; no
+matching original build is claimed.

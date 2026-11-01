@@ -1,0 +1,9 @@
+1084c948  10402de9  stmdb sp!,{r4,lr}
+1084c94c  0040a0e1  cpy r4, r0
+1084c950  010980e2  add r0, r0, #0x4000
+1084c954  df0f80e2  add r0, r0, #0x37c
+1084c958  8a7500eb  bl 0x10869f88
+1084c95c  0010a0e1  cpy r1, r0
+1084c960  0400a0e1  cpy r0, r4
+1084c964  1040bde8  ldmia sp!,{r4,lr}
+1084c968  766c00ea  b 0x10867b48

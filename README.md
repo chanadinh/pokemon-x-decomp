@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 195 functions, 27,240 bytes | 840,188 bytes | 3.24% |
-| **All game code** (main + 133 CRO modules) | **414 functions, 53,264 bytes** | **8,782,284 bytes** | **0.61%** |
+| Battle module (`DllBattle.cro` text) | 202 functions, 27,860 bytes | 840,188 bytes | 3.32% |
+| **All game code** (main + 133 CRO modules) | **421 functions, 53,884 bytes** | **8,782,284 bytes** | **0.61%** |
 
 So roughly **0.61%** of the original program has been reconstructed so far
-(34 milestones). The figure counts each implemented function once, by its
+(35 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside thirty-four connected C reconstruction milestones.
+The visual tools sit alongside thirty-five connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -304,6 +304,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle status prevention](reconstructed/battle_status/README.md) | Every status-blocking handler: Limber, Insomnia, Immunity, Water Veil, Magma Armor, Own Tempo, Oblivious, Leaf Guard, the Veils and Uproar |
 | [Battle switch-in](reconstructed/battle_switchin/README.md) | 23 of 28 switch-in handlers: the weather setters, Intimidate, entry cures, Forecast, Flower Gift, Unnerve, Mold Breaker and the other announcements |
 | [Battle insight](reconstructed/battle_insight/README.md) | The last five switch-in handlers: Trace, Download, Forewarn, Anticipation and Frisk |
+| [Battle actions](reconstructed/battle_action/README.md) | The action stack, commit, ability popup, message builders and temporary buffer every handler uses |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their
