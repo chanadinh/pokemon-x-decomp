@@ -1,0 +1,23 @@
+Battle restore-routine milestone, 2026-11-01
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (session outputs/rea-battle-4).
+Implemented: the action-processor routines for record kinds 4 (10821948),
+8 (10821b80), 0x23 (1081db1c) and 0x34 (1081defc). All 2,100 instruction
+bytes and 24 literal bytes match live REA bytes and the original
+DllBattle.cro; literal 1081dd14 is an ABS32 relocation (the battle state
+108fca00) whose original word matches and whose value equals symbol plus
+addend.
+
+All forty-one reconstruction suites pass. New suite: 869 cases, including
+two records committed end to end through battle_action and battle_process.
+Twenty-five mutations are each detected. ASan/UBSan pass.
+
+Original data: the processor's jump table hands the four kinds to these
+routines (4 and 8 with the stack word's low bits), and each record's
+original size equals the fields read.
+
+The 1,628 hashes of milestones 1-40 remain unchanged. Native implementation
+files are unchanged. The callees, the command writer and the other five
+kind routines remain external. No running-game comparison was made; no
+matching original build is claimed.
