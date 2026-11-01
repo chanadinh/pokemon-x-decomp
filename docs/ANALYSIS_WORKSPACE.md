@@ -104,6 +104,9 @@ The twenty-eighth milestone adds every [final-damage handler](../reconstructed/b
 The twenty-ninth milestone adds every [type-change handler](../reconstructed/battle_typechange/README.md)
 (event 0x28), from Normalize to Judgment and Techno Blast.
 
+The thirtieth milestone adds every [immunity handler](../reconstructed/battle_immunity/README.md)
+(event 0x31): the absorbing abilities, Wonder Guard, Soundproof, Magic Bounce and others.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

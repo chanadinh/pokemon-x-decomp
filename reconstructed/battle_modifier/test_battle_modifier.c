@@ -26,7 +26,7 @@ static const struct px_battle_ability_api base={&events,NULL,NULL,NULL,NULL,NULL
 static uint32_t item_param(void *u,uint32_t item,uint32_t p) { (void)u;CHECK(item<0x300&&p==3);note("ip ");return params[item]; }
 static uint32_t no_consume(void *u,uint32_t c) { (void)u;CHECK(c==CTX);note("nc ");return no_consume_value; }
 static uint32_t action_record(void *u,uint32_t c,uint32_t k,uint32_t id) { (void)u;CHECK(c==CTX&&k==0x15&&id<8);note("rec ");++records;return RECORD; }
-static void commit(void *u,uint32_t c) { (void)u;CHECK(c==CTX);note("commit ");++commits; }
+static void commit(void *u,uint32_t c,uint32_t r) { (void)u;CHECK(c==CTX&&r==RECORD);note("commit ");++commits; }
 static uint32_t full_hp(void *u,uint32_t p) { (void)u;return full[mon(p)]; }
 static uint32_t is_ally(void *u,uint32_t id,uint32_t other) { (void)u;CHECK(id<8&&other<8);note("ally ");return ally_pairs>>(id*8+other)&1; }
 static uint32_t excluded_move;static uint32_t move_excluded(void *u,uint32_t m) { (void)u;note("ex ");return m==excluded_move; }

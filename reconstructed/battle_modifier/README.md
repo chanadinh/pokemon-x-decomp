@@ -40,7 +40,8 @@ are the original table ids; names follow the public Generation VI lists.
   above 7. The handler's first work word marks the berry as used; with it
   zero the damage is halved, and unless `1084c70c(context)` reports a
   non-consuming pass the word is set and an action record (`10869f7c(context,
-  0x15, id)` with bytes `+4 = 0x11`, `+5 = id`) is committed by `10867b48`.
+  0x15, id)` with bytes `+4 = 0x11`, `+5 = id`) is committed by
+  `10867b48(context, record)`.
 - **The item factor** reads parameter 3 of the item at handler `+0x38`
   through `1084cf74` and computes `(p << 12) + 0x64000` in single precision
   with ±0.5 (literal `1084cc38`), truncated and divided by 100 with the

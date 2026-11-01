@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 118 functions, 16,904 bytes | 840,188 bytes | 2.01% |
-| **All game code** (main + 133 CRO modules) | **337 functions, 42,928 bytes** | **8,782,284 bytes** | **0.49%** |
+| Battle module (`DllBattle.cro` text) | 136 functions, 19,500 bytes | 840,188 bytes | 2.32% |
+| **All game code** (main + 133 CRO modules) | **355 functions, 45,524 bytes** | **8,782,284 bytes** | **0.52%** |
 
-So roughly **0.49%** of the original program has been reconstructed so far
-(29 milestones). The figure counts each implemented function once, by its
+So roughly **0.52%** of the original program has been reconstructed so far
+(30 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside twenty-nine connected C reconstruction milestones.
+The visual tools sit alongside thirty connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -299,6 +299,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle move-power abilities](reconstructed/battle_power/README.md) | All nineteen move-power ability handlers (Technician, Iron Fist, Sheer Force, Strong Jaw, the Auras and others) |
 | [Battle damage modifiers](reconstructed/battle_modifier/README.md) | Every final-damage handler: type-resist berries, Expert Belt, Life Orb, Metronome, Multiscale, Filter, Sniper and the moves that double against Dig, Dive or Minimize |
 | [Battle type changes](reconstructed/battle_typechange/README.md) | Every move-type handler: Normalize, Aerilate, Pixilate, Refrigerate, Weather Ball, Hidden Power, Judgment, Natural Gift, Techno Blast, Curse, Struggle |
+| [Battle immunities](reconstructed/battle_immunity/README.md) | Every move-blocking handler: the absorbing abilities, Flash Fire, Wonder Guard, Soundproof, Overcoat, Magic Bounce, Safety Goggles, Magic Coat, Telekinesis and others |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

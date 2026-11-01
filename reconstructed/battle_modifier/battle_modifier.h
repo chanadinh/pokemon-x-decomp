@@ -16,7 +16,7 @@ struct px_battle_modifier_api {
     uint32_t (*item_param)(void *user, uint32_t item, uint32_t param);    /* 1084cf74 -> 108003ac */
     uint32_t (*no_consume)(void *user, uint32_t context);                 /* 1084c70c */
     uint32_t (*action_record)(void *user, uint32_t context, uint32_t kind, uint32_t id); /* 10869f7c */
-    void (*commit_actions)(void *user, uint32_t context);                 /* 10867b48 */
+    void (*commit_actions)(void *user, uint32_t context, uint32_t record); /* 10867b48 */
     uint32_t (*full_hp)(void *user, uint32_t pokemon);                    /* 1084d318 */
     uint32_t (*is_ally)(void *user, uint32_t id, uint32_t other);         /* 1084c5a8 */
     uint32_t (*move_excluded)(void *user, uint32_t move);                 /* 1084c808 */

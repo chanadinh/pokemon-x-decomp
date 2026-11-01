@@ -139,3 +139,6 @@ continued in the same `outputs/rea-battle-4/` session.
 
 The type-change review ([battle_typechange](../reconstructed/battle_typechange/README.md))
 continued in the same session.
+
+The immunity review ([battle_immunity](../reconstructed/battle_immunity/README.md))
+continued in the same session.

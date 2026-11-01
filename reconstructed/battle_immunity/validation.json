@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-01",
+  "method": "Live REA stdio MCP over a main+DllBattle carrier, ARM assembly review, synthetic tests on the reconstructed event stack and original-table bindings",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "module": {
+      "file": "DllBattle.cro",
+      "size": 1040384,
+      "sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "text_file_offset": 384,
+      "text_analysis_address": "0x10800180"
+    },
+    "carrier_sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1",
+    "implemented_functions": 18,
+    "instruction_bytes_verified": 2596,
+    "literal_bytes_verified": 12,
+    "relocations_verified": 0,
+    "decoder_listed_functions": 5,
+    "complete_evidence_records_retained": 31,
+    "original_project_unchanged": true
+  },
+  "tests": {
+    "reconstructed_modules_passed": 30,
+    "synthetic_cases": 3673,
+    "mutations_detected": 23,
+    "original_data": {
+      "module_sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "handlers": 17,
+      "bindings": 17,
+      "event_0x31_entries": {
+        "ability": 14,
+        "item": 1,
+        "move": 2
+      },
+      "event_0x31_covered": true,
+      "all_match": true
+    },
+    "asan": true,
+    "ubsan": true,
+    "live": "not run"
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 1189,
+    "native_source_changed": false,
+    "prior_manifest_sha256": {
+      "reconstructed/archive_index/SHA256SUMS": "503f6df93165c6471c85c3774016a40f40992badd4b7dcc0328b184f6204a2c2",
+      "reconstructed/archive_io/SHA256SUMS": "9fa4fd6dfe7974163f5ff7642bff9836decd08a56bdb3b2849d7be50a47f5685",
+      "reconstructed/battle_ability/SHA256SUMS": "b4e76f9d77f3eea184503b643374692cb232efc271eecc86d6a467ddce4e0b93",
+      "reconstructed/battle_damage/SHA256SUMS": "e963c1ed162463732cbd85cc950f12cb4c5681594844a65ad27212b12c13fc14",
+      "reconstructed/battle_event/SHA256SUMS": "6cad8e22c5341d1bf2d163cb31e17cc6ff669a75b064a8baa5159e0523651b8c",
+      "reconstructed/battle_handler/SHA256SUMS": "b3b6e4b61bde90ca7876f0d2cd16f8db59b65b568de19b789d1c4a868f6e05c0",
+      "reconstructed/battle_matchup/SHA256SUMS": "e5204e7a06fa1d7a600ff064cf7c84defd50b89913f21b0fa83322d7c7f0c630",
+      "reconstructed/battle_power/SHA256SUMS": "3b9f3bb7aa4dd38c8eed1735ef11506eca909b57ff385c5f660fc3aa03563647",
+      "reconstructed/battle_stats/SHA256SUMS": "b86f0d510313270849bb938b9375587aa9b3113e336589feb2bef591aae5705c",
+      "reconstructed/battle_task/SHA256SUMS": "5e9434c27e94bbf43014bcc273f80cf26775dcbe1c51e8051183647c5009cdf1",
+      "reconstructed/battle_typechange/SHA256SUMS": "2a97ddc986a449c535342d9af09a71b0aca27a7cb3068347019ddd1e82cb5052",
+      "reconstructed/battle_types/SHA256SUMS": "b85660a34baff9528e353afca3df929a78c37d77f8d8cfcbbba86704135422aa",
+      "reconstructed/call_wild_battle/SHA256SUMS": "a3acabefdeab4df63e6b9b7fc651fe55e1bd297a02d56476c0c122b4e3609bd9",
+      "reconstructed/encounter_builder/SHA256SUMS": "af4aa6a38b51a66e7d2c43aaca61109ebbc988bb3c673ed360257fe996d4abf6",
+      "reconstructed/message_construction/SHA256SUMS": "1ed98b9c145d88f792d7a5b8590c8ee6c82f1e43b070bdfe693cda6341202428",
+      "reconstructed/message_resources/SHA256SUMS": "60af55af559b069347994a3a1204f7b9ce3d2045f81952e43e3c6627139fc577",
+      "reconstructed/pokemon_constructor/SHA256SUMS": "f8573547857c456fbd3acd57046378116cc77c3a51ce99d73297b4c095d1e143",
+      "reconstructed/pokemon_data/SHA256SUMS": "0405aba491f360b8e6d63d029fd9959205b7aa1baf96ddb3775ec096e3d481b7",
+      "reconstructed/pokemon_growth/SHA256SUMS": "d59ee78af48596e7d1061851421e800b8de6b7d6e937741675ca5eaf0b5a0cbd",
+      "reconstructed/pokemon_learnset/SHA256SUMS": "46467b590596d8a09fd486734e89256a37560eb6848818b36ce4e32f8013853a",
+      "reconstructed/pokemon_move_resource/SHA256SUMS": "2c88555c6749ca3eb15d12fd02659db31ddc757e7da59a484cdf2a473a62dfe4",
+      "reconstructed/pokemon_moves/SHA256SUMS": "132d2947267f8d4410bec4785df6b14fd51925fd4a880850845937774e7efb68",
+      "reconstructed/pokemon_names/SHA256SUMS": "1b10f524faa68d19dc9771de52e74705f4358050ab63587f04166a7a843d721b",
+      "reconstructed/pokemon_personal/SHA256SUMS": "637c4b0ed470ec942aa93f5cbeef289a943af46a43c02ef67de5acabacebf15c",
+      "reconstructed/pokemon_resources/SHA256SUMS": "58534029acc54ea260f792ab2bad15f995630b2afcadd79833c30f469f46eef0",
+      "reconstructed/pokemon_state/SHA256SUMS": "8b4558ec9f88813ab18e582bdffd0d79ca393f08f1d4d1ead90b057b5627ac7b",
+      "reconstructed/pokemon_stats/SHA256SUMS": "0e1b43210166c53462066dbdd1c6fc70d53d48aa6c5aae534568300573f72289",
+      "reconstructed/wild_battle_setup/SHA256SUMS": "aa1682d7073cc8623ce3941231451c88a81e7876aa890272b3fb328def0d5efa"
+    }
+  },
+  "source_hashes": {
+    "reconstructed/battle_immunity/battle_immunity.c": "40e03009650f7799aafd9d0ff6b9b3cf7e4c4b6541a55b8271a7194410863480",
+    "reconstructed/battle_immunity/battle_immunity.h": "27d64ba8168c0301b277e75c14ed242607666e8f5db24458a68f79f68a4eee09",
+    "reconstructed/battle_immunity/test_battle_immunity.c": "86ba19fcc27a98ff158fa596d1a2c53e3409346abcdb5801b9f627f3bab15e28",
+    "reconstructed/battle_immunity/Makefile": "32ad9609fb7f59316daa69d5cde9c04c6a7b6da5dc9f71e29b7900575a4db684",
+    "reconstructed/battle_immunity/reproduction/verify_rea.py": "abb031e087dea9b156f720271ef3f94423dfde8724b1240b7e6648eac7d6fc43",
+    "reconstructed/battle_immunity/reproduction/check_bindings.py": "63aaaefbd24b87d92aa114962cd3a4f27d01bcfe1874c123b122aacdc0f9c1ba",
+    "reconstructed/battle_power/reproduction/decode_arm.py": "7b8658ce88254bf87eece1a767521fba45b277301e56f1984eca5ed22624fcd2",
+    "reconstructed/battle_ability/battle_ability.c": "d56d8e0ab044b0b640272942cc923ce2d3adda4bc38e62c07be97d559d8c7866",
+    "reconstructed/battle_event/battle_event.c": "c8fc0ed4b70198157054cfd23ec737be5eac3f006c83583c844d855f0f8bd2ce",
+    "reconstructed/battle_modifier/battle_modifier.c": "208c604ee62659a97f5ef9f46c797373d24d46be31621db701a8353dd1575646",
+    "reconstructed/battle_modifier/battle_modifier.h": "f5e8f5ce700f7cfd1d77144eddab7606b5eb5fe15557a74dd7af1976dac055ac"
+  },
+  "limits": [
+    "Healing, stat-change, message, popup, reflection, move-data, ally, status and form services remain external.",
+    "The damage-modifier milestone was corrected: its commit callback now passes the action record.",
+    "Two handlers have no Ghidra function; their listings come from the battle_power decoder.",
+    "No running-game comparison of these routines has been made.",
+    "No matching original build is claimed."
+  ]
+}

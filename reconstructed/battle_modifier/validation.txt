@@ -20,3 +20,7 @@ The 1,151 hashes of milestones 1-27 remain unchanged. Native implementation
 files are unchanged. Item, consumption, HP, ally and move-history services
 remain external. No running-game comparison was made; no matching original
 build is claimed.
+
+Correction (same day, battle_immunity milestone): the action-record commit
+10867b48 takes the record as its second argument; commit_actions now passes
+it and the test checks it. Behaviour is otherwise unchanged.

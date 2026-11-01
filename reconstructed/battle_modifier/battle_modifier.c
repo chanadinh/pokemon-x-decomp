@@ -58,7 +58,7 @@ uint32_t px_battle_resist_berry(uint32_t context, uint32_t id, uint32_t work, ui
     const uint32_t record = api->action_record(user(api), context, 0x15, id);
     m->store8(m->user, record + UINT32_C(5), (uint8_t)id);
     m->store8(m->user, record + UINT32_C(4), 0x11);
-    api->commit_actions(user(api), context);
+    api->commit_actions(user(api), context, record);
     return 1;
 }
 

@@ -81,9 +81,9 @@
     }
   },
   "source_hashes": {
-    "reconstructed/battle_modifier/battle_modifier.c": "cd37168201a45f706b9185d59158e50172602244838b826c6693c85468072018",
-    "reconstructed/battle_modifier/battle_modifier.h": "ca3f920c54221ceafb645277d6675cb8468d2e89580b069c8477c78fb473e767",
-    "reconstructed/battle_modifier/test_battle_modifier.c": "d02a6aa1b911fd896dd45a3ced8ac19e6cced1a7722ea6efd604da3fa29c7c51",
+    "reconstructed/battle_modifier/battle_modifier.c": "208c604ee62659a97f5ef9f46c797373d24d46be31621db701a8353dd1575646",
+    "reconstructed/battle_modifier/battle_modifier.h": "f5e8f5ce700f7cfd1d77144eddab7606b5eb5fe15557a74dd7af1976dac055ac",
+    "reconstructed/battle_modifier/test_battle_modifier.c": "3861b924e001835d608fa493de54d4d28a4886e4d0abc2203f498fceb6394814",
     "reconstructed/battle_modifier/Makefile": "06f3019206a14a083041e71d41bcf75940276d26e276735ea93ba33f95541395",
     "reconstructed/battle_modifier/reproduction/verify_rea.py": "533b28e3902f7d6739ce13146214637ed6faa0a97d791880e755c970af51de9a",
     "reconstructed/battle_modifier/reproduction/check_bindings.py": "0e3f4104b6cd8a3280862b95ae7f5d53f41a3eee323e407a4e28601f8c59d283",
@@ -96,5 +96,8 @@
     "Two handlers have no Ghidra function; their listings come from the battle_power decoder.",
     "No running-game comparison of these routines has been made.",
     "No matching original build is claimed."
+  ],
+  "corrections": [
+    "2026-11-01 (battle_immunity milestone): the action-record commit 10867b48 takes the record as its second argument; commit_actions now passes it and the test checks it. Behaviour is otherwise unchanged."
   ]
 }
