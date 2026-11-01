@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Thirty-seven connected host-source milestones now exist: the `CallWildBattle`
+Thirty-eight connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -119,7 +119,7 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    Frisk in [battle_insight](reconstructed/battle_insight/README.md), and the action stack, commit, popup and message
    services in [battle_action](reconstructed/battle_action/README.md), with the processor that runs every record in
    [battle_process](reconstructed/battle_process/README.md) and three of its kind routines in
-   [battle_kinds](reconstructed/battle_kinds/README.md); the remaining handler functions (of 926 across
+   [battle_kinds](reconstructed/battle_kinds/README.md) and [battle_effects](reconstructed/battle_effects/README.md); the remaining handler functions (of 926 across
    abilities, items, moves and field effects) are the next targets. Reconstruct the archive object
    constructors and the boot code that fills the resource configuration table. Message construction `0x0011e264`, member opening
    `0x0012ad74`, destruction and move-resource boot `0x00112894` now have host

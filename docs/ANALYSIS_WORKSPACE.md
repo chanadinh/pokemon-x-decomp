@@ -128,6 +128,9 @@ The thirty-sixth milestone adds the [action processor](../reconstructed/battle_p
 The thirty-seventh milestone adds three of its [kind routines](../reconstructed/battle_kinds/README.md):
 stat stages, weather and ability change.
 
+The thirty-eighth milestone adds [six more](../reconstructed/battle_effects/README.md) (kinds 5, 0xe, 0x11,
+0x1a, 0x1c and 0x2b).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
