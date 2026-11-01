@@ -1,0 +1,22 @@
+Battle damage-modifier milestone, 2026-11-01
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (session outputs/rea-battle-4).
+Implemented: all 30 handlers of event 0x4f (six abilities, 21 items, 12
+moves) and four helpers. All 1,968 instruction bytes and 20 literal bytes
+match live REA bytes and the original DllBattle.cro; no relocations apply.
+Two handlers without a Ghidra function are listed by the battle_power
+decoder.
+
+All twenty-eight reconstruction suites pass. New suite: 18,950 cases on the
+real event stack, including four handlers through the real dispatcher.
+Twenty-seven mutations are each detected (two further are equivalent).
+ASan/UBSan pass.
+
+Original data: the handlers are bound to exactly 39 table rows, only for
+event 0x4f, and these are all of its entries (6 ability, 21 item, 12 move).
+
+The 1,151 hashes of milestones 1-27 remain unchanged. Native implementation
+files are unchanged. Item, consumption, HP, ally and move-history services
+remain external. No running-game comparison was made; no matching original
+build is claimed.

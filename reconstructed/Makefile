@@ -27,3 +27,4 @@ all test clean:
 	$(MAKE) -C battle_handler $@
 	$(MAKE) -C battle_ability $@
 	$(MAKE) -C battle_power $@
+	$(MAKE) -C battle_modifier $@

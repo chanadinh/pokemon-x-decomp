@@ -133,3 +133,6 @@ The move-power review ([battle_power](../reconstructed/battle_power/README.md)) 
 `outputs/rea-battle-4/`. Where Ghidra created no function, REA's instruction inspection
 reports data, so those handlers are listed by a small decoder that the verifier checks
 against every REA listing.
+
+The damage-modifier review ([battle_modifier](../reconstructed/battle_modifier/README.md))
+continued in the same `outputs/rea-battle-4/` session.

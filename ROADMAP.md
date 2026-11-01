@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Twenty-seven connected host-source milestones now exist: the `CallWildBattle`
+Twenty-eight connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -24,7 +24,7 @@ message loading/decoding/token-aware length, personal-data selection/fields,
 growth-resource selection/loading/caching, archive member/file-stream I/O,
 GARC index parsing/resident-table construction, boot-time Pokémon resource
 initialization, message-resource construction with move-resource boot, and the first CRO
-milestone: the battle damage calculation with its attack and defense helpers, type effectiveness, the type matchup, the event system, handler registration and the attack, defense and move-power ability handlers.
+milestone: the battle damage calculation with its attack and defense helpers, type effectiveness, the type matchup, the event system, handler registration, the attack, defense and move-power ability handlers and every final-damage handler.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
 creation-parameter preparation, weighted optional-value selection, random
@@ -109,7 +109,8 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    [battle_event](reconstructed/battle_event/README.md), and handler registration in
    [battle_handler](reconstructed/battle_handler/README.md). Thirteen ability handlers for attack and defense are in
    [battle_ability](reconstructed/battle_ability/README.md) and all nineteen move-power handlers in
-   [battle_power](reconstructed/battle_power/README.md); the remaining handler functions (of 926 across
+   [battle_power](reconstructed/battle_power/README.md), and every final-damage handler (abilities, items and
+   moves) in [battle_modifier](reconstructed/battle_modifier/README.md); the remaining handler functions (of 926 across
    abilities, items, moves and field effects) are the next targets. Reconstruct the archive object
    constructors and the boot code that fills the resource configuration table. Message construction `0x0011e264`, member opening
    `0x0012ad74`, destruction and move-resource boot `0x00112894` now have host
