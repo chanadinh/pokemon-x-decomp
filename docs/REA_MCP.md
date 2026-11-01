@@ -151,3 +151,6 @@ continued in the same session.
 
 The switch-in review ([battle_switchin](../reconstructed/battle_switchin/README.md))
 continued in the same session.
+
+The remaining switch-in handlers ([battle_insight](../reconstructed/battle_insight/README.md))
+were reviewed in the same session.

@@ -1,0 +1,22 @@
+Battle insight milestone, 2026-11-01
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (session outputs/rea-battle-4).
+Implemented: Trace, Download, Forewarn, Anticipation and Frisk, the last five
+handlers of event 0x94. All 2,044 instruction bytes and 12 literal bytes
+match live REA bytes and the original DllBattle.cro (no relocations).
+Download and Frisk have no Ghidra function and are listed by the
+battle_power decoder.
+
+All thirty-four reconstruction suites pass. New suite: 238 cases on the real
+event stack, including Download then Frisk through the real dispatcher.
+Twenty-three mutations are each detected. ASan/UBSan pass.
+
+Original data: the five handlers are bound to exactly 10 (ability, event)
+pairs on events 0x94 and 0x5e; all 31 entries of event 0x94 are covered by
+these handlers and the 23 of battle_switchin.
+
+The 1,456 hashes of milestones 1-33 remain unchanged. Native implementation
+files are unchanged. Opponent, side, buffer, random, move-data,
+effectiveness, popup, message and action services remain external. No
+running-game comparison was made; no matching original build is claimed.

@@ -33,3 +33,4 @@ all test clean:
 	$(MAKE) -C battle_stage $@
 	$(MAKE) -C battle_status $@
 	$(MAKE) -C battle_switchin $@
+	$(MAKE) -C battle_insight $@
