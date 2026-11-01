@@ -95,6 +95,9 @@ tables, with every original table row registered through the reconstruction.
 The twenty-sixth milestone adds the first [ability handlers](../reconstructed/battle_ability/README.md):
 thirteen attack and defense multipliers, run on the reconstructed event stack.
 
+The twenty-seventh milestone adds every [move-power ability handler](../reconstructed/battle_power/README.md)
+(event 0x3d), four of them listed by a decoder checked against every REA listing.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

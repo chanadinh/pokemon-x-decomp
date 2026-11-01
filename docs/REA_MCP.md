@@ -128,3 +128,8 @@ relocation records (original word and symbol plus addend).
 The ability-handler review ([battle_ability](../reconstructed/battle_ability/README.md)) used a new
 session, `outputs/rea-battle-3/`, after the earlier one ended; its first query again
 waited for whole-image analysis.
+
+The move-power review ([battle_power](../reconstructed/battle_power/README.md)) used
+`outputs/rea-battle-4/`. Where Ghidra created no function, REA's instruction inspection
+reports data, so those handlers are listed by a small decoder that the verifier checks
+against every REA listing.
