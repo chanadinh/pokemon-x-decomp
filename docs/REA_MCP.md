@@ -124,3 +124,7 @@ One later session (`outputs/rea-battle-2/`) stayed open across five milestones,
 [battle_handler](../reconstructed/battle_handler/README.md), so the whole-image analysis
 ran once. Relocated literals and jump-table words are checked against the CRO
 relocation records (original word and symbol plus addend).
+
+The ability-handler review ([battle_ability](../reconstructed/battle_ability/README.md)) used a new
+session, `outputs/rea-battle-3/`, after the earlier one ended; its first query again
+waited for whole-image analysis.

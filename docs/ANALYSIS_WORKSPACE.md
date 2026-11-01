@@ -92,6 +92,9 @@ The twenty-fifth milestone adds [handler registration](../reconstructed/battle_h
 the handler pool, sorted registration and the ability, item, move and field lookup
 tables, with every original table row registered through the reconstruction.
 
+The twenty-sixth milestone adds the first [ability handlers](../reconstructed/battle_ability/README.md):
+thirteen attack and defense multipliers, run on the reconstructed event stack.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

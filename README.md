@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 35 functions, 10,196 bytes | 840,188 bytes | 1.21% |
-| **All game code** (main + 133 CRO modules) | **254 functions, 36,220 bytes** | **8,782,284 bytes** | **0.41%** |
+| Battle module (`DllBattle.cro` text) | 53 functions, 12,208 bytes | 840,188 bytes | 1.45% |
+| **All game code** (main + 133 CRO modules) | **272 functions, 38,232 bytes** | **8,782,284 bytes** | **0.44%** |
 
-So roughly **0.4%** of the original program has been reconstructed so far
-(25 milestones). The figure counts each implemented function once, by its
+So roughly **0.44%** of the original program has been reconstructed so far
+(26 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside twenty-five connected C reconstruction milestones.
+The visual tools sit alongside twenty-six connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -295,6 +295,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle type matchup](reconstructed/battle_matchup/README.md) | A move against all defending types: Roost, ability events, airborne Ground immunity and the immunity message |
 | [Battle event system](reconstructed/battle_event/README.md) | The event variable stack, dispatch and handler walk that every battle routine uses |
 | [Battle handler registration](reconstructed/battle_handler/README.md) | Handler pool, sorted registration and removal, and ability, item, move and field handler lookup, checked over every original table row |
+| [Battle ability handlers](reconstructed/battle_ability/README.md) | Thirteen ability handlers that change attack and defense (Huge Power, Blaze, Guts, Thick Fat, Fur Coat and others) |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

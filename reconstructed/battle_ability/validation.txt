@@ -1,0 +1,22 @@
+Battle ability-handler milestone, 2026-11-01
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (new session
+outputs/rea-battle-3). Implemented: thirteen ability handlers for events 0x40
+and 0x41 and five helpers. All 2,012 instruction bytes match live REA bytes
+and the original DllBattle.cro; the two literals are ABS32 relocations whose
+original words match and whose values equal symbol plus addend. 108c1648
+(Marvel Scale) has no Ghidra function and is checked by bytes with an
+analyst-decoded listing.
+
+All twenty-six reconstruction suites pass. New suite: 23,897 cases on the real
+event stack, including three handlers run through the real dispatcher.
+Thirty mutations are each detected. ASan/UBSan pass.
+
+Original data: the thirteen handlers are bound to exactly fifteen abilities
+(twelve on event 0x40, three on 0x41) and to no item, move or field row.
+
+The 1,049 hashes of milestones 1-25 remain unchanged. Native implementation
+files are unchanged. Value, category, status, side and field services remain
+external. No running-game comparison was made; no matching original build is
+claimed.
