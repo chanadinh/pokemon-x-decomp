@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 150 functions, 20,604 bytes | 840,188 bytes | 2.45% |
-| **All game code** (main + 133 CRO modules) | **369 functions, 46,628 bytes** | **8,782,284 bytes** | **0.53%** |
+| Battle module (`DllBattle.cro` text) | 167 functions, 22,848 bytes | 840,188 bytes | 2.72% |
+| **All game code** (main + 133 CRO modules) | **386 functions, 48,872 bytes** | **8,782,284 bytes** | **0.56%** |
 
-So roughly **0.53%** of the original program has been reconstructed so far
-(31 milestones). The figure counts each implemented function once, by its
+So roughly **0.56%** of the original program has been reconstructed so far
+(32 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside thirty-one connected C reconstruction milestones.
+The visual tools sit alongside thirty-two connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -301,6 +301,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle type changes](reconstructed/battle_typechange/README.md) | Every move-type handler: Normalize, Aerilate, Pixilate, Refrigerate, Weather Ball, Hidden Power, Judgment, Natural Gift, Techno Blast, Curse, Struggle |
 | [Battle immunities](reconstructed/battle_immunity/README.md) | Every move-blocking handler: the absorbing abilities, Flash Fire, Wonder Guard, Soundproof, Overcoat, Magic Bounce, Safety Goggles, Magic Coat, Telekinesis and others |
 | [Battle stat stages](reconstructed/battle_stage/README.md) | Every stat-stage handler: Simple, Contrary, Clear Body, Hyper Cutter, Keen Eye, Big Pecks, Flower Veil, Defiant and Competitive |
+| [Battle status prevention](reconstructed/battle_status/README.md) | Every status-blocking handler: Limber, Insomnia, Immunity, Water Veil, Magma Armor, Own Tempo, Oblivious, Leaf Guard, the Veils and Uproar |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

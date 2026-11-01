@@ -1,0 +1,20 @@
+Battle status-prevention milestone, 2026-11-01
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (session outputs/rea-battle-4).
+Implemented: all 17 handlers of events 0x6e and 0x70 (twelve abilities and
+Uproar). All 2,244 instruction bytes and 20 literal bytes match live REA
+bytes and the original DllBattle.cro; no relocations apply. Three handlers
+without a Ghidra function are listed by the battle_power decoder.
+
+All thirty-two reconstruction suites pass. New suite: 2,328 cases on the
+real event stack, including a block and its message through the real
+dispatcher. Nineteen mutations are each detected. ASan/UBSan pass.
+
+Original data: the handlers are bound to exactly 25 (row, event) pairs, and
+these are all of the two events' entries.
+
+The 1,356 hashes of milestones 1-31 remain unchanged. Native implementation
+files are unchanged. Ally, type, weather, status-class, popup, message and
+action services remain external. No running-game comparison was made; no
+matching original build is claimed.

@@ -110,6 +110,9 @@ The thirtieth milestone adds every [immunity handler](../reconstructed/battle_im
 The thirty-first milestone adds every [stat-stage handler](../reconstructed/battle_stage/README.md)
 (events 0x63-0x66): Simple, Contrary, the drop blockers, Defiant and Competitive.
 
+The thirty-second milestone adds every [status-prevention handler](../reconstructed/battle_status/README.md)
+(events 0x6e and 0x70), from Limber to the Veils and Uproar.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

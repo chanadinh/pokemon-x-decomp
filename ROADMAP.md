@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-Thirty-one connected host-source milestones now exist: the `CallWildBattle`
+Thirty-two connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -24,7 +24,7 @@ message loading/decoding/token-aware length, personal-data selection/fields,
 growth-resource selection/loading/caching, archive member/file-stream I/O,
 GARC index parsing/resident-table construction, boot-time Pokémon resource
 initialization, message-resource construction with move-resource boot, and the first CRO
-milestone: the battle damage calculation with its attack and defense helpers, type effectiveness, the type matchup, the event system, handler registration, the attack, defense and move-power ability handlers and every final-damage, type-change, immunity and stat-stage handler.
+milestone: the battle damage calculation with its attack and defense helpers, type effectiveness, the type matchup, the event system, handler registration, the attack, defense and move-power ability handlers and every final-damage, type-change, immunity, stat-stage and status-prevention handler.
 They include buffer initialization, decoding of a 12-byte record,
 optional-context handling, task/list initialization, state flag updates,
 creation-parameter preparation, weighted optional-value selection, random
@@ -113,7 +113,8 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    moves) in [battle_modifier](reconstructed/battle_modifier/README.md), and every type-change handler in
    [battle_typechange](reconstructed/battle_typechange/README.md), and every immunity handler in
    [battle_immunity](reconstructed/battle_immunity/README.md), and every stat-stage handler in
-   [battle_stage](reconstructed/battle_stage/README.md); the remaining handler functions (of 926 across
+   [battle_stage](reconstructed/battle_stage/README.md), and every status-prevention handler in
+   [battle_status](reconstructed/battle_status/README.md); the remaining handler functions (of 926 across
    abilities, items, moves and field effects) are the next targets. Reconstruct the archive object
    constructors and the boot code that fills the resource configuration table. Message construction `0x0011e264`, member opening
    `0x0012ad74`, destruction and move-resource boot `0x00112894` now have host

@@ -31,3 +31,4 @@ all test clean:
 	$(MAKE) -C battle_typechange $@
 	$(MAKE) -C battle_immunity $@
 	$(MAKE) -C battle_stage $@
+	$(MAKE) -C battle_status $@

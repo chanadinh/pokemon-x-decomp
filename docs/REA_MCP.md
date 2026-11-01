@@ -145,3 +145,6 @@ continued in the same session.
 
 The stat-stage review ([battle_stage](../reconstructed/battle_stage/README.md))
 continued in the same session.
+
+The status-prevention review ([battle_status](../reconstructed/battle_status/README.md))
+continued in the same session.
