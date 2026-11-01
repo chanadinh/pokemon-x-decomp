@@ -125,6 +125,9 @@ handlers share: the action stack, commit, ability popup, message builders and te
 The thirty-sixth milestone adds the [action processor](../reconstructed/battle_process/README.md)
 `10819600`, which runs every committed record.
 
+The thirty-seventh milestone adds three of its [kind routines](../reconstructed/battle_kinds/README.md):
+stat stages, weather and ability change.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

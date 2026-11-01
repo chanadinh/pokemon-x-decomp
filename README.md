@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 203 functions, 33,556 bytes | 840,188 bytes | 3.99% |
-| **All game code** (main + 133 CRO modules) | **422 functions, 59,580 bytes** | **8,782,284 bytes** | **0.68%** |
+| Battle module (`DllBattle.cro` text) | 206 functions, 35,560 bytes | 840,188 bytes | 4.23% |
+| **All game code** (main + 133 CRO modules) | **425 functions, 61,584 bytes** | **8,782,284 bytes** | **0.70%** |
 
-So roughly **0.68%** of the original program has been reconstructed so far
-(36 milestones). The figure counts each implemented function once, by its
+So roughly **0.70%** of the original program has been reconstructed so far
+(37 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside thirty-six connected C reconstruction milestones.
+The visual tools sit alongside thirty-seven connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -306,6 +306,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle insight](reconstructed/battle_insight/README.md) | The last five switch-in handlers: Trace, Download, Forewarn, Anticipation and Frisk |
 | [Battle actions](reconstructed/battle_action/README.md) | The action stack, commit, ability popup, message builders and temporary buffer every handler uses |
 | [Battle action processor](reconstructed/battle_process/README.md) | `10819600`, which runs every committed record: gating, 63 kinds and the outcome bits |
+| [Battle kind routines](reconstructed/battle_kinds/README.md) | The processor's stat-stage, weather and ability-change routines, completing the path from handler to effect |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

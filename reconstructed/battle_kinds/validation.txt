@@ -1,0 +1,24 @@
+Battle kind-routine milestone, 2026-11-01
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (session outputs/rea-battle-4).
+Implemented: the action-processor routines for record kinds 0xd (stat
+stages, 10823014), 0x1e (weather, 10824774) and 0x20 (ability change,
+10824978). All 2,004 instruction bytes and 8 literal bytes match live REA
+bytes and the original DllBattle.cro; literal 10824b98 is an ABS32
+relocation (the ability list 108d10f0) whose original word matches and
+whose value equals symbol plus addend.
+
+All thirty-seven reconstruction suites pass. New suite: 172 cases on the
+real event stack, including weather and stage records committed end to end
+through battle_action and battle_process. Twenty-five mutations are each
+detected. ASan/UBSan pass.
+
+Original data: the processor's jump table hands the three kinds to these
+routines (0xd with the stack word's low bits), and each record's original
+size ends exactly with its eight-argument message.
+
+The 1,528 hashes of milestones 1-36 remain unchanged. Native implementation
+files are unchanged. The stat-stage applier, ability hooks, command writer
+and the other 24 kind routines remain external. No running-game comparison
+was made; no matching original build is claimed.

@@ -36,3 +36,4 @@ all test clean:
 	$(MAKE) -C battle_insight $@
 	$(MAKE) -C battle_action $@
 	$(MAKE) -C battle_process $@
+	$(MAKE) -C battle_kinds $@
