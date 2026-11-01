@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains thirty-two connected, independently reviewed pieces:
+This source bundle contains thirty-three connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -55,6 +55,7 @@ This source bundle contains thirty-two connected, independently reviewed pieces:
 - `battle_immunity/`: every move-blocking handler (abilities, item, moves).
 - `battle_stage/`: every stat-stage handler (twelve abilities).
 - `battle_status/`: every status-prevention handler (twelve abilities, Uproar).
+- `battle_switchin/`: 23 of the 28 switch-in handlers.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -82,7 +83,8 @@ not recovered original source or builds that match the original machine code.
 
 The next targets are the archive object constructors and the configuration
 table. Details, assembly evidence, and limitations
-are in [the battle status-prevention milestone](battle_status/README.md),
+are in [the battle switch-in milestone](battle_switchin/README.md),
+[the battle status-prevention milestone](battle_status/README.md),
 [the battle stat-stage milestone](battle_stage/README.md),
 [the battle immunity milestone](battle_immunity/README.md),
 [the battle type-change milestone](battle_typechange/README.md),

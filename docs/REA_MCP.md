@@ -148,3 +148,6 @@ continued in the same session.
 
 The status-prevention review ([battle_status](../reconstructed/battle_status/README.md))
 continued in the same session.
+
+The switch-in review ([battle_switchin](../reconstructed/battle_switchin/README.md))
+continued in the same session.

@@ -1,0 +1,17 @@
+108c0074  70402de9  stmdb sp!,{r4,r5,r6,lr}
+108c0078  0160a0e1  cpy r6, r1
+108c007c  0240a0e1  cpy r4, r2
+108c0080  0350a0e1  cpy r5, r3
+108c0084  0200a0e3  mov r0, #0x2
+108c0088  23aefeeb  bl 0x1086b91c
+108c008c  040050e1  cmp r0, r4
+108c0090  0700001a  bne 0x108c00b4
+108c0094  0410a0e1  cpy r1, r4
+108c0098  0600a0e1  cpy r0, r6
+108c009c  ff50feeb  bl 0x108544a0
+108c00a0  0010a0e3  mov r1, #0x0
+108c00a4  db31feeb  bl 0x1084c818
+108c00a8  000050e3  cmp r0, #0x0
+108c00ac  0100a013  movne r0, #0x1
+108c00b0  00008515  strne r0, [r5,#0x0]
+108c00b4  7080bde8  ldmia sp!,{r4,r5,r6,pc}

@@ -113,6 +113,9 @@ The thirty-first milestone adds every [stat-stage handler](../reconstructed/batt
 The thirty-second milestone adds every [status-prevention handler](../reconstructed/battle_status/README.md)
 (events 0x6e and 0x70), from Limber to the Veils and Uproar.
 
+The thirty-third milestone adds 23 of the 28 [switch-in handlers](../reconstructed/battle_switchin/README.md)
+(event 0x94): weather setters, Intimidate, entry cures and the announcements.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
