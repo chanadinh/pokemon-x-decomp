@@ -175,3 +175,6 @@ were reviewed in the same session.
 
 Four more kind routines ([battle_restores](../reconstructed/battle_restores/README.md))
 were reviewed in the same session.
+
+The last five kind routines ([battle_cures](../reconstructed/battle_cures/README.md))
+were reviewed in the same session.

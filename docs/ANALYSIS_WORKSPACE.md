@@ -140,6 +140,9 @@ The fortieth milestone adds [four more](../reconstructed/battle_changes/README.m
 The forty-first milestone adds [four more](../reconstructed/battle_restores/README.md) (kinds 4, 8, 0x23
 and 0x34).
 
+The forty-second milestone adds [the last five](../reconstructed/battle_cures/README.md) (kinds 0xa,
+0x21, 0x25, 0x28 and 0x36): all 27 kind routines are now reconstructed.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

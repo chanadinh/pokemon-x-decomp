@@ -41,3 +41,4 @@ all test clean:
 	$(MAKE) -C battle_outcomes $@
 	$(MAKE) -C battle_changes $@
 	$(MAKE) -C battle_restores $@
+	$(MAKE) -C battle_cures $@
