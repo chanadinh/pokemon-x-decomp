@@ -1,0 +1,48 @@
+108a790c  f0472de9  stmdb sp!,{r4,r5,r6,r7,r8,r9,r10,lr}
+108a7910  0250a0e1  cpy r5, r2
+108a7914  0070a0e1  cpy r7, r0
+108a7918  0190a0e1  cpy r9, r1
+108a791c  0200a0e3  mov r0, #0x2
+108a7920  fd0fffeb  bl 0x1086b91c
+108a7924  050050e1  cmp r0, r5
+108a7928  2600001a  bne 0x108a79c8
+108a792c  0510a0e1  cpy r1, r5
+108a7930  0900a0e1  cpy r0, r9
+108a7934  d9b2feeb  bl 0x108544a0
+108a7938  0e10a0e3  mov r1, #0xe
+108a793c  b732ffeb  bl 0x10874420
+108a7940  0080a0e1  cpy r8, r0
+108a7944  0700a0e1  cpy r0, r7
+108a7948  0340a0e3  mov r4, #0x3
+108a794c  b803d0e1  ldrh r0, [r0,#0x38]
+108a7950  0410a0e1  cpy r1, r4
+108a7954  8695feeb  bl 0x1084cf74
+108a7958  ff6000e2  and r6, r0, #0xff
+108a795c  0520a0e1  cpy r2, r5
+108a7960  0410a0e3  mov r1, #0x4
+108a7964  0900a0e1  cpy r0, r9
+108a7968  8309ffeb  bl 0x10869f7c
+108a796c  0040a0e1  cpy r4, r0
+108a7970  980600e0  mul r0, r8, r6
+108a7974  50109fe5  ldr r1, [0x108a79cc]
+108a7978  0650c4e5  strb r5, [r4,#0x6]
+108a797c  4c209fe5  ldr r2, [0x108a79d0]
+108a7980  911080e0  umull r1, r0, r1, r0
+108a7984  0210a0e3  mov r1, #0x2
+108a7988  a002a0e1  mov r0, r0, lsr #0x5
+108a798c  b400c4e1  strh r0, [r4,#0x4]
+108a7990  080084e2  add r0, r4, #0x8
+108a7994  4e96feeb  bl 0x1084d2d4
+108a7998  0510a0e1  cpy r1, r5
+108a799c  080084e2  add r0, r4, #0x8
+108a79a0  3d96feeb  bl 0x1084d29c
+108a79a4  0700a0e1  cpy r0, r7
+108a79a8  b803d0e1  ldrh r0, [r0,#0x38]
+108a79ac  0010a0e1  cpy r1, r0
+108a79b0  080084e2  add r0, r4, #0x8
+108a79b4  3896feeb  bl 0x1084d29c
+108a79b8  0410a0e1  cpy r1, r4
+108a79bc  0900a0e1  cpy r0, r9
+108a79c0  f047bde8  ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,lr}
+108a79c4  5f00ffea  b 0x10867b48
+108a79c8  f087bde8  ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,pc}

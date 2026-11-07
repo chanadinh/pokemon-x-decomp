@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains forty-five connected, independently reviewed pieces:
+This source bundle contains forty-eight connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -68,6 +68,9 @@ This source bundle contains forty-five connected, independently reviewed pieces:
 - `battle_command/`: the command writer and its queue encoder.
 - `battle_message/`: the message routines.
 - `battle_services/`: battler services the kind routines call.
+- `battle_items_1/`: cure and HP berry handlers.
+- `battle_moves_1/`: base-power move handlers.
+- `battle_abilities_1/`: contact-ability handlers.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -95,7 +98,10 @@ not recovered original source or builds that match the original machine code.
 
 The next targets are the archive object constructors and the configuration
 table. Details, assembly evidence, and limitations
-are in [the battle battler-service milestone](battle_services/README.md),
+are in [the battle item-handler milestone](battle_items_1/README.md),
+[the battle move-handler milestone](battle_moves_1/README.md),
+[the battle ability-handler milestone](battle_abilities_1/README.md),
+[the battle battler-service milestone](battle_services/README.md),
 [the battle message-routine milestone](battle_message/README.md),
 [the battle command-writer milestone](battle_command/README.md),
 [the battle cure-routine milestone](battle_cures/README.md),

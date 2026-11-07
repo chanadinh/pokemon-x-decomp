@@ -1,0 +1,24 @@
+Battle contact-abilities milestone, 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6). Implemented: 14 ability handlers of event 0x53
+(Static, Poison Point, Flame Body, Effect Spore, Cute Charm, Poison Touch,
+Rough Skin/Iron Barbs, Aftermath, Mummy, Gooey, Rattled, Justified, Anger
+Point, Weak Armor) and the helpers 1084ad50, 1085f844 and 1084d2f4: 17
+functions. All 2,744 instruction bytes and 12 literal bytes match live
+REA bytes and the original DllBattle.cro; no relocations are involved
+(34 evidence records retained).
+
+New suite: 3,977 cases. 34 mutations are each detected (one
+equivalent mutation replaced). ASan/UBSan pass. The other reconstruction
+suites were not run here.
+
+Original data: the 14 handlers are bound to exactly 15 (ability, event)
+pairs, the three helpers to none, and the other ability entries of event
+0x53 are exactly Cursed Body (108c10a0) and Illusion (108c29c0).
+
+The 1,784 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. The services listed in README.md remain
+external. No running-game comparison was made; no matching original build is
+claimed.

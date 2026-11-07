@@ -1,0 +1,25 @@
+Battle item handlers, batch 1 (cure and HP berries), 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6). Implemented: 19 item handlers (the cure
+berries Cheri, Chesto, Pecha, Rawst, Aspear, Persim and Lum; Berry Juice,
+Oran and Sitrus Berry) and the shared routines 1087bfa0, 1084c96c, 1084c844,
+1084c730, 1084c198, 1084cc48 and 1084c4c0. All 1,728 instruction bytes and
+20 literal bytes match live REA bytes and the original DllBattle.cro;
+literals 1087c020 (the event stack) and 1084c8b4 (the condition list) are
+ABS32 relocations whose original words match and whose values equal symbol
+plus addend. Fourteen two-instruction handlers without a Ghidra function are
+listed by the battle_power decoder.
+
+New suite: 9,732 cases. Forty-three mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 19 handlers are bound to exactly 49 (item, event) pairs
+of the item table and to nothing in the other tables, and every entry of
+items 43, 149-153 and 155-158 is one of them.
+
+The 1,730 hashes of the other milestones remain unchanged. The status and
+condition queries, item parameters, record stack, messages and commit remain
+external. No running-game comparison was made; no matching original build is
+claimed.

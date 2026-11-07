@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-07",
+  "method": "Live REA stdio MCP over a main+DllBattle carrier, ARM assembly review, synthetic tests on the reconstructed event stack and original-table bindings",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "module": {
+      "file": "DllBattle.cro",
+      "size": 1040384,
+      "sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "text_file_offset": 384,
+      "text_analysis_address": "0x10800180"
+    },
+    "carrier_sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1",
+    "implemented_functions": 26,
+    "handlers": 19,
+    "shared_routines": 7,
+    "instruction_bytes_verified": 1728,
+    "literal_bytes_verified": 20,
+    "relocations_verified": 2,
+    "decoder_listed_functions": 14,
+    "complete_evidence_records_retained": 35,
+    "original_project_unchanged": true
+  },
+  "tests": {
+    "synthetic_cases": 9732,
+    "mutations_detected": 43,
+    "mutations_total": 43,
+    "original_data": {
+      "module_sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "handlers": 19,
+      "items": [
+        43,
+        149,
+        150,
+        151,
+        152,
+        153,
+        155,
+        156,
+        157,
+        158
+      ],
+      "bindings": 49,
+      "entries": {
+        "item 0x02": 7,
+        "item 0x5e": 10,
+        "item 0x61": 3,
+        "item 0x7b": 10,
+        "item 0x7c": 9,
+        "item 0x9c": 10
+      },
+      "all_match": true
+    },
+    "asan": true,
+    "ubsan": true,
+    "live": "not run"
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 1730,
+    "native_source_changed": false,
+    "note": "Only reconstructed/battle_items_1 and outputs/rea-items were written; the other milestones' SHA256SUMS all verify."
+  }
+}

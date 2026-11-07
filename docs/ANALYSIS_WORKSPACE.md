@@ -152,6 +152,10 @@ queue battle messages.
 The forty-fifth milestone adds nine [battler services](../reconstructed/battle_services/README.md) the
 kind routines call: stat stages and values, HP, cures, the status check and the stat-stage applier.
 
+The forty-sixth to forty-eighth milestones are the first handler batches from three parallel sessions:
+[cure and HP berries](../reconstructed/battle_items_1/README.md), [base-power moves](../reconstructed/battle_moves_1/README.md)
+and [contact abilities](../reconstructed/battle_abilities_1/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
