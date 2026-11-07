@@ -193,3 +193,6 @@ through the same shared session.
 The first item, move and ability handler batches (`battle_items_1`, `battle_moves_1`,
 `battle_abilities_1`) were reviewed by three parallel sessions sharing that daemon session through
 `scripts/rea_query.py`, and verified again by the integrating session before they were committed.
+
+The status applier ([battle_conditions](../reconstructed/battle_conditions/README.md)) was reviewed
+through the same shared session.

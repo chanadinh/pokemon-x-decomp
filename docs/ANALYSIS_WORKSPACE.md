@@ -156,6 +156,8 @@ The forty-sixth to forty-eighth milestones are the first handler batches from th
 [cure and HP berries](../reconstructed/battle_items_1/README.md), [base-power moves](../reconstructed/battle_moves_1/README.md)
 and [contact abilities](../reconstructed/battle_abilities_1/README.md).
 
+The forty-ninth milestone adds the [status applier](../reconstructed/battle_conditions/README.md) `108629b8`.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

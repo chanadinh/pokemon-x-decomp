@@ -48,3 +48,4 @@ all test clean:
 	$(MAKE) -C battle_items_1 $@
 	$(MAKE) -C battle_moves_1 $@
 	$(MAKE) -C battle_abilities_1 $@
+	$(MAKE) -C battle_conditions $@
