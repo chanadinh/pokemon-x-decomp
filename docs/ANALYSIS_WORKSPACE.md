@@ -146,6 +146,9 @@ The forty-second milestone adds [the last five](../reconstructed/battle_cures/RE
 The forty-third milestone adds the [command writer](../reconstructed/battle_command/README.md) and its
 queue encoder, which every routine reports its effects through.
 
+The forty-fourth milestone adds the [message routines](../reconstructed/battle_message/README.md) that
+queue battle messages.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
