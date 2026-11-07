@@ -44,3 +44,4 @@ all test clean:
 	$(MAKE) -C battle_cures $@
 	$(MAKE) -C battle_command $@
 	$(MAKE) -C battle_message $@
+	$(MAKE) -C battle_services $@

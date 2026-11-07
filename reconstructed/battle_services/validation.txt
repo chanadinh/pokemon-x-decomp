@@ -1,0 +1,22 @@
+Battle battler-service milestone, 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6). Implemented: nine battler services the kind
+routines call (108722e8, 108714fc, 108620d4, 10871250, 10867a04, 10865788,
+108695c0, 10862858, 10860e74). All 2,100 instruction bytes and 88 literal
+bytes match live REA bytes and the original DllBattle.cro; the 21 words of
+the inner jump tables 10872304, 10871508 and 10871270 are ABS32 relocations
+whose original words match and whose values equal symbol plus addend.
+
+All forty-five reconstruction suites pass. New suite: 1,223 cases on the
+real event stack. Thirty-two mutations are each detected. ASan/UBSan pass.
+
+Original data: the inner jump tables give exactly the stage and value
+offsets of the C (stat 0 faulting); all 10 calls of the reconstructed kind
+routines to these services pass the arguments they take.
+
+The 1,730 hashes of milestones 1-44 remain unchanged. Native implementation
+files are unchanged. The status applier 108629b8 and the callees remain
+external. No running-game comparison was made; no matching original build
+is claimed.

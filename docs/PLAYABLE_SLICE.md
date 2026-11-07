@@ -7,13 +7,13 @@ systems. The native asset viewer and host tests do not yet provide a playable ga
 
 ## Current position
 
-Forty-four source milestones connect wild-battle request preparation to Pokémon
+Forty-five source milestones connect wild-battle request preparation to Pokémon
 construction, payload storage, state initialization/refresh, and HP/stat
 calculation, constructor move insertion, maximum PP, learnset access/selection,
 name construction/storage, move-resource field dispatch/loading/caching,
 message loading/decoding/token-aware length, personal-data selection/fields
 growth-resource selection/caching, archive member/file-stream I/O and
-GARC index construction, boot-time resource initialization, message-resource construction, and the battle damage calculation with its attack and defense helpers, type effectiveness, the type matchup, the event system, handler registration, the attack, defense and move-power ability handlers and the final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, their action services, the action processor, all 27 of its kind routines, the command writer and the message routines.
+GARC index construction, boot-time resource initialization, message-resource construction, and the battle damage calculation with its attack and defense helpers, type effectiveness, the type matchup, the event system, handler registration, the attack, defense and move-power ability handlers and the final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, their action services, the action processor, all 27 of its kind routines, the command writer, the message routines and battler services.
 Growth-to-level lookup and nature adjustment
 are reconstructed alongside the HP and five stat updates.
 Their tests still use synthetic resources and callbacks for table loading,
@@ -62,11 +62,12 @@ validation are described in the [source overview](../reconstructed/README.md),
 [battle restore-routine milestone](../reconstructed/battle_restores/README.md), and
 [battle cure-routine milestone](../reconstructed/battle_cures/README.md), and
 [battle command-writer milestone](../reconstructed/battle_command/README.md), and
-[battle message-routine milestone](../reconstructed/battle_message/README.md).
+[battle message-routine milestone](../reconstructed/battle_message/README.md), and
+[battle battler-service milestone](../reconstructed/battle_services/README.md).
 
 | Requirement | Current state |
 | --- | --- |
-| Reviewed game logic | Forty-four connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction, the battle damage calculation, type effectiveness, the type matchup, the event system, handler registration, ability, final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, the action services, processor and kind routines |
+| Reviewed game logic | Forty-five connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction, the battle damage calculation, type effectiveness, the type matchup, the event system, handler registration, ability, final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, the action services, processor and kind routines |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |

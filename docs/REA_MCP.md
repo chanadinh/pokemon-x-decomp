@@ -186,3 +186,6 @@ carrier after the first one ended.
 The message routines ([battle_message](../reconstructed/battle_message/README.md)) were reviewed in
 `outputs/rea-battle-6`. From this session on, several workers share one warm daemon session
 through `scripts/rea_query.py`, which queues jobs and matches each response by tool and arguments.
+
+The battler services ([battle_services](../reconstructed/battle_services/README.md)) were reviewed
+through the same shared session.

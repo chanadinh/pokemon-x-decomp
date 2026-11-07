@@ -149,6 +149,9 @@ queue encoder, which every routine reports its effects through.
 The forty-fourth milestone adds the [message routines](../reconstructed/battle_message/README.md) that
 queue battle messages.
 
+The forty-fifth milestone adds nine [battler services](../reconstructed/battle_services/README.md) the
+kind routines call: stat stages and values, HP, cures, the status check and the stat-stage applier.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
