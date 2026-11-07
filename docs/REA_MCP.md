@@ -178,3 +178,7 @@ were reviewed in the same session.
 
 The last five kind routines ([battle_cures](../reconstructed/battle_cures/README.md))
 were reviewed in the same session.
+
+The command writer ([battle_command](../reconstructed/battle_command/README.md)) was reviewed in
+the same session; its byte reads came from a new session (`outputs/rea-battle-6`) over the same
+carrier after the first one ended.

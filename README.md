@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 230 functions, 47,344 bytes | 840,188 bytes | 5.63% |
-| **All game code** (main + 133 CRO modules) | **449 functions, 73,368 bytes** | **8,782,284 bytes** | **0.84%** |
+| Battle module (`DllBattle.cro` text) | 237 functions, 51,336 bytes | 840,188 bytes | 6.11% |
+| **All game code** (main + 133 CRO modules) | **456 functions, 77,360 bytes** | **8,782,284 bytes** | **0.88%** |
 
-So roughly **0.84%** of the original program has been reconstructed so far
-(42 milestones). The figure counts each implemented function once, by its
+So roughly **0.88%** of the original program has been reconstructed so far
+(43 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside forty-two connected C reconstruction milestones.
+The visual tools sit alongside forty-three connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -312,6 +312,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle change routines](reconstructed/battle_changes/README.md) | Four more kind routines: conditions, HP changes, status, types |
 | [Battle restore routines](reconstructed/battle_restores/README.md) | Four more kind routines: HP and PP restoring, held items, transforming |
 | [Battle cure routines](reconstructed/battle_cures/README.md) | The last five kind routines (cures, items, moves, side cures): all 27 now reconstructed |
+| [Battle command writer](reconstructed/battle_command/README.md) | `1086c22c` and its queue encoder: every command the battle routines send becomes the original's queued bytes |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

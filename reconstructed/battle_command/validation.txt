@@ -1,0 +1,25 @@
+Battle command-writer milestone, 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses in session
+outputs/rea-battle-4, byte reads in session outputs/rea-battle-6, the same
+carrier). Implemented: the command writer 1086c22c, the queue encoder
+1084dbf4, the writers 10862078, 1084d930 and 1084db70 and the packers
+1084d9a0 and 1084dab0. All 3,992 instruction bytes and 60 literal bytes
+match live REA bytes and the original DllBattle.cro; literals 1086c2c4 and
+1086c2c8 and the nine jump-table words 1084dc44 are ABS32 relocations whose
+original words match and whose values equal symbol plus addend.
+
+All forty-three reconstruction suites pass. New suite: 333 cases.
+Twenty-nine mutations are each detected. ASan/UBSan pass.
+
+Original data: the literals point at the info bytes and the argument
+buffer; all 104 encoded commands use a format whose argument count equals
+their info byte's low nibble; format 0 reaches the fault exit; and all 56
+literal command call sites of the seven reconstructed routine milestones
+pass exactly the arguments the original declares.
+
+The 1,678 hashes of milestones 1-42 remain unchanged. Native implementation
+files are unchanged. The message routines, the display side and the fault
+routines remain external. No running-game comparison was made; no matching
+original build is claimed.

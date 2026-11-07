@@ -1,0 +1,549 @@
+[
+  {
+    "address": "1086c22c",
+    "name": "FUN_1086c22c",
+    "implemented": true,
+    "body_bytes": 152,
+    "body_ranges": [
+      {
+        "start": "0x1086c22c",
+        "end": "0x1086c2c3"
+      }
+    ],
+    "evidence_id": "ev_66c30826929efa7f3a11a9f6e812fefa29467cb7952ab6fccc2b7decd3e43e51",
+    "callees": [
+      {
+        "address": "0x10800394",
+        "name": "FUN_10800394",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10800394",
+              "end": "0x10800397"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084dbf4",
+        "name": "FUN_1084dbf4",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084dbf4",
+              "end": "0x1084dc43"
+            },
+            {
+              "start": "0x1084dc68",
+              "end": "0x1084e803"
+            }
+          ],
+          "total_bytes": 3052,
+          "span_bytes": 3088,
+          "non_contiguous": true,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "1084dbf4",
+    "name": "FUN_1084dbf4",
+    "implemented": true,
+    "body_bytes": 3052,
+    "body_ranges": [
+      {
+        "start": "0x1084dbf4",
+        "end": "0x1084dc43"
+      },
+      {
+        "start": "0x1084dc68",
+        "end": "0x1084e803"
+      }
+    ],
+    "evidence_id": "ev_00c36ca13a139ff8e456b35dc482ea805e6aa9e45fdb73ed92782679bc7279f2",
+    "callees": [
+      {
+        "address": "0x10800394",
+        "name": "FUN_10800394",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10800394",
+              "end": "0x10800397"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108003a4",
+        "name": "thunk_FUN_0011e864",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": true,
+          "thunk_target": "0x11e864",
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108003a4",
+              "end": "0x108003a7"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084d930",
+        "name": "FUN_1084d930",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084d930",
+              "end": "0x1084d99b"
+            }
+          ],
+          "total_bytes": 108,
+          "span_bytes": 108,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084d9a0",
+        "name": "FUN_1084d9a0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084d9a0",
+              "end": "0x1084daaf"
+            }
+          ],
+          "total_bytes": 272,
+          "span_bytes": 272,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084dab0",
+        "name": "FUN_1084dab0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084dab0",
+              "end": "0x1084db6f"
+            }
+          ],
+          "total_bytes": 192,
+          "span_bytes": 192,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084db70",
+        "name": "FUN_1084db70",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084db70",
+              "end": "0x1084dbef"
+            }
+          ],
+          "total_bytes": 128,
+          "span_bytes": 128,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x10862078",
+        "name": "FUN_10862078",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10862078",
+              "end": "0x108620cf"
+            }
+          ],
+          "total_bytes": 88,
+          "span_bytes": 88,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "10862078",
+    "name": "FUN_10862078",
+    "implemented": true,
+    "body_bytes": 88,
+    "body_ranges": [
+      {
+        "start": "0x10862078",
+        "end": "0x108620cf"
+      }
+    ],
+    "evidence_id": "ev_3062fd3cad74ea82d24a8c43fce299f0966564de9bdaab19add2f27ab1c27a9b",
+    "callees": [
+      {
+        "address": "0x108003a4",
+        "name": "thunk_FUN_0011e864",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": true,
+          "thunk_target": "0x11e864",
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108003a4",
+              "end": "0x108003a7"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "1084d930",
+    "name": "FUN_1084d930",
+    "implemented": true,
+    "body_bytes": 108,
+    "body_ranges": [
+      {
+        "start": "0x1084d930",
+        "end": "0x1084d99b"
+      }
+    ],
+    "evidence_id": "ev_2689d6eb5d066e9cc18c5ff8a19b00f5ac0f91f86c9a49c5fb652933098ffe3c",
+    "callees": [
+      {
+        "address": "0x108003a4",
+        "name": "thunk_FUN_0011e864",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": true,
+          "thunk_target": "0x11e864",
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108003a4",
+              "end": "0x108003a7"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "1084db70",
+    "name": "FUN_1084db70",
+    "implemented": true,
+    "body_bytes": 128,
+    "body_ranges": [
+      {
+        "start": "0x1084db70",
+        "end": "0x1084dbef"
+      }
+    ],
+    "evidence_id": "ev_a198a8d39711ab9361aad862a53db1890c4137bd1bf679c512801c083e3d0301",
+    "callees": [
+      {
+        "address": "0x108003a4",
+        "name": "thunk_FUN_0011e864",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": true,
+          "thunk_target": "0x11e864",
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108003a4",
+              "end": "0x108003a7"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "1084d9a0",
+    "name": "FUN_1084d9a0",
+    "implemented": true,
+    "body_bytes": 272,
+    "body_ranges": [
+      {
+        "start": "0x1084d9a0",
+        "end": "0x1084daaf"
+      }
+    ],
+    "evidence_id": "ev_7fbe525849282cb941b779ffa00a2310e1d845756b6b1ccde5e83715222136a8",
+    "callees": [
+      {
+        "address": "0x10800394",
+        "name": "FUN_10800394",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10800394",
+              "end": "0x10800397"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "1084dab0",
+    "name": "FUN_1084dab0",
+    "implemented": true,
+    "body_bytes": 192,
+    "body_ranges": [
+      {
+        "start": "0x1084dab0",
+        "end": "0x1084db6f"
+      }
+    ],
+    "evidence_id": "ev_9000c8ea8c42560e32781e1bee3fdfa530882e33b2f33b5f9db3aa8983f09149",
+    "callees": [
+      {
+        "address": "0x10800394",
+        "name": "FUN_10800394",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10800394",
+              "end": "0x10800397"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  }
+]
