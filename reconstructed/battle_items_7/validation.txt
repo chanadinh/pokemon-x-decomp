@@ -1,0 +1,34 @@
+Battle item handlers, batch 7 (residual held items), 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7).
+
+Implemented: 12 item handlers.
+- Toxic Orb and Flame Orb, each at end of turn and when used.
+- Sticky Barb, at end of turn and its contact transfer.
+- The Leftovers check and restore.
+- Black Sludge, Shell Bell, Life Orb's recoil and Big Root.
+
+Evidence:
+- All 1,932 instruction bytes and 20 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Two handlers without a Ghidra function are listed by the battle_power
+  decoder, using only forms REA lists in this batch.
+
+Tests: 13,466 new cases. Thirty-nine mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 12 handlers are bound to exactly 12 (item, event) pairs
+of the item table, and to nothing in the other tables. The only other entry
+of the eight items is Life Orb's event-0x4f handler, which battle_modifier
+covers.
+
+The 2,947 hashes of the committed milestones (through 0ad70ec) remain
+unchanged.
+
+Not covered:
+- The condition, full-HP, type, decided, contact and side queries, the item
+  parameters, record stack, messages and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

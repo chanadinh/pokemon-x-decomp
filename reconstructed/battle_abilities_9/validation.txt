@@ -1,0 +1,26 @@
+Battle hook-abilities milestone, 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 20 ability handlers that
+install or clear a hook in their handler's word +0xc or set a key or work word
+for the move (Damp, Infiltrator, Mold Breaker/Turboblaze/Teravolt, Scrappy,
+Liquid Ooze, Klutz, Unnerve, Slow Start); six are listed by decode_arm.py.
+The hook-word helpers come from battle_moves_3 and the owner-byte helper from
+battle_items_4. All 1,464 instruction bytes and 28 literal
+bytes match live REA bytes and the original DllBattle.cro; the six hook
+literals are ABS32 relocations whose original words and S+A values are checked
+(35 evidence records retained).
+
+New suite: 1,117 cases. 32 mutations are each detected by a failing
+test (one non-compiling mutation replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the 20 handlers are bound to exactly 28 (ability, event)
+pairs, and the other ability entries of events 0x03,
+0x04, 0x05, 0xb7, 0xaf and 0x5f are exactly the deferred Scrappy and Stance
+Change handlers.
+
+The 3,030 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

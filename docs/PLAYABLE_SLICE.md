@@ -7,7 +7,7 @@ systems. The native asset viewer and host tests do not yet provide a playable ga
 
 ## Current position
 
-Sixty-eight source milestones connect wild-battle request preparation to Pokémon
+Seventy-one source milestones connect wild-battle request preparation to Pokémon
 construction, payload storage, state initialization/refresh, and HP/stat
 calculation, constructor move insertion, maximum PP, learnset access/selection,
 name construction/storage, move-resource field dispatch/loading/caching,
@@ -78,11 +78,13 @@ ability handler batches ([items](../reconstructed/battle_items_1/README.md), [mo
 [stat items](../reconstructed/battle_items_5/README.md), [after-hit moves](../reconstructed/battle_moves_7/README.md) and
 [trapping and priority abilities](../reconstructed/battle_abilities_7/README.md), then
 [accuracy items](../reconstructed/battle_items_6/README.md), [move failure](../reconstructed/battle_moves_8/README.md) and
-[item abilities](../reconstructed/battle_abilities_8/README.md).
+[item abilities](../reconstructed/battle_abilities_8/README.md), and
+[residual items](../reconstructed/battle_items_7/README.md), [after-move handlers](../reconstructed/battle_moves_9/README.md) and
+[hook abilities](../reconstructed/battle_abilities_9/README.md).
 
 | Requirement | Current state |
 | --- | --- |
-| Reviewed game logic | Sixty-eight connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction, the battle damage calculation, type effectiveness, the type matchup, the event system, handler registration, ability, final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, the action services, processor and kind routines |
+| Reviewed game logic | Seventy-one connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction, the battle damage calculation, type effectiveness, the type matchup, the event system, handler registration, ability, final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, the action services, processor and kind routines |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |

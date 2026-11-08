@@ -185,6 +185,10 @@ The sixty-sixth to sixty-eighth milestones add [accuracy and duration items](../
 [move-failure handlers](../reconstructed/battle_moves_8/README.md) and
 [item and after-move abilities](../reconstructed/battle_abilities_8/README.md).
 
+The sixty-ninth to seventy-first milestones add [residual held items](../reconstructed/battle_items_7/README.md),
+[after-move handlers and Secret Power](../reconstructed/battle_moves_9/README.md) and
+[hook abilities](../reconstructed/battle_abilities_9/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
