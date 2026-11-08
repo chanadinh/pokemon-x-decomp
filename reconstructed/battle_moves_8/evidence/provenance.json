@@ -1,0 +1,147 @@
+{
+  "module": {
+    "file": "DllBattle.cro",
+    "size": 1040384,
+    "sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+    "text_file_offset": 384,
+    "text_analysis_address": "0x10800180"
+  },
+  "carrier": {
+    "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+    "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1",
+    "size": 6116100
+  },
+  "rea_server": {
+    "name": "rea",
+    "version": "6.8.0"
+  },
+  "provider": {
+    "id": "ghidra",
+    "name": "Ghidra",
+    "version": "12.1.4"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "parameters": {
+      "target_kind": "executable",
+      "target_format": "elf",
+      "architecture": "arm",
+      "available_architectures": [
+        "arm"
+      ],
+      "import_mode": "ephemeral-source-immutable",
+      "annotation_policy": "atomic-function-entry-metadata-v1",
+      "load_image_observations": "source-mappings-entry-context-v2",
+      "function_body_evidence": "complete-inclusive-ranges-v1",
+      "function_references": "complete-body-and-entry-reference-manager-v2",
+      "call_relationship_coverage": "function-body-call-coverage-v5",
+      "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+      "string_inventory_evidence": "defined-data-coverage-v1",
+      "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+      "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+      "instruction_flow_evidence": "decoded-return-pcode-v1",
+      "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+      "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+      "no_return_repair": "returning-imports-decoded-return-v2",
+      "process_launch": "inspected-jvm-launch-support-v1",
+      "jump_table_evidence": "typed-case-default-blocks-v1",
+      "decompiler_jump_loads": true,
+      "loader": "auto-from-header",
+      "language_id": "ARM:LE:32:v6",
+      "compiler_spec_id": "default",
+      "language_selection": "configured-v1",
+      "analyzer_preset": "ghidra-default",
+      "function_coordinate_context": {
+        "kind": "native-function-coordinate-context-v1",
+        "selected_image": null,
+        "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+      },
+      "analysis_seeds": {
+        "format": "rea-ghidra-seeds-v1",
+        "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+        "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "entries": {
+          "function": 0,
+          "code": 0,
+          "label": 0
+        }
+      }
+    },
+    "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+  },
+  "verified_functions": [
+    {
+      "address": "108af1e4",
+      "instruction_bytes": 128,
+      "instruction_bytes_sha256": "bebb86ea0c71560241f84bdb2099ba4f8fd3898722f47030bf3b9ba96249a15f"
+    },
+    {
+      "address": "108afe50",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "a4f4cce0939f7728f2100110ec938cb65c0a9e7d954e79c56a59b209ecf61f56"
+    },
+    {
+      "address": "108b5494",
+      "instruction_bytes": 224,
+      "instruction_bytes_sha256": "1617850de49b1d2c0c29fa0571b959b44184ae5be92e5342877b18b2131fd402"
+    },
+    {
+      "address": "108b5624",
+      "instruction_bytes": 204,
+      "instruction_bytes_sha256": "0c126c1a2e324adb155b427af3d5ce04ae6bfb2a127fc2b425af985a9ff77fe0"
+    },
+    {
+      "address": "108b9034",
+      "instruction_bytes": 76,
+      "instruction_bytes_sha256": "3a0aaf6e915848f0720ca8a80ead6cc8dbf127898b1d140d456609e0685fe55f"
+    },
+    {
+      "address": "108b96ac",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "481a24ec8ef374f675c0162c928270c130f186d6106d1460c9cceb264aa9b133"
+    },
+    {
+      "address": "108b9b70",
+      "instruction_bytes": 108,
+      "instruction_bytes_sha256": "02ebde35859d0afe8f60b34820897404b30805ea2572019976db0d441fec3480"
+    },
+    {
+      "address": "108bb560",
+      "instruction_bytes": 136,
+      "instruction_bytes_sha256": "65e8508e6729c5a563e9f59df1a7d07e094c068a8cc2532a1c51ef0b4d5be0fd"
+    },
+    {
+      "address": "108bb9cc",
+      "instruction_bytes": 128,
+      "instruction_bytes_sha256": "d6e8ca3b141a62705024f0aad5930a19395330536a1d2cbee385241bf9fe3ab8"
+    },
+    {
+      "address": "108b4b64",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "92e5bf2bb2ceb10146a985e2a4b3155f4396282510ea557031eea4c9b764a2b3"
+    },
+    {
+      "address": "108ba338",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "25205a8d529b3c2d0f528301cc693e4d8d51e07a90f5d7d234827ed10cfa9b5f"
+    }
+  ],
+  "instruction_bytes": 1340,
+  "literal_bytes": 0,
+  "data_bytes": 0,
+  "runtime_delta": "-0x1015b000",
+  "decoder": {
+    "listed_instructions_reproduced": 293,
+    "listed_instructions_refused": 0
+  },
+  "notes": [
+    "Live REA stdio MCP over the main+DllBattle carrier (analyses from the battle sessions, byte reads in session outputs/rea-battle-7, the same carrier); every instruction word equals the original DllBattle.cro bytes (no literals, no relocations).",
+    "Nightmare and the Mean Look family have no Ghidra function and are listed by ../battle_power/reproduction/decode_arm.py.",
+    "Static analysis plus host comparison; not a matching original build."
+  ]
+}

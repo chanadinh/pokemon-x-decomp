@@ -1,0 +1,24 @@
+Battle item-abilities milestone, 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 9 ability handlers that
+keep, steal, pass or eat held items or act once a move has finished (Sticky
+Hold, Pickpocket, Magician, Symbiosis, Cheek Pouch, Moxie, Color Change,
+Cursed Body); one is listed by decode_arm.py. All 1,860
+instruction bytes and 12 literal bytes match live REA bytes and the original
+DllBattle.cro; no relocations are involved (17 evidence records
+retained).
+
+New suite: 2,518 cases. 34 mutations are each detected by a failing
+test (two non-compiling mutations replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the nine handlers are bound to exactly nine (ability, event)
+pairs, and every other ability entry of the events covered is a contact
+handler of battle_abilities_1 or one of the deferred Magician and Illusion
+handlers.
+
+The 2,914 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

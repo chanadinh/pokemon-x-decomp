@@ -1,0 +1,34 @@
+Battle item handlers, batch 6 (accuracy and duration items), 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7).
+
+Implemented: 11 item handlers.
+- Accuracy items: BrightPowder, Lax Incense, Wide Lens and Zoom Lens.
+- Weather rocks: Heat, Damp, Icy and Smooth Rock.
+- Condition-word items: Light Clay, Grip Claw and Binding Band.
+
+Evidence:
+- All 992 instruction bytes and 24 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved. The literals are
+  0.5f, -0.5f and 0x51eb851f, twice.
+- Two handlers without a Ghidra function are listed by the battle_power
+  decoder. One is checked against a same-shape REA sibling. The other is
+  checked against REA spelling references at 108c43c0 and 10865d48.
+
+Tests: 66,856 new cases. Thirty-two mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 11 handlers are bound to exactly 11 (item, event) pairs
+of the item table, and to nothing in the other tables. These are every
+entry of the 11 items.
+
+The 2,840 hashes of the committed milestones (through ecefd95) remain
+unchanged.
+
+Not covered:
+- The turn flag, condition-word helpers, item parameters and key rewrite
+  remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

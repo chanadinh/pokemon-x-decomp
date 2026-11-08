@@ -219,3 +219,6 @@ values in later `validation.json` files record those lists as they stood when ea
 
 The next batches (`battle_items_5`, `battle_moves_7`, `battle_abilities_7`) came through
 `outputs/rea-battle-7` the same way and were verified again before they were committed.
+
+The next batches (`battle_items_6`, `battle_moves_8`, `battle_abilities_8`) came through
+`outputs/rea-battle-7` the same way and were verified again before they were committed.
