@@ -1,0 +1,23 @@
+Battle move handlers milestone (battle_moves_10), 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 20 move handlers of event 0x1f (Counter's
+listing, 1084b2c4, includes the shared check 1084b2d8)
+(4 listed by the battle_power decoder). All
+2,460 instruction bytes, 8 literal bytes and 14 table bytes match
+live REA bytes and the original DllBattle.cro; the Protect table pointer 108b7db4 is
+an ABS32 relocation whose original word matches and whose value equals symbol
+plus addend.
+
+New suite: 2,208 cases on the real event stack.
+40 mutations are each detected (1 equivalent mutations replaced).
+ASan/UBSan pass.
+
+Original data: the handlers are bound to exactly 29 (move, event) pairs;
+every move entry of event 0x1f is one of them.
+
+The 3,080 hashes of the 71 committed milestones remain unchanged. Native
+implementation files are unchanged. The services listed in README.md remain
+external. No running-game comparison was made; no matching original build is
+claimed.

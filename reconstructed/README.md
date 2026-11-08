@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains seventy-one connected, independently reviewed pieces:
+This source bundle contains seventy-four connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -94,6 +94,9 @@ This source bundle contains seventy-one connected, independently reviewed pieces
 - `battle_items_7/`: residual held-item handlers.
 - `battle_moves_9/`: after-move handlers and Secret Power.
 - `battle_abilities_9/`: hook ability handlers.
+- `battle_items_8/`: handlers for items set off by a hit.
+- `battle_moves_10/`: pre-move check handlers.
+- `battle_abilities_10/`: form ability handlers.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -121,7 +124,10 @@ not recovered original source or builds that match the original machine code.
 
 The next targets are the archive object constructors and the configuration
 table. Details, assembly evidence, and limitations
-are in [the seventh item-handler milestone](battle_items_7/README.md),
+are in [the eighth item-handler milestone](battle_items_8/README.md),
+[the tenth move-handler milestone](battle_moves_10/README.md),
+[the tenth ability-handler milestone](battle_abilities_10/README.md),
+[the seventh item-handler milestone](battle_items_7/README.md),
 [the ninth move-handler milestone](battle_moves_9/README.md),
 [the ninth ability-handler milestone](battle_abilities_9/README.md),
 [the sixth item-handler milestone](battle_items_6/README.md),

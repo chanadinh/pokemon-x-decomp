@@ -225,3 +225,6 @@ The next batches (`battle_items_6`, `battle_moves_8`, `battle_abilities_8`) came
 
 The next batches (`battle_items_7`, `battle_moves_9`, `battle_abilities_9`) came through
 `outputs/rea-battle-7` the same way and were verified again before they were committed.
+
+The next batches (`battle_items_8`, `battle_moves_10`, `battle_abilities_10`) came through
+`outputs/rea-battle-7` the same way and were verified again before they were committed.

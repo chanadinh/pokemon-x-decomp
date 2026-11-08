@@ -1,0 +1,36 @@
+Battle item handlers, batch 8 (items set off by a hit), 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7).
+
+Implemented: 19 item handlers for 28 items.
+- Rocky Helmet and Air Balloon.
+- Absorb Bulb, Cell Battery, Snowball and Luminous Moss.
+- Weakness Policy.
+- The Enigma, Jaboca and Rowap Berries.
+- The resist berries' event-0x53 handler.
+
+Evidence:
+- All 2,516 instruction bytes and 8 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Six handlers without a Ghidra function are listed by the battle_power
+  decoder. Their instruction shapes are REA-listed in this batch or at five
+  checked spelling references.
+
+Tests: 81,249 new cases. Forty-two mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 19 handlers are bound to exactly 38 (item, event) pairs
+of the item table, and to nothing in the other tables. The only other
+entries of the 28 items are the resist berries' event-0x4f handlers, which
+battle_modifier covers.
+
+The 3,080 hashes of the committed milestones (through fd7106a) remain
+unchanged.
+
+Not covered:
+- The contact, stage, field, exclusion and berry-note queries, the status
+  test, item parameters, record stack, messages and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

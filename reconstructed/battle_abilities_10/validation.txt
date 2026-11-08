@@ -1,0 +1,20 @@
+Battle form-abilities milestone, 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 14 form handlers of Forecast,
+Flower Gift and Zen Mode; two are listed by decode_arm.py. All 1,988
+instruction bytes match live REA bytes and the original DllBattle.cro; there
+are no literal pools or relocations (26 evidence records retained).
+
+New suite: 2,378 cases. 30 mutations are each detected by a failing
+test (four non-compiling and one equivalent mutation replaced). ASan/UBSan
+pass. The other reconstruction suites were not run here.
+
+Original data: the 14 handlers are bound to exactly 21 (ability, event)
+pairs, and every ability entry of events 0x82, 0x81, 0x87 and 0x60 is one of
+them.
+
+The 3,080 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.
