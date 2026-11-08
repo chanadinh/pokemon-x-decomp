@@ -206,3 +206,7 @@ verified again before they were committed.
 The fourth move and ability batches (`battle_moves_4`, `battle_abilities_4`) came the same way and were
 verified again before they were committed. After the daemon session in `outputs/rea-battle-6` ended,
 later byte reads come from a new session in `outputs/rea-battle-7` over the same carrier.
+
+The next batches (`battle_items_3`, `battle_moves_5`, `battle_abilities_5`) read their bytes through
+`outputs/rea-battle-7` (with earlier reads from `outputs/rea-battle-6`) and were verified again before
+they were committed.

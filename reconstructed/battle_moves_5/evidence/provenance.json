@@ -1,0 +1,246 @@
+{
+  "module": {
+    "file": "DllBattle.cro",
+    "size": 1040384,
+    "sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+    "text_file_offset": 384,
+    "text_analysis_address": "0x10800180"
+  },
+  "carrier": {
+    "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+    "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1",
+    "size": 6116100
+  },
+  "rea_server": {
+    "name": "rea",
+    "version": "6.8.0"
+  },
+  "provider": {
+    "id": "ghidra",
+    "name": "Ghidra",
+    "version": "12.1.4"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "parameters": {
+      "target_kind": "executable",
+      "target_format": "elf",
+      "architecture": "arm",
+      "available_architectures": [
+        "arm"
+      ],
+      "import_mode": "ephemeral-source-immutable",
+      "annotation_policy": "atomic-function-entry-metadata-v1",
+      "load_image_observations": "source-mappings-entry-context-v2",
+      "function_body_evidence": "complete-inclusive-ranges-v1",
+      "function_references": "complete-body-and-entry-reference-manager-v2",
+      "call_relationship_coverage": "function-body-call-coverage-v5",
+      "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+      "string_inventory_evidence": "defined-data-coverage-v1",
+      "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+      "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+      "instruction_flow_evidence": "decoded-return-pcode-v1",
+      "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+      "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+      "no_return_repair": "returning-imports-decoded-return-v2",
+      "process_launch": "inspected-jvm-launch-support-v1",
+      "jump_table_evidence": "typed-case-default-blocks-v1",
+      "decompiler_jump_loads": true,
+      "loader": "auto-from-header",
+      "language_id": "ARM:LE:32:v6",
+      "compiler_spec_id": "default",
+      "language_selection": "configured-v1",
+      "analyzer_preset": "ghidra-default",
+      "function_coordinate_context": {
+        "kind": "native-function-coordinate-context-v1",
+        "selected_image": null,
+        "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+      },
+      "analysis_seeds": {
+        "format": "rea-ghidra-seeds-v1",
+        "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+        "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "entries": {
+          "function": 0,
+          "code": 0,
+          "label": 0
+        }
+      }
+    },
+    "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+  },
+  "verified_functions": [
+    {
+      "address": "108af744",
+      "instruction_bytes": 148,
+      "instruction_bytes_sha256": "3f40115ed27ccd0a2e8795ef3b04e57211fe2ff346cb1332c3df18b6be191ff4"
+    },
+    {
+      "address": "108b14a8",
+      "instruction_bytes": 100,
+      "instruction_bytes_sha256": "ae5fe543a59af3b27bfe429dd034df4bc8bfd10dbd8937e5f33128d5dfc590d4"
+    },
+    {
+      "address": "108b15c8",
+      "instruction_bytes": 132,
+      "instruction_bytes_sha256": "78100fa74eada9e486921b83f2825bbb0c96fdd37d51a04cf5d57522af332bbe"
+    },
+    {
+      "address": "108b1700",
+      "instruction_bytes": 104,
+      "instruction_bytes_sha256": "f077b3ed296e9ff61d7865174f20135951ca5f70c0e3e14dbda906bcc81bc3ca"
+    },
+    {
+      "address": "108b2630",
+      "instruction_bytes": 148,
+      "instruction_bytes_sha256": "557896b704ebbf4da11dc053449727f2c810b3756cc9be1620c73fdda61b904c"
+    },
+    {
+      "address": "108b2738",
+      "instruction_bytes": 156,
+      "instruction_bytes_sha256": "c9eef6ed0fbd10c6f437d1433c29444cf137d35ab8b07c23d0a83d76643a1571"
+    },
+    {
+      "address": "108b28bc",
+      "instruction_bytes": 132,
+      "instruction_bytes_sha256": "fd156b640c5afedd043096ed2725b041bdb5f7f7aaf6a093623154f9fc936d07"
+    },
+    {
+      "address": "108b2940",
+      "instruction_bytes": 104,
+      "instruction_bytes_sha256": "97e54b1b1f3bdb82c97d944256e6607711054fb9c339f1ad2583b65a9f949ced"
+    },
+    {
+      "address": "108b3684",
+      "instruction_bytes": 132,
+      "instruction_bytes_sha256": "aba9df9d037280bcd6479ff42d2d1dfc4cfd3b91e442cca06d1b9881d72e65cb"
+    },
+    {
+      "address": "108b4988",
+      "instruction_bytes": 156,
+      "instruction_bytes_sha256": "8408a247b4d91ad0662464f0b6e1c39763255d14e2fa58d490f943ba93450259"
+    },
+    {
+      "address": "108b0140",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "9da61d5dd3d0e115c1e33ff9c525616b9b05d9c8bbbd89d5679303f1bbbd1931"
+    },
+    {
+      "address": "108b0db4",
+      "instruction_bytes": 88,
+      "instruction_bytes_sha256": "022e17924636fb025e673a8306f31aab7098aaaaaece7e426be49c3da879f4c5"
+    },
+    {
+      "address": "108b176c",
+      "instruction_bytes": 184,
+      "instruction_bytes_sha256": "34b791f8e1d48108aab5dc6e3320f2906c57fa9607c4b8efa5db112d688c44ca"
+    },
+    {
+      "address": "108b1ae0",
+      "instruction_bytes": 100,
+      "instruction_bytes_sha256": "13f153078e56a9a9fe1ec57eac0ba7847d1bdcbb4e063408f20a4d18a37e387c"
+    },
+    {
+      "address": "108b2e34",
+      "instruction_bytes": 88,
+      "instruction_bytes_sha256": "f9a979f2f812f9ca885864f639d9dcea4599c5e2a6d99b4d2419325690ba8dd2"
+    },
+    {
+      "address": "108b320c",
+      "instruction_bytes": 184,
+      "instruction_bytes_sha256": "8391c92ed876fd66b51a6b9792699087b61af39df204936b14b2b9453fc9d86e"
+    },
+    {
+      "address": "108b4784",
+      "instruction_bytes": 88,
+      "instruction_bytes_sha256": "360182808811266ef661de3a534750a1968468c72e2b7c4a6b39fe01e58ff99f"
+    },
+    {
+      "address": "108b5074",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "8ce13b936a804c0076c4c4ed2059aba5ade43c124aaecf176e46b4e68f2fa7f0"
+    },
+    {
+      "address": "108b5440",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "e09c6da4d5dbdf6f5ef7f810054ca28f129d7a2ffaa178f2ffd1704e9e50d233"
+    },
+    {
+      "address": "108b59f0",
+      "instruction_bytes": 88,
+      "instruction_bytes_sha256": "8db5f20e4b413afbdab81cd54f47542fd7b67409b581a2517c83de9beb53374b"
+    },
+    {
+      "address": "108b70bc",
+      "instruction_bytes": 96,
+      "instruction_bytes_sha256": "133e24f556245d0f58dd3f9002a7b434474ebecfc547f2eaad184393cd90c29a"
+    },
+    {
+      "address": "1084bcb0",
+      "instruction_bytes": 140,
+      "instruction_bytes_sha256": "cd08fe084cd71e22cde374edb127b84d572e627cf7fac6e66e92d13ac2c7d971"
+    },
+    {
+      "address": "1084be3c",
+      "instruction_bytes": 24,
+      "instruction_bytes_sha256": "e5968598b4d3a150ce80b19559c1233b1c8fcbebed534291299731b98cdc593a"
+    },
+    {
+      "address": "108b3164",
+      "instruction_bytes": 168,
+      "instruction_bytes_sha256": "76a5c01bbb24399090a968cc05c23ebb1aeeb36c99984c8af47967304622dacb"
+    },
+    {
+      "address": "108b6294",
+      "instruction_bytes": 104,
+      "instruction_bytes_sha256": "6fd19d79fb4b08f83d8068f82afdd29dfb77cfc45aaf25f7f390cd137dd11066"
+    },
+    {
+      "address": "108aed68",
+      "instruction_bytes": 88,
+      "instruction_bytes_sha256": "ee80ff9723978dbbd1a4e2419469529262fbd3cf2f2a42a914ca9226c7f374dd"
+    },
+    {
+      "address": "108b092c",
+      "instruction_bytes": 84,
+      "instruction_bytes_sha256": "82606970497179c6d5ffb978ad86c2d0ed5c2fc73cbd6794fe81fbadbb1b0a97"
+    },
+    {
+      "address": "108b2d6c",
+      "instruction_bytes": 88,
+      "instruction_bytes_sha256": "11eb7b5d16944bc459512d1e51cfdb9c080c5df0bd734c1775e36fa76b6aa8cf"
+    },
+    {
+      "address": "108b6300",
+      "instruction_bytes": 148,
+      "instruction_bytes_sha256": "ac64d28199279b07b4a1d9d9d9d81dd3f0ac88e5dbe499890c5ea85bd6c1fdf2"
+    }
+  ],
+  "instruction_bytes": 3324,
+  "literal_bytes": 16,
+  "data_bytes": 0,
+  "runtime_delta": "-0x1015b000",
+  "decoder": {
+    "listed_instructions_reproduced": 656,
+    "listed_instructions_refused": 5,
+    "form_references": 6,
+    "reference_functions": [
+      "0x10867bbc",
+      "0x10867c9c",
+      "0x1086bbe8",
+      "0x1089e61c",
+      "0x108c4500"
+    ]
+  },
+  "notes": [
+    "Live REA stdio MCP over the main+DllBattle carrier (analyses from the battle sessions, byte reads in session outputs/rea-battle-7, the same carrier); every instruction and literal word equals the original DllBattle.cro bytes (no relocations).",
+    "Six handlers have no Ghidra function and are listed by ../reproduction/decode_store.py (the battle_moves_3 decoder plus STR pre-indexed with writeback, used by Mat Block). The REA analyses listing that form are retained as references; the decoder reproduces all six of those instructions from live bytes.",
+    "1084bcb0 holds VFP instructions (vpush, vldr, vstr, vpop) that the decoder refuses; they are checked against the live bytes and the original module like every other word.",
+    "Static analysis plus host comparison; not a matching original build."
+  ]
+}

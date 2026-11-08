@@ -1,0 +1,23 @@
+Battle redirect-absorb-abilities milestone, 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 15 ability handlers that
+redirect, absorb or block moves and statuses (Lightning Rod, Storm Drain, Sap
+Sipper, Flash Fire, Bulletproof, Damp, Magic Bounce, Sweet Veil, Insomnia /
+Vital Spirit, Flower Veil, Liquid Ooze); two are listed by decode_arm.py. All
+1,880 instruction bytes and 8 literal bytes match live REA bytes and the
+original DllBattle.cro; no relocations are involved (28 evidence
+records retained).
+
+New suite: 970 cases. 35 mutations are each detected by a failing
+test (one equivalent and two non-compiling mutations replaced). ASan/UBSan
+pass. The other reconstruction suites were not run here.
+
+Original data: the 15 handlers are bound to exactly 17 (ability, event)
+pairs, and the only other ability entry of events 0x2b, 0x24 and 0x0e is
+Leaf Guard (battle_abilities_2).
+
+The 2,474 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

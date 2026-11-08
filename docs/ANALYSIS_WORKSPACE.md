@@ -169,6 +169,10 @@ The fifty-second to fifty-fourth milestones add [pinch berries](../reconstructed
 The fifty-fifth and fifty-sixth milestones add [accuracy, added-effect and cleanup moves](../reconstructed/battle_moves_4/README.md)
 and [move-calculation abilities](../reconstructed/battle_abilities_4/README.md).
 
+The fifty-seventh to fifty-ninth milestones add [power-boosting held items](../reconstructed/battle_items_3/README.md),
+[field- and side-condition moves](../reconstructed/battle_moves_5/README.md) and
+[redirect, absorb and blocking abilities](../reconstructed/battle_abilities_5/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

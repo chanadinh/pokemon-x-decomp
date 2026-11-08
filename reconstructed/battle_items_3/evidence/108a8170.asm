@@ -1,0 +1,18 @@
+108a8170  70402de9  stmdb sp!,{r4,r5,r6,lr}
+108a8174  0050a0e1  cpy r5, r0
+108a8178  0240a0e1  cpy r4, r2
+108a817c  0300a0e3  mov r0, #0x3
+108a8180  e50dffeb  bl 0x1086b91c
+108a8184  040050e1  cmp r0, r4
+108a8188  0900001a  bne 0x108a81b4
+108a818c  1600a0e3  mov r0, #0x16
+108a8190  e10dffeb  bl 0x1086b91c
+108a8194  0a0050e3  cmp r0, #0xa
+108a8198  0500001a  bne 0x108a81b4
+108a819c  0500a0e1  cpy r0, r5
+108a81a0  8f92feeb  bl 0x1084cbe4
+108a81a4  7040bde8  ldmia sp!,{r4,r5,r6,lr}
+108a81a8  0010a0e1  cpy r1, r0
+108a81ac  3200a0e3  mov r0, #0x32
+108a81b0  3393feea  b 0x1084ce84
+108a81b4  7080bde8  ldmia sp!,{r4,r5,r6,pc}

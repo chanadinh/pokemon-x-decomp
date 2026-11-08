@@ -1,0 +1,32 @@
+Battle item handlers, batch 3 (power-boosting held items), 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6).
+
+Implemented: 29 item handlers.
+- The 28 event-0x3d power boosts: 23 type items and plates or incenses, the
+  Adamant, Lustrous and Griseous Orbs, Muscle Band and Wise Glasses.
+- Poison Barb's event-0x7c poison record.
+
+Evidence:
+- All 2,244 instruction bytes and 4 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Five handlers without a Ghidra function are listed by the battle_power
+  decoder. Their one further form (uxth r0, r0) reproduces REA's listing of
+  108bc9ec.
+
+Tests: 11,244 new cases. Thirty-five mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 29 handlers are bound to exactly 45 (item, event) pairs
+of the item table, and to nothing in the other tables. Every entry of the 44
+covered items is one of those pairs.
+
+The 2,333 hashes of the other milestones (through a8f1bd4) remain unchanged.
+
+Not covered:
+- The move category, condition word, item parameters, record stack and
+  commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

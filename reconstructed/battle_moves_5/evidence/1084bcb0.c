@@ -1,0 +1,22 @@
+/* Unreviewed Ghidra pseudocode from live REA MCP; types require assembly review. */
+
+void FUN_1084bcb0(undefined4 param_1,undefined4 param_2,int param_3,undefined4 param_4,
+                 undefined4 param_5,undefined1 param_6,undefined4 param_7,undefined2 param_8)
+
+{
+  int iVar1;
+  
+  iVar1 = FUN_1086b91c(3);
+  if (iVar1 == param_3) {
+    iVar1 = FUN_10869f7c(param_2,0x19,param_3);
+    *(undefined1 *)(iVar1 + 4) = param_6;
+    *(char *)(iVar1 + 0xc) = (char)param_5;
+    *(undefined4 *)(iVar1 + 8) = param_7;
+    FUN_1084d2d4(iVar1 + 0x10,1,param_8);
+    FUN_1084d29c(iVar1 + 0x10,param_5);
+    FUN_10867b48(param_2,iVar1);
+    return;
+  }
+  return;
+}
+

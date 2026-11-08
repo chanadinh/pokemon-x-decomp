@@ -1,0 +1,23 @@
+Battle move handlers milestone (battle_moves_5), 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 29 routines, the 27 move handlers of events
+0xaa and 0xad, the side-condition setter 1084bcb0 and the turn-count encoder 1084be3c
+(6 listed by reproduction/decode_store.py, the battle_moves_3
+decoder plus STR pre-indexed with writeback, checked against 6 REA-listed instructions of that form). All
+3,324 instruction bytes, 16 literal bytes and 0 table bytes match
+live REA bytes and the original DllBattle.cro; there are no relocations; the VFP words of
+1084bcb0, which the decoder refuses, are checked as bytes.
+
+New suite: 356 cases on the real event stack.
+35 mutations are each detected (1 equivalent mutations replaced).
+ASan/UBSan pass.
+
+Original data: the handlers are bound to exactly 27 (move, event) pairs;
+every move entry of events 0xaa and 0xad is one of them.
+
+The 2,333 hashes of the 56 committed milestones remain unchanged. Native
+implementation files are unchanged. The services listed in README.md remain
+external. No running-game comparison was made; no matching original build is
+claimed.
