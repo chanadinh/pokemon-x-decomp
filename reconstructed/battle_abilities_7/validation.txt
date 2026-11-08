@@ -1,0 +1,23 @@
+Battle trapping-abilities milestone, 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 14 ability handlers that
+trap or free a switching battler, resist forced switches and Ground moves, add
+PP use or priority, and let Sturdy survive (Shadow Tag, Arena Trap, Magnet
+Pull, Run Away, Suction Cups, Levitate, Pressure, Prankster, Gale Wings,
+Sturdy); three are listed by decode_arm.py. All 1,684 instruction
+bytes and 12 literal bytes match live REA bytes and the original DllBattle.cro;
+no relocations are involved (25 evidence records retained).
+
+New suite: 970 cases. 31 mutations are each detected by a failing
+test (none replaced). ASan/UBSan pass. The other reconstruction suites were
+not run here.
+
+Original data: the 14 handlers are bound to exactly 14 (ability, event)
+pairs, and every ability entry of the eleven events they serve is one of
+them.
+
+The 2,761 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

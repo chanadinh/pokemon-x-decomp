@@ -177,6 +177,10 @@ The sixtieth to sixty-second milestones add [gems](../reconstructed/battle_items
 [two-turn moves](../reconstructed/battle_moves_6/README.md) and
 [status-cure and secondary-effect abilities](../reconstructed/battle_abilities_6/README.md).
 
+The sixty-third to sixty-fifth milestones add [stat and critical-hit items](../reconstructed/battle_items_5/README.md),
+[after-hit moves](../reconstructed/battle_moves_7/README.md) and
+[trapping, escape, priority and endurance abilities](../reconstructed/battle_abilities_7/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

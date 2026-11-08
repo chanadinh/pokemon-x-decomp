@@ -216,3 +216,6 @@ The next batches (`battle_items_4`, `battle_moves_6`, `battle_abilities_6`) came
 `SHA256SUMS` of `battle_moves_2`, `battle_moves_3` and `battle_moves_5` had each listed a gitignored
 `__pycache__` file, which a clean checkout lacks; those lines were removed. The `prior_manifest_sha256`
 values in later `validation.json` files record those lists as they stood when each was written.
+
+The next batches (`battle_items_5`, `battle_moves_7`, `battle_abilities_7`) came through
+`outputs/rea-battle-7` the same way and were verified again before they were committed.

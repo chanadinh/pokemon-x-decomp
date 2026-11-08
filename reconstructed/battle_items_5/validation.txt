@@ -1,0 +1,37 @@
+Battle item handlers, batch 5 (stat and critical-hit items), 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7).
+
+Implemented: 23 item handlers for 24 items.
+- Speed multipliers: Macho Brace, Quick Powder, Iron Ball, Choice Scarf and
+  the Power items.
+- Critical-hit items: Scope Lens, Razor Claw, Lucky Punch and Stick.
+- Attack multipliers: Choice Band, Choice Specs, Soul Dew, DeepSeaTooth,
+  Light Ball and Thick Club.
+- Defence multipliers: Soul Dew, DeepSeaScale, Metal Powder, Eviolite and
+  Assault Vest.
+- Other entries: the Choice lock and release, Iron Ball's grounding and
+  Light Ball's paralysis.
+
+Evidence:
+- All 23 handlers are REA-listed.
+- All 1,808 instruction bytes match live REA bytes and the original
+  DllBattle.cro. No literal pool or relocation is involved.
+- The battle_power decoder reproduces every listed instruction.
+
+Tests: 29,191 new cases. Forty mutations are each detected. ASan/UBSan pass.
+
+Original data: the 23 handlers are bound to exactly 33 (item, event) pairs
+of the item table, and to nothing in the other tables. Every entry of the 24
+covered items is one of those pairs.
+
+The 2,698 hashes of the committed milestones (through 46ffc58) remain
+unchanged.
+
+Not covered:
+- The transformed and can-evolve queries, the condition words, the move
+  category, record stack and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.
