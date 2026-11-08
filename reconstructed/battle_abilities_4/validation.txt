@@ -1,0 +1,22 @@
+Battle move-calculation-abilities milestone, 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6). Implemented: 27 ability handlers that
+adjust accuracy, stages, critical hits, speed, weight, recoil, hit counts and
+effect chances; three are listed by decode_arm.py. All 1,592
+instruction bytes and 16 literal bytes match live REA bytes and the original
+DllBattle.cro; no relocations are involved (51 evidence records
+retained).
+
+New suite: 2,657 cases. 34 mutations are each detected by a failing
+test (three non-compiling mutations replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the 27 handlers are bound to exactly 30 (ability, event)
+pairs, and the only other ability entries of events 0x39, 0x38, 0x3b and
+0x84 are Sand Veil and Snow Cloak (battle_abilities_2).
+
+The 2,207 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.
