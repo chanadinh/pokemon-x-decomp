@@ -210,3 +210,9 @@ later byte reads come from a new session in `outputs/rea-battle-7` over the same
 The next batches (`battle_items_3`, `battle_moves_5`, `battle_abilities_5`) read their bytes through
 `outputs/rea-battle-7` (with earlier reads from `outputs/rea-battle-6`) and were verified again before
 they were committed.
+
+The next batches (`battle_items_4`, `battle_moves_6`, `battle_abilities_6`) came through
+`outputs/rea-battle-7` the same way and were verified again before they were committed. The
+`SHA256SUMS` of `battle_moves_2`, `battle_moves_3` and `battle_moves_5` had each listed a gitignored
+`__pycache__` file, which a clean checkout lacks; those lines were removed. The `prior_manifest_sha256`
+values in later `validation.json` files record those lists as they stood when each was written.

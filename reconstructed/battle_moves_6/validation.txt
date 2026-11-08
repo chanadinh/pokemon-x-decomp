@@ -1,0 +1,22 @@
+Battle move handlers milestone (battle_moves_6), 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 16 move handlers of two-turn moves on
+events 0xa0, 0xa1 and 0xa3
+(7 listed by battle_moves_3's decode_mult.py, checked against 4 REA-listed bx lr). All
+1,368 instruction bytes, 40 literal bytes and 0 table bytes match
+live REA bytes and the original DllBattle.cro; there are no relocations.
+
+New suite: 45 cases on the real event stack.
+26 mutations are each detected (0 equivalent mutations replaced).
+ASan/UBSan pass.
+
+Original data: the handlers are bound to exactly 19 (move, event) pairs;
+every other move entry of these events is one of Sky Drop's two deferred
+handlers.
+
+The 2,515 hashes of the 59 committed milestones remain unchanged. Native
+implementation files are unchanged. The services listed in README.md remain
+external. No running-game comparison was made; no matching original build is
+claimed.

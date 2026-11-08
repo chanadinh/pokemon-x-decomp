@@ -173,6 +173,10 @@ The fifty-seventh to fifty-ninth milestones add [power-boosting held items](../r
 [field- and side-condition moves](../reconstructed/battle_moves_5/README.md) and
 [redirect, absorb and blocking abilities](../reconstructed/battle_abilities_5/README.md).
 
+The sixtieth to sixty-second milestones add [gems](../reconstructed/battle_items_4/README.md),
+[two-turn moves](../reconstructed/battle_moves_6/README.md) and
+[status-cure and secondary-effect abilities](../reconstructed/battle_abilities_6/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

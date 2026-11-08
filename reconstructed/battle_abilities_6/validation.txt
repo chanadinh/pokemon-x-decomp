@@ -1,0 +1,27 @@
+Battle status-cure-abilities milestone, 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 25 functions: 21 ability
+handlers that cure or soften statuses or remove secondary effects (the
+event-0x02 cures, Truant, Shield Dust, Sheer Force, Stench, Natural Cure,
+Regenerator, Poison Heal, Heatproof) and the helpers 1084aba4, 1084a890,
+1084d318 and 1089e6fc; eight handlers are listed by decode_arm.py. All
+1,636 instruction bytes match live REA bytes and the original
+DllBattle.cro; there are no literal pools or relocations (41 evidence
+records retained).
+
+New suite: 32,079 cases. 32 mutations are each detected by a failing
+test (three equivalent and one non-compiling mutation replaced). ASan/UBSan
+pass. The other reconstruction suites were not run here.
+
+Original data: the 21 handlers are bound to exactly 23 (ability, event)
+pairs, the four helpers to none, and every other ability entry of the events
+covered is in battle_abilities_4 or one of the deferred Forecast and Flower
+Gift handlers.
+
+The 2,642 hashes of the existing milestones remain unchanged; one listed
+Python cache file (battle_moves_3/reproduction/__pycache__) differs and is
+recorded in validation.json. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

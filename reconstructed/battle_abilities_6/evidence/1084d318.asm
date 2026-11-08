@@ -1,0 +1,12 @@
+1084d318  70402de9  stmdb sp!,{r4,r5,r6,lr}
+1084d31c  0040a0e1  cpy r4, r0
+1084d320  0d10a0e3  mov r1, #0xd
+1084d324  3d9c00eb  bl 0x10874420
+1084d328  0050a0e1  cpy r5, r0
+1084d32c  0e10a0e3  mov r1, #0xe
+1084d330  0400a0e1  cpy r0, r4
+1084d334  399c00eb  bl 0x10874420
+1084d338  000055e1  cmp r5, r0
+1084d33c  0100a003  moveq r0, #0x1
+1084d340  0000a013  movne r0, #0x0
+1084d344  7080bde8  ldmia sp!,{r4,r5,r6,pc}

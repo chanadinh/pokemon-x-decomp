@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-08",
+  "method": "Live REA stdio MCP over a main+DllBattle carrier (session 7), ARM assembly review, synthetic tests on the reconstructed event stack and original-table bindings",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "module": {
+      "file": "DllBattle.cro",
+      "size": 1040384,
+      "sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "text_file_offset": 384,
+      "text_analysis_address": "0x10800180",
+      "rodata_file_offset": 843776,
+      "rodata_analysis_address": "0x108ce000"
+    },
+    "carrier_sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1",
+    "implemented_functions": 40,
+    "instruction_bytes_verified": 2408,
+    "literal_bytes_verified": 72,
+    "relocations_verified": 0,
+    "decoder_listed_functions": 14,
+    "complete_evidence_records_retained": 84,
+    "original_project_unchanged": true,
+    "handlers": 37,
+    "shared_routines": 3,
+    "decoded_shapes_checked_against_rea_siblings": true,
+    "rea_session": "outputs/rea-battle-7"
+  },
+  "tests": {
+    "synthetic_cases": 6619,
+    "mutations_detected": 35,
+    "mutations_total": 35,
+    "original_data": {
+      "module_sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "handlers": 37,
+      "unbound_helpers": [
+        "1084c284",
+        "1084c700",
+        "10881638"
+      ],
+      "items": [
+        548,
+        549,
+        550,
+        551,
+        552,
+        553,
+        554,
+        555,
+        556,
+        557,
+        558,
+        559,
+        560,
+        561,
+        562,
+        563,
+        564,
+        715
+      ],
+      "bindings": 54,
+      "entries": {
+        "item 0x3d": 18,
+        "item 0x8a": 18,
+        "item 0x91": 18
+      },
+      "all_match": true
+    },
+    "asan": true,
+    "ubsan": true,
+    "live": "not run"
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 2517,
+    "prior_reconstruction_hashes_listed": 2518,
+    "native_source_changed": false,
+    "note": "Only reconstructed/battle_items_4 and outputs/rea-items were written. Of the 2,518 hashes in the committed milestones (through 6ac9bac), 2,517 verify; the one that does not is reconstructed/battle_moves_3/reproduction/__pycache__/decode_mult.cpython-311.pyc, a gitignored bytecode cache listed in that SHA256SUMS, not a tracked file. The untracked battle_abilities_6 and battle_moves_6 of other sessions were not counted."
+  }
+}

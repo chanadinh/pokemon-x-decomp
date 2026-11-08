@@ -1,0 +1,35 @@
+Battle item handlers, batch 4 (gems), 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7).
+
+Implemented: the 18 gems (items 548-564 and 715).
+- 37 handlers: 18 on event 0x3d (power), 18 on event 0x8a (use) and one on
+  event 0x91 (spent).
+- 3 helpers: 1084c284, 1084c700 and 10881638.
+
+Evidence:
+- All 2,408 instruction bytes and 72 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Fourteen handlers without a Ghidra function are listed by the battle_power
+  decoder. Each listing equals the REA listing of a same-shape sibling,
+  apart from the type constant.
+
+Tests: 6,619 new cases. Thirty-five mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 37 handlers are bound to exactly 54 (item, event) pairs
+of the item table, and to nothing in the other tables. The helpers are bound
+to nothing. Every entry of the 18 gems is one of those pairs.
+
+The committed milestones (through 6ac9bac) list 2,518 hashes, and 2,517 of
+them verify. The exception is a gitignored bytecode cache listed in
+battle_moves_3/SHA256SUMS (reproduction/__pycache__/decode_mult.cpython-311.pyc),
+not a tracked file.
+
+Not covered:
+- The damaging-move and fixed-target queries, the non-consuming pass, the
+  record stack, messages and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.
