@@ -158,6 +158,10 @@ and [contact abilities](../reconstructed/battle_abilities_1/README.md).
 
 The forty-ninth milestone adds the [status applier](../reconstructed/battle_conditions/README.md) `108629b8`.
 
+The fiftieth and fifty-first milestones are second batches from the parallel sessions:
+[damage-calculation move handlers](../reconstructed/battle_moves_2/README.md), closing out events 0x3c-0x40, and
+[weather abilities](../reconstructed/battle_abilities_2/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

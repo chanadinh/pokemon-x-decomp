@@ -1,0 +1,3 @@
+108c51bc  0110a0e3  mov r1, #0x1
+108c51c0  4200a0e3  mov r0, #0x42
+108c51c4  c281feea  b 0x108658d4

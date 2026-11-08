@@ -196,3 +196,6 @@ The first item, move and ability handler batches (`battle_items_1`, `battle_move
 
 The status applier ([battle_conditions](../reconstructed/battle_conditions/README.md)) was reviewed
 through the same shared session.
+
+The second move and ability batches (`battle_moves_2`, `battle_abilities_2`) came from the parallel
+sessions through the same shared session and were verified again before they were committed.

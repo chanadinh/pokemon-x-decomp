@@ -1,0 +1,23 @@
+Battle move handlers milestone (battle_moves_2), 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6). Implemented: 15 move handlers of the damage-calculation
+events 0x3c-0x40
+(2 listed by reproduction/decode_mul.py, the battle_power
+decoder plus the MUL form, checked against 20 REA-listed MUL instructions). All
+1,200 instruction bytes, 8 literal bytes and 0 table bytes match
+live REA bytes and the original DllBattle.cro; there are no relocations.
+
+New suite: 3,737 cases on the real event stack.
+29 mutations are each detected (1 equivalent mutations replaced).
+ASan/UBSan pass.
+
+Original data: the handlers are bound to exactly 20 (move, event) pairs;
+every move entry of events 0x3c-0x40 belongs to this milestone or
+battle_moves_1, so those events are complete for moves.
+
+The 1,965 hashes of the 49 committed milestones remain unchanged. Native
+implementation files are unchanged. The services listed in README.md remain
+external. No running-game comparison was made; no matching original build is
+claimed.

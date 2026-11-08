@@ -1,0 +1,22 @@
+Battle weather-abilities milestone, 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6). Implemented: 17 weather ability handlers
+(Ice Body, Rain Dish, Dry Skin, Solar Power, Overcoat, Sand Veil/Rush/Force,
+Snow Cloak, Swift Swim, Chlorophyll, Sand Rush, Hydration, Leaf Guard, Cloud
+Nine/Air Lock) on events 0x88, 0x13, 0x39, 0x40, 0x7f, 0x0e, 0x5e and 0x83;
+four are listed by decode_arm.py. All 1,636 instruction bytes and 8
+literal bytes match live REA bytes and the original DllBattle.cro; no
+relocations are involved (30 evidence records retained).
+
+New suite: 85,681 cases. 32 mutations are each detected by a failing
+test (two that did not compile were replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the 17 handlers are bound to exactly 21 (ability, event)
+pairs, and every ability entry of events 0x88 and 0x83 is one of them.
+
+The 1,965 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.
