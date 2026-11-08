@@ -74,3 +74,6 @@ all test clean:
 	$(MAKE) -C battle_items_8 $@
 	$(MAKE) -C battle_moves_10 $@
 	$(MAKE) -C battle_abilities_10 $@
+	$(MAKE) -C battle_items_9 $@
+	$(MAKE) -C battle_moves_11 $@
+	$(MAKE) -C battle_abilities_11 $@

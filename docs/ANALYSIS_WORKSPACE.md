@@ -193,6 +193,10 @@ The seventy-second to seventy-fourth milestones add [items set off by a hit](../
 [the check before a move](../reconstructed/battle_moves_10/README.md) and
 [form abilities](../reconstructed/battle_abilities_10/README.md).
 
+The seventy-fifth to seventy-seventh milestones add [turn-order, survival and flinch items](../reconstructed/battle_items_9/README.md),
+[moves that call other moves](../reconstructed/battle_moves_11/README.md) and
+[the field (position) handlers](../reconstructed/battle_abilities_11/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

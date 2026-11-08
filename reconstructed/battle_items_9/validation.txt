@@ -1,0 +1,32 @@
+Battle item handlers, batch 9 (turn order, survival and flinch items), 2026-11-08
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7).
+
+Implemented: 12 item handlers.
+- Turn order: Custap Berry, Quick Claw, Lagging Tail and Full Incense.
+- Flinching: King's Rock and Razor Fang.
+- Holding on: Focus Band and Focus Sash.
+
+Evidence:
+- All 1,244 instruction bytes and 16 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Two handlers without a Ghidra function are listed by the battle_power
+  decoder, using only instruction shapes REA lists in this batch.
+
+Tests: 466 new cases. Thirty-one mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 12 handlers are bound to exactly 15 (item, event) pairs
+of the item table, and to nothing in the other tables. These are every
+entry of the eight items.
+
+The 3,224 hashes of the committed milestones (through c06dc0a) remain
+unchanged.
+
+Not covered:
+- The chance, forced-chance and full-HP queries, the item parameters,
+  record stack, messages and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

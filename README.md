@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 798 functions, 111,004 bytes | 840,188 bytes | 13.21% |
-| **All game code** (main + 133 CRO modules) | **1,017 functions, 137,028 bytes** | **8,782,284 bytes** | **1.56%** |
+| Battle module (`DllBattle.cro` text) | 825 functions, 115,852 bytes | 840,188 bytes | 13.79% |
+| **All game code** (main + 133 CRO modules) | **1,044 functions, 141,876 bytes** | **8,782,284 bytes** | **1.62%** |
 
-So roughly **1.56%** of the original program has been reconstructed so far
-(74 milestones). The figure counts each implemented function once, by its
+So roughly **1.62%** of the original program has been reconstructed so far
+(77 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside seventy-four connected C reconstruction milestones.
+The visual tools sit alongside seventy-seven connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -344,6 +344,9 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle item handlers 8](reconstructed/battle_items_8/README.md) | 19 handlers for items set off by a hit |
 | [Battle move handlers 10](reconstructed/battle_moves_10/README.md) | All 20 handlers of event 0x1f, the check before a move runs |
 | [Battle ability handlers 10](reconstructed/battle_abilities_10/README.md) | 14 form ability handlers |
+| [Battle item handlers 9](reconstructed/battle_items_9/README.md) | 12 turn-order, survival and flinch item handlers |
+| [Battle move handlers 11](reconstructed/battle_moves_11/README.md) | All 10 handlers of events 0x18/0x19, for moves that call other moves |
+| [Battle field handlers](reconstructed/battle_abilities_11/README.md) | The five field (position) table handlers |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their
