@@ -1,0 +1,25 @@
+Battle move handlers milestone (battle_moves_3), 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6). Implemented: 23 routines, the 20 move handlers of events
+0x38, 0x43-0x46, 0x4e and 0x50 and three shared routines
+(6 listed by reproduction/decode_mult.py, the battle_moves_2
+decoder plus UMULL and BX, checked against 30 REA-listed MUL and UMULL instructions). All
+1,392 instruction bytes, 8 literal bytes and 0 table bytes match
+live REA bytes and the original DllBattle.cro; Brick Break's hook literal 108ba334
+is an ABS32 relocation whose original word matches and whose value equals
+symbol plus addend.
+
+New suite: 29,418 cases on the real event stack.
+36 mutations are each detected (0 equivalent mutations replaced).
+ASan/UBSan pass.
+
+Original data: the handlers are bound to exactly 22 (move, event) pairs;
+every move entry of events 0x38, 0x43-0x46, 0x4e and 0x50 is one of
+them.
+
+The 2,058 hashes of the 51 committed milestones remain unchanged. Native
+implementation files are unchanged. The services listed in README.md remain
+external. No running-game comparison was made; no matching original build is
+claimed.

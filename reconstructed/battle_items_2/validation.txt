@@ -1,0 +1,37 @@
+Battle item handlers, batch 2 (pinch berries), 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6).
+
+Implemented: 23 item handlers and the Figy body 1084c5e0.
+- The Figy family: Figy, Wiki, Mago, Aguav and Iapapa (three checks and ten
+  uses).
+- The stat berries: Liechi, Ganlon, Salac, Petaya, Apicot, Lansat and Starf
+  (three checks and seven uses).
+
+Evidence:
+- All 1,968 instruction bytes and 12 literal bytes match live REA bytes and
+  the original DllBattle.cro.
+- Literal 108a68e0, Starf's stat table, is an ABS32 relocation. Its original
+  word matches and its value equals symbol plus addend.
+- The five table bytes at 108d2c3a (1-5) match the live bytes and the
+  read-only segment.
+- Eight handlers without a Ghidra function are listed by the battle_power
+  decoder. The bx<cond> form it refuses is spelled by a rule that reproduces
+  REA's listing of 108695c4 (bxeq lr).
+
+Tests: 26,184 new cases. Forty-five mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 23 handlers are bound to exactly 60 (item, event) pairs
+of the item table, and to nothing in the other tables. 1084c5e0 is bound to
+nothing. Every entry of items 159-163 and 201-207 is one of those pairs.
+
+The 1,965 hashes of the committed milestones remain unchanged.
+
+Not covered:
+- The flavor answer, condition word, stage query, random roll, temporary
+  buffer, item parameters, record stack, messages and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

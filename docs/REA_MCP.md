@@ -199,3 +199,6 @@ through the same shared session.
 
 The second move and ability batches (`battle_moves_2`, `battle_abilities_2`) came from the parallel
 sessions through the same shared session and were verified again before they were committed.
+
+The next batches (`battle_items_2`, `battle_moves_3`, `battle_abilities_3`) came the same way and were
+verified again before they were committed.

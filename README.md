@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 358 functions, 66,764 bytes | 840,188 bytes | 7.95% |
-| **All game code** (main + 133 CRO modules) | **577 functions, 92,788 bytes** | **8,782,284 bytes** | **1.06%** |
+| Battle module (`DllBattle.cro` text) | 414 functions, 72,432 bytes | 840,188 bytes | 8.62% |
+| **All game code** (main + 133 CRO modules) | **633 functions, 98,456 bytes** | **8,782,284 bytes** | **1.12%** |
 
-So roughly **1.06%** of the original program has been reconstructed so far
-(51 milestones). The figure counts each implemented function once, by its
+So roughly **1.12%** of the original program has been reconstructed so far
+(54 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside fifty-one connected C reconstruction milestones.
+The visual tools sit alongside fifty-four connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -321,6 +321,9 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle status applier](reconstructed/battle_conditions/README.md) | `108629b8`: applying a status with its animation, message, events and item reaction |
 | [Battle move handlers 2](reconstructed/battle_moves_2/README.md) | The last 15 move handlers of events 0x3c-0x40 (damage-calculation inputs), with Eruption/Water Spout |
 | [Battle ability handlers 2](reconstructed/battle_abilities_2/README.md) | 17 weather-ability handlers |
+| [Battle item handlers 2](reconstructed/battle_items_2/README.md) | 23 pinch-berry handlers and the Figy body |
+| [Battle move handlers 3](reconstructed/battle_moves_3/README.md) | 20 fixed-damage and type-matchup move handlers with 3 shared routines |
+| [Battle ability handlers 3](reconstructed/battle_abilities_3/README.md) | 9 end-of-turn ability handlers (events 0x7f/0x80) |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

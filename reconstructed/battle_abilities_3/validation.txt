@@ -1,0 +1,22 @@
+Battle end-of-turn-abilities milestone, 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-6). Implemented: 9 ability handlers of
+events 0x80 and 0x7f (Speed Boost, Moody, Harvest, Pickup, Bad Dreams, Slow
+Start, Shed Skin, Healer, Levitate); Moody is listed by decode_arm.py. All
+2,308 instruction bytes and 12 literal bytes match live REA bytes and the
+original DllBattle.cro; no relocations are involved (17 evidence
+records retained).
+
+New suite: 51,259 cases. 34 mutations are each detected by a failing
+test (one equivalent and three non-compiling mutations replaced). ASan/UBSan
+pass. The other reconstruction suites were not run here.
+
+Original data: the nine handlers are bound to exactly nine (ability, event)
+pairs, and the only other ability entry of events 0x80 and 0x7f is Hydration
+(battle_abilities_2).
+
+The 2,115 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.
