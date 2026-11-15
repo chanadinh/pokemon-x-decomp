@@ -197,6 +197,10 @@ The seventy-fifth to seventy-seventh milestones add [turn-order, survival and fl
 [moves that call other moves](../reconstructed/battle_moves_11/README.md) and
 [the field (position) handlers](../reconstructed/battle_abilities_11/README.md).
 
+The seventy-eighth to eightieth milestones add [the herbs](../reconstructed/battle_items_10/README.md),
+[Sky Drop and the lock releases](../reconstructed/battle_moves_12/README.md) and
+[transformation, status and move-reaction abilities](../reconstructed/battle_abilities_12/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

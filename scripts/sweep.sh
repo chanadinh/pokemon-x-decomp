@@ -110,6 +110,12 @@ python3 -I reconstructed/battle_moves_11/reproduction/verify_rea.py
 python3 -I reconstructed/battle_moves_11/reproduction/check_bindings.py | python3 -c "import json,sys;assert json.load(sys.stdin)==json.load(open('reconstructed/battle_moves_11/reproduction/record-comparison.json'));print('battle_moves_11-ok')"
 python3 -I reconstructed/battle_abilities_11/reproduction/verify_rea.py
 python3 -I reconstructed/battle_abilities_11/reproduction/check_bindings.py | python3 -c "import json,sys;assert json.load(sys.stdin)==json.load(open('reconstructed/battle_abilities_11/reproduction/record-comparison.json'));print('battle_abilities_11-ok')"
+python3 -I reconstructed/battle_items_10/reproduction/verify_rea.py
+python3 -I reconstructed/battle_items_10/reproduction/check_bindings.py | python3 -c "import json,sys;assert json.load(sys.stdin)==json.load(open('reconstructed/battle_items_10/reproduction/record-comparison.json'));print('battle_items_10-ok')"
+python3 -I reconstructed/battle_moves_12/reproduction/verify_rea.py
+python3 -I reconstructed/battle_moves_12/reproduction/check_bindings.py | python3 -c "import json,sys;assert json.load(sys.stdin)==json.load(open('reconstructed/battle_moves_12/reproduction/record-comparison.json'));print('battle_moves_12-ok')"
+python3 -I reconstructed/battle_abilities_12/reproduction/verify_rea.py
+python3 -I reconstructed/battle_abilities_12/reproduction/check_bindings.py | python3 -c "import json,sys;assert json.load(sys.stdin)==json.load(open('reconstructed/battle_abilities_12/reproduction/record-comparison.json'));print('battle_abilities_12-ok')"
 python3 -I reconstructed/battle_status/reproduction/check_bindings.py | python3 -c "import json,sys;assert json.load(sys.stdin)==json.load(open('reconstructed/battle_status/reproduction/record-comparison.json'));print('status-bindings-ok')"
 python3 -I reconstructed/battle_stage/reproduction/check_bindings.py | python3 -c "import json,sys;assert json.load(sys.stdin)==json.load(open('reconstructed/battle_stage/reproduction/record-comparison.json'));print('stage-bindings-ok')"
 python3 -I reconstructed/battle_immunity/reproduction/check_bindings.py | python3 -c "import json,sys;assert json.load(sys.stdin)==json.load(open('reconstructed/battle_immunity/reproduction/record-comparison.json'));print('immunity-bindings-ok')"

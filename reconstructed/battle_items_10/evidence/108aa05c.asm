@@ -1,0 +1,6 @@
+108aa05c  183093e5  ldr r3, [r3,#0x18]
+108aa060  000053e3  cmp r3, #0x0
+108aa064  0100000a  beq 0x108aa070
+108aa068  2830a0e3  mov r3, #0x28
+108aa06c  1389feea  b 0x1084c4c0
+108aa070  1eff2fe1  bx lr

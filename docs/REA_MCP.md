@@ -231,3 +231,7 @@ The next batches (`battle_items_8`, `battle_moves_10`, `battle_abilities_10`) ca
 
 The next batches (`battle_items_9`, `battle_moves_11`, `battle_abilities_11`) came through
 `outputs/rea-battle-7` the same way and were verified again before they were committed.
+
+The next batches (`battle_items_10`, `battle_moves_12`, `battle_abilities_12`) were verified again before
+they were committed. The daemon session in `outputs/rea-battle-7` ended while they were in progress;
+later byte reads come from a new session in `outputs/rea-battle-8` over the same carrier.

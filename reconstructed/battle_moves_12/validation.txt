@@ -1,0 +1,25 @@
+Battle move handlers milestone (battle_moves_12), 2026-11-07
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 11 move handlers of Sky Drop and the lock
+releases (events 0x21, 0x23, 0x26, 0x91, 0xa0, 0xa3, 0xb6)
+(0 listed by the battle_power decoder, which is still checked
+against every supported listed instruction). All
+1,300 instruction bytes, 8 literal bytes and 0 table bytes match
+live REA bytes and the original DllBattle.cro; Sky Drop's state literal 108b96a4 is an
+ABS32 relocation whose original word matches and whose value equals symbol
+plus addend.
+
+New suite: 123 cases on the real event stack and handler registry.
+30 mutations are each detected (0 equivalent mutations replaced).
+ASan/UBSan pass.
+
+Original data: the handlers are bound to exactly 23 (move, event) pairs;
+every move entry of events 0x21, 0x23, 0x26, 0x91 and 0xb6 is one of
+them, and Sky Drop is complete.
+
+The 3,322 hashes of the 77 committed milestones remain unchanged. Native
+implementation files are unchanged. The services listed in README.md remain
+external. No running-game comparison was made; no matching original build is
+claimed.

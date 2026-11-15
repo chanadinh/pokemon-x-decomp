@@ -1,0 +1,23 @@
+Battle transformation-abilities milestone, 2026-11-15
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-7). Implemented: 12 ability handlers that
+transform a battler, pass on or react to a status or a move, or change a move's
+type or power (Imposter, Truant, Synchronize, Aura Break, Protean, Stance
+Change, Illusion, Steadfast, Mega Launcher); three are listed by decode_arm.py.
+All 1,640 instruction bytes and 16 literal bytes match live REA bytes and
+the original DllBattle.cro; no relocations are involved (21 evidence
+records retained).
+
+New suite: 477 cases. 30 mutations are each detected by a failing
+test (one non-compiling mutation replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the 12 handlers are bound to exactly 12 (ability, event)
+pairs, and every ability entry of events 0x1e, 0x71, 0x3c, 0x23 and 0x99 is
+one of them.
+
+The 3,363 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

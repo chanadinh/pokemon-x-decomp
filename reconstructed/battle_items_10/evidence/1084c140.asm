@@ -1,0 +1,22 @@
+1084c140  010c80e2  add r0, r0, #0x100
+1084c144  d410d0e1  ldrsb r1, [r0,#0x4]
+1084c148  060051e3  cmp r1, #0x6
+1084c14c  d510d0a1  ldrsbge r1, [r0,#0x5]
+1084c150  060051a3  cmpge r1, #0x6
+1084c154  0d0000ba  blt 0x1084c190
+1084c158  d610d0e1  ldrsb r1, [r0,#0x6]
+1084c15c  060051e3  cmp r1, #0x6
+1084c160  d710d0a1  ldrsbge r1, [r0,#0x7]
+1084c164  060051a3  cmpge r1, #0x6
+1084c168  080000ba  blt 0x1084c190
+1084c16c  d810d0e1  ldrsb r1, [r0,#0x8]
+1084c170  060051e3  cmp r1, #0x6
+1084c174  d910d0a1  ldrsbge r1, [r0,#0x9]
+1084c178  060051a3  cmpge r1, #0x6
+1084c17c  030000ba  blt 0x1084c190
+1084c180  da00d0e1  ldrsb r0, [r0,#0xa]
+1084c184  060050e3  cmp r0, #0x6
+1084c188  0000a0a3  movge r0, #0x0
+1084c18c  000000aa  bge 0x1084c194
+1084c190  0100a0e3  mov r0, #0x1
+1084c194  1eff2fe1  bx lr
