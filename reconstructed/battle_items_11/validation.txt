@@ -1,0 +1,32 @@
+Battle item handlers, batch 11 (items of event 0x8c), 2026-11-15
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-8).
+
+Implemented: 7 item handlers and two helpers.
+- Every entry of Red Card, Eject Button, Kee Berry and Maranga Berry.
+- The switch-flag helpers 1084c000 and 1084c020.
+
+Evidence:
+- All 1,308 instruction bytes and 12 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Three handlers without a Ghidra function are listed by the battle_power
+  decoder. Their instruction shapes are REA-listed in this batch or at three
+  checked spelling references.
+
+Tests: 1,556 new cases. Thirty-five mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 7 handlers are bound to exactly 9 (item, event) pairs of
+the item table, and to nothing in the other tables. The helpers are bound to
+nothing. These are every entry of the four items.
+
+The 3,439 hashes of the committed milestones (through b1cdace) remain
+unchanged.
+
+Not covered:
+- The opposing-slot, replacement, charging, decided and stage queries, the
+  record stack, messages and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

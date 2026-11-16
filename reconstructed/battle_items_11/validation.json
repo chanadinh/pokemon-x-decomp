@@ -1,0 +1,75 @@
+{
+  "date": "2026-11-15",
+  "method": "Live REA stdio MCP over a main+DllBattle carrier (session 7), ARM assembly review, synthetic tests on the reconstructed event stack and original-table bindings",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "module": {
+      "file": "DllBattle.cro",
+      "size": 1040384,
+      "sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "text_file_offset": 384,
+      "text_analysis_address": "0x10800180",
+      "rodata_file_offset": 843776,
+      "rodata_analysis_address": "0x108ce000"
+    },
+    "carrier_sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1",
+    "implemented_functions": 9,
+    "instruction_bytes_verified": 1308,
+    "literal_bytes_verified": 12,
+    "relocations_verified": 0,
+    "decoder_listed_functions": 3,
+    "complete_evidence_records_retained": 22,
+    "original_project_unchanged": true,
+    "handlers": 7,
+    "rea_session": "outputs/rea-battle-8",
+    "decoded_shapes_rea_listed_or_referenced": true,
+    "shared_routines": 2,
+    "bx_rule_checked_against_rea": "1084c000 and 1084c020 bx lr",
+    "spelling_references_checked_against_rea": [
+      "108af7a4",
+      "108af7a8",
+      "108bbaf0"
+    ]
+  },
+  "tests": {
+    "synthetic_cases": 1556,
+    "mutations_detected": 35,
+    "mutations_total": 35,
+    "original_data": {
+      "module_sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "handlers": 7,
+      "unbound_helpers": [
+        "1084c000",
+        "1084c020"
+      ],
+      "items": [
+        542,
+        547,
+        687,
+        688
+      ],
+      "bindings": 9,
+      "entries": {
+        "item 0x7b": 3,
+        "item 0x7c": 2,
+        "item 0x8c": 4
+      },
+      "all_match": true
+    },
+    "asan": true,
+    "ubsan": true,
+    "live": "not run"
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 3439,
+    "native_source_changed": false,
+    "note": "Only reconstructed/battle_items_11 and outputs/rea-items were written; every committed milestone's SHA256SUMS (through b1cdace) verifies. The untracked battle_abilities_13 and battle_moves_13 of other sessions were not counted."
+  }
+}

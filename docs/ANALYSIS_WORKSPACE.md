@@ -201,6 +201,10 @@ The seventy-eighth to eightieth milestones add [the herbs](../reconstructed/batt
 [Sky Drop and the lock releases](../reconstructed/battle_moves_12/README.md) and
 [transformation, status and move-reaction abilities](../reconstructed/battle_abilities_12/README.md).
 
+The eighty-first to eighty-third milestones add [items of event 0x8c](../reconstructed/battle_items_11/README.md),
+[protection breakers and event 0x4d](../reconstructed/battle_moves_13/README.md) and
+[the last three ability handlers](../reconstructed/battle_abilities_13/README.md), completing the ability table.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

@@ -1,0 +1,23 @@
+Battle last-ability-handlers milestone, 2026-11-15
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (byte reads and the spelling
+reference in session outputs/rea-battle-8). Implemented: 4 functions,
+the last three ability handlers (Magician, Scrappy's event 0x04 and the -ate
+abilities' event 0x91) and the work reset 1087a19c, all listed by
+decode_arm.py with bx lr spelled as REA lists it in 1084aeec. All 680
+instruction bytes and 8 literal bytes match live REA bytes and the original
+DllBattle.cro; literal 108bef08 is an ABS32 relocation whose original word and
+S+A value are checked (6 evidence records retained).
+
+New suite: 505 cases. 25 mutations are each detected by a failing
+test (two non-compiling mutations replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the three handlers are bound to exactly five (ability, event)
+pairs, the helper to none, every ability entry of event 0x91 is one of them,
+and all 288 handlers of the ability table appear in some milestone's evidence.
+
+The 3,439 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.
