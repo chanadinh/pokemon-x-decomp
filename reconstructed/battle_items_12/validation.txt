@@ -1,0 +1,36 @@
+Battle item handlers, batch 12 (Leppa and Micle Berries), 2026-11-15
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-8).
+
+Implemented: 13 item handlers and three helpers.
+- Every entry of Leppa Berry and Micle Berry.
+- Leppa's use body 108a9e1c and the move helpers 1084c278 and 1084c224.
+
+Evidence:
+- All 2,116 instruction bytes and 12 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Two handlers without a Ghidra function are listed by the battle_power
+  decoder and a bx<cond> rule. Their instruction shapes are REA-listed in
+  this batch or at three checked spelling references.
+
+Tests: 3,104 new cases. Thirty-five mutations are each detected. ASan/UBSan
+pass.
+
+Original data: the 13 handlers are bound to exactly 14 (item, event) pairs
+of the item table, and to nothing in the other tables. The helpers are bound
+to nothing. These are every entry of the two berries.
+
+Item-table handlers remaining after this batch: 8 of the original 225
+(1084c3bc, 108a5c9c, 108a5db4, 108a6adc, 108a71f4, 108a79d4, 108a85fc,
+108ab6f8).
+
+The 3,524 hashes of the committed milestones (through 96ab539) remain
+unchanged.
+
+Not covered:
+- The PP, restorable-slot, slot-move and condition-word queries, the item
+  parameters, record stack, messages and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

@@ -1,0 +1,7 @@
+108ba778  180093e5  ldr r0, [r3,#0x18]
+108ba77c  000050e3  cmp r0, #0x0
+108ba780  0200000a  beq 0x108ba790
+108ba784  0110a0e3  mov r1, #0x1
+108ba788  4200a0e3  mov r0, #0x42
+108ba78c  50acfeea  b 0x108658d4
+108ba790  1eff2fe1  bx lr

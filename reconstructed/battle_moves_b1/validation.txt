@@ -1,0 +1,22 @@
+Battle move handlers, events 0xae-0xb4, 2026-11-15
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-8). Implemented: the 5 move handlers of the four
+highest move events (Final Gambit, Whirlwind/Roar, Spiky Shield, King's
+Shield, the Pledges); three are listed by decode_arm.py. All 760
+instruction bytes and 12 literal bytes match live REA bytes and the original
+DllBattle.cro; no relocations are involved (8 evidence records
+retained).
+
+New suite: 310 cases. 29 mutations are each detected by a failing
+test (one non-compiling mutation replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the five handlers are bound to exactly eight (move, event)
+pairs, and every move entry of events 0xb4, 0xb3, 0xb1 and 0xae is one of
+them.
+
+The 3,524 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

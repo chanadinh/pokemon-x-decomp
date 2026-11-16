@@ -238,3 +238,8 @@ later byte reads come from a new session in `outputs/rea-battle-8` over the same
 
 The next batches (`battle_items_11`, `battle_moves_13`, `battle_abilities_13`) came through
 `outputs/rea-battle-8` the same way and were verified again before they were committed.
+
+The next batches (`battle_items_12`, `battle_moves_14`, `battle_moves_b1`) came through
+`outputs/rea-battle-8` the same way and were verified again before they were committed. The
+`battle_moves_bN` directories hold move handlers taken from the highest-numbered events downward by
+the session that finished the ability table.
