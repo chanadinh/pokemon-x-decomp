@@ -1,0 +1,22 @@
+Battle move handlers, event 0xac (first group), 2026-11-20
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-8). Implemented: the 17 shortest REA-listed
+move handlers of event 0xac (Teleport, Hold Hands, Wish, King's Shield,
+Grudge, Follow Me/Rage Powder, Quash, Magic Coat, Refresh, Forest's Curse,
+Transform, Magnet Rise, Snatch, Imprison, Torment, Soak, Conversion). All
+1,880 instruction bytes and 28 literal bytes match live REA bytes and the
+original DllBattle.cro; no relocations are involved (34 evidence records
+retained).
+
+New suite: 341 cases. 39 mutations are each detected by a failing
+test (one non-compiling mutation replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the 17 handlers are bound to exactly 18 (move, event) pairs, all
+on event 0xac.
+
+The 3,708 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

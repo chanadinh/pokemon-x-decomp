@@ -1,0 +1,47 @@
+Battle side-effect handlers (battle_fields_1), 2026-11-20
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-9).
+
+Implemented: the 20 handlers of the side-effect table (108d4fe8, 17 rows) and
+four helpers.
+- Reflect, Light Screen, Safeguard, Mist, Tailwind, Lucky Chant, Spikes, Toxic
+  Spikes, Stealth Rock, Wide Guard, Quick Guard, Rainbow, Sea of Fire, Swamp,
+  Sticky Web, Mat Block and Crafty Shield (analyst names for the rows).
+- The helpers 1084bfc0, 1084bf04, 1084bf14 and 108802a8.
+
+Evidence:
+- All 3,008 instruction bytes (including the 14 jump-table words of Stealth
+  Rock) and 52 literal bytes match live REA bytes and the original
+  DllBattle.cro. Sixteen words are ABS32 relocations (the layer-array
+  literals and the jump table) whose original words and values are checked.
+- Thirteen handlers without a Ghidra function are listed by the battle_power
+  decoder, a bx<cond> rule and a pre-indexed str/strb rule. Their instruction
+  shapes are REA-listed in this batch or at 18 checked spelling references.
+
+Tests: 7,411 new cases. Ninety mutations are each detected. ASan/UBSan pass.
+
+Original data: the 17 table rows hold exactly these 20 handlers, bound to 23
+(row, event) pairs with the expected maximum layers. The helpers are bound to
+nothing, the jump table has the 14 expected targets, and every handler is
+listed in evidence/functions.json.
+
+Handler tables after this batch (handlers; left): ability 288; 0. item 247; 0.
+field 5; 0. side effect 20; 0. move 386; 119 (the other sessions' work).
+position 9; 9 (11 rows, one with an irregular table function).
+
+Line endings: every file is LF, and the repository stores LF, so these hashes
+match what git stores.
+
+The 3,671 hashes of the committed milestones (through a4aacb2) remain
+unchanged.
+
+Not covered:
+- The airborne, slot-present, decided, position, type, effectiveness,
+  move-value, damaging-move and move-flag queries, the record stack,
+  messages and commit remain external.
+- The 17 side-effect table functions and the registrar 108acd0c are not
+  reconstructed.
+- No running-game comparison was made.
+- No matching original build is claimed.

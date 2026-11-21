@@ -246,3 +246,7 @@ the session that finished the ability table.
 
 `battle_items_13` was verified again before it was committed. After the daemon session in
 `outputs/rea-battle-8` ended, later byte reads come from a new session in `outputs/rea-battle-9`.
+
+The next batches (`battle_moves_15`, `battle_moves_b2`, `battle_fields_1`) came through
+`outputs/rea-battle-9` (with earlier reads from `outputs/rea-battle-8`) and were verified again before
+they were committed.

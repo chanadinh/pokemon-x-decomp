@@ -1,0 +1,28 @@
+108b26c4  f0412de9  stmdb sp!,{r4,r5,r6,r7,r8,lr}
+108b26c8  0260a0e1  cpy r6, r2
+108b26cc  0170a0e1  cpy r7, r1
+108b26d0  0340a0e1  cpy r4, r3
+108b26d4  0300a0e3  mov r0, #0x3
+108b26d8  8fe4feeb  bl 0x1086b91c
+108b26dc  060050e1  cmp r0, r6
+108b26e0  18009405  ldreq r0, [r4,#0x18]
+108b26e4  00005003  cmpeq r0, #0x0
+108b26e8  1000001a  bne 0x108b2730
+108b26ec  0620a0e1  cpy r2, r6
+108b26f0  0310a0e3  mov r1, #0x3
+108b26f4  0700a0e1  cpy r0, r7
+108b26f8  1fdefeeb  bl 0x10869f7c
+108b26fc  0050a0e1  cpy r5, r0
+108b2700  2c209fe5  ldr r2, [0x108b2734]
+108b2704  0210a0e3  mov r1, #0x2
+108b2708  040080e2  add r0, r0, #0x4
+108b270c  f06afeeb  bl 0x1084d2d4
+108b2710  0610a0e1  cpy r1, r6
+108b2714  040085e2  add r0, r5, #0x4
+108b2718  df6afeeb  bl 0x1084d29c
+108b271c  0510a0e1  cpy r1, r5
+108b2720  0700a0e1  cpy r0, r7
+108b2724  07d5feeb  bl 0x10867b48
+108b2728  0100a0e3  mov r0, #0x1
+108b272c  180084e5  str r0, [r4,#0x18]
+108b2730  f081bde8  ldmia sp!,{r4,r5,r6,r7,r8,pc}

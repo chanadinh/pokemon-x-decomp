@@ -1,0 +1,58 @@
+108b22d0  70402de9  stmdb sp!,{r4,r5,r6,lr}
+108b22d4  0160a0e1  cpy r6, r1
+108b22d8  0250a0e1  cpy r5, r2
+108b22dc  0200a0e3  mov r0, #0x2
+108b22e0  8de5feeb  bl 0x1086b91c
+108b22e4  050050e1  cmp r0, r5
+108b22e8  3100001a  bne 0x108b23b4
+108b22ec  0520a0e1  cpy r2, r5
+108b22f0  1510a0e3  mov r1, #0x15
+108b22f4  0600a0e1  cpy r0, r6
+108b22f8  1fdffeeb  bl 0x10869f7c
+108b22fc  0010a0e1  cpy r1, r0
+108b2300  0500a0e3  mov r0, #0x5
+108b2304  0550c1e5  strb r5, [r1,#0x5]
+108b2308  0400c1e5  strb r0, [r1,#0x4]
+108b230c  0600a0e1  cpy r0, r6
+108b2310  0cd6feeb  bl 0x10867b48
+108b2314  0510a0e1  cpy r1, r5
+108b2318  0600a0e1  cpy r0, r6
+108b231c  5f88feeb  bl 0x108544a0
+108b2320  3765feeb  bl 0x1084b804
+108b2324  000050e3  cmp r0, #0x0
+108b2328  1100001a  bne 0x108b2374
+108b232c  0520a0e1  cpy r2, r5
+108b2330  3810a0e3  mov r1, #0x38
+108b2334  0600a0e1  cpy r0, r6
+108b2338  0fdffeeb  bl 0x10869f7c
+108b233c  0040a0e1  cpy r4, r0
+108b2340  70009fe5  ldr r0, [0x108b23b8]
+108b2344  0510a0e1  cpy r1, r5
+108b2348  b400c4e1  strh r0, [r4,#0x4]
+108b234c  0600a0e1  cpy r0, r6
+108b2350  8003ffeb  bl 0x10873158
+108b2354  0600c4e5  strb r0, [r4,#0x6]
+108b2358  0a20a0e3  mov r2, #0xa
+108b235c  0110a0e3  mov r1, #0x1
+108b2360  0720c4e5  strb r2, [r4,#0x7]
+108b2364  0b10c4e5  strb r1, [r4,#0xb]
+108b2368  0410a0e1  cpy r1, r4
+108b236c  0600a0e1  cpy r0, r6
+108b2370  f4d5feeb  bl 0x10867b48
+108b2374  0520a0e1  cpy r2, r5
+108b2378  0310a0e3  mov r1, #0x3
+108b237c  0600a0e1  cpy r0, r6
+108b2380  fddefeeb  bl 0x10869f7c
+108b2384  0040a0e1  cpy r4, r0
+108b2388  9a2fa0e3  mov r2, #0x268
+108b238c  0210a0e3  mov r1, #0x2
+108b2390  040080e2  add r0, r0, #0x4
+108b2394  ce6bfeeb  bl 0x1084d2d4
+108b2398  0510a0e1  cpy r1, r5
+108b239c  040084e2  add r0, r4, #0x4
+108b23a0  bd6bfeeb  bl 0x1084d29c
+108b23a4  0410a0e1  cpy r1, r4
+108b23a8  0600a0e1  cpy r0, r6
+108b23ac  7040bde8  ldmia sp!,{r4,r5,r6,lr}
+108b23b0  e4d5feea  b 0x10867b48
+108b23b4  7080bde8  ldmia sp!,{r4,r5,r6,pc}

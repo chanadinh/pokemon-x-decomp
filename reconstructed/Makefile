@@ -87,3 +87,6 @@ all test clean:
 	$(MAKE) -C battle_moves_14 $@
 	$(MAKE) -C battle_moves_b1 $@
 	$(MAKE) -C battle_items_13 $@
+	$(MAKE) -C battle_moves_15 $@
+	$(MAKE) -C battle_moves_b2 $@
+	$(MAKE) -C battle_fields_1 $@

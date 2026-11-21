@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 929 functions, 129,756 bytes | 840,188 bytes | 15.44% |
-| **All game code** (main + 133 CRO modules) | **1,148 functions, 155,780 bytes** | **8,782,284 bytes** | **1.77%** |
+| Battle module (`DllBattle.cro` text) | 981 functions, 136,104 bytes | 840,188 bytes | 16.20% |
+| **All game code** (main + 133 CRO modules) | **1,200 functions, 162,128 bytes** | **8,782,284 bytes** | **1.85%** |
 
-So roughly **1.77%** of the original program has been reconstructed so far
-(87 milestones). The figure counts each implemented function once, by its
+So roughly **1.85%** of the original program has been reconstructed so far
+(90 milestones). The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +264,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside eighty-seven connected C reconstruction milestones.
+The visual tools sit alongside ninety connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -357,6 +357,9 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle move handlers 14](reconstructed/battle_moves_14/README.md) | All 16 move handlers of events 0x01-0x0e |
 | [Battle move handlers B1](reconstructed/battle_moves_b1/README.md) | The 5 move handlers of events 0xae-0xb4 |
 | [Battle item handlers 13](reconstructed/battle_items_13/README.md) | The last 8 item-table handlers; all 247 item-table handlers are now reconstructed |
+| [Battle move handlers 15](reconstructed/battle_moves_15/README.md) | All 11 move handlers of events 0x15-0x27 |
+| [Battle move handlers B2](reconstructed/battle_moves_b2/README.md) | 17 move handlers of event 0xac |
+| [Battle side-effect handlers](reconstructed/battle_fields_1/README.md) | The 20 side-effect table handlers with 4 helpers |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their
