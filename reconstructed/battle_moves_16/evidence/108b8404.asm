@@ -1,0 +1,5 @@
+108b8404  0100a0e1  cpy r0, r1
+108b8408  0210a0e1  cpy r1, r2
+108b840c  0320a0e1  cpy r2, r3
+108b8410  0230a0e3  mov r3, #0x2
+108b8414  144cfeea  b 0x1084b46c

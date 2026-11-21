@@ -255,3 +255,6 @@ The next batches (`battle_moves_b3`, `battle_fields_2`) read their bytes through
 (with earlier reads from `outputs/rea-battle-9`) and were verified again before they were committed.
 A cold Java probe can exceed the provider's start-up deadline when the JDK on the Windows mount is
 not cached; running `java -version` once in WSL before `open_binary` avoids the failure.
+
+`battle_moves_16` came through `outputs/rea-battle-10` the same way and was verified again before it
+was committed.

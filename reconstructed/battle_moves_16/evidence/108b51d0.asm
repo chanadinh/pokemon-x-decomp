@@ -1,0 +1,58 @@
+108b51d0  f0412de9  stmdb sp!,{r4,r5,r6,r7,r8,lr}
+108b51d4  0260a0e1  cpy r6, r2
+108b51d8  0170a0e1  cpy r7, r1
+108b51dc  0340a0e1  cpy r4, r3
+108b51e0  0300a0e3  mov r0, #0x3
+108b51e4  ccd9feeb  bl 0x1086b91c
+108b51e8  060050e1  cmp r0, r6
+108b51ec  3000001a  bne 0x108b52b4
+108b51f0  000094e5  ldr r0, [r4,#0x0]
+108b51f4  000050e3  cmp r0, #0x0
+108b51f8  2d00000a  beq 0x108b52b4
+108b51fc  0400a0e3  mov r0, #0x4
+108b5200  c5d9feeb  bl 0x1086b91c
+108b5204  ff5000e2  and r5, r0, #0xff
+108b5208  0510a0e1  cpy r1, r5
+108b520c  0700a0e1  cpy r0, r7
+108b5210  a27cfeeb  bl 0x108544a0
+108b5214  0080a0e1  cpy r8, r0
+108b5218  3e60feeb  bl 0x1084d318
+108b521c  000050e3  cmp r0, #0x0
+108b5220  0620a0e1  cpy r2, r6
+108b5224  0e00000a  beq 0x108b5264
+108b5228  0310a0e3  mov r1, #0x3
+108b522c  0700a0e1  cpy r0, r7
+108b5230  51d3feeb  bl 0x10869f7c
+108b5234  0040a0e1  cpy r4, r0
+108b5238  d220a0e3  mov r2, #0xd2
+108b523c  0210a0e3  mov r1, #0x2
+108b5240  040080e2  add r0, r0, #0x4
+108b5244  2260feeb  bl 0x1084d2d4
+108b5248  0510a0e1  cpy r1, r5
+108b524c  040084e2  add r0, r4, #0x4
+108b5250  1160feeb  bl 0x1084d29c
+108b5254  0410a0e1  cpy r1, r4
+108b5258  0700a0e1  cpy r0, r7
+108b525c  f041bde8  ldmia sp!,{r4,r5,r6,r7,r8,lr}
+108b5260  38cafeea  b 0x10867b48
+108b5264  0410a0e3  mov r1, #0x4
+108b5268  0700a0e1  cpy r0, r7
+108b526c  42d3feeb  bl 0x10869f7c
+108b5270  0040a0e1  cpy r4, r0
+108b5274  0650c0e5  strb r5, [r0,#0x6]
+108b5278  0410a0e3  mov r1, #0x4
+108b527c  0800a0e1  cpy r0, r8
+108b5280  1b60feeb  bl 0x1084d2f4
+108b5284  b400c4e1  strh r0, [r4,#0x4]
+108b5288  28209fe5  ldr r2, [0x108b52b8]
+108b528c  0210a0e3  mov r1, #0x2
+108b5290  080084e2  add r0, r4, #0x8
+108b5294  0e60feeb  bl 0x1084d2d4
+108b5298  0510a0e1  cpy r1, r5
+108b529c  080084e2  add r0, r4, #0x8
+108b52a0  fd5ffeeb  bl 0x1084d29c
+108b52a4  0410a0e1  cpy r1, r4
+108b52a8  0700a0e1  cpy r0, r7
+108b52ac  f041bde8  ldmia sp!,{r4,r5,r6,r7,r8,lr}
+108b52b0  24cafeea  b 0x10867b48
+108b52b4  f081bde8  ldmia sp!,{r4,r5,r6,r7,r8,pc}

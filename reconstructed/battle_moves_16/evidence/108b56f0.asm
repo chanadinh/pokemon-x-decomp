@@ -1,0 +1,66 @@
+108b56f0  ff4f2de9  stmdb sp!,{r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,lr}
+108b56f4  0cd04de2  sub sp, sp, #0xc
+108b56f8  0300a0e3  mov r0, #0x3
+108b56fc  0260a0e1  cpy r6, r2
+108b5700  0190a0e1  cpy r9, r1
+108b5704  84d8feeb  bl 0x1086b91c
+108b5708  060050e1  cmp r0, r6
+108b570c  2f00001a  bne 0x108b57d0
+108b5710  0080a0e3  mov r8, #0x0
+108b5714  08a0a0e1  cpy r10, r8
+108b5718  08b0a0e1  cpy r11, r8
+108b571c  0900a0e1  cpy r0, r9
+108b5720  ff5008e2  and r5, r8, #0xff
+108b5724  0610a0e1  cpy r1, r6
+108b5728  8858feeb  bl 0x1084b950
+108b572c  04008de5  str r0, [sp,#0x4]
+108b5730  00f020e3  nop
+108b5734  1800d0e5  ldrb r0, [r0,#0x18]
+108b5738  050050e1  cmp r0, r5
+108b573c  0070a0e1  cpy r7, r0
+108b5740  1800009a  bls 0x108b57a8
+108b5744  000057e3  cmp r7, #0x0
+108b5748  0040a0e3  mov r4, #0x0
+108b574c  1500009a  bls 0x108b57a8
+108b5750  04009de5  ldr r0, [sp,#0x4]
+108b5754  ff1004e2  and r1, r4, #0xff
+108b5758  e6a0feeb  bl 0x1085daf8
+108b575c  00008de5  str r0, [sp,#0x0]
+108b5760  00f020e3  nop
+108b5764  1900d0e5  ldrb r0, [r0,#0x19]
+108b5768  060050e1  cmp r0, r6
+108b576c  00f020e3  nop
+108b5770  1800000a  beq 0x108b57d8
+108b5774  00009de5  ldr r0, [sp,#0x0]
+108b5778  957efeeb  bl 0x108551d4
+108b577c  000050e3  cmp r0, #0x0
+108b5780  00f020e3  nop
+108b5784  0400000a  beq 0x108b579c
+108b5788  00009de5  ldr r0, [sp,#0x0]
+108b578c  46e0feeb  bl 0x1086d8ac
+108b5790  000050e3  cmp r0, #0x0
+108b5794  00f020e3  nop
+108b5798  0e00000a  beq 0x108b57d8
+108b579c  014084e2  add r4, r4, #0x1
+108b57a0  070054e1  cmp r4, r7
+108b57a4  e9ffff3a  bcc 0x108b5750
+108b57a8  018088e2  add r8, r8, #0x1
+108b57ac  060058e3  cmp r8, #0x6
+108b57b0  d9ffff3a  bcc 0x108b571c
+108b57b4  00005ae3  cmp r10, #0x0
+108b57b8  01a0a003  moveq r10, #0x1
+108b57bc  0a10a0e1  cpy r1, r10
+108b57c0  2b00a0e3  mov r0, #0x2b
+108b57c4  42c0feeb  bl 0x108658d4
+108b57c8  18009de5  ldr r0, [sp,#0x18]
+108b57cc  00b080e5  str r11, [r0,#0x0]
+108b57d0  1cd08de2  add sp, sp, #0x1c
+108b57d4  f08fbde8  ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,r11,pc}
+108b57d8  000055e3  cmp r5, #0x0
+108b57dc  01004512  subne r0, r5, #0x1
+108b57e0  ff500012  andne r5, r0, #0xff
+108b57e4  ecffff1a  bne 0x108b579c
+108b57e8  00009de5  ldr r0, [sp,#0x0]
+108b57ec  000050e3  cmp r0, #0x0
+108b57f0  01a08a12  addne r10, r10, #0x1
+108b57f4  ebffffea  b 0x108b57a8

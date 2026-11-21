@@ -1,0 +1,64 @@
+108b5848  f0412de9  stmdb sp!,{r4,r5,r6,r7,r8,lr}
+108b584c  10d04de2  sub sp, sp, #0x10
+108b5850  0160a0e1  cpy r6, r1
+108b5854  0240a0e1  cpy r4, r2
+108b5858  0350a0e1  cpy r5, r3
+108b585c  0300a0e3  mov r0, #0x3
+108b5860  2dd8feeb  bl 0x1086b91c
+108b5864  040050e1  cmp r0, r4
+108b5868  3400001a  bne 0x108b5940
+108b586c  000095e5  ldr r0, [r5,#0x0]
+108b5870  020050e3  cmp r0, #0x2
+108b5874  310000ba  blt 0x108b5940
+108b5878  0670a0e1  cpy r7, r6
+108b587c  0460a0e1  cpy r6, r4
+108b5880  0410a0e1  cpy r1, r4
+108b5884  0700a0e1  cpy r0, r7
+108b5888  047bfeeb  bl 0x108544a0
+108b588c  0080a0e1  cpy r8, r0
+108b5890  0040a0e3  mov r4, #0x0
+108b5894  ff1004e2  and r1, r4, #0xff
+108b5898  0800a0e1  cpy r0, r8
+108b589c  8c4b00eb  bl 0x108c86d4
+108b58a0  000050e3  cmp r0, #0x0
+108b58a4  00f020e3  nop
+108b58a8  2000000a  beq 0x108b5930
+108b58ac  ff1004e2  and r1, r4, #0xff
+108b58b0  08308de2  add r3, sp, #0x8
+108b58b4  0020a0e3  mov r2, #0x0
+108b58b8  0800a0e1  cpy r0, r8
+108b58bc  8058feeb  bl 0x1084bac4
+108b58c0  0d40dde5  ldrb r4, [sp,#0xd]
+108b58c4  0700a0e1  cpy r0, r7
+108b58c8  0410a0e1  cpy r1, r4
+108b58cc  a95cfeeb  bl 0x1084cb78
+108b58d0  0a0050e3  cmp r0, #0xa
+108b58d4  00f020e3  nop
+108b58d8  0e00001a  bne 0x108b5918
+108b58dc  0610a0e1  cpy r1, r6
+108b58e0  0700a0e1  cpy r0, r7
+108b58e4  1bf6feeb  bl 0x10873158
+108b58e8  011c80e3  orr r1, r0, #0x100
+108b58ec  0d20a0e1  cpy r2, sp
+108b58f0  0700a0e1  cpy r0, r7
+108b58f4  c958feeb  bl 0x1084bc20
+108b58f8  000050e3  cmp r0, #0x0
+108b58fc  00f020e3  nop
+108b5900  0300000a  beq 0x108b5914
+108b5904  ac5bfeeb  bl 0x1084c7bc
+108b5908  ff0000e2  and r0, r0, #0xff
+108b590c  0040dde7  ldrb r4, [sp,r0]
+108b5910  000000ea  b 0x108b5918
+108b5914  1f40a0e3  mov r4, #0x1f
+108b5918  084085e5  str r4, [r5,#0x8]
+108b591c  10d08de2  add sp, sp, #0x10
+108b5920  0410a0e1  cpy r1, r4
+108b5924  f041bde8  ldmia sp!,{r4,r5,r6,r7,r8,lr}
+108b5928  0400a0e3  mov r0, #0x4
+108b592c  e8bffeea  b 0x108658d4
+108b5930  014084e2  add r4, r4, #0x1
+108b5934  030054e3  cmp r4, #0x3
+108b5938  d5ffff3a  bcc 0x108b5894
+108b593c  f4ffffea  b 0x108b5914
+108b5940  10d08de2  add sp, sp, #0x10
+108b5944  f081bde8  ldmia sp!,{r4,r5,r6,r7,r8,pc}
