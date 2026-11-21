@@ -250,14 +250,14 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 1,468 functions, 158,816 bytes | 840,188 bytes | 18.90% |
-| **All game code** (main + 133 CRO modules) | **1,687 functions, 184,840 bytes** | **8,782,284 bytes** | **2.10%** |
+| Battle module (`DllBattle.cro` text) | 1,716 functions, 162,784 bytes | 840,188 bytes | 19.37% |
+| **All game code** (main + 133 CRO modules) | **1,935 functions, 188,808 bytes** | **8,782,284 bytes** | **2.15%** |
 
-So roughly **2.10%** of the original program has been reconstructed so far
-(98 milestones). The function count jumped with
-[battle_tables_1](reconstructed/battle_tables_1/README.md): 382 of its functions are identical
-four-instruction table stubs that differ only in their constants, modelled by one shared routine,
-with every stub's bytes checked. The figure counts each implemented function once, by its
+So roughly **2.15%** of the original program has been reconstructed so far
+(99 milestones). The function count jumped with
+[battle_tables_1](reconstructed/battle_tables_1/README.md) and [battle_tables_2](reconstructed/battle_tables_2/README.md):
+630 of their functions are identical four-instruction table stubs that differ only in their constants,
+modelled by one shared routine, with every stub's bytes checked. The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -267,7 +267,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside ninety-eight connected C reconstruction milestones.
+The visual tools sit alongside ninety-nine connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -371,6 +371,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle move handlers 17](reconstructed/battle_moves_17/README.md) | 13 move handlers of events 0x54-0x6d |
 | [Battle move handlers B5](reconstructed/battle_moves_b5/README.md) | 14 more move handlers of event 0xac |
 | [Battle move handlers 18](reconstructed/battle_moves_18/README.md) | 13 move handlers of events 0x7d-0x9f |
+| [Battle move-table functions](reconstructed/battle_tables_2/README.md) | The 248 distinct table functions of the move table's 296 rows (one more is shared with a table in battle_tables_1) |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

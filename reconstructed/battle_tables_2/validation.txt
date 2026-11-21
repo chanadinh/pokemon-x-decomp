@@ -1,0 +1,36 @@
+Battle move-table functions (battle_tables_2), 2026-11-21
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-10).
+
+Implemented: the 248 distinct table functions of the 296-row move table
+(108d3ddc), regular four-instruction stubs. The move registrar 10869dd4 was
+already covered (battle_handler); the move handlers are not part of this batch.
+
+Evidence:
+- All 3,968 instruction bytes and 992 literal bytes match live REA bytes and
+  the original DllBattle.cro. 248 entries literals are ABS32 relocations
+  whose original words and values are checked.
+- The stubs are listed by the battle_power decoder; their instruction shapes
+  are REA-listed through four spelling references to the stub 108a53cc, which battle_tables_1
+  owns.
+
+Tests: 392 new cases. Eight mutations are each detected. ASan/UBSan pass.
+
+Original data: all 296 rows name a table function with distinct move ids;
+the 248 distinct functions are regular stubs with a count from 1 to 9 and
+priority 0, are exactly those in evidence/functions.json, and none is covered by an earlier milestone; the shape-reference stub 108a53cc
+is a field table function owned by battle_tables_1, and the move registrar is
+covered elsewhere.
+
+Line endings: every file is LF, and the repository stores LF, so these hashes
+match what git stores.
+
+The 4,008 hashes of the committed milestones (through f13ae67) remain
+unchanged.
+
+Not covered:
+- The move handlers (event entries) and the indirect call of a table function.
+- No running-game comparison was made.
+- No matching original build is claimed.

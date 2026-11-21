@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-21",
+  "method": "Live REA stdio MCP over a main+DllBattle carrier (session 10), ARM assembly review, synthetic tests on the reconstructed handler pool and original-table bindings",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "analysis": {
+    "rea_version": "6.8.0",
+    "protocol": "2025-06-18",
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "module": {
+      "file": "DllBattle.cro",
+      "size": 1040384,
+      "sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "text_file_offset": 384,
+      "text_analysis_address": "0x10800180",
+      "rodata_file_offset": 843776,
+      "rodata_analysis_address": "0x108ce000"
+    },
+    "carrier_sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1",
+    "implemented_functions": 248,
+    "instruction_bytes_verified": 3968,
+    "literal_bytes_verified": 992,
+    "relocations_verified": 248,
+    "decoder_listed_functions": 248,
+    "complete_evidence_records_retained": 11,
+    "original_project_unchanged": true,
+    "rea_session": "outputs/rea-battle-10",
+    "decoded_shapes_rea_listed_or_referenced": true,
+    "spelling_references_checked_against_rea": 4,
+    "table_functions": 248
+  },
+  "tests": {
+    "synthetic_cases": 392,
+    "mutations_detected": 8,
+    "mutations_total": 8,
+    "original_data": {
+      "module_sha256": "9c07a3342dfba4adfc3569271d65fe9fad88f1e271d5ba650179377e60d0a5a1",
+      "rows": 296,
+      "distinct_move_ids": 296,
+      "distinct_table_functions": 248,
+      "shape_reference_owned_by_battle_tables_1": "108a53cc",
+      "registrar_covered_elsewhere": "10869dd4",
+      "count_values": {
+        "count 1": 186,
+        "count 2": 54,
+        "count 3": 25,
+        "count 4": 12,
+        "count 5": 9,
+        "count 6": 6,
+        "count 7": 1,
+        "count 8": 2,
+        "count 9": 1
+      },
+      "priorities": {
+        "priority 0": 296
+      },
+      "all_match": true
+    },
+    "asan": true,
+    "ubsan": true,
+    "live": "not run"
+  },
+  "preservation": {
+    "prior_reconstruction_hashes_verified": 4008,
+    "native_source_changed": false,
+    "note": "Only reconstructed/battle_tables_2 and outputs/rea-items were written; every committed milestone's SHA256SUMS (through f13ae67) verifies."
+  },
+  "line_endings": "LF in every file; the repository stores LF (* text=auto eol=lf), so these hashes match what git stores.",
+  "scope": "table functions of the move table"
+}

@@ -267,3 +267,6 @@ was committed.
 
 The next batches (`battle_moves_b5`, `battle_moves_18`) came through `outputs/rea-battle-10` the same
 way and were verified again before they were committed.
+
+`battle_tables_2` came through `outputs/rea-battle-10` the same way and was verified again before it
+was committed.
