@@ -1,0 +1,39 @@
+Battle item handlers, batch 13 (the last item-table handlers), 2026-11-15
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-8).
+
+Implemented: the last 8 item-table handlers, for Amulet Coin, Luck Incense,
+Smoke Ball, Destiny Knot, Float Stone, Ring Target and Safety Goggles.
+
+Evidence:
+- All 644 instruction bytes and 12 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Two handlers without a Ghidra function are listed by the battle_power
+  decoder. Their instruction shapes are REA-listed in this batch or at the
+  checked spelling reference 108b1080.
+
+Tests: 165 new cases. Twenty-seven mutations are each detected. ASan/UBSan
+pass.
+
+Original data:
+- The 8 handlers are bound to exactly 10 (item, event) pairs of the item
+  table, and to nothing in the other tables.
+- The only other entry of the seven items is Safety Goggles' event-0x31
+  handler, which battle_immunity covers.
+- Item-table coverage: all 247 distinct handlers bound in the item table
+  appear in some milestone's evidence/functions.json. No item-table handler
+  remains.
+
+Line endings: every file is LF, and the repository stores LF, so these hashes
+match what git stores.
+
+The 3,640 hashes of the committed milestones (through 52a3287) remain
+unchanged.
+
+Not covered:
+- The prize-money, ally, extra-message, infatuation and non-consuming-pass
+  routines, the record stack, messages and commit remain external.
+- No running-game comparison was made.
+- No matching original build is claimed.

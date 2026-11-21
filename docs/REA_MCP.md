@@ -243,3 +243,6 @@ The next batches (`battle_items_12`, `battle_moves_14`, `battle_moves_b1`) came 
 `outputs/rea-battle-8` the same way and were verified again before they were committed. The
 `battle_moves_bN` directories hold move handlers taken from the highest-numbered events downward by
 the session that finished the ability table.
+
+`battle_items_13` was verified again before it was committed. After the daemon session in
+`outputs/rea-battle-8` ended, later byte reads come from a new session in `outputs/rea-battle-9`.

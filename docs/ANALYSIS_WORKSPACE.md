@@ -209,6 +209,9 @@ The eighty-fourth to eighty-sixth milestones add [Leppa and Micle Berries](../re
 [the move handlers of events 0x01-0x0e](../reconstructed/battle_moves_14/README.md) and
 [those of events 0xae-0xb4](../reconstructed/battle_moves_b1/README.md).
 
+The eighty-seventh milestone adds [the last item-table handlers](../reconstructed/battle_items_13/README.md),
+completing the item table.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
