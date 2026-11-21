@@ -1,0 +1,22 @@
+Battle low-address state hooks, second batch (10802000-10840000), 2026-11-22
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-10). Implemented: 24 Ghidra-listed small
+functions of a menu/page state machine (108395d8-1083f270) that all store a
+state id in word +0x6c of one global object and then do a small job on the
+page object. All 1,436 instruction bytes and 192 literal bytes match live REA
+bytes and the original DllBattle.cro; the 24 pointer literals (ABS32
+relocations to 108fcb18) are checked (48 evidence records retained).
+
+New suite: 1,440 cases. 68 mutations are each detected by a failing
+test (two non-compiling mutations replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Survey: each function is a plain procedure of REA's list_procedures inside the
+band, all 24 load the same state object pointer, and none is listed by another
+milestone; 70 of the band's 569 procedures are covered after this batch.
+
+The 4,565 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

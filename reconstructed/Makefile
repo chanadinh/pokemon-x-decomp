@@ -107,3 +107,6 @@ all test clean:
 	$(MAKE) -C battle_core_2 $@
 	$(MAKE) -C battle_low_1 $@
 	$(MAKE) -C battle_mid_2 $@
+	$(MAKE) -C battle_core_3 $@
+	$(MAKE) -C battle_low_2 $@
+	$(MAKE) -C battle_mid_3 $@

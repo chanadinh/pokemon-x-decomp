@@ -1,0 +1,15 @@
+1083f270  34209fe5  ldr r2, [0x1083f2ac]
+1083f274  10402de9  stmdb sp!,{r4,lr}
+1083f278  30109fe5  ldr r1, [0x1083f2b0]
+1083f27c  6c3092e5  ldr r3, [r2,#0x6c]
+1083f280  010053e1  cmp r3, r1
+1083f284  6c108215  strne r1, [r2,#0x6c]
+1083f288  904190e5  ldr r4, [r0,#0x190]
+1083f28c  0210a0e3  mov r1, #0x2
+1083f290  5c0694e5  ldr r0, [r4,#0x65c]
+1083f294  7205ffeb  bl 0x10800864
+1083f298  5c0694e5  ldr r0, [r4,#0x65c]
+1083f29c  1040bde8  ldmia sp!,{r4,lr}
+1083f2a0  0310a0e3  mov r1, #0x3
+1083f2a4  0120a0e3  mov r2, #0x1
+1083f2a8  7105ffea  b 0x10800874

@@ -1,0 +1,15 @@
+/* Unreviewed Ghidra pseudocode from live REA MCP; types require assembly review. */
+
+void FUN_1083b17c(int param_1)
+
+{
+  if (DAT_108fcb84 != 0x1180) {
+    DAT_108fcb84 = 0x1180;
+  }
+  if (*(int *)(param_1 + 0x6b8) == 0) {
+    FUN_10858cb8(param_1,0);
+    return;
+  }
+  return;
+}
+

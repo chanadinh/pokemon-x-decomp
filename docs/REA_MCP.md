@@ -286,3 +286,6 @@ committed.
 
 The next batches (`battle_core_2`, `battle_low_1`, `battle_mid_2`) came through `outputs/rea-battle-10`
 the same way and were verified again before they were committed.
+
+The next batches (`battle_core_3`, `battle_low_2`, `battle_mid_3`) came through `outputs/rea-battle-10`
+the same way and were verified again before they were committed.

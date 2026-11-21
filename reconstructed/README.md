@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains one hundred and seven connected, independently reviewed pieces:
+This source bundle contains one hundred and ten connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -130,6 +130,9 @@ This source bundle contains one hundred and seven connected, independently revie
 - `battle_core_2/`: more core helpers.
 - `battle_low_1/`: helpers of the `10802000`-`10840000` band.
 - `battle_mid_2/`: page objects of the `10880000`-`108a6000` band.
+- `battle_core_3/`: more core helpers.
+- `battle_low_2/`: state hooks of a menu/page state machine.
+- `battle_mid_3/`: page-object teardowns and accessors.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -157,7 +160,10 @@ not recovered original source or builds that match the original machine code.
 
 The next targets are the archive object constructors and the configuration
 table. Details, assembly evidence, and limitations
-are in [the second core-helper milestone](battle_core_2/README.md),
+are in [the third core-helper milestone](battle_core_3/README.md),
+[the second low-band milestone](battle_low_2/README.md),
+[the third mid-band milestone](battle_mid_3/README.md),
+[the second core-helper milestone](battle_core_2/README.md),
 [the first low-band milestone](battle_low_1/README.md),
 [the second mid-band milestone](battle_mid_2/README.md),
 [the first mid-band milestone](battle_mid_1/README.md),

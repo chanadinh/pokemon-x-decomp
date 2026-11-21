@@ -1,0 +1,9 @@
+10886734  38402de9  stmdb sp!,{r3,r4,r5,lr}
+10886738  0140a0e1  cpy r4, r1
+1088673c  0120a0e3  mov r2, #0x1
+10886740  0d10a0e1  cpy r1, sp
+10886744  6ee7fdeb  bl 0x10800504
+10886748  00109de5  ldr r1, [sp,#0x0]
+1088674c  0400a0e1  cpy r0, r4
+10886750  58d6feeb  bl 0x1083c0b8
+10886754  3880bde8  ldmia sp!,{r3,r4,r5,pc}
