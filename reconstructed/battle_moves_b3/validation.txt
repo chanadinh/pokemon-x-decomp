@@ -1,0 +1,22 @@
+Battle move handlers, event 0xac (second group), 2026-11-21
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-9). Implemented: the 12 REA-listed
+move handlers of event 0xac (Mind Reader/Lock-On, Electrify, Endure, Recycle,
+Focus Energy, Role Play, Disable, Reflect Type, Psych Up, Healing Wish, Lunar
+Dance, Helping Hand). All
+2,144 instruction bytes and 32 literal bytes match live REA bytes and the
+original DllBattle.cro; no relocations are involved (24 evidence records
+retained).
+
+New suite: 475 cases. 48 mutations are each detected by a failing
+test (two non-compiling mutations replaced). ASan/UBSan pass. The other
+reconstruction suites were not run here.
+
+Original data: the 12 handlers are bound to exactly 13 (move, event) pairs, all
+on event 0xac.
+
+The 3,810 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

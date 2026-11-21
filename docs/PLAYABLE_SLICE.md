@@ -7,7 +7,7 @@ systems. The native asset viewer and host tests do not yet provide a playable ga
 
 ## Current position
 
-Ninety source milestones connect wild-battle request preparation to Pokémon
+Ninety-two source milestones connect wild-battle request preparation to Pokémon
 construction, payload storage, state initialization/refresh, and HP/stat
 calculation, constructor move insertion, maximum PP, learnset access/selection,
 name construction/storage, move-resource field dispatch/loading/caching,
@@ -93,11 +93,12 @@ ability handler batches ([items](../reconstructed/battle_items_1/README.md), [mo
 [lowest](../reconstructed/battle_moves_14/README.md) and [highest](../reconstructed/battle_moves_b1/README.md) events, and
 [the last item handlers](../reconstructed/battle_items_13/README.md), then two more move batches
 ([low](../reconstructed/battle_moves_15/README.md), [high](../reconstructed/battle_moves_b2/README.md)) and
-[the side-effect table](../reconstructed/battle_fields_1/README.md).
+[the side-effect table](../reconstructed/battle_fields_1/README.md), and
+[more event 0xac moves](../reconstructed/battle_moves_b3/README.md) and [the position-effect table](../reconstructed/battle_fields_2/README.md).
 
 | Requirement | Current state |
 | --- | --- |
-| Reviewed game logic | Ninety connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction, the battle damage calculation, type effectiveness, the type matchup, the event system, handler registration, ability, final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, the action services, processor and kind routines |
+| Reviewed game logic | Ninety-two connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction, the battle damage calculation, type effectiveness, the type matchup, the event system, handler registration, ability, final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, the action services, processor and kind routines |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |

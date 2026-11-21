@@ -1,0 +1,44 @@
+Battle position-effect handlers (battle_fields_2), 2026-11-21
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-10).
+
+Implemented: the 17 handlers of the position-effect table (108d6768, 11 rows).
+- Row handlers: no-op, flag, accuracy, Ground, Water Sport, Mud Sport, counter,
+  Ion Deluge (analyst names for the rows).
+- Row 10's terrains (parameter 1 Grassy, 2 Misty, 3 Electric): power, heal,
+  block and show handlers.
+
+Evidence:
+- All 1,492 instruction bytes and 24 literal bytes match live REA bytes and
+  the original DllBattle.cro. No relocation is involved.
+- Eleven handlers without a Ghidra function are listed by the battle_power
+  decoder and a bx<cond> rule. Their instruction shapes are REA-listed in this
+  batch or at four checked spelling references.
+
+Tests: 4,555 new cases. Sixty mutations are each detected. ASan/UBSan pass.
+
+Original data: the 11 table rows (ids 0-7, 9, 8, 10 in table order) hold
+exactly these 17 handlers, bound to 20 (table, event) pairs. Row 10's table
+function and its four entry tables are checked directly. Every handler has
+evidence in this milestone.
+
+Handler tables after this batch (handlers; left): ability 288; 0. item 247; 0.
+field 5; 0. side effect 20; 0. position 17; 0. move 386; 119 (the other
+sessions' work).
+
+Line endings: every file is LF, and the repository stores LF, so these hashes
+match what git stores.
+
+The 3,810 hashes of the committed milestones (through cbba9b3) remain
+unchanged.
+
+Not covered:
+- The airborne, exemption, pokemon-lookup and state queries, the record stack,
+  messages and commit remain external.
+- The table functions and the registrar 108bc690 are not reconstructed.
+- Misty show and Electric show commit the first record twice and never the
+  message record; the reconstruction keeps that.
+- No running-game comparison was made.
+- No matching original build is claimed.

@@ -216,6 +216,10 @@ The eighty-eighth to ninetieth milestones add [the move handlers of events 0x15-
 [a first group of event 0xac](../reconstructed/battle_moves_b2/README.md) and
 [the side-effect table](../reconstructed/battle_fields_1/README.md).
 
+The ninety-first and ninety-second milestones add [a second group of event 0xac](../reconstructed/battle_moves_b3/README.md)
+and [the position-effect table](../reconstructed/battle_fields_2/README.md). With it, every handler table except the
+move table is reconstructed.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
