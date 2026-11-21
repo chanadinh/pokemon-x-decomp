@@ -1,0 +1,6 @@
+1084b804  04e02de5  str lr, [sp,#-0x4]!
+1084b808  cea200eb  bl 0x10874348
+1084b80c  120050e3  cmp r0, #0x12
+1084b810  0100a013  movne r0, #0x1
+1084b814  0000a003  moveq r0, #0x0
+1084b818  04f09de4  ldr pc, [sp],#0x4

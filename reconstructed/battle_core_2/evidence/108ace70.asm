@@ -1,0 +1,15 @@
+10877490  181090e5  ldr r1, [r0,#0x18]
+10877494  020411e3  tst r1, #0x2000000
+10877498  02148103  orreq r1, r1, #0x2000000
+1087749c  18108005  streq r1, [r0,#0x18]
+108774a0  0100a003  moveq r0, #0x1
+108774a4  0000a013  movne r0, #0x0
+108774a8  1eff2fe1  bx lr
+108ace70  18209fe5  ldr r2, [0x108ace90]
+108ace74  000280e0  add r0, r0, r0, lsl #0x4
+108ace78  000282e0  add r0, r2, r0, lsl #0x4
+108ace7c  010290e7  ldr r0, [r0,r1,lsl #0x4]
+108ace80  000050e3  cmp r0, #0x0
+108ace84  0000000a  beq 0x108ace8c
+108ace88  8029ffea  b 0x10877490
+108ace8c  1eff2fe1  bx lr

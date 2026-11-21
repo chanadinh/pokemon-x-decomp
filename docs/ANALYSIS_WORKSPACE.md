@@ -248,6 +248,10 @@ The hundred-and-third milestone starts on the code outside the handler tables wi
 
 The hundred-and-fourth milestone adds [18 functions of the `10880000`-`108a6000` band](../reconstructed/battle_mid_1/README.md).
 
+The hundred-and-fifth to hundred-and-seventh milestones add [more core helpers](../reconstructed/battle_core_2/README.md),
+[the first low-address helpers](../reconstructed/battle_low_1/README.md) and
+[a family of page objects](../reconstructed/battle_mid_2/README.md), the first group not yet connected to other milestones.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

@@ -1,6 +1,6 @@
 # Pokémon X host reconstruction milestones
 
-This source bundle contains one hundred and four connected, independently reviewed pieces:
+This source bundle contains one hundred and seven connected, independently reviewed pieces:
 
 - `call_wild_battle/`: script argument handling and helper call sequence.
 - `wild_battle_setup/`: temporary-buffer initialization, 12-byte record
@@ -127,6 +127,9 @@ This source bundle contains one hundred and four connected, independently review
 - `battle_moves_b7/`: Heal Bell and Aromatherapy, the last move handlers.
 - `battle_core_1/`: core helpers that earlier milestones call.
 - `battle_mid_1/`: helpers of the `10880000`-`108a6000` band.
+- `battle_core_2/`: more core helpers.
+- `battle_low_1/`: helpers of the `10802000`-`10840000` band.
+- `battle_mid_2/`: page objects of the `10880000`-`108a6000` band.
 
 Run all host tests with a C11 compiler and Make:
 
@@ -154,7 +157,10 @@ not recovered original source or builds that match the original machine code.
 
 The next targets are the archive object constructors and the configuration
 table. Details, assembly evidence, and limitations
-are in [the first mid-band milestone](battle_mid_1/README.md),
+are in [the second core-helper milestone](battle_core_2/README.md),
+[the first low-band milestone](battle_low_1/README.md),
+[the second mid-band milestone](battle_mid_2/README.md),
+[the first mid-band milestone](battle_mid_1/README.md),
 [the first core-helper milestone](battle_core_1/README.md),
 [the nineteenth move-handler milestone](battle_moves_19/README.md),
 [the last move-handler milestone](battle_moves_b7/README.md),

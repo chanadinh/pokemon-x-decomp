@@ -1,0 +1,10 @@
+1084b590  010a80e2  add r0, r0, #0x1000
+1084b594  910f80e2  add r0, r0, #0x244
+1084b598  002090e5  ldr r2, [r0,#0x0]
+1084b59c  000052e3  cmp r2, #0x0
+1084b5a0  04309015  ldrne r3, [r0,#0x4]
+1084b5a4  01005311  cmpne r3, r1
+1084b5a8  08008092  addls r0, r0, #0x8
+1084b5ac  01008280  addhi r0, r2, r1
+1084b5b0  0000d0e5  ldrb r0, [r0,#0x0]
+1084b5b4  1eff2fe1  bx lr

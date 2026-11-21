@@ -1,0 +1,10 @@
+1081e28c  10402de9  stmdb sp!,{r4,lr}
+1081e290  021081e2  add r1, r1, #0x2
+1081e294  034001e2  and r4, r1, #0x3
+1081e298  040090e5  ldr r0, [r0,#0x4]
+1081e29c  0410a0e1  cpy r1, r4
+1081e2a0  304801eb  bl 0x10870368
+1081e2a4  000050e3  cmp r0, #0x0
+1081e2a8  0400a011  cpyne r0, r4
+1081e2ac  0400a003  moveq r0, #0x4
+1081e2b0  1080bde8  ldmia sp!,{r4,pc}

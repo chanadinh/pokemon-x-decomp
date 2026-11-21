@@ -1,0 +1,9 @@
+1087a1c0  071000e2  and r1, r0, #0x7
+1087a1c4  010051e3  cmp r1, #0x1
+1087a1c8  0300001a  bne 0x1087a1dc
+1087a1cc  7e0f00e2  and r0, r0, #0x1f8
+1087a1d0  780050e3  cmp r0, #0x78
+1087a1d4  0100a003  moveq r0, #0x1
+1087a1d8  0000000a  beq 0x1087a1e0
+1087a1dc  0000a0e3  mov r0, #0x0
+1087a1e0  1eff2fe1  bx lr
