@@ -258,3 +258,6 @@ not cached; running `java -version` once in WSL before `open_binary` avoids the 
 
 `battle_moves_16` came through `outputs/rea-battle-10` the same way and was verified again before it
 was committed.
+
+The next batches (`battle_moves_b4`, `battle_tables_1`) came through `outputs/rea-battle-10` the same
+way and were verified again before they were committed.

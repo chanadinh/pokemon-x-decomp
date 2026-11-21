@@ -250,11 +250,14 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 1,029 functions, 142,712 bytes | 840,188 bytes | 16.99% |
-| **All game code** (main + 133 CRO modules) | **1,248 functions, 168,736 bytes** | **8,782,284 bytes** | **1.92%** |
+| Battle module (`DllBattle.cro` text) | 1,428 functions, 152,736 bytes | 840,188 bytes | 18.18% |
+| **All game code** (main + 133 CRO modules) | **1,647 functions, 178,760 bytes** | **8,782,284 bytes** | **2.04%** |
 
-So roughly **1.92%** of the original program has been reconstructed so far
-(93 milestones). The figure counts each implemented function once, by its
+So roughly **2.04%** of the original program has been reconstructed so far
+(95 milestones). The function count jumped with
+[battle_tables_1](reconstructed/battle_tables_1/README.md): 382 of its functions are identical
+four-instruction table stubs that differ only in their constants, modelled by one shared routine,
+with every stub's bytes checked. The figure counts each implemented function once, by its
 body size in the evidence files; reviewed helpers that were only compared are
 not counted. It measures code, not effort or playability: the native field
 viewer, asset decoders and renderer (see [Play the field slice](#play-the-field-slice))
@@ -264,7 +267,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside ninety-three connected C reconstruction milestones.
+The visual tools sit alongside ninety-five connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -363,6 +366,8 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle move handlers B3](reconstructed/battle_moves_b3/README.md) | 12 more move handlers of event 0xac |
 | [Battle position-effect handlers](reconstructed/battle_fields_2/README.md) | The 17 position-effect table handlers (terrains, Water Sport, Mud Sport, Ion Deluge); every non-move handler table is now reconstructed |
 | [Battle move handlers 16](reconstructed/battle_moves_16/README.md) | 19 move handlers of events 0x2a-0x53 |
+| [Battle move handlers B4](reconstructed/battle_moves_b4/README.md) | 10 more move handlers of event 0xac |
+| [Battle handler-table functions](reconstructed/battle_tables_1/README.md) | The 383 table functions of the five non-move tables (382 four-instruction stubs and the terrain selector) and four registrars |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

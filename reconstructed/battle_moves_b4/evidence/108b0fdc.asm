@@ -1,0 +1,67 @@
+108b0fdc  f0472de9  stmdb sp!,{r4,r5,r6,r7,r8,r9,r10,lr}
+108b0fe0  0300a0e3  mov r0, #0x3
+108b0fe4  0180a0e1  cpy r8, r1
+108b0fe8  0270a0e1  cpy r7, r2
+108b0fec  4aeafeeb  bl 0x1086b91c
+108b0ff0  070050e1  cmp r0, r7
+108b0ff4  3a00001a  bne 0x108b10e4
+108b0ff8  0600a0e3  mov r0, #0x6
+108b0ffc  46eafeeb  bl 0x1086b91c
+108b1000  ff1000e2  and r1, r0, #0xff
+108b1004  0800a0e1  cpy r0, r8
+108b1008  248dfeeb  bl 0x108544a0
+108b100c  5701d0e5  ldrb r0, [r0,#0x157]
+108b1010  120050e3  cmp r0, #0x12
+108b1014  0040a0e1  cpy r4, r0
+108b1018  3100000a  beq 0x108b10e4
+108b101c  1210a0e3  mov r1, #0x12
+108b1020  0800a0e1  cpy r0, r8
+108b1024  e96dfeeb  bl 0x1084c7d0
+108b1028  0060a0e1  cpy r6, r0
+108b102c  0010a0e1  cpy r1, r0
+108b1030  0400a0e1  cpy r0, r4
+108b1034  5cb5ffeb  bl 0x1089e5ac
+108b1038  0050b0e1  movs r5, r0
+108b103c  2800000a  beq 0x108b10e4
+108b1040  0710a0e1  cpy r1, r7
+108b1044  0800a0e1  cpy r0, r8
+108b1048  148dfeeb  bl 0x108544a0
+108b104c  000055e3  cmp r5, #0x0
+108b1050  0090a0e1  cpy r9, r0
+108b1054  0040a0e3  mov r4, #0x0
+108b1058  1100009a  bls 0x108b10a4
+108b105c  0410d6e7  ldrb r1, [r6,r4]
+108b1060  0900a0e1  cpy r0, r9
+108b1064  3dfafeeb  bl 0x1086f960
+108b1068  000050e3  cmp r0, #0x0
+108b106c  01408402  addeq r4, r4, #0x1
+108b1070  0700000a  beq 0x108b1094
+108b1074  040045e0  sub r0, r5, r4
+108b1078  012040e2  sub r2, r0, #0x1
+108b107c  000052e3  cmp r2, #0x0
+108b1080  020000da  ble 0x108b1090
+108b1084  040086e0  add r0, r6, r4
+108b1088  011080e2  add r1, r0, #0x1
+108b108c  e63cfdeb  bl 0x1080042c
+108b1090  015045e2  sub r5, r5, #0x1
+108b1094  040055e1  cmp r5, r4
+108b1098  efffff8a  bhi 0x108b105c
+108b109c  000055e3  cmp r5, #0x0
+108b10a0  0f00000a  beq 0x108b10e4
+108b10a4  0500a0e1  cpy r0, r5
+108b10a8  c36dfeeb  bl 0x1084c7bc
+108b10ac  0040d6e7  ldrb r4, [r6,r0]
+108b10b0  0720a0e1  cpy r2, r7
+108b10b4  1310a0e3  mov r1, #0x13
+108b10b8  0800a0e1  cpy r0, r8
+108b10bc  aee3feeb  bl 0x10869f7c
+108b10c0  0010a0e1  cpy r1, r0
+108b10c4  1f0004e2  and r0, r4, #0x1f
+108b10c8  0670c1e5  strb r7, [r1,#0x6]
+108b10cc  800280e1  orr r0, r0, r0, lsl #0x5
+108b10d0  120b80e3  orr r0, r0, #0x4800
+108b10d4  b400c1e1  strh r0, [r1,#0x4]
+108b10d8  0800a0e1  cpy r0, r8
+108b10dc  f047bde8  ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,lr}
+108b10e0  98dafeea  b 0x10867b48
+108b10e4  f087bde8  ldmia sp!,{r4,r5,r6,r7,r8,r9,r10,pc}

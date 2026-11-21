@@ -1,0 +1,48 @@
+Battle handler-table functions and registrars (battle_tables_1), 2026-11-21
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-10).
+
+Implemented:
+- The table functions of the non-move handler tables: 382 regular
+  four-instruction stubs and the irregular terrain function 108bbf98.
+- The registrars 108acd0c (side effects), 108bc690 (position effects),
+  108a5bd8 and 108abf28 (items), and the helpers 1087c024 and 10882674
+  (analyst names).
+
+Evidence:
+- All 7,104 instruction bytes and 1,576 literal bytes match live REA bytes and
+  the original DllBattle.cro. 392 literal words are ABS32 relocations whose
+  original words and values are checked.
+- The registrars, helpers and the stub 108a53cc are REA-listed. 381 stubs and
+  108bbf98 are listed by the battle_power decoder and a bx<cond> rule; their
+  instruction shapes are REA-listed in this batch or at five checked spelling
+  references. The decoder refuses only blx in the registrars.
+
+Tests: 3,041 new cases. Fifty-eight mutations are each detected. ASan/UBSan
+pass.
+
+Original data: 396 of the 397 rows of the five tables name a table function
+(item row 181 has none); the 383 distinct functions are exactly those in
+evidence/functions.json; each regular stub has the expected four instructions
+and a count word in range; the terrain function and its literals match; the
+registrars' retained listings carry the loop bounds, record layout and table
+addresses.
+
+Handler tables after this batch: every non-move table, its handlers, its
+table functions and its registrars are reconstructed. Move table: 119
+handlers left (other sessions), with its table functions and registrar.
+
+Line endings: every file is LF, and the repository stores LF, so these hashes
+match what git stores.
+
+The 3,890 hashes of the committed milestones (through 46110d0) remain
+unchanged.
+
+Not covered:
+- The abort and overflow routines, the speed and pokemon queries and the
+  indirect call of a table function remain external.
+- The move table's table functions and its registrar (10869dd4).
+- No running-game comparison was made.
+- No matching original build is claimed.

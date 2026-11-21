@@ -1,0 +1,6368 @@
+[
+  {
+    "address": "108acd0c",
+    "name": "FUN_108acd0c",
+    "implemented": true,
+    "body_bytes": 312,
+    "body_ranges": [
+      {
+        "start": "0x108acd0c",
+        "end": "0x108ace43"
+      }
+    ],
+    "evidence_id": "ev_af07c8bc97d325bbef03e880c2c283b5844ef929a3601755bfc65eb91e3ca51c",
+    "callees": [
+      {
+        "address": "0x10800394",
+        "name": "FUN_10800394",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10800394",
+              "end": "0x10800397"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108003a4",
+        "name": "thunk_FUN_0011e864",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": true,
+          "thunk_target": "0x11e864",
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108003a4",
+              "end": "0x108003a7"
+            }
+          ],
+          "total_bytes": 4,
+          "span_bytes": 4,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084cf8c",
+        "name": "FUN_1084cf8c",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084cf8c",
+              "end": "0x1084cfbf"
+            }
+          ],
+          "total_bytes": 52,
+          "span_bytes": 52,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084cfc0",
+        "name": "FUN_1084cfc0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084cfc0",
+              "end": "0x1084d17b"
+            }
+          ],
+          "total_bytes": 444,
+          "span_bytes": 444,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108ac2d8",
+        "name": "FUN_108ac2d8",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108ac2d8",
+              "end": "0x108ac2e7"
+            }
+          ],
+          "total_bytes": 16,
+          "span_bytes": 16,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "108bc690",
+    "name": "FUN_108bc690",
+    "implemented": true,
+    "body_bytes": 124,
+    "body_ranges": [
+      {
+        "start": "0x108bc690",
+        "end": "0x108bc70b"
+      }
+    ],
+    "evidence_id": "ev_9e8bdd57333fd9e3d31628b4fa841bc4b3478e831c57268d3e7b9eda1fdb21d9",
+    "callees": [
+      {
+        "address": "0x1084cfc0",
+        "name": "FUN_1084cfc0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084cfc0",
+              "end": "0x1084d17b"
+            }
+          ],
+          "total_bytes": 444,
+          "span_bytes": 444,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108bc004",
+        "name": "FUN_108bc004",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108bc004",
+              "end": "0x108bc013"
+            }
+          ],
+          "total_bytes": 16,
+          "span_bytes": 16,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108bc068",
+        "name": "FUN_108bc068",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108bc068",
+              "end": "0x108bc077"
+            }
+          ],
+          "total_bytes": 16,
+          "span_bytes": 16,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "108a5bd8",
+    "name": "FUN_108a5bd8",
+    "implemented": true,
+    "body_bytes": 192,
+    "body_ranges": [
+      {
+        "start": "0x108a5bd8",
+        "end": "0x108a5c97"
+      }
+    ],
+    "evidence_id": "ev_9e82c5cfa3b01ef9d0d481a4f42fdd3c4bc015da05cd59f0cd85e56069e005b6",
+    "callees": [
+      {
+        "address": "0x1084cfc0",
+        "name": "FUN_1084cfc0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084cfc0",
+              "end": "0x1084d17b"
+            }
+          ],
+          "total_bytes": 444,
+          "span_bytes": 444,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108743a8",
+        "name": "FUN_108743a8",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108743a8",
+              "end": "0x108743c7"
+            },
+            {
+              "start": "0x108743e4",
+              "end": "0x1087441f"
+            }
+          ],
+          "total_bytes": 92,
+          "span_bytes": 120,
+          "non_contiguous": true,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1087c024",
+        "name": "FUN_1087c024",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1087c024",
+              "end": "0x1087c06f"
+            }
+          ],
+          "total_bytes": 76,
+          "span_bytes": 76,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108a93c0",
+        "name": "FUN_108a93c0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108a93c0",
+              "end": "0x108a93cf"
+            }
+          ],
+          "total_bytes": 16,
+          "span_bytes": 16,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "108abf28",
+    "name": "FUN_108abf28",
+    "implemented": true,
+    "body_bytes": 200,
+    "body_ranges": [
+      {
+        "start": "0x108abf28",
+        "end": "0x108abfef"
+      }
+    ],
+    "evidence_id": "ev_0169fcf00f15f2b3e62ffc8e7542e11d805f08372e3d4df3036742a4d30346a5",
+    "callees": [
+      {
+        "address": "0x1084cf8c",
+        "name": "FUN_1084cf8c",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084cf8c",
+              "end": "0x1084cfbf"
+            }
+          ],
+          "total_bytes": 52,
+          "span_bytes": 52,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084cfc0",
+        "name": "FUN_1084cfc0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084cfc0",
+              "end": "0x1084d17b"
+            }
+          ],
+          "total_bytes": 444,
+          "span_bytes": 444,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108743a8",
+        "name": "FUN_108743a8",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108743a8",
+              "end": "0x108743c7"
+            },
+            {
+              "start": "0x108743e4",
+              "end": "0x1087441f"
+            }
+          ],
+          "total_bytes": 92,
+          "span_bytes": 120,
+          "non_contiguous": true,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x10882674",
+        "name": "FUN_10882674",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10882674",
+              "end": "0x10882683"
+            }
+          ],
+          "total_bytes": 16,
+          "span_bytes": 16,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108a93c0",
+        "name": "FUN_108a93c0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108a93c0",
+              "end": "0x108a93cf"
+            }
+          ],
+          "total_bytes": 16,
+          "span_bytes": 16,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "1087c024",
+    "name": "FUN_1087c024",
+    "implemented": true,
+    "body_bytes": 76,
+    "body_ranges": [
+      {
+        "start": "0x1087c024",
+        "end": "0x1087c06f"
+      }
+    ],
+    "evidence_id": "ev_1e1c32b5750654ffb8d26a7f994f1e2638e98fd0f0765ba1edb4f2fae96b2513",
+    "callees": []
+  },
+  {
+    "address": "10882674",
+    "name": "FUN_10882674",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x10882674",
+        "end": "0x10882683"
+      }
+    ],
+    "evidence_id": "ev_7ba1bd2e160b5143f115ec4e533dd5e2599d47cb3be2880acc754f21c1c7d549",
+    "callees": []
+  },
+  {
+    "address": "108a53cc",
+    "name": "FUN_108a53cc",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a53cc",
+        "end": "0x108a53db"
+      }
+    ],
+    "evidence_id": "ev_2d2b5b910d1e37dcf103a0979160880b54a75cae13cf5b2f7d0aed89f25840da",
+    "callees": []
+  },
+  {
+    "address": "108a53e0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a53e0",
+        "end": "0x108a53ef"
+      }
+    ],
+    "evidence_id": "ev_928ced20a8659776110c7db4ca71c5e5eb9aadb7f586488f51f3ea212c9271eb",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a53f4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a53f4",
+        "end": "0x108a5403"
+      }
+    ],
+    "evidence_id": "ev_928ced20a8659776110c7db4ca71c5e5eb9aadb7f586488f51f3ea212c9271eb",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a5408",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a5408",
+        "end": "0x108a5417"
+      }
+    ],
+    "evidence_id": "ev_928ced20a8659776110c7db4ca71c5e5eb9aadb7f586488f51f3ea212c9271eb",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a541c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a541c",
+        "end": "0x108a542b"
+      }
+    ],
+    "evidence_id": "ev_928ced20a8659776110c7db4ca71c5e5eb9aadb7f586488f51f3ea212c9271eb",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a743c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a743c",
+        "end": "0x108a744b"
+      }
+    ],
+    "evidence_id": "ev_b0e196abf347509df20c295f1b464d883661dfaf42f7f57c42c0f8f5190c2b12",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7450",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7450",
+        "end": "0x108a745f"
+      }
+    ],
+    "evidence_id": "ev_b0e196abf347509df20c295f1b464d883661dfaf42f7f57c42c0f8f5190c2b12",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7464",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7464",
+        "end": "0x108a7473"
+      }
+    ],
+    "evidence_id": "ev_b0e196abf347509df20c295f1b464d883661dfaf42f7f57c42c0f8f5190c2b12",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7be0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7be0",
+        "end": "0x108a7bef"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7bf4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7bf4",
+        "end": "0x108a7c03"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7c08",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7c08",
+        "end": "0x108a7c17"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7c1c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7c1c",
+        "end": "0x108a7c2b"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7c30",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7c30",
+        "end": "0x108a7c3f"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7c44",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7c44",
+        "end": "0x108a7c53"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7c58",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7c58",
+        "end": "0x108a7c67"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7c6c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7c6c",
+        "end": "0x108a7c7b"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7c80",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7c80",
+        "end": "0x108a7c8f"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7c94",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7c94",
+        "end": "0x108a7ca3"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7ca8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7ca8",
+        "end": "0x108a7cb7"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a7cbc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a7cbc",
+        "end": "0x108a7ccb"
+      }
+    ],
+    "evidence_id": "ev_4f653bda6601b94a4dd8ef7ff4fab7d6f065c2df21ac6b651642ba4a1acd7598",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8300",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8300",
+        "end": "0x108a830f"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8314",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8314",
+        "end": "0x108a8323"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8328",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8328",
+        "end": "0x108a8337"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a833c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a833c",
+        "end": "0x108a834b"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8350",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8350",
+        "end": "0x108a835f"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8364",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8364",
+        "end": "0x108a8373"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8378",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8378",
+        "end": "0x108a8387"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a838c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a838c",
+        "end": "0x108a839b"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a83a0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a83a0",
+        "end": "0x108a83af"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a83b4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a83b4",
+        "end": "0x108a83c3"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a83c8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a83c8",
+        "end": "0x108a83d7"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a83dc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a83dc",
+        "end": "0x108a83eb"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a83f0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a83f0",
+        "end": "0x108a83ff"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8404",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8404",
+        "end": "0x108a8413"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8418",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8418",
+        "end": "0x108a8427"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a842c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a842c",
+        "end": "0x108a843b"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8440",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8440",
+        "end": "0x108a844f"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8454",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8454",
+        "end": "0x108a8463"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8468",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8468",
+        "end": "0x108a8477"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a847c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a847c",
+        "end": "0x108a848b"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8490",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8490",
+        "end": "0x108a849f"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a84a4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a84a4",
+        "end": "0x108a84b3"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a84b8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a84b8",
+        "end": "0x108a84c7"
+      }
+    ],
+    "evidence_id": "ev_e740d2d3d2c27012cad8a1376eadb1c94c44192180ef80a02102ab4db8608060",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8b48",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8b48",
+        "end": "0x108a8b57"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8b5c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8b5c",
+        "end": "0x108a8b6b"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8b70",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8b70",
+        "end": "0x108a8b7f"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8b84",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8b84",
+        "end": "0x108a8b93"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8b98",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8b98",
+        "end": "0x108a8ba7"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8bac",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8bac",
+        "end": "0x108a8bbb"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8bc0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8bc0",
+        "end": "0x108a8bcf"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8bd4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8bd4",
+        "end": "0x108a8be3"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8be8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8be8",
+        "end": "0x108a8bf7"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8bfc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8bfc",
+        "end": "0x108a8c0b"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8c10",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8c10",
+        "end": "0x108a8c1f"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8c24",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8c24",
+        "end": "0x108a8c33"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8c38",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8c38",
+        "end": "0x108a8c47"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8c4c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8c4c",
+        "end": "0x108a8c5b"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8c60",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8c60",
+        "end": "0x108a8c6f"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8c74",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8c74",
+        "end": "0x108a8c83"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8c88",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8c88",
+        "end": "0x108a8c97"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8c9c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8c9c",
+        "end": "0x108a8cab"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8cb0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8cb0",
+        "end": "0x108a8cbf"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8cc4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8cc4",
+        "end": "0x108a8cd3"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8cd8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8cd8",
+        "end": "0x108a8ce7"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8cec",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8cec",
+        "end": "0x108a8cfb"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8d00",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8d00",
+        "end": "0x108a8d0f"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8d14",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8d14",
+        "end": "0x108a8d23"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8d28",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8d28",
+        "end": "0x108a8d37"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8d3c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8d3c",
+        "end": "0x108a8d4b"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8d50",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8d50",
+        "end": "0x108a8d5f"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a8d64",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a8d64",
+        "end": "0x108a8d73"
+      }
+    ],
+    "evidence_id": "ev_d5827b7f8d6660db699f317ff3b1a3bdcf020abeb3401bed1d446b3c472d56c8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a92f8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a92f8",
+        "end": "0x108a9307"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a930c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a930c",
+        "end": "0x108a931b"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9320",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9320",
+        "end": "0x108a932f"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9334",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9334",
+        "end": "0x108a9343"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9348",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9348",
+        "end": "0x108a9357"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a935c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a935c",
+        "end": "0x108a936b"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9370",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9370",
+        "end": "0x108a937f"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9384",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9384",
+        "end": "0x108a9393"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9398",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9398",
+        "end": "0x108a93a7"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a93ac",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a93ac",
+        "end": "0x108a93bb"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a93c0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a93c0",
+        "end": "0x108a93cf"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a93d4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a93d4",
+        "end": "0x108a93e3"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a93e8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a93e8",
+        "end": "0x108a93f7"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a93fc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a93fc",
+        "end": "0x108a940b"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9410",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9410",
+        "end": "0x108a941f"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9424",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9424",
+        "end": "0x108a9433"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9438",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9438",
+        "end": "0x108a9447"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a944c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a944c",
+        "end": "0x108a945b"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9460",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9460",
+        "end": "0x108a946f"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9474",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9474",
+        "end": "0x108a9483"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9488",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9488",
+        "end": "0x108a9497"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a949c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a949c",
+        "end": "0x108a94ab"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a94b0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a94b0",
+        "end": "0x108a94bf"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a94c4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a94c4",
+        "end": "0x108a94d3"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a94d8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a94d8",
+        "end": "0x108a94e7"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a94ec",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a94ec",
+        "end": "0x108a94fb"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9500",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9500",
+        "end": "0x108a950f"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9514",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9514",
+        "end": "0x108a9523"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9528",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9528",
+        "end": "0x108a9537"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a953c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a953c",
+        "end": "0x108a954b"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9550",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9550",
+        "end": "0x108a955f"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9564",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9564",
+        "end": "0x108a9573"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9578",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9578",
+        "end": "0x108a9587"
+      }
+    ],
+    "evidence_id": "ev_ee944ecbceafcb288391c70b0755583c29e68d4e01ff233083fe26a625c68405",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9bcc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9bcc",
+        "end": "0x108a9bdb"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9be0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9be0",
+        "end": "0x108a9bef"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9bf4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9bf4",
+        "end": "0x108a9c03"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9c08",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9c08",
+        "end": "0x108a9c17"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9c1c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9c1c",
+        "end": "0x108a9c2b"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9c30",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9c30",
+        "end": "0x108a9c3f"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9c44",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9c44",
+        "end": "0x108a9c53"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9c58",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9c58",
+        "end": "0x108a9c67"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9c6c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9c6c",
+        "end": "0x108a9c7b"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9c80",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9c80",
+        "end": "0x108a9c8f"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9c94",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9c94",
+        "end": "0x108a9ca3"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9ca8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9ca8",
+        "end": "0x108a9cb7"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9cbc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9cbc",
+        "end": "0x108a9ccb"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9cd0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9cd0",
+        "end": "0x108a9cdf"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9ce4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9ce4",
+        "end": "0x108a9cf3"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9cf8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9cf8",
+        "end": "0x108a9d07"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9d0c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9d0c",
+        "end": "0x108a9d1b"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9d20",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9d20",
+        "end": "0x108a9d2f"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9d34",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9d34",
+        "end": "0x108a9d43"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9d48",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9d48",
+        "end": "0x108a9d57"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9d5c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9d5c",
+        "end": "0x108a9d6b"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9d70",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9d70",
+        "end": "0x108a9d7f"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9d84",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9d84",
+        "end": "0x108a9d93"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9d98",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9d98",
+        "end": "0x108a9da7"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9dac",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9dac",
+        "end": "0x108a9dbb"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9dc0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9dc0",
+        "end": "0x108a9dcf"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108a9dd4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108a9dd4",
+        "end": "0x108a9de3"
+      }
+    ],
+    "evidence_id": "ev_06f9c2deefcd987d7c8f301eccffd40962017d0aabc4778c8f32dc41c3c51cf8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa208",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa208",
+        "end": "0x108aa217"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa21c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa21c",
+        "end": "0x108aa22b"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa230",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa230",
+        "end": "0x108aa23f"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa244",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa244",
+        "end": "0x108aa253"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa258",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa258",
+        "end": "0x108aa267"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa26c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa26c",
+        "end": "0x108aa27b"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa280",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa280",
+        "end": "0x108aa28f"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa294",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa294",
+        "end": "0x108aa2a3"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa2a8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa2a8",
+        "end": "0x108aa2b7"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa2bc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa2bc",
+        "end": "0x108aa2cb"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa2d0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa2d0",
+        "end": "0x108aa2df"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa2e4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa2e4",
+        "end": "0x108aa2f3"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa2f8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa2f8",
+        "end": "0x108aa307"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa30c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa30c",
+        "end": "0x108aa31b"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa320",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa320",
+        "end": "0x108aa32f"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa334",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa334",
+        "end": "0x108aa343"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa348",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa348",
+        "end": "0x108aa357"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa35c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa35c",
+        "end": "0x108aa36b"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa370",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa370",
+        "end": "0x108aa37f"
+      }
+    ],
+    "evidence_id": "ev_eada59e39cd150b56553f21863c162745aefe9fe57d49ba066df879bed210e01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa744",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa744",
+        "end": "0x108aa753"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa758",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa758",
+        "end": "0x108aa767"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa76c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa76c",
+        "end": "0x108aa77b"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa780",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa780",
+        "end": "0x108aa78f"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa794",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa794",
+        "end": "0x108aa7a3"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa7a8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa7a8",
+        "end": "0x108aa7b7"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa7bc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa7bc",
+        "end": "0x108aa7cb"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa7d0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa7d0",
+        "end": "0x108aa7df"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa7e4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa7e4",
+        "end": "0x108aa7f3"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa7f8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa7f8",
+        "end": "0x108aa807"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa80c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa80c",
+        "end": "0x108aa81b"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa820",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa820",
+        "end": "0x108aa82f"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa834",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa834",
+        "end": "0x108aa843"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa848",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa848",
+        "end": "0x108aa857"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa85c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa85c",
+        "end": "0x108aa86b"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa870",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa870",
+        "end": "0x108aa87f"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa884",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa884",
+        "end": "0x108aa893"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa898",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa898",
+        "end": "0x108aa8a7"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa8ac",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa8ac",
+        "end": "0x108aa8bb"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa8c0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa8c0",
+        "end": "0x108aa8cf"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aa8d4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aa8d4",
+        "end": "0x108aa8e3"
+      }
+    ],
+    "evidence_id": "ev_952ea1640e9aee237502bdce125ce12d4e9e1cf20c8262b80f5c6b7ca032fe01",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aae4c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aae4c",
+        "end": "0x108aae5b"
+      }
+    ],
+    "evidence_id": "ev_2adf2b72644dad7ec84aee251922c6f2466376419c309caa4541c2c135b68f4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aae60",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aae60",
+        "end": "0x108aae6f"
+      }
+    ],
+    "evidence_id": "ev_2adf2b72644dad7ec84aee251922c6f2466376419c309caa4541c2c135b68f4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aae74",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aae74",
+        "end": "0x108aae83"
+      }
+    ],
+    "evidence_id": "ev_2adf2b72644dad7ec84aee251922c6f2466376419c309caa4541c2c135b68f4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aae88",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aae88",
+        "end": "0x108aae97"
+      }
+    ],
+    "evidence_id": "ev_2adf2b72644dad7ec84aee251922c6f2466376419c309caa4541c2c135b68f4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aae9c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aae9c",
+        "end": "0x108aaeab"
+      }
+    ],
+    "evidence_id": "ev_2adf2b72644dad7ec84aee251922c6f2466376419c309caa4541c2c135b68f4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aaeb0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aaeb0",
+        "end": "0x108aaebf"
+      }
+    ],
+    "evidence_id": "ev_2adf2b72644dad7ec84aee251922c6f2466376419c309caa4541c2c135b68f4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ab218",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ab218",
+        "end": "0x108ab227"
+      }
+    ],
+    "evidence_id": "ev_e985d559dc0c71e539ed7f918d6986fcb2e2a922445c7669cc6c0895a320997c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ab22c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ab22c",
+        "end": "0x108ab23b"
+      }
+    ],
+    "evidence_id": "ev_e985d559dc0c71e539ed7f918d6986fcb2e2a922445c7669cc6c0895a320997c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ab240",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ab240",
+        "end": "0x108ab24f"
+      }
+    ],
+    "evidence_id": "ev_e985d559dc0c71e539ed7f918d6986fcb2e2a922445c7669cc6c0895a320997c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ab608",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ab608",
+        "end": "0x108ab617"
+      }
+    ],
+    "evidence_id": "ev_a100efb61aafda1381108c8ffdf06f0e2f81b95482ae1f3bd201bc11d9dad517",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ab6e4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ab6e4",
+        "end": "0x108ab6f3"
+      }
+    ],
+    "evidence_id": "ev_8326080092395927ca3fba12d28414861402c0fab855222f333b1fc9d916751b",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108aba04",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108aba04",
+        "end": "0x108aba13"
+      }
+    ],
+    "evidence_id": "ev_0c91e8d02e840072e5f9d5ad4a595b372280fc36b1d66ad669ed553643aba764",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac004",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac004",
+        "end": "0x108ac013"
+      }
+    ],
+    "evidence_id": "ev_1ff54cbe01bd87edf085560e8a7af43347afca19f061de52f01482495606742e",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac018",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac018",
+        "end": "0x108ac027"
+      }
+    ],
+    "evidence_id": "ev_1ff54cbe01bd87edf085560e8a7af43347afca19f061de52f01482495606742e",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac070",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac070",
+        "end": "0x108ac07f"
+      }
+    ],
+    "evidence_id": "ev_b8a0c24833319b99b5932c8e4645e2f51293e549ba6b4d5fff58c8707ee55dd6",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac084",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac084",
+        "end": "0x108ac093"
+      }
+    ],
+    "evidence_id": "ev_b8a0c24833319b99b5932c8e4645e2f51293e549ba6b4d5fff58c8707ee55dd6",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac098",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac098",
+        "end": "0x108ac0a7"
+      }
+    ],
+    "evidence_id": "ev_b8a0c24833319b99b5932c8e4645e2f51293e549ba6b4d5fff58c8707ee55dd6",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac0ac",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac0ac",
+        "end": "0x108ac0bb"
+      }
+    ],
+    "evidence_id": "ev_b8a0c24833319b99b5932c8e4645e2f51293e549ba6b4d5fff58c8707ee55dd6",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac0c0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac0c0",
+        "end": "0x108ac0cf"
+      }
+    ],
+    "evidence_id": "ev_b8a0c24833319b99b5932c8e4645e2f51293e549ba6b4d5fff58c8707ee55dd6",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac108",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac108",
+        "end": "0x108ac117"
+      }
+    ],
+    "evidence_id": "ev_5e0e4346a212c20b4b6a7b31c2a60a9086c2cb25a2dac554b0cb944a264128f7",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac11c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac11c",
+        "end": "0x108ac12b"
+      }
+    ],
+    "evidence_id": "ev_5e0e4346a212c20b4b6a7b31c2a60a9086c2cb25a2dac554b0cb944a264128f7",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac130",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac130",
+        "end": "0x108ac13f"
+      }
+    ],
+    "evidence_id": "ev_5e0e4346a212c20b4b6a7b31c2a60a9086c2cb25a2dac554b0cb944a264128f7",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac144",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac144",
+        "end": "0x108ac153"
+      }
+    ],
+    "evidence_id": "ev_5e0e4346a212c20b4b6a7b31c2a60a9086c2cb25a2dac554b0cb944a264128f7",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac158",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac158",
+        "end": "0x108ac167"
+      }
+    ],
+    "evidence_id": "ev_5e0e4346a212c20b4b6a7b31c2a60a9086c2cb25a2dac554b0cb944a264128f7",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac1a0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac1a0",
+        "end": "0x108ac1af"
+      }
+    ],
+    "evidence_id": "ev_894dc7fc6af8fdcf78123f7aa9f88c6333e15d331264a06b0f1f35de40e95259",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac1b4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac1b4",
+        "end": "0x108ac1c3"
+      }
+    ],
+    "evidence_id": "ev_894dc7fc6af8fdcf78123f7aa9f88c6333e15d331264a06b0f1f35de40e95259",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac2d8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac2d8",
+        "end": "0x108ac2e7"
+      }
+    ],
+    "evidence_id": "ev_950ff9eef8b54817a48e546b72a19b7ca0ae6a0053fa9d342a6b22ccc07cba2c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac2ec",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac2ec",
+        "end": "0x108ac2fb"
+      }
+    ],
+    "evidence_id": "ev_950ff9eef8b54817a48e546b72a19b7ca0ae6a0053fa9d342a6b22ccc07cba2c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108ac59c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108ac59c",
+        "end": "0x108ac5ab"
+      }
+    ],
+    "evidence_id": "ev_d62c5805e3e8eccb24ca9525a01ee52902b60fd58d5cd84e9b204c504b7b188d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bbf84",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bbf84",
+        "end": "0x108bbf93"
+      }
+    ],
+    "evidence_id": "ev_07a9c602e29da6c17493be43e1fd712537ed3acdfb59dd6997779c7af324a9cc",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bbf98",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 72,
+    "body_ranges": [
+      {
+        "start": "0x108bbf98",
+        "end": "0x108bbfdf"
+      }
+    ],
+    "evidence_id": "ev_aa59dee85ce48b1fa0b772253f586a6653d1f8d4e8b1fc4bd5c4aff1cad427a8",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108bbff0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bbff0",
+        "end": "0x108bbfff"
+      }
+    ],
+    "evidence_id": "ev_0f20c2ae44c46682b8cf9cfe93b3fa227a0d463598e302ef924d0c11f0df7ec2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bc004",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bc004",
+        "end": "0x108bc013"
+      }
+    ],
+    "evidence_id": "ev_0f20c2ae44c46682b8cf9cfe93b3fa227a0d463598e302ef924d0c11f0df7ec2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bc018",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bc018",
+        "end": "0x108bc027"
+      }
+    ],
+    "evidence_id": "ev_0f20c2ae44c46682b8cf9cfe93b3fa227a0d463598e302ef924d0c11f0df7ec2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bc02c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bc02c",
+        "end": "0x108bc03b"
+      }
+    ],
+    "evidence_id": "ev_0f20c2ae44c46682b8cf9cfe93b3fa227a0d463598e302ef924d0c11f0df7ec2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bc040",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bc040",
+        "end": "0x108bc04f"
+      }
+    ],
+    "evidence_id": "ev_0f20c2ae44c46682b8cf9cfe93b3fa227a0d463598e302ef924d0c11f0df7ec2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bc054",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bc054",
+        "end": "0x108bc063"
+      }
+    ],
+    "evidence_id": "ev_0f20c2ae44c46682b8cf9cfe93b3fa227a0d463598e302ef924d0c11f0df7ec2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bc068",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bc068",
+        "end": "0x108bc077"
+      }
+    ],
+    "evidence_id": "ev_0f20c2ae44c46682b8cf9cfe93b3fa227a0d463598e302ef924d0c11f0df7ec2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bc080",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bc080",
+        "end": "0x108bc08f"
+      }
+    ],
+    "evidence_id": "ev_b014ed916a8c3ca3e77ef6f11723c98d097ca3b656d0b1d749b0659323655074",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bc220",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bc220",
+        "end": "0x108bc22f"
+      }
+    ],
+    "evidence_id": "ev_ab9aa7023c24693be452319241d2b3fadb89ca5515280d40882e58b10e9e7172",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bef10",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bef10",
+        "end": "0x108bef1f"
+      }
+    ],
+    "evidence_id": "ev_90d6a5e6d5ad3670f31b6133420261c8372b9ab1bb8db7bc7fc62cc278fa445a",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfaa4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfaa4",
+        "end": "0x108bfab3"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfab8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfab8",
+        "end": "0x108bfac7"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfacc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfacc",
+        "end": "0x108bfadb"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfae0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfae0",
+        "end": "0x108bfaef"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfaf4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfaf4",
+        "end": "0x108bfb03"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfb08",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfb08",
+        "end": "0x108bfb17"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfb1c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfb1c",
+        "end": "0x108bfb2b"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfb30",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfb30",
+        "end": "0x108bfb3f"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108bfb44",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108bfb44",
+        "end": "0x108bfb53"
+      }
+    ],
+    "evidence_id": "ev_d190e9cb84f46f1e7dabc11b795725bb9d4d52e2a3a94cd0ac1ff109af1598f0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0338",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0338",
+        "end": "0x108c0347"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c034c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c034c",
+        "end": "0x108c035b"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0360",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0360",
+        "end": "0x108c036f"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0374",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0374",
+        "end": "0x108c0383"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0388",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0388",
+        "end": "0x108c0397"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c039c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c039c",
+        "end": "0x108c03ab"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c03b0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c03b0",
+        "end": "0x108c03bf"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c03c4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c03c4",
+        "end": "0x108c03d3"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c03d8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c03d8",
+        "end": "0x108c03e7"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c03ec",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c03ec",
+        "end": "0x108c03fb"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0400",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0400",
+        "end": "0x108c040f"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0414",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0414",
+        "end": "0x108c0423"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0428",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0428",
+        "end": "0x108c0437"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c043c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c043c",
+        "end": "0x108c044b"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0450",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0450",
+        "end": "0x108c045f"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0464",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0464",
+        "end": "0x108c0473"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0478",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0478",
+        "end": "0x108c0487"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c048c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c048c",
+        "end": "0x108c049b"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c04a0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c04a0",
+        "end": "0x108c04af"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c04b4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c04b4",
+        "end": "0x108c04c3"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c04c8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c04c8",
+        "end": "0x108c04d7"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c04dc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c04dc",
+        "end": "0x108c04eb"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c04f0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c04f0",
+        "end": "0x108c04ff"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0504",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0504",
+        "end": "0x108c0513"
+      }
+    ],
+    "evidence_id": "ev_b65a18da4a7ebf7d29941c0e8fa5c4a826589dac731707ba9b8acab1e2d8a5bf",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0c2c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0c2c",
+        "end": "0x108c0c3b"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0c40",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0c40",
+        "end": "0x108c0c4f"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0c54",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0c54",
+        "end": "0x108c0c63"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0c68",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0c68",
+        "end": "0x108c0c77"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0c80",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0c80",
+        "end": "0x108c0c8f"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0c94",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0c94",
+        "end": "0x108c0ca3"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0cac",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0cac",
+        "end": "0x108c0cbb"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0cc0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0cc0",
+        "end": "0x108c0ccf"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0cd4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0cd4",
+        "end": "0x108c0ce3"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0ce8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0ce8",
+        "end": "0x108c0cf7"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0cfc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0cfc",
+        "end": "0x108c0d0b"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0d10",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0d10",
+        "end": "0x108c0d1f"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0d24",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0d24",
+        "end": "0x108c0d33"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0d38",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0d38",
+        "end": "0x108c0d47"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0d4c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0d4c",
+        "end": "0x108c0d5b"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0d60",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0d60",
+        "end": "0x108c0d6f"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0d74",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0d74",
+        "end": "0x108c0d83"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0d88",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0d88",
+        "end": "0x108c0d97"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0d9c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0d9c",
+        "end": "0x108c0dab"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0db0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0db0",
+        "end": "0x108c0dbf"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0dc4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0dc4",
+        "end": "0x108c0dd3"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0dd8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0dd8",
+        "end": "0x108c0de7"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0dec",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0dec",
+        "end": "0x108c0dfb"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c0e00",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c0e00",
+        "end": "0x108c0e0f"
+      }
+    ],
+    "evidence_id": "ev_44806505dc1df0c22b34d8a65ec759cce7ebe29f58e2e1c1da12238e57106436",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c135c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c135c",
+        "end": "0x108c136b"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1370",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1370",
+        "end": "0x108c137f"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1384",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1384",
+        "end": "0x108c1393"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1398",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1398",
+        "end": "0x108c13a7"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c13ac",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c13ac",
+        "end": "0x108c13bb"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c13c0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c13c0",
+        "end": "0x108c13cf"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c13d4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c13d4",
+        "end": "0x108c13e3"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c13e8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c13e8",
+        "end": "0x108c13f7"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c13fc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c13fc",
+        "end": "0x108c140b"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1410",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1410",
+        "end": "0x108c141f"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1424",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1424",
+        "end": "0x108c1433"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1438",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1438",
+        "end": "0x108c1447"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c144c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c144c",
+        "end": "0x108c145b"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1460",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1460",
+        "end": "0x108c146f"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1474",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1474",
+        "end": "0x108c1483"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1488",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1488",
+        "end": "0x108c1497"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c149c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c149c",
+        "end": "0x108c14ab"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c14b0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c14b0",
+        "end": "0x108c14bf"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c14c4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c14c4",
+        "end": "0x108c14d3"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c14d8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c14d8",
+        "end": "0x108c14e7"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c14ec",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c14ec",
+        "end": "0x108c14fb"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1500",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1500",
+        "end": "0x108c150f"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1514",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1514",
+        "end": "0x108c1523"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1528",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1528",
+        "end": "0x108c1537"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c153c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c153c",
+        "end": "0x108c154b"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1550",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1550",
+        "end": "0x108c155f"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1564",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1564",
+        "end": "0x108c1573"
+      }
+    ],
+    "evidence_id": "ev_bfac3e904beb6d64d6534f821ed2ddfe8806324d4bf406814cdaf08e7ac683d2",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1a74",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1a74",
+        "end": "0x108c1a83"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1a88",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1a88",
+        "end": "0x108c1a97"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1a9c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1a9c",
+        "end": "0x108c1aab"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1ab0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1ab0",
+        "end": "0x108c1abf"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1ac4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1ac4",
+        "end": "0x108c1ad3"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1ad8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1ad8",
+        "end": "0x108c1ae7"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1aec",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1aec",
+        "end": "0x108c1afb"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1b00",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1b00",
+        "end": "0x108c1b0f"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1b14",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1b14",
+        "end": "0x108c1b23"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1b28",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1b28",
+        "end": "0x108c1b37"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1b3c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1b3c",
+        "end": "0x108c1b4b"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1b50",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1b50",
+        "end": "0x108c1b5f"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1b64",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1b64",
+        "end": "0x108c1b73"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1b78",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1b78",
+        "end": "0x108c1b87"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1b8c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1b8c",
+        "end": "0x108c1b9b"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1ba0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1ba0",
+        "end": "0x108c1baf"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1bb4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1bb4",
+        "end": "0x108c1bc3"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1bc8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1bc8",
+        "end": "0x108c1bd7"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1bdc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1bdc",
+        "end": "0x108c1beb"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1bf0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1bf0",
+        "end": "0x108c1bff"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1c04",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1c04",
+        "end": "0x108c1c13"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1c18",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1c18",
+        "end": "0x108c1c27"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1c2c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1c2c",
+        "end": "0x108c1c3b"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1c40",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1c40",
+        "end": "0x108c1c4f"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1c54",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1c54",
+        "end": "0x108c1c63"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1c68",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1c68",
+        "end": "0x108c1c77"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1c7c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1c7c",
+        "end": "0x108c1c8b"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1c90",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1c90",
+        "end": "0x108c1c9f"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c1ca4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c1ca4",
+        "end": "0x108c1cb3"
+      }
+    ],
+    "evidence_id": "ev_c26e05eff9658ef3a6aad6af7fb5cc4b20a4253c820dacd564f0ab820dffb91c",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2484",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2484",
+        "end": "0x108c2493"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2498",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2498",
+        "end": "0x108c24a7"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c24ac",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c24ac",
+        "end": "0x108c24bb"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c24c0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c24c0",
+        "end": "0x108c24cf"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c24d4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c24d4",
+        "end": "0x108c24e3"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c24e8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c24e8",
+        "end": "0x108c24f7"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c24fc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c24fc",
+        "end": "0x108c250b"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2510",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2510",
+        "end": "0x108c251f"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2524",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2524",
+        "end": "0x108c2533"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2538",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2538",
+        "end": "0x108c2547"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c254c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c254c",
+        "end": "0x108c255b"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2560",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2560",
+        "end": "0x108c256f"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2574",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2574",
+        "end": "0x108c2583"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2588",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2588",
+        "end": "0x108c2597"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c259c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c259c",
+        "end": "0x108c25ab"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c25b0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c25b0",
+        "end": "0x108c25bf"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c25c4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c25c4",
+        "end": "0x108c25d3"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c25d8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c25d8",
+        "end": "0x108c25e7"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c25ec",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c25ec",
+        "end": "0x108c25fb"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2600",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2600",
+        "end": "0x108c260f"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2614",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2614",
+        "end": "0x108c2623"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2628",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2628",
+        "end": "0x108c2637"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c263c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c263c",
+        "end": "0x108c264b"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2650",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2650",
+        "end": "0x108c265f"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2664",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2664",
+        "end": "0x108c2673"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2678",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2678",
+        "end": "0x108c2687"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c268c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c268c",
+        "end": "0x108c269b"
+      }
+    ],
+    "evidence_id": "ev_ccdad6aafbae9ccd617389374236fe1674a4be2ea215996018c08c22decc6785",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2df0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2df0",
+        "end": "0x108c2dff"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2e04",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2e04",
+        "end": "0x108c2e13"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2e18",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2e18",
+        "end": "0x108c2e27"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2e2c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2e2c",
+        "end": "0x108c2e3b"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2e40",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2e40",
+        "end": "0x108c2e4f"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2e54",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2e54",
+        "end": "0x108c2e63"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2e68",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2e68",
+        "end": "0x108c2e77"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2e7c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2e7c",
+        "end": "0x108c2e8b"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2e90",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2e90",
+        "end": "0x108c2e9f"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2ea4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2ea4",
+        "end": "0x108c2eb3"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2eb8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2eb8",
+        "end": "0x108c2ec7"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c2ecc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c2ecc",
+        "end": "0x108c2edb"
+      }
+    ],
+    "evidence_id": "ev_0943bb8951737a891eb9ba28e52d4f9e867d553ed3aa90d14b25ee6af47c09c9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3530",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3530",
+        "end": "0x108c353f"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3544",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3544",
+        "end": "0x108c3553"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3558",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3558",
+        "end": "0x108c3567"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c356c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c356c",
+        "end": "0x108c357b"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3580",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3580",
+        "end": "0x108c358f"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3594",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3594",
+        "end": "0x108c35a3"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c35a8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c35a8",
+        "end": "0x108c35b7"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c35bc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c35bc",
+        "end": "0x108c35cb"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c35d0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c35d0",
+        "end": "0x108c35df"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c35e4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c35e4",
+        "end": "0x108c35f3"
+      }
+    ],
+    "evidence_id": "ev_84a134f2c9d30643b9bf2bfa86b8264af481c968d2587d7ea5f4f40c24a54e4d",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3ecc",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3ecc",
+        "end": "0x108c3edb"
+      }
+    ],
+    "evidence_id": "ev_445faef42fb99bbc4befd00944c340d5aab9e9949878003b03cebff6c16425d1",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3ee0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3ee0",
+        "end": "0x108c3eef"
+      }
+    ],
+    "evidence_id": "ev_445faef42fb99bbc4befd00944c340d5aab9e9949878003b03cebff6c16425d1",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3ef4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3ef4",
+        "end": "0x108c3f03"
+      }
+    ],
+    "evidence_id": "ev_445faef42fb99bbc4befd00944c340d5aab9e9949878003b03cebff6c16425d1",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3f08",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3f08",
+        "end": "0x108c3f17"
+      }
+    ],
+    "evidence_id": "ev_445faef42fb99bbc4befd00944c340d5aab9e9949878003b03cebff6c16425d1",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3f1c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3f1c",
+        "end": "0x108c3f2b"
+      }
+    ],
+    "evidence_id": "ev_445faef42fb99bbc4befd00944c340d5aab9e9949878003b03cebff6c16425d1",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3f30",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3f30",
+        "end": "0x108c3f3f"
+      }
+    ],
+    "evidence_id": "ev_445faef42fb99bbc4befd00944c340d5aab9e9949878003b03cebff6c16425d1",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c3f44",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c3f44",
+        "end": "0x108c3f53"
+      }
+    ],
+    "evidence_id": "ev_445faef42fb99bbc4befd00944c340d5aab9e9949878003b03cebff6c16425d1",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c479c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c479c",
+        "end": "0x108c47ab"
+      }
+    ],
+    "evidence_id": "ev_e7c206739cea65b8850a880fa453e61a25c5c6e72dde9677145f853e395e7d54",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  },
+  {
+    "address": "108c4c6c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 16,
+    "body_ranges": [
+      {
+        "start": "0x108c4c6c",
+        "end": "0x108c4c7b"
+      }
+    ],
+    "evidence_id": "ev_8ea6a32d87fdae29aa802f99c40a913e6a428c517962672b43b283fc7dc40d56",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py",
+    "listing": "stubs.asm"
+  }
+]

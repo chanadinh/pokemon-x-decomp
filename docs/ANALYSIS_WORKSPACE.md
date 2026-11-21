@@ -222,6 +222,11 @@ move table is reconstructed.
 
 The ninety-third milestone adds [the move handlers of events 0x2a-0x53](../reconstructed/battle_moves_16/README.md).
 
+The ninety-fourth and ninety-fifth milestones add [a third group of event 0xac](../reconstructed/battle_moves_b4/README.md)
+and [the non-move table functions and registrars](../reconstructed/battle_tables_1/README.md). That milestone's
+382 table stubs are identical in shape, so one routine models them; each stub's bytes, count and entries literal
+are still checked one by one.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
