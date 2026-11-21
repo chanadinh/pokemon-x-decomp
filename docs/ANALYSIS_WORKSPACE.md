@@ -236,6 +236,8 @@ are all on event 0xac.
 The ninety-ninth milestone adds [the move table's table functions](../reconstructed/battle_tables_2/README.md): 248
 four-instruction stubs for its 296 rows. Stub `108a53cc` is shared with a table covered by battle_tables_1 and stays there.
 
+The hundredth milestone adds [eight more event-0xac move handlers](../reconstructed/battle_moves_b6/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

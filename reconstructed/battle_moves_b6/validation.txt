@@ -1,0 +1,27 @@
+Battle move handlers, event 0xac (fifth group, upper half), 2026-11-21
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses in session
+outputs/rea-battle-9, byte reads in outputs/rea-battle-10). Implemented:
+8 move handlers of event 0xac: four Ghidra-listed (Defog,
+Stockpile, Ally Switch, Acupressure) and four without a Ghidra function
+(Power Swap, Baton Pass, Psycho Shift, Spiky Shield's stub), the latter listed
+by decode_arm.py. All 2,688 instruction bytes and 12 literal bytes
+match live REA bytes and the original DllBattle.cro; the one relocation (the
+Acupressure table pointer, ABS32) is checked and the table's seven bytes equal
+the original (13 evidence records retained).
+
+New suite: 401 cases. 56 mutations are each detected by a failing
+test (six that did not compile or were equivalent replaced). ASan/UBSan pass.
+The other reconstruction suites were not run here.
+
+Original data: the 8 handlers are bound to exactly 8 (move, event) pairs, all
+on event 0xac.
+
+Not done: 108b5620 (Aromatherapy, a branch into 108b87e4) and 108b87e0 (Heal
+Bell, whose body at 108b87e4 uses a post-indexed byte load the battle_power
+decoder refuses).
+
+The 4,138 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

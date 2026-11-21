@@ -1,0 +1,60 @@
+108b3458  f0412de9  stmdb sp!,{r4,r5,r6,r7,r8,lr}
+108b345c  0160a0e1  cpy r6, r1
+108b3460  0240a0e1  cpy r4, r2
+108b3464  0300a0e3  mov r0, #0x3
+108b3468  2be1feeb  bl 0x1086b91c
+108b346c  040050e1  cmp r0, r4
+108b3470  3300001a  bne 0x108b3544
+108b3474  0410a0e1  cpy r1, r4
+108b3478  0600a0e1  cpy r0, r6
+108b347c  7d65feeb  bl 0x1084ca78
+108b3480  000050e3  cmp r0, #0x0
+108b3484  2e00000a  beq 0x108b3544
+108b3488  0600a0e1  cpy r0, r6
+108b348c  db62feeb  bl 0x1084c000
+108b3490  000050e3  cmp r0, #0x0
+108b3494  2a00000a  beq 0x108b3544
+108b3498  0420a0e1  cpy r2, r4
+108b349c  1f10a0e3  mov r1, #0x1f
+108b34a0  0600a0e1  cpy r0, r6
+108b34a4  b4dafeeb  bl 0x10869f7c
+108b34a8  0050a0e1  cpy r5, r0
+108b34ac  0400a0e3  mov r0, #0x4
+108b34b0  0400c5e5  strb r0, [r5,#0x4]
+108b34b4  0410a0e1  cpy r1, r4
+108b34b8  0600a0e1  cpy r0, r6
+108b34bc  25fffeeb  bl 0x10873158
+108b34c0  0500c5e5  strb r0, [r5,#0x5]
+108b34c4  0170a0e3  mov r7, #0x1
+108b34c8  084085e5  str r4, [r5,#0x8]
+108b34cc  0510a0e1  cpy r1, r5
+108b34d0  0600a0e1  cpy r0, r6
+108b34d4  1870c5e5  strb r7, [r5,#0x18]
+108b34d8  9ad1feeb  bl 0x10867b48
+108b34dc  0420a0e1  cpy r2, r4
+108b34e0  1710a0e3  mov r1, #0x17
+108b34e4  0600a0e1  cpy r0, r6
+108b34e8  a3dafeeb  bl 0x10869f7c
+108b34ec  002090e5  ldr r2, [r0,#0x0]
+108b34f0  0010a0e1  cpy r1, r0
+108b34f4  0e00a0e3  mov r0, #0xe
+108b34f8  0540c1e5  strb r4, [r1,#0x5]
+108b34fc  0400c1e5  strb r0, [r1,#0x4]
+108b3500  012482e3  orr r2, r2, #0x1000000
+108b3504  0600a0e1  cpy r0, r6
+108b3508  002081e5  str r2, [r1,#0x0]
+108b350c  8dd1feeb  bl 0x10867b48
+108b3510  0420a0e1  cpy r2, r4
+108b3514  2a10a0e3  mov r1, #0x2a
+108b3518  0600a0e1  cpy r0, r6
+108b351c  96dafeeb  bl 0x10869f7c
+108b3520  0010a0e1  cpy r1, r0
+108b3524  000090e5  ldr r0, [r0,#0x0]
+108b3528  4c40c1e5  strb r4, [r1,#0x4c]
+108b352c  4d70c1e5  strb r7, [r1,#0x4d]
+108b3530  010480e3  orr r0, r0, #0x1000000
+108b3534  000081e5  str r0, [r1,#0x0]
+108b3538  0600a0e1  cpy r0, r6
+108b353c  f041bde8  ldmia sp!,{r4,r5,r6,r7,r8,lr}
+108b3540  80d1feea  b 0x10867b48
+108b3544  f081bde8  ldmia sp!,{r4,r5,r6,r7,r8,pc}

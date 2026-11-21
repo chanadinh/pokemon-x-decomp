@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 1,716 functions, 162,784 bytes | 840,188 bytes | 19.37% |
-| **All game code** (main + 133 CRO modules) | **1,935 functions, 188,808 bytes** | **8,782,284 bytes** | **2.15%** |
+| Battle module (`DllBattle.cro` text) | 1,724 functions, 165,472 bytes | 840,188 bytes | 19.69% |
+| **All game code** (main + 133 CRO modules) | **1,943 functions, 191,496 bytes** | **8,782,284 bytes** | **2.18%** |
 
-So roughly **2.15%** of the original program has been reconstructed so far
-(99 milestones). The function count jumped with
+So roughly **2.18%** of the original program has been reconstructed so far
+(100 milestones). The function count jumped with
 [battle_tables_1](reconstructed/battle_tables_1/README.md) and [battle_tables_2](reconstructed/battle_tables_2/README.md):
 630 of their functions are identical four-instruction table stubs that differ only in their constants,
 modelled by one shared routine, with every stub's bytes checked. The figure counts each implemented function once, by its
@@ -267,7 +267,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside ninety-nine connected C reconstruction milestones.
+The visual tools sit alongside one hundred connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -372,6 +372,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle move handlers B5](reconstructed/battle_moves_b5/README.md) | 14 more move handlers of event 0xac |
 | [Battle move handlers 18](reconstructed/battle_moves_18/README.md) | 13 move handlers of events 0x7d-0x9f |
 | [Battle move-table functions](reconstructed/battle_tables_2/README.md) | The 248 distinct table functions of the move table's 296 rows (one more is shared with a table in battle_tables_1) |
+| [Battle move handlers B6](reconstructed/battle_moves_b6/README.md) | 8 more move handlers of event 0xac (Defog, Stockpile, Ally Switch, Acupressure, Power Swap, Baton Pass, Psycho Shift, Spiky Shield) |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their
