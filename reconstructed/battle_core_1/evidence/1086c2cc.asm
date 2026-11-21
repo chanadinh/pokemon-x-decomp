@@ -1,0 +1,26 @@
+1086c2cc  0020a0e3  mov r2, #0x0
+1086c2d0  823082e0  add r3, r2, r2, lsl #0x1
+1086c2d4  03c0d0e7  ldrb r12, [r0,r3]
+1086c2d8  00005ce3  cmp r12, #0x0
+1086c2dc  0500000a  beq 0x1086c2f8
+1086c2e0  00c083e0  add r12, r3, r0
+1086c2e4  02c0dce5  ldrb r12, [r12,#0x2]
+1086c2e8  01005ce1  cmp r12, r1
+1086c2ec  0100001a  bne 0x1086c2f8
+1086c2f0  ff0002e2  and r0, r2, #0xff
+1086c2f4  1eff2fe1  bx lr
+1086c2f8  003083e0  add r3, r3, r0
+1086c2fc  03c0d3e5  ldrb r12, [r3,#0x3]
+1086c300  00005ce3  cmp r12, #0x0
+1086c304  0500000a  beq 0x1086c320
+1086c308  0530d3e5  ldrb r3, [r3,#0x5]
+1086c30c  010053e1  cmp r3, r1
+1086c310  0200001a  bne 0x1086c320
+1086c314  010082e2  add r0, r2, #0x1
+1086c318  ff0000e2  and r0, r0, #0xff
+1086c31c  1eff2fe1  bx lr
+1086c320  022082e2  add r2, r2, #0x2
+1086c324  0a0052e3  cmp r2, #0xa
+1086c328  e8ffff3a  bcc 0x1086c2d0
+1086c32c  0a00a0e3  mov r0, #0xa
+1086c330  1eff2fe1  bx lr

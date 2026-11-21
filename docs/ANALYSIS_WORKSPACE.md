@@ -243,6 +243,9 @@ and [Heal Bell and Aromatherapy](../reconstructed/battle_moves_b7/README.md), co
 handler table. `battle_moves_b7` ships its own copy of the ARM decoder from `battle_power`, extended by one
 instruction form and checked to decode every committed evidence word identically; `battle_power` is unchanged.
 
+The hundred-and-third milestone starts on the code outside the handler tables with
+[28 helpers that earlier milestones call](../reconstructed/battle_core_1/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

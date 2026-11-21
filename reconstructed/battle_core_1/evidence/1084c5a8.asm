@@ -1,0 +1,14 @@
+1084c5a8  1f0050e3  cmp r0, #0x1f
+1084c5ac  1f005113  cmpne r1, #0x1f
+1084c5b0  0800000a  beq 0x1084c5d8
+1084c5b4  0c0050e3  cmp r0, #0xc
+1084c5b8  0100a023  movcs r0, #0x1
+1084c5bc  0000a033  movcc r0, #0x0
+1084c5c0  0c0051e3  cmp r1, #0xc
+1084c5c4  0110a023  movcs r1, #0x1
+1084c5c8  0010a033  movcc r1, #0x0
+1084c5cc  010050e1  cmp r0, r1
+1084c5d0  0100a003  moveq r0, #0x1
+1084c5d4  0000000a  beq 0x1084c5dc
+1084c5d8  0000a0e3  mov r0, #0x0
+1084c5dc  1eff2fe1  bx lr

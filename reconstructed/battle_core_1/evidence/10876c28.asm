@@ -1,0 +1,9 @@
+10876c28  b220d0e1  ldrh r2, [r0,#0x2]
+10876c2c  0830a0e3  mov r3, #0x8
+10876c30  02c9a0e1  mov r12, r2, lsl #0x12
+10876c34  ac0c53e1  cmp r3, r12, lsr #0x19
+10876c38  0200009a  bls 0x10876c48
+10876c3c  012982e3  orr r2, r2, #0x4000
+10876c40  201080e5  str r1, [r0,#0x20]
+10876c44  b220c0e1  strh r2, [r0,#0x2]
+10876c48  1eff2fe1  bx lr

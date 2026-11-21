@@ -1,0 +1,41 @@
+1086f960  120051e3  cmp r1, #0x12
+1086f964  04402de5  str r4, [sp,#-0x4]!
+1086f968  2200000a  beq 0x1086f9f8
+1086f96c  7c2090e5  ldr r2, [r0,#0x7c]
+1086f970  0031d0e5  ldrb r3, [r0,#0x100]
+1086f974  070012e3  tst r2, #0x7
+1086f978  01c0a013  movne r12, #0x1
+1086f97c  00c0a003  moveq r12, #0x0
+1086f980  020053e3  cmp r3, #0x2
+1086f984  1220a0e3  mov r2, #0x12
+1086f988  0100001a  bne 0x1086f994
+1086f98c  00005ce3  cmp r12, #0x0
+1086f990  0230a011  cpyne r3, r2
+1086f994  0141d0e5  ldrb r4, [r0,#0x101]
+1086f998  020054e3  cmp r4, #0x2
+1086f99c  0100001a  bne 0x1086f9a8
+1086f9a0  00005ce3  cmp r12, #0x0
+1086f9a4  0000001a  bne 0x1086f9ac
+1086f9a8  0420a0e1  cpy r2, r4
+1086f9ac  ffc003e2  and r12, r3, #0xff
+1086f9b0  12005ce3  cmp r12, #0x12
+1086f9b4  0300000a  beq 0x1086f9c8
+1086f9b8  ff4002e2  and r4, r2, #0xff
+1086f9bc  120054e3  cmp r4, #0x12
+1086f9c0  0c20a001  cpyeq r2, r12
+1086f9c4  030000ea  b 0x1086f9d8
+1086f9c8  ff3002e2  and r3, r2, #0xff
+1086f9cc  120053e3  cmp r3, #0x12
+1086f9d0  0020a003  moveq r2, #0x0
+1086f9d4  ff3002e2  and r3, r2, #0xff
+1086f9d8  ff3003e2  and r3, r3, #0xff
+1086f9dc  010053e1  cmp r3, r1
+1086f9e0  ff200212  andne r2, r2, #0xff
+1086f9e4  01005211  cmpne r2, r1
+1086f9e8  0201d015  ldrbne r0, [r0,#0x102]
+1086f9ec  01005011  cmpne r0, r1
+1086f9f0  0100a003  moveq r0, #0x1
+1086f9f4  0000000a  beq 0x1086f9fc
+1086f9f8  0000a0e3  mov r0, #0x0
+1086f9fc  04409de4  ldr r4, [sp],#0x4
+1086fa00  1eff2fe1  bx lr

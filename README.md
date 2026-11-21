@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 1,738 functions, 169,924 bytes | 840,188 bytes | 20.22% |
-| **All game code** (main + 133 CRO modules) | **1,957 functions, 195,948 bytes** | **8,782,284 bytes** | **2.23%** |
+| Battle module (`DllBattle.cro` text) | 1,766 functions, 171,360 bytes | 840,188 bytes | 20.40% |
+| **All game code** (main + 133 CRO modules) | **1,985 functions, 197,384 bytes** | **8,782,284 bytes** | **2.25%** |
 
-So roughly **2.23%** of the original program has been reconstructed so far
-(102 milestones). Every handler of the six battle handler tables is now
+So roughly **2.25%** of the original program has been reconstructed so far
+(103 milestones). Every handler of the six battle handler tables is now
 reconstructed: 963 handlers (288 ability, 247 item, 386 move, 20 side-effect, 17 position and 5 field),
 with the tables' functions and registrars. The function count jumped with
 [battle_tables_1](reconstructed/battle_tables_1/README.md) and [battle_tables_2](reconstructed/battle_tables_2/README.md):
@@ -269,7 +269,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside one hundred and two connected C reconstruction milestones.
+The visual tools sit alongside one hundred and three connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -377,6 +377,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle move handlers B6](reconstructed/battle_moves_b6/README.md) | 8 more move handlers of event 0xac (Defog, Stockpile, Ally Switch, Acupressure, Power Swap, Baton Pass, Psycho Shift, Spiky Shield) |
 | [Battle move handlers 19](reconstructed/battle_moves_19/README.md) | The lower half (11) of the last event-0xac move handlers |
 | [Battle move handlers B7](reconstructed/battle_moves_b7/README.md) | Heal Bell and Aromatherapy with their shared body; all 386 move-table handlers are now reconstructed |
+| [Battle core helpers 1](reconstructed/battle_core_1/README.md) | 28 helpers (battler status, type queries and others) that earlier milestones call |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their
