@@ -1,0 +1,1402 @@
+[
+  {
+    "evidence_id": "ev_e8dfe19c2614cd237d321d0ee7f053916a8b4a97f008bdc85881fdfb252e839f",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108ad640",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108ad640",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "70402de90160a0e10240a0e10300a0e3b1f8feeb040050e11700001a0600a0e3adf8feebff5000e20420a0e10b10a0e30600a0e140f2feeb0040a0e11000a0e30f50c4e5b400c4e10100a0e3080084e528209fe50210a0e3140084e20c7ffeeb0510a0e1140084e2fb7efeeb0410a0e10600a0e17040bde822e9feea7080bde8350200000210a0e3001080e500009fe51eff2fe1684d8d100110a0e3001080e500009fe51eff2fe16c318d100110a0e3001080e500009fe51eff2fe15c308d100110a0e3001080e500009fe51eff2fe12c308d100110a0e3001080e500009fe51eff2fe17c2c8d100110a0e3001080e500009fe51eff2fe1fc2f8d100110a0e3001080e500009fe51eff2fe154318d100110a0e3001080e500009fe51eff2fe1f42f8d100110a0e3001080e500009fe51eff2fe17c318d100210a0e3001080e500009fe51eff2fe1784e8d100110a0e3001080e500009fe51eff2fe1d4308d100210a0e3001080e500009fe51eff2fe1c4478d100110a0e3001080e500009fe51eff2fe1942e8d100110a0e3001080e5",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_2d5f652a2a85276a39c62d60dff8966a2353f7ed97a008ff09b6c4456792f180",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108adf14",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108adf14",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "70402de90160a0e10240a0e10300a0e37cf6feeb040050e11e00001a0010a0e35300a0e365defeeb0420a0e13c10a0e30600a0e17e7afeeb0400a0e1c118ffeb0050a0e10010a0e10600a0e1266900eb000050e30050a0030420a0e10310a0e30600a0e1ffeffeeb0040a0e128209fe50110a0e3040080e2d07cfeeb0510a0e1040084e2bf7cfeeb0410a0e10600a0e17040bde8e6e6feea7080bde80b010000f05f2de90250a0e10300a0e30190a0e154f6feeb050050e17000001a0600a0e350f6feebff8000e20900a0e14199feeb000050e30300001a0500a0e19918ffeb010050e36500000a0510a0e10900a0e12599feeb0040a0e10810a0e10900a0e12199feeb00b0a0e10400a0e1b201d0e10060a0e10b00a0e1b201d0e10070a0e1070096e15500000a0400a0e1bc00d0e100a0a0e10b00a0e1bc00d0e10040a0e10600a0e19b77feeb000050e300f020e34a00001a0700a0e19677feeb000050e300f020e34500001a0720a0e10a10a0e10900a0e1e398feeb000050e300f020e33e00001a0620a0e10410a0e10900a0e1",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_135e72ee5a2dead660bae30620fa6287f350f082f4df2428c15c4fa71cb758b8",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108ae754",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108ae754",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "f05f2de90300a0e30280a0e10190a0e16cf4feeb080050e12100001a0500a0e368f4feeb007050e278b09f850050a0e325a0a0831a00009a060085e2ff0000e260f4feebff6000e20820a0e10b10a0e30900a0e1f3edfeeb0f60c0e50040a0e1b4a0c0e10100a0e39e75feeb080084e50b20a0e10210a0e3140084e2bf7afeeb0610a0e1140084e2ae7afeeb0410a0e10900a0e1d6e4feeb015085e2050057e1e4ffff8af09fbde8ba04000070402de90150a0e10240a0e10300a0e341f4feeb040050e10c00001a0420a0e10310a0e30500a0e1d3edfeeb0040a0e16a20a0e30110a0e3040080e2a47afeeb0410a0e10500a0e17040bde8bde4feea7080bde870402de90160a0e10250a0e10300a0e32cf4feeb050050e11500001a0520a0e13410a0e30600a0e1beedfeeb0040a0e10600a0e323f4feeb0400c4e5a12fa0e30210a0e3080084e28c7afeeb0510a0e1080084e27b7afeeb0410d4e5080084e2787afeeb0410a0e10600a0e17040bde89fe4feea7080bde870402de90160a0e10240a0e10300a0e30ef4feeb040050e1",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_88cecbd929ae05c4e92cefc50d6149e35eddda2ccfa905f93b496923e4be99d3",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108ae800",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108ae800",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "70402de90150a0e10240a0e10300a0e341f4feeb040050e10c00001a0420a0e10310a0e30500a0e1d3edfeeb0040a0e16a20a0e30110a0e3040080e2a47afeeb0410a0e10500a0e17040bde8bde4feea7080bde870402de90160a0e10250a0e10300a0e32cf4feeb050050e11500001a0520a0e13410a0e30600a0e1beedfeeb0040a0e10600a0e323f4feeb0400c4e5a12fa0e30210a0e3080084e28c7afeeb0510a0e1080084e27b7afeeb0410d4e5080084e2787afeeb0410a0e10600a0e17040bde89fe4feea7080bde870402de90160a0e10240a0e10300a0e30ef4feeb040050e11e00001a0600a0e15975feeb030050e31a00001a0600a0e306f4feebff5000e20510a0e10600a0e1e396feeb0210a0e35ba0feeb000050e31000000a0420a0e11210a0e30600a0e192edfeeb0040a0e10450c0e528209fe50210a0e3080080e2627afeeb0510a0e1080084e2517afeeb0410a0e10600a0e17040bde878e4feea7080bde89604000070402de90150a0e10240a0e10300a0e3e6f3feeb040050e10e00001a0400a0e3e2f3feeb",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_9ecc08e19231bb7a08cdf3f4a56ff82866d3348dd81a74572e101f3f63986a76",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b000c",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b000c",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "70402de90160a0e10250a0e10300a0e33eeefeeb050050e11b00001a0510a0e10600a0e11a91feeb2310a0e3929afeeb000050e31400001a0520a0e10b10a0e30600a0e1c9e7feeb0040a0e12300a0e3b400c4e10100a0e3080084e52c209fe50210a0e3140084e20f50c4e59574feeb0510a0e1140084e28474feeb0410a0e10600a0e17040bde8abdefeea7080bde859020000f0412de90240a0e10170a0e10300a0e319eefeeb040050e11f00001a0600a0e315eefeebff5000e20510a0e10700a0e1f290feeb0080a0e10b10a0e3699afeeb000050e31400001a0360a0e30110a0e30800a0e1c771feeb000050e30460a0130420a0e10b10a0e30700a0e19ae7feeb0040a0e10b00a0e3b400c4e10600a0e1456ffeeb080084e50410a0e10700a0e10f50c4e5f041bde882defeeaf081bde8f0412de910d04de20060a0e10170a0e10250a0e10380a0e10100a0e30040a0e10500a0e1526efeeb9e10a0e30c108de50710a0e313008de80830a0e10520a0e10710a0e10600a0e1c86efeeb10d08de2f081bde870402de90160a0e1",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_5847303c5d808442bb7204565fb9b701cbde4ddc7118f36374fafa6808aafa42",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b00a0",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b00a0",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "f0412de90240a0e10170a0e10300a0e319eefeeb040050e11f00001a0600a0e315eefeebff5000e20510a0e10700a0e1f290feeb0080a0e10b10a0e3699afeeb000050e31400001a0360a0e30110a0e30800a0e1c771feeb000050e30460a0130420a0e10b10a0e30700a0e19ae7feeb0040a0e10b00a0e3b400c4e10600a0e1456ffeeb080084e50410a0e10700a0e10f50c4e5f041bde882defeeaf081bde8f0412de910d04de20060a0e10170a0e10250a0e10380a0e10100a0e30040a0e10500a0e1526efeeb9e10a0e30c108de50710a0e313008de80830a0e10520a0e10710a0e10600a0e1c86efeeb10d08de2f081bde870402de90160a0e10250a0e10200a0e3dcedfeeb050050e11500001a0510a0e10600a0e1b890feeb0310a0e3e6fdfeeb000050e30e00000a0520a0e10b10a0e30600a0e167e7feeb0040a0e11c00a0e30f50c4e5b400c4e10100a0e3116ffeeb080084e50410a0e10600a0e17040bde84fdefeea7080bde810402de90240a0e10300a0e3bfedfeeb040050e10700001a1500a0e3bbedfeeb0a0050e3",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_8c36f22743b9c0845e27b5d5c3366dfcef8a523226a096383a37bd37bc3342c2",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b0848",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b0848",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "f05f2de90300a0e30280a0e10190a0e12fecfeeb080050e12f00001a0500a0e32becfeeb007050e2b0b09f850040a0e316a0a0832800009a0600a0e324ecfeebff6000e20610a0e10900a0e1018ffeeb0050a0e11610a0e37898feeb000050e300f020e31900001a0710a0e30500a0e128fcfeeb000050e300f020e31300001a0820a0e10b10a0e30900a0e1a8e5feeb0f60c0e50050a0e1b4a0c0e10800a0e152b7ffeb080085e50b20a0e10210a0e3140085e27472feeb0610a0e1140085e26372feeb0510a0e10900a0e18bdcfeeb014084e2070054e1d6ffff3af09fbde86b030000f0412de910d04de20060a0e10170a0e10250a0e10380a0e10100a0e30040a0e10500a0e1576cfeeb9a10a0e30c108de50610a0e313008de80830a0e10520a0e10710a0e10600a0e1cd6cfeeb10d08de2f081bde838402de90050a0e10240a0e10300a0e3e1ebfeeb040050e10b00001a0500a0e1b803d0e10040a0e11f00a0e3daebfeeb00008de50410a0e10d00a0e1f36bfeeb00109de51f00a0e3c1d3feeb3880bde838402de90240a0e1",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_95ca8c2bc5892a9fafc57c2b5290cbb4cb4e7a9b9bec0c913f2280eb263e45c6",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b1a6c",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b1a6c",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "70402de90160a0e10250a0e10300a0e3a6e7feeb050050e11400001a0600a0e3a2e7feebff4000e20410a0e10600a0e17f8afeeb0710a0e3adf7feeb000050e30a00001a0520a0e11410a0e30600a0e12ee1feeb0010a0e10700a0e30540c1e50400c1e50600a0e17040bde81ad8feea7080bde870402de90150a0e10240a0e10300a0e389e7feeb040050e11000001a0120a0e30410a0e10500a0e12f6afeeb0420a0e10310a0e30500a0e117e1feeb0040a0e1ff20a0e30110a0e3040080e2e86dfeeb0410a0e10500a0e17040bde801d8feea7080bde8f0412de90240a0e10170a0e10300a0e370e7feeb040050e14500001a0410a0e10700a0e14c8afeeb0080a0e10210a0e3de6dfeeb0060a0e10110a0e30800a0e12867feeb0050a0e10d10a0e30800a0e1210affeb060050e13500009a000055e33300000a0420a0e10710a0e30700a0e1f0e0feeb0010a0e10180a0e3000066e20480c1e5140081e50680c1e50700a0e10740c1e5dad7feeb0420a0e10d10a0e30700a0e1e3e0feeb0010a0e11800d0e50480c1e50c40c1e5",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_0295e470c8775f288c3413e5c4245ea581a03ef72b441130427315b87047aeba",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b43f4",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b43f4",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "f05f2de90300a0e30280a0e10190a0e144ddfeeb080050e12b00001a0500a0e340ddfeeb007050e2a0b09f850040a0e356a0a0832400009a066084e2ff0006e238ddfeebff1000e20900a0e11680feeb1010a0e300f020e3f3fffeeb360050e300f020e31500000a0820a0e12010a0e30900a0e1c3d6feeb0050a0e1ff0006e228ddfeeb0600c5e50b20a0e10210a0e30c0085e2b4a0c5e19063feeb0610d5e50c0085e27f63feebb410d5e10c0085e27c63feeb0510a0e10900a0e1a4cdfeeb014084e2070054e1daffff3af09fbde89501000070402de90150a0e10240a0e10300a0e30fddfeeb040050e10e00001a0400a0e30bddfeebff1000e20500a0e1e97ffeeb0110a0e3c560feeb000050e30500000a3100a0e302ddfeeb7040bde88010a0e13100a0e3ecc4feea7080bde870402de90150a0e10240a0e10300a0e3f8dcfeeb040050e10c00001a0500a0e1725efeeb010050e3020050130700001a0010a0e35300a0e3dcc4feeb0420a0e10500a0e17040bde83c10a0e3f460feea7080bde870402de90150a0e10240a0e1",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_3cf2ba3f930c988dfa00b9db5a8533af0383c643ff769a1ddbfacf25970917a2",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b4c1c",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b4c1c",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "f05f2de90150a0e10240a0e10300a0e33adbfeeb040050e12700001a0580a0e10470a0e10b90a0e30500a0e333dbfeeb006050e20040a0e301a0a08302b0a0831d00009a060084e2ff0000e22bdbfeebff5000e20510a0e10800a0e1087efeeb0910a0e100f020e335ebfeeb000050e300f020e30d00000a0720a0e10d10a0e30800a0e1b5d4feeb1820d0e50c50c0e516a0c0e50010a0e104b0c0e5260082e317a0c1e51800c1e50800a0e19ecbfeeb014084e2060054e1e1ffff3af09fbde810402de90240a0e10300a0e30bdbfeeb040050e10300001a1040bde80210a0e31700a0e3f3c2feea1080bde870402de90160a0e10240a0e10300a0e3ffdafeeb040050e12300001a0410a0e10600a0e1db7dfeeb0400a0e3f8dafeebff1000e20600a0e1d67dfeeb0050a0e10410a0e10600a0e1265bfeeb0040a0e10500a0e11900d0e50010a0e10600a0e1205bfeeb0010a0e10400a0e12e2ffdeb050050e37810a0a3080000aa040050e36410a0030500000a030050e35010a0030200000a020050e33c10a0032810a0137040bde8",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_c1b8bc149f43fa820bb7bb2d0fc308767f595d06613353b4a4a668840b09a29e",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b60a4",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b60a4",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "f05f2de90300a0e301a0a0e10290a0e118d6feeb090050e13400001a0910a0e10a00a0e1f478feeb1010a0e3d2f8feeb7080ffe60800a0e110baffeb000050e32a00001a0500a0e30ad6feeb007050e29cb09f850040a0e32400009a066084e2ff0006e203d6feebff1000e20a00a0e1e178feeb1010a0e300f020e3bef8feeb360050e300f020e31500000a0920a0e12010a0e30a00a0e18ecffeeb0050a0e1ff0006e2f3d5feebb480c5e10600c5e50b20a0e10210a0e30c0085e25b5cfeeb0610d5e50c0085e24a5cfeebb410d5e10c0085e2475cfeeb0510a0e10a00a0e16fc6feeb014084e2070054e1daffff3af09fbde89501000070402de90160a0e10240a0e10300a0e3dad5feeb040050e11800001a0600a0e3d6d5feeb0050a0e10420a0e12010a0e30600a0e169cffeeb0040a0e10f00a0e30650c4e5b400c4e134209fe50210a0e30c0084e2375cfeeb0610d4e50c0084e2265cfeebb410d4e10c0084e2235cfeeb0410a0e10600a0e17040bde84ac6feea7080bde89501000070402de90150a0e10240a0e10300a0e3",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_956fd2f22916efce2fbd2afa364eefd97bde6abf088a4dbdbe33d2986696ba04",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b619c",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b619c",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "70402de90160a0e10240a0e10300a0e3dad5feeb040050e11800001a0600a0e3d6d5feeb0050a0e10420a0e12010a0e30600a0e169cffeeb0040a0e10f00a0e30650c4e5b400c4e134209fe50210a0e30c0084e2375cfeeb0610d4e50c0084e2265cfeebb410d4e10c0084e2235cfeeb0410a0e10600a0e17040bde84ac6feea7080bde89501000070402de90150a0e10240a0e10300a0e3b8d5feeb040050e11200001a0420a0e13010a0e30500a0e14acffeeb0040a0e10600a0e3afd5feeb0400c4e528209fe50210a0e3080084e2185cfeeb0410d4e5080084e2075cfeeb0410a0e10500a0e17040bde82ec6feea7080bde87404000070402de90150a0e10240a0e10300a0e39cd5feeb040050e11100001a0420a0e11c10a0e30500a0e12ecffeeb0040a0e10800a0e30400c4e50100a0e3d956feeb080084e51c209fe50110a0e30c0084e2fa5bfeeb0410a0e10500a0e17040bde813c6feea7080bde801010000f05f2de90240a0e10180a0e10100a0e3c956feeb0060a0e10400a0e12757feeb0050a0e168a09fe50f70a0e3",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_4ba2430237f0e6bd3847a55b2869b9d12447202235f9b1ca4c2379428987fa03",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b6224",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b6224",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "70402de90150a0e10240a0e10300a0e3b8d5feeb040050e11200001a0420a0e13010a0e30500a0e14acffeeb0040a0e10600a0e3afd5feeb0400c4e528209fe50210a0e3080084e2185cfeeb0410d4e5080084e2075cfeeb0410a0e10500a0e17040bde82ec6feea7080bde87404000070402de90150a0e10240a0e10300a0e39cd5feeb040050e11100001a0420a0e11c10a0e30500a0e12ecffeeb0040a0e10800a0e30400c4e50100a0e3d956feeb080084e51c209fe50110a0e30c0084e2fa5bfeeb0410a0e10500a0e17040bde813c6feea7080bde801010000f05f2de90240a0e10180a0e10100a0e3c956feeb0060a0e10400a0e12757feeb0050a0e168a09fe50f70a0e30490a0e102b0a0e30300a0e377d5feeb040050e11200001a0420a0e11910a0e30800a0e109cffeeb0470c0e50040a0e10c50c0e50860a0e50a20a0e10b10a0e1080080e2d75bfeeb0910a0e1100084e2c65bfeeb0410a0e10800a0e1f05fbde8edc5feeaf09fbde8a504000070402de90150a0e10240a0e10200a0e35bd5feeb040050e11f00001a",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  },
+  {
+    "evidence_id": "ev_e5501d84c6f14ca503ae6603669eff1386fa27815cf7202375872bd7777a02db",
+    "subject": {
+      "name": "pokemon-x-dllbattle-dllbackground.elf",
+      "digest": {
+        "sha256": "0570444f9d872b6d876428f1312a411fed43100c28c0506bd99fbb0f8cf0b8e1"
+      },
+      "local_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/pokemon-x-dllbattle-dllbackground.elf",
+      "format": "elf",
+      "architecture": "arm"
+    },
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "analysis_profile": {
+      "provider": {
+        "id": "ghidra",
+        "name": "Ghidra",
+        "version": "12.1.4"
+      },
+      "parameters": {
+        "target_kind": "executable",
+        "target_format": "elf",
+        "architecture": "arm",
+        "available_architectures": [
+          "arm"
+        ],
+        "import_mode": "ephemeral-source-immutable",
+        "annotation_policy": "atomic-function-entry-metadata-v1",
+        "load_image_observations": "source-mappings-entry-context-v2",
+        "function_body_evidence": "complete-inclusive-ranges-v1",
+        "function_references": "complete-body-and-entry-reference-manager-v2",
+        "call_relationship_coverage": "function-body-call-coverage-v5",
+        "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+        "string_inventory_evidence": "defined-data-coverage-v1",
+        "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+        "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+        "instruction_flow_evidence": "decoded-return-pcode-v1",
+        "instruction_references": "exact-address-incoming-without-synthetic-entry-v2",
+        "function_boundary_observations": "ghidra-function-boundary-limitations-v4",
+        "no_return_repair": "returning-imports-decoded-return-v2",
+        "process_launch": "inspected-jvm-launch-support-v1",
+        "jump_table_evidence": "typed-case-default-blocks-v1",
+        "decompiler_jump_loads": true,
+        "loader": "auto-from-header",
+        "language_id": "ARM:LE:32:v6",
+        "compiler_spec_id": "default",
+        "language_selection": "configured-v1",
+        "analyzer_preset": "ghidra-default",
+        "function_coordinate_context": {
+          "kind": "native-function-coordinate-context-v1",
+          "selected_image": null,
+          "mapping_sha256": "81a255ca3529ee53c8937c75ba7bda3ab33e4169af49b0e1c80be213e7bfe677"
+        },
+        "analysis_seeds": {
+          "format": "rea-ghidra-seeds-v1",
+          "path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "configured_path": "/mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "entries": {
+            "function": 0,
+            "code": 0,
+            "label": 0
+          }
+        }
+      },
+      "digest": "428871330358cf59933b4509c36a98eca911ef9d30b35b23828da91cf8034770"
+    },
+    "predicate_type": "rea.analysis",
+    "operation": "read_bytes",
+    "parameters": {
+      "address": "0x108b7e50",
+      "length": 400
+    },
+    "raw_result": null,
+    "normalized_result": {
+      "address": "0x108b7e50",
+      "requested_bytes": 400,
+      "returned_bytes": 400,
+      "bytes_hex": "f0412de90250a0e10170a0e10360a0e10300a0e3accefeeb050050e11000001a0520a0e10310a0e30700a0e13ec8feeb0040a0e12c209fe50210a0e3040080e20f55feeb0510a0e1040084e2fe54feeb0410a0e10700a0e126bffeeb0100a0e3180086e5f081bde87202000070402de90160a0e10240a0e10350a0e10200a0e391cefeeb040050e100009505000050031000001a0410a0e10600a0e16b71feebb201d0e1000050e30a00000a0420a0e12410a0e30600a0e11bc8feeb0120a0e30420c0e50010a0e10520c0e50600a0e17040bde807bffeea7080bde870402de90150a0e10240a0e10200a0e376cefeeb040050e12e00001a2300a0e372cefeebff0010e32a00001a0410a0e10500a0e14e71feeb0040a0e10210a0e3c57afeeb000050e30300000a7040bde81b10a0e32300a0e352b6feea0f10a0e30400a0e1bc7afeeb000050e300f020e30300000a7040bde80d10a0e32300a0e348b6feea0400a0e1d754feeb000050e300f020e30300000a7040bde80e10a0e32300a0e33fb6feea1110a0e30400a0e10ff1feeb",
+      "complete": true
+    },
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "environment": null,
+    "limitations": [
+      "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+      "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+      "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+      "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+      "Bytes reflect Ghidra's initialized memory, including loader fixups. Reads stop at an unmapped or uninitialized byte and report completeness explicitly.",
+      "Ghidra analysis was seeded before auto-analysis from /mnt/d/projects/pokemon-x-decomp-local/outputs/rea-battle-target/seeds.tsv (sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855: 0 function, 0 code, 0 label entries). Seeded functions, code and names are caller assertions, not Ghidra discoveries.",
+      "Seed outcome: 0 functions created, 0 already present, 0 failed; 0 code seeds decoded, 0 failed; 0 labels applied, 0 failed; 0 seeds outside initialized memory."
+    ],
+    "relationship_coverage": null,
+    "locations": [],
+    "evidence_links": []
+  }
+]

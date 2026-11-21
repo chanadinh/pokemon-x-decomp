@@ -229,6 +229,10 @@ are still checked one by one.
 
 The ninety-sixth milestone adds [the move handlers of events 0x54-0x6d](../reconstructed/battle_moves_17/README.md).
 
+The ninety-seventh and ninety-eighth milestones add [a fourth group of event 0xac](../reconstructed/battle_moves_b5/README.md)
+and [the move handlers of events 0x7d-0x9f](../reconstructed/battle_moves_18/README.md). The move handlers still to do
+are all on event 0xac.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
