@@ -1,0 +1,13 @@
+--- battle_power/reproduction/decode_arm.py
++++ battle_moves_b7/reproduction/decode_arm.py
+@@ -60,6 +60,10 @@
+         p, u, b, w, load = (word >> 24 & 1, word >> 23 & 1, word >> 22 & 1, word >> 21 & 1, word >> 20 & 1)
+         name = ('ldr' if load else 'str') + ('b' if b else '') + cond
+         rn, rd = word >> 16 & 0xf, register(word >> 12 & 0xf)
++        if kind == 2 and not p and not w and b and load and rn != 15 and u:
++            # Extension of battle_moves_b7: the post-indexed immediate byte load, as REA lists it
++            # (word e4d03001 at 108b8950 is `ldrb r3,[r0],#0x1`).
++            return '%s %s, [%s],#0x%x' % (name, rd, register(rn), word & 0xfff)
+         if not p or w:
+             raise ValueError('unsupported indexing at %#x' % address)
+         if kind == 2:

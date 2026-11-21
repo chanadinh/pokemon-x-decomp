@@ -1,0 +1,29 @@
+Battle move handlers, event 0xac (last group: Heal Bell and Aromatherapy), 2026-11-21
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analysis and byte reads in
+session outputs/rea-battle-10). Implemented: the two move handlers 108b87e0
+(Heal Bell, a nop word) and 108b5620 (Aromatherapy, a branch) and their shared
+body 108b87e4, a Ghidra function (3 evidence listings). All
+432 instruction bytes match live REA bytes and the original
+DllBattle.cro; no relocations are involved (4 evidence records
+retained).
+
+The body contains the post-indexed byte load ldrb r3,[r0],#0x1 (word e4d03001
+at 108b8950), which battle_power's decoder refuses. REA's own decoding of that
+address (inspect_native_instruction, ev_94f8b8dad) is retained and this
+milestone's decoder copy, battle_power's extended only with that form, agrees
+with it. check_decoder.py shows the copy decodes every evidence word of every
+milestone identically to the original except the extended form, and the
+extended form identically to its listings.
+
+New suite: 1,945 cases. 27 mutations are each detected by a failing
+test. ASan/UBSan pass. The other reconstruction suites were not run here.
+
+Original data: the two handlers are bound to exactly two (move, event) pairs on
+event 0xac, and with battle_moves_19 on disk every one of the 386 move-table
+handlers is covered by some evidence/functions.json.
+
+The 4,195 hashes of the existing milestones remain unchanged. Native
+implementation files and battle_power are unchanged. No running-game comparison
+was made; no matching original build is claimed.

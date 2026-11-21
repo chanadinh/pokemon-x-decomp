@@ -273,3 +273,7 @@ was committed.
 
 `battle_moves_b6` came through `outputs/rea-battle-10` the same way and was verified again before it
 was committed.
+
+The last move batches (`battle_moves_19`, `battle_moves_b7`) came through `outputs/rea-battle-10` the same
+way and were verified again before they were committed. One word in `battle_moves_b7` (`0x108b8950`,
+`ldrb r3,[r0],#0x1`) has no Ghidra listing; its decoding is REA's `inspect_native_instruction` record.

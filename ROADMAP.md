@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-One hundred connected host-source milestones now exist: the `CallWildBattle`
+One hundred and two connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -157,8 +157,11 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    [battle_tables_1](reconstructed/battle_tables_1/README.md) (the non-move table functions and registrars), then
    [battle_moves_17](reconstructed/battle_moves_17/README.md), [battle_moves_b5](reconstructed/battle_moves_b5/README.md) and
    [battle_moves_18](reconstructed/battle_moves_18/README.md), and the move table's own table functions in
-   [battle_tables_2](reconstructed/battle_tables_2/README.md), then [battle_moves_b6](reconstructed/battle_moves_b6/README.md); the remaining handler functions (of 926 across
-   abilities, items, moves and field effects) are the next targets. Reconstruct the archive object
+   [battle_tables_2](reconstructed/battle_tables_2/README.md), then [battle_moves_b6](reconstructed/battle_moves_b6/README.md),
+   [battle_moves_19](reconstructed/battle_moves_19/README.md) and [battle_moves_b7](reconstructed/battle_moves_b7/README.md). Every handler
+   of the six handler tables is now reconstructed: 963 in all (288 ability, 247 item, 386 move, 20 side-effect,
+   17 position and 5 field; an earlier estimate said 926), with the tables' functions and registrars. The battle
+   flow, calculation and client code outside those tables are the next targets. Reconstruct the archive object
    constructors and the boot code that fills the resource configuration table. Message construction `0x0011e264`, member opening
    `0x0012ad74`, destruction and move-resource boot `0x00112894` now have host
    implementations in [message_construction](reconstructed/message_construction/README.md).

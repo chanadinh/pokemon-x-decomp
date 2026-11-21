@@ -238,6 +238,11 @@ four-instruction stubs for its 296 rows. Stub `108a53cc` is shared with a table 
 
 The hundredth milestone adds [eight more event-0xac move handlers](../reconstructed/battle_moves_b6/README.md).
 
+The hundred-and-first and hundred-and-second milestones add [the lower half of the last event-0xac handlers](../reconstructed/battle_moves_19/README.md)
+and [Heal Bell and Aromatherapy](../reconstructed/battle_moves_b7/README.md), completing the move table and so every
+handler table. `battle_moves_b7` ships its own copy of the ARM decoder from `battle_power`, extended by one
+instruction form and checked to decode every committed evidence word identically; `battle_power` is unchanged.
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

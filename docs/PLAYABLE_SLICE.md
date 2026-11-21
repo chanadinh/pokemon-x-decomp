@@ -7,7 +7,7 @@ systems. The native asset viewer and host tests do not yet provide a playable ga
 
 ## Current position
 
-One hundred source milestones connect wild-battle request preparation to Pokémon
+One hundred and two source milestones connect wild-battle request preparation to Pokémon
 construction, payload storage, state initialization/refresh, and HP/stat
 calculation, constructor move insertion, maximum PP, learnset access/selection,
 name construction/storage, move-resource field dispatch/loading/caching,
@@ -100,11 +100,12 @@ ability handler batches ([items](../reconstructed/battle_items_1/README.md), [mo
 [the move handlers of events 0x54-0x6d](../reconstructed/battle_moves_17/README.md),
 [more event 0xac moves](../reconstructed/battle_moves_b5/README.md) and [events 0x7d-0x9f](../reconstructed/battle_moves_18/README.md), and
 [the move table's table functions](../reconstructed/battle_tables_2/README.md), and
-[more event 0xac moves](../reconstructed/battle_moves_b6/README.md).
+[more event 0xac moves](../reconstructed/battle_moves_b6/README.md), and the last move handlers
+([lower half](../reconstructed/battle_moves_19/README.md), [Heal Bell and Aromatherapy](../reconstructed/battle_moves_b7/README.md)).
 
 | Requirement | Current state |
 | --- | --- |
-| Reviewed game logic | One hundred connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction, the battle damage calculation, type effectiveness, the type matchup, the event system, handler registration, ability, final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, the action services, processor and kind routines |
+| Reviewed game logic | One hundred and two connected host-source milestones, including HP/stat updates, level resolution, constructor moves, maximum PP, learnsets, names, move/message services, personal-data selection/fields, growth resources, archive I/O, archive indexes, resource initialization, message construction, the battle damage calculation, type effectiveness, the type matchup, the event system, handler registration, ability, final-damage, type-change, immunity, stat-stage, status-prevention and switch-in handlers, the action services, processor and kind routines |
 | Original executable and modules | Present locally; baseline hashes checked |
 | Extracted game assets | Present locally; inventory recorded below |
 | Native application and runtime | Native SDL2 viewers; `--zone` runs a real-time field scene at 400 × 240 with frame pacing, scripted input and frame capture, drawing in row bands on several cores; game runtime integration pending |

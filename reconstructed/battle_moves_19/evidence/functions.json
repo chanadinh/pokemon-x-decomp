@@ -1,0 +1,417 @@
+[
+  {
+    "address": "108b0468",
+    "name": "FUN_108b0468",
+    "implemented": true,
+    "body_bytes": 392,
+    "body_ranges": [
+      {
+        "start": "0x108b0468",
+        "end": "0x108b05ef"
+      }
+    ],
+    "evidence_id": "ev_267eef37a2455580579c76bd294e471b27b83747453f759ade9bd5998c9a8fe3",
+    "callees": [
+      {
+        "address": "0x1084ca4c",
+        "name": "FUN_1084ca4c",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084ca4c",
+              "end": "0x1084ca77"
+            }
+          ],
+          "total_bytes": 44,
+          "span_bytes": 44,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084d29c",
+        "name": "FUN_1084d29c",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084d29c",
+              "end": "0x1084d2d3"
+            }
+          ],
+          "total_bytes": 56,
+          "span_bytes": 56,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1084d2d4",
+        "name": "FUN_1084d2d4",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1084d2d4",
+              "end": "0x1084d2f3"
+            }
+          ],
+          "total_bytes": 32,
+          "span_bytes": 32,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x108544a0",
+        "name": "FUN_108544a0",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x108544a0",
+              "end": "0x108544eb"
+            }
+          ],
+          "total_bytes": 76,
+          "span_bytes": 76,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x10867b48",
+        "name": "FUN_10867b48",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10867b48",
+              "end": "0x10867bbb"
+            }
+          ],
+          "total_bytes": 116,
+          "span_bytes": 116,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x10869f7c",
+        "name": "FUN_10869f7c",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10869f7c",
+              "end": "0x10869f87"
+            }
+          ],
+          "total_bytes": 12,
+          "span_bytes": 12,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x1086b91c",
+        "name": "FUN_1086b91c",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x1086b91c",
+              "end": "0x1086b99f"
+            }
+          ],
+          "total_bytes": 132,
+          "span_bytes": 132,
+          "non_contiguous": false,
+          "contains_entry": true
+        }
+      },
+      {
+        "address": "0x10874420",
+        "name": "FUN_10874420",
+        "symbol": {
+          "primary": true,
+          "dynamic": false,
+          "external": false,
+          "type": "function",
+          "source": "default"
+        },
+        "classification": {
+          "external": false,
+          "thunk": false,
+          "thunk_target": null,
+          "provenance": "ghidra-function-manager"
+        },
+        "body": {
+          "available": true,
+          "provenance": "ghidra-function-body-address-set",
+          "ranges": [
+            {
+              "start": "0x10874420",
+              "end": "0x1087443b"
+            },
+            {
+              "start": "0x10874490",
+              "end": "0x10874617"
+            }
+          ],
+          "total_bytes": 420,
+          "span_bytes": 504,
+          "non_contiguous": true,
+          "contains_entry": true
+        }
+      }
+    ]
+  },
+  {
+    "address": "1084bd3c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 252,
+    "body_ranges": [
+      {
+        "start": "0x1084bd3c",
+        "end": "0x1084be37"
+      }
+    ],
+    "evidence_id": "ev_4a0fb79275517dec7e46249afaf4758000cf290d8c116e31b52c476bd925bbb9",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108add30",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 480,
+    "body_ranges": [
+      {
+        "start": "0x108add30",
+        "end": "0x108adf0f"
+      }
+    ],
+    "evidence_id": "ev_e853cd6fe21ac7a44399aca9996f0328c40d7f464c8ff02b56a1f743c950d9ca",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108adfb4",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 484,
+    "body_ranges": [
+      {
+        "start": "0x108adfb4",
+        "end": "0x108ae197"
+      }
+    ],
+    "evidence_id": "ev_768f917e0b7c6df511682e953c9df0625962c1e182bcb5a929c48e6f62f0c1ab",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108ae1a0",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 224,
+    "body_ranges": [
+      {
+        "start": "0x108ae1a0",
+        "end": "0x108ae27f"
+      }
+    ],
+    "evidence_id": "ev_3f0a17ad1ebe36cc0f851d6091acdfcea92a8996ab09af39c980af25e05f1c9f",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108aeb70",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 312,
+    "body_ranges": [
+      {
+        "start": "0x108aeb70",
+        "end": "0x108aeca7"
+      }
+    ],
+    "evidence_id": "ev_08c1cb5bb59423437c4887e76cd6b7da896857f6bb91da509ffbbdbe320ea972",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108aeff8",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 324,
+    "body_ranges": [
+      {
+        "start": "0x108aeff8",
+        "end": "0x108af13b"
+      }
+    ],
+    "evidence_id": "ev_5afbe3a9f1d0835f55a6919129f055a1f67d939c61fec55ec5c3e18926ff27d0",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108b0248",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 392,
+    "body_ranges": [
+      {
+        "start": "0x108b0248",
+        "end": "0x108b03cf"
+      }
+    ],
+    "evidence_id": "ev_18122e703efd1da4390edb05f4ae7eb61221ee85cdfdba31a01e6d30c194fc10",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108b1898",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 464,
+    "body_ranges": [
+      {
+        "start": "0x108b1898",
+        "end": "0x108b1a67"
+      }
+    ],
+    "evidence_id": "ev_220a63e5c95460b591b3b49a0565942960553c10ece7fec3025584836250d377",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108b1c7c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 460,
+    "body_ranges": [
+      {
+        "start": "0x108b1c7c",
+        "end": "0x108b1e47"
+      }
+    ],
+    "evidence_id": "ev_2b32ea97a5053c53f54f469d0a913ca4ae79cc8a99a616d61f706e3b5b77aeb3",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  },
+  {
+    "address": "108b1e4c",
+    "name": "decode_arm",
+    "implemented": true,
+    "body_bytes": 236,
+    "body_ranges": [
+      {
+        "start": "0x108b1e4c",
+        "end": "0x108b1e7f"
+      },
+      {
+        "start": "0x108b1ea0",
+        "end": "0x108b1ed7"
+      },
+      {
+        "start": "0x108b1ef0",
+        "end": "0x108b1f6f"
+      }
+    ],
+    "evidence_id": "ev_eed0624cf31825733a9a3b51b35a677472232188aa2bd8d0f6cf584876e428fd",
+    "decoded_by": "../battle_power/reproduction/decode_arm.py"
+  }
+]
