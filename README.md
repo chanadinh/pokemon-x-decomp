@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 1,428 functions, 152,736 bytes | 840,188 bytes | 18.18% |
-| **All game code** (main + 133 CRO modules) | **1,647 functions, 178,760 bytes** | **8,782,284 bytes** | **2.04%** |
+| Battle module (`DllBattle.cro` text) | 1,441 functions, 154,628 bytes | 840,188 bytes | 18.40% |
+| **All game code** (main + 133 CRO modules) | **1,660 functions, 180,652 bytes** | **8,782,284 bytes** | **2.06%** |
 
-So roughly **2.04%** of the original program has been reconstructed so far
-(95 milestones). The function count jumped with
+So roughly **2.06%** of the original program has been reconstructed so far
+(96 milestones). The function count jumped with
 [battle_tables_1](reconstructed/battle_tables_1/README.md): 382 of its functions are identical
 four-instruction table stubs that differ only in their constants, modelled by one shared routine,
 with every stub's bytes checked. The figure counts each implemented function once, by its
@@ -267,7 +267,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside ninety-five connected C reconstruction milestones.
+The visual tools sit alongside ninety-six connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -368,6 +368,7 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle move handlers 16](reconstructed/battle_moves_16/README.md) | 19 move handlers of events 0x2a-0x53 |
 | [Battle move handlers B4](reconstructed/battle_moves_b4/README.md) | 10 more move handlers of event 0xac |
 | [Battle handler-table functions](reconstructed/battle_tables_1/README.md) | The 383 table functions of the five non-move tables (382 four-instruction stubs and the terrain selector) and four registrars |
+| [Battle move handlers 17](reconstructed/battle_moves_17/README.md) | 13 move handlers of events 0x54-0x6d |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

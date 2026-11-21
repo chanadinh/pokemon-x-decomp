@@ -227,6 +227,8 @@ and [the non-move table functions and registrars](../reconstructed/battle_tables
 382 table stubs are identical in shape, so one routine models them; each stub's bytes, count and entries literal
 are still checked one by one.
 
+The ninety-sixth milestone adds [the move handlers of events 0x54-0x6d](../reconstructed/battle_moves_17/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,
