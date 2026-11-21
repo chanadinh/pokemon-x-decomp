@@ -1,0 +1,3 @@
+108a47f4  04109fe5  ldr r1, [0x108a4800]
+108a47f8  0620a0e3  mov r2, #0x6
+108a47fc  9a2dffea  b 0x1086fe6c

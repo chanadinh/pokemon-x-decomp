@@ -246,6 +246,8 @@ instruction form and checked to decode every committed evidence word identically
 The hundred-and-third milestone starts on the code outside the handler tables with
 [28 helpers that earlier milestones call](../reconstructed/battle_core_1/README.md).
 
+The hundred-and-fourth milestone adds [18 functions of the `10880000`-`108a6000` band](../reconstructed/battle_mid_1/README.md).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

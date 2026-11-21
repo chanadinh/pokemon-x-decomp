@@ -1,0 +1,15 @@
+108a4764  34309fe5  ldr r3, [0x108a47a0]
+108a4768  0010a0e3  mov r1, #0x0
+108a476c  812083e0  add r2, r3, r1, lsl #0x1
+108a4770  b0c0d2e1  ldrh r12, [r2,#0x0]
+108a4774  00005ce1  cmp r12, r0
+108a4778  b220d211  ldrhne r2, [r2,#0x2]
+108a477c  00005211  cmpne r2, r0
+108a4780  0100001a  bne 0x108a478c
+108a4784  0100a0e3  mov r0, #0x1
+108a4788  1eff2fe1  bx lr
+108a478c  021081e2  add r1, r1, #0x2
+108a4790  060051e3  cmp r1, #0x6
+108a4794  f4ffff3a  bcc 0x108a476c
+108a4798  0000a0e3  mov r0, #0x0
+108a479c  1eff2fe1  bx lr

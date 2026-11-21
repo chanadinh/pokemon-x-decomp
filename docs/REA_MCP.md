@@ -280,3 +280,6 @@ way and were verified again before they were committed. One word in `battle_move
 
 `battle_core_1` came through `outputs/rea-battle-10` the same way and was verified again before it was
 committed. Its survey used REA's `list_procedures` (3,529 DllBattle procedures).
+
+`battle_mid_1` came through `outputs/rea-battle-10` the same way and was verified again before it was
+committed.

@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-One hundred and three connected host-source milestones now exist: the `CallWildBattle`
+One hundred and four connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -164,7 +164,10 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    flow, calculation and client code outside those tables are the next targets; the first batch,
    [battle_core_1](reconstructed/battle_core_1/README.md), covers 28 helpers that committed milestones call.
    A REA procedure listing found 2,672 DllBattle functions (about 670 KB) outside every milestone before it,
-   1,456 of them not yet connected to reconstructed code. Reconstruct the archive object
+   1,456 of them not yet connected to reconstructed code. The rest is split by address between parallel
+   sessions (`battle_low_N` for `10802000`-`10840000`, `battle_mid_N` for `10880000`-`108a6000`, and
+   `battle_core_N` for the remainder), each working outward from functions that committed code calls;
+   [battle_mid_1](reconstructed/battle_mid_1/README.md) is the first of the middle band. Reconstruct the archive object
    constructors and the boot code that fills the resource configuration table. Message construction `0x0011e264`, member opening
    `0x0012ad74`, destruction and move-resource boot `0x00112894` now have host
    implementations in [message_construction](reconstructed/message_construction/README.md).

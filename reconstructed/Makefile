@@ -103,3 +103,4 @@ all test clean:
 	$(MAKE) -C battle_moves_19 $@
 	$(MAKE) -C battle_moves_b7 $@
 	$(MAKE) -C battle_core_1 $@
+	$(MAKE) -C battle_mid_1 $@
