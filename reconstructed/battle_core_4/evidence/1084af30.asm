@@ -1,0 +1,23 @@
+1084af30  70402de9  stmdb sp!,{r4,r5,r6,lr}
+1084af34  180051e3  cmp r1, #0x18
+1084af38  085090e5  ldr r5, [r0,#0x8]
+1084af3c  0140a0e1  cpy r4, r1
+1084af40  0300003a  bcc 0x1084af54
+1084af44  0020a0e3  mov r2, #0x0
+1084af48  0210a0e1  cpy r1, r2
+1084af4c  0200a0e1  cpy r0, r2
+1084af50  0fd5feeb  bl 0x10800394
+1084af54  044185e0  add r4, r5, r4, lsl #0x2
+1084af58  840094e5  ldr r0, [r4,#0x84]
+1084af5c  000050e3  cmp r0, #0x0
+1084af60  0300001a  bne 0x1084af74
+1084af64  0020a0e3  mov r2, #0x0
+1084af68  0210a0e1  cpy r1, r2
+1084af6c  0200a0e1  cpy r0, r2
+1084af70  07d5feeb  bl 0x10800394
+1084af74  840094e5  ldr r0, [r4,#0x84]
+1084af78  f2a400eb  bl 0x10874348
+1084af7c  120050e3  cmp r0, #0x12
+1084af80  0100a013  movne r0, #0x1
+1084af84  0000a003  moveq r0, #0x0
+1084af88  7080bde8  ldmia sp!,{r4,r5,r6,pc}

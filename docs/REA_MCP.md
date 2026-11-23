@@ -289,3 +289,7 @@ the same way and were verified again before they were committed.
 
 The next batches (`battle_core_3`, `battle_low_2`, `battle_mid_3`) came through `outputs/rea-battle-10`
 the same way and were verified again before they were committed.
+
+The next batches (`battle_low_3`, `battle_low_4`, `battle_core_4`, `battle_core_5`) came through
+`outputs/rea-battle-10` and, after that daemon session ended, a new session in `outputs/rea-battle-11`,
+and were verified again before they were committed.

@@ -13,7 +13,7 @@ mapped and linked for static analysis. There are 44,279 candidate functions
 and 230 previously exported pseudocode functions. Those counts describe
 analysis output, not reconstructed-source completion.
 
-One hundred and ten connected host-source milestones now exist: the `CallWildBattle`
+One hundred and fourteen connected host-source milestones now exist: the `CallWildBattle`
 wrapper, its record-preparation path, task creation/request consumption,
 the per-record encounter builder/population/configuration helpers, the
 Pokémon constructor/parameter-normalization path, data population/storage,
@@ -170,7 +170,11 @@ the architecture, asset pipeline, and behavior-preservation strategy work.
    [battle_mid_1](reconstructed/battle_mid_1/README.md) is the first of the middle band, followed by
    [battle_core_2](reconstructed/battle_core_2/README.md), [battle_low_1](reconstructed/battle_low_1/README.md) and
    [battle_mid_2](reconstructed/battle_mid_2/README.md), then [battle_core_3](reconstructed/battle_core_3/README.md),
-   [battle_low_2](reconstructed/battle_low_2/README.md) and [battle_mid_3](reconstructed/battle_mid_3/README.md). Reconstruct the archive object
+   [battle_low_2](reconstructed/battle_low_2/README.md) and [battle_mid_3](reconstructed/battle_mid_3/README.md), then
+   [battle_low_3](reconstructed/battle_low_3/README.md), [battle_low_4](reconstructed/battle_low_4/README.md),
+   [battle_core_4](reconstructed/battle_core_4/README.md) and [battle_core_5](reconstructed/battle_core_5/README.md).
+   A band milestone's binding record holds only facts later milestones cannot change; band progress
+   figures are in its README as of the time of the batch. Reconstruct the archive object
    constructors and the boot code that fills the resource configuration table. Message construction `0x0011e264`, member opening
    `0x0012ad74`, destruction and move-resource boot `0x00112894` now have host
    implementations in [message_construction](reconstructed/message_construction/README.md).

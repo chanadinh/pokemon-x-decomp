@@ -1,0 +1,34 @@
+Battle core helpers, batch 5 (battle_core_5), 2026-11-23
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-11).
+
+Implemented: 22 DllBattle functions in 10840000-10880000 and 108a6000 and up
+(analyst names): the random and item-data wrappers, bounds-checked accessors,
+struct initializers, list inserts, a scaled-HP event builder and the
+handler-blocking test. Eleven were recorded callees of committed milestones
+when the batch was chosen (the frontier).
+
+Evidence:
+- All 1,896 instruction bytes and 20 literal bytes match live REA bytes and the
+  original DllBattle.cro. Four literal words are ABS32 relocations whose
+  original words and values are checked.
+- All 22 functions are REA-listed with Ghidra pseudocode; the decoder
+  reproduces every listing it supports, and its refusals keep REA's text.
+
+Tests: 6,124 new cases. Seventy-nine mutations are each detected. ASan/UBSan
+pass.
+
+Overlap check: no function overlaps any other milestone (committed or on
+disk), and every function starts inside the batch ranges.
+
+Line endings: every file is LF, and the repository stores LF, so these hashes
+match what git stores.
+
+The committed milestones' hashes remain unchanged (see validation.json).
+
+Not covered:
+- The other functions of the ranges.
+- No running-game comparison was made.
+- No matching original build is claimed.

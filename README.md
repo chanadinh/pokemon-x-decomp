@@ -250,11 +250,11 @@ bytes of reconstructed functions that are checked against the original:
 | Code | Reconstructed | Total | Share |
 | --- | --- | --- | --- |
 | Main executable (`code.bin` text) | 219 functions, 26,024 bytes | 4,439,772 bytes | 0.59% |
-| Battle module (`DllBattle.cro` text) | 1,904 functions, 181,324 bytes | 840,188 bytes | 21.58% |
-| **All game code** (main + 133 CRO modules) | **2,123 functions, 207,348 bytes** | **8,782,284 bytes** | **2.36%** |
+| Battle module (`DllBattle.cro` text) | 1,963 functions, 189,372 bytes | 840,188 bytes | 22.54% |
+| **All game code** (main + 133 CRO modules) | **2,182 functions, 215,396 bytes** | **8,782,284 bytes** | **2.45%** |
 
-So roughly **2.36%** of the original program has been reconstructed so far
-(110 milestones). Every handler of the six battle handler tables is now
+So roughly **2.45%** of the original program has been reconstructed so far
+(114 milestones). Every handler of the six battle handler tables is now
 reconstructed: 963 handlers (288 ability, 247 item, 386 move, 20 side-effect, 17 position and 5 field),
 with the tables' functions and registrars. The function count jumped with
 [battle_tables_1](reconstructed/battle_tables_1/README.md) and [battle_tables_2](reconstructed/battle_tables_2/README.md):
@@ -269,7 +269,7 @@ the battle and Pokémon systems done so far are among the denser parts.
 
 ## Rebuilding the rules
 
-The visual tools sit alongside one hundred and ten connected C reconstruction milestones.
+The visual tools sit alongside one hundred and fourteen connected C reconstruction milestones.
 An integration fixture connects wild-battle request preparation to Pokémon
 construction, payload storage, state refresh and stat calculations.
 
@@ -385,6 +385,10 @@ construction, payload storage, state refresh and stat calculations.
 | [Battle core helpers 3](reconstructed/battle_core_3/README.md) | 19 more helpers in `10840000`-`10880000` and above `108a6000` |
 | [Battle low-address state hooks 2](reconstructed/battle_low_2/README.md) | 24 state hooks of a menu/page state machine in `108395d8`-`1083f270` |
 | [Battle mid-band teardowns 3](reconstructed/battle_mid_3/README.md) | 19 teardowns and accessors of the page-object families |
+| [Battle low-address state hooks 3](reconstructed/battle_low_3/README.md) | 15 more hooks of the page state machine |
+| [Battle low-address functions 4](reconstructed/battle_low_4/README.md) | 7 functions: a release helper, three state hooks, a jump-table mapper, a message writer and an event 0xa5 walk |
+| [Battle core helpers 4](reconstructed/battle_core_4/README.md) | 15 more helpers in `10840000`-`10880000` and above `108a6000` |
+| [Battle core helpers 5](reconstructed/battle_core_5/README.md) | 22 more helpers in the same ranges |
 
 The archive object constructors, platform file calls and OS services
 still use synthetic resources or callbacks where their

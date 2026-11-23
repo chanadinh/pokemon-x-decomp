@@ -256,6 +256,10 @@ The hundred-and-eighth to hundred-and-tenth milestones add [more core helpers](.
 [a menu state machine's hooks](../reconstructed/battle_low_2/README.md) and
 [the page objects' teardowns](../reconstructed/battle_mid_3/README.md).
 
+The hundred-and-eleventh to hundred-and-fourteenth milestones add [more page-state hooks](../reconstructed/battle_low_3/README.md),
+[seven more low-address functions](../reconstructed/battle_low_4/README.md) and two more core-helper batches
+([4](../reconstructed/battle_core_4/README.md), [5](../reconstructed/battle_core_5/README.md)).
+
 The sixth source milestone implements Pokémon data population, 26 field setters,
 the payload checksum, manager encoding/decoding, and block selection. See
 [pokemon_data](../reconstructed/pokemon_data/README.md) for the storage layout,

@@ -1,0 +1,23 @@
+Battle low-address functions, fourth batch (10802000-10840000), 2026-11-23
+
+Live REA 6.8.0 / MCP 2025-06-18 / Ghidra 12.1.4 / ARM:LE:32:v6 over the main
+plus relocated DllBattle/DllBackGround carrier (analyses and byte reads in
+session outputs/rea-battle-11). Implemented: 7 Ghidra-listed functions of
+the band: the release function of a page's helper objects, three more state
+hooks of the page state machine, a jump-table mapper over a data object, the
+0x6a/0x69 message writer and the event 0xa5 walk over a battler list. All
+2,012 instruction bytes and 96 literal bytes match live REA bytes and the original
+DllBattle.cro; the 13 relocated words (three state object pointers, the data
+object pointer and the nine words of a jump table) are checked (14
+evidence records retained).
+
+New suite: 1,409 cases. 69 mutations are each detected by a failing
+test. ASan/UBSan pass. The other reconstruction suites were not run here.
+
+Survey: each function is a plain procedure of REA's list_procedures inside the
+band and none is listed by another milestone; at the time of this batch 92 of
+the band's 569 procedures were covered.
+
+The 4,374 hashes of the existing milestones remain unchanged. Native
+implementation files are unchanged. No running-game comparison was made; no
+matching original build is claimed.

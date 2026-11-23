@@ -1,0 +1,10 @@
+1084c0f8  10402de9  stmdb sp!,{r4,lr}
+1084c0fc  0040a0e1  cpy r4, r0
+1084c100  18009fe5  ldr r0, [0x1084c120]
+1084c104  6410a0e3  mov r1, #0x64
+1084c108  540090e5  ldr r0, [r0,#0x54]
+1084c10c  b2d0feeb  bl 0x108003dc
+1084c110  040050e1  cmp r0, r4
+1084c114  0100a033  movcc r0, #0x1
+1084c118  0000a023  movcs r0, #0x0
+1084c11c  1080bde8  ldmia sp!,{r4,pc}
