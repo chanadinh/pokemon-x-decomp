@@ -7,8 +7,8 @@ procedure of the carrier whose start lies in the half-open range 10802000-108400
 is an import thunk, that each loads the same relocated state object pointer (108fcb18, the family
 criterion; the batch works outward from the frontier, so callers in other milestones are only
 counted), and that no other
-milestone's evidence/functions.json lists any of them. It reports how many of the range's
-procedures are covered after this batch. No original data is retained; the output is a summary.
+milestone's evidence/functions.json lists any of them. The output holds only facts that
+later milestones cannot change. No original data is retained; the output is a summary.
 """
 import argparse
 import json
@@ -42,23 +42,13 @@ def run(root):
     clash = sorted(hex(f) for f in FUNCTIONS if f in covered_elsewhere)
     if clash:
         raise ValueError('Already reconstructed elsewhere: %s' % clash)
-    callers = {f: set() for f in FUNCTIONS}
-    for asm in sorted((root / 'reconstructed').glob('*/evidence/*.asm')):
-        if asm.parents[1].name == mine:
-            continue
-        for line in asm.read_text().splitlines():
-            m = re.match(r'[0-9a-f]{8}  [0-9a-f]{8}  (?:bl|b)[a-z]{0,2} 0x([0-9a-f]+)$', line.strip())
-            if m and int(m[1], 16) in callers:
-                callers[int(m[1], 16)].add(asm.parents[1].name)
     # The family: every function loads the relocated pointer 108fcb18 (the state tracker object) and one state id.
     literals = json.loads((HERE.parents[1] / 'evidence/literals.json').read_text())
     values = [int.from_bytes(bytes.fromhex(v), 'little') for v in literals.values()]
     if values.count(0x108fcb18) != len(FUNCTIONS):
         raise ValueError('Not every function loads the state object pointer')
-    covered = (covered_elsewhere | set(FUNCTIONS)) & set(in_range)
     return {'procedures_in_range': len(in_range), 'reconstructed_here': len(FUNCTIONS),
-            'covered_after_this_batch': len(covered), 'uncovered_in_range': len(in_range) - len(covered),
-            'state_object_loads': len(FUNCTIONS), 'callers_in_other_milestones': {hex(f): len(c) for f, c in sorted(callers.items())}, 'all_match': True}
+            'state_object_loads': len(FUNCTIONS), 'all_match': True}
 
 
 def main():

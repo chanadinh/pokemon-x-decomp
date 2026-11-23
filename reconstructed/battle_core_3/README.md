@@ -62,14 +62,14 @@ ASan/UBSan pass. 69 mutations are each detected.
 [`reproduction/check_bindings.py`](reproduction/check_bindings.py) reads
 every other milestone's `evidence/functions.json` (committed or on disk) and
 confirms that none of these 19 functions is covered elsewhere, that all start
-inside the batch ranges, and that 10 of them are recorded callees of other
+inside the batch ranges, and that the ten functions chosen as frontier are recorded callees of other
 milestones ([record](reproduction/record-comparison.json)).
 
 ## Limits
 
 The rest of the cluster at `10870000`–`10876000` is mostly UI code (objects
 with virtual methods, a trace marker store at `+0x6c` of a global) and is not
-part of this batch. In the batch's ranges 825 functions remain uncovered (706
+part of this batch. When this batch was made, 825 functions remained uncovered in its ranges (706
 in `10840000`–`10880000`, 119 from `108a6000` up), 125 of them called by
 committed code. No running-game comparison has been made. Static evidence and
 host comparisons do not establish a matching original build.

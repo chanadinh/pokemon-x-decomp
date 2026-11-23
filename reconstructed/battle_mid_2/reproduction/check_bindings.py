@@ -5,9 +5,9 @@ Reads every other milestone's evidence/functions.json and confirms that:
 
 - none of this milestone's 22 functions is also a function of another
   milestone (no overlap), and each starts in the band 10880000-108a6000;
-- the batch is reported as connected or not: how many of its functions are
-  recorded callees of another milestone, and how many of its own callees another
-  milestone covers (a self-contained group of page objects of this band: none);
+- nothing else about its connections is recorded: whether other milestones
+  call it or cover its callees changes as they are added (the group was
+  disconnected at the time of its batch);
 - each function's retained listing starts at its entry and ends within the
   body size REA reported.
 The output is a summary.
@@ -51,8 +51,7 @@ def run():
         if not BAND[0] <= address < BAND[1]:
             raise ValueError('%#x is outside the band' % address)
     callees = {int(c if isinstance(c, str) else c['address'], 16) for r in mine.values() for c in r.get('callees') or []}
-    return {'functions': len(mine), 'called_by_other_milestones': sum(1 for c in callers.values() if c),
-            'callees_covered_by_other_milestones': len(callees & others), 'distinct_external_callees': len(callees - set(mine)),
+    return {'functions': len(mine), 'distinct_callees_outside_the_batch': len(callees - set(mine)),
             'band': [hex(BAND[0]), hex(BAND[1])],
             'overlap': 0, 'all_match': True}
 

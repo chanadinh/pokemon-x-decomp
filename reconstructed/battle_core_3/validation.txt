@@ -8,8 +8,8 @@ Implemented: 19 small DllBattle functions in 10840000-10880000 and
 108a6000-108ce000 (analyst names): packed-word builders and readers, record
 push and init, copies, a pair search, a slot-group map, a scaled amount,
 pokemon queries over the value callback, bounds-checked accessors and a
-side-record clear. Ten are recorded callees of committed milestones; nine
-belong to the same cluster and are not called yet.
+side-record clear. Ten were recorded callees of committed milestones when the
+batch was chosen (the frontier); nine belong to the same cluster.
 
 Evidence:
 - All 1,148 instruction bytes and 8 literal bytes match live REA bytes and the
@@ -25,7 +25,7 @@ Overlap check: no function overlaps any other milestone (committed or on
 disk, including battle_low_1, battle_mid_1 and battle_mid_2), and every
 function starts inside the batch ranges.
 
-Remaining in the ranges: 825 uncovered functions (706 in 10840000-10880000,
+Remaining in the ranges when this batch was made: 825 uncovered functions (706 in 10840000-10880000,
 119 in 108a6000 and up), 125 of them called by committed code.
 
 Line endings: every file is LF, and the repository stores LF, so these hashes

@@ -14,7 +14,7 @@ All 19 functions have Ghidra listings; the verifier also checks the
 battle_power decoder against every REA-listed instruction. The functions have
 no literal pools or relocations.
 
-Overlap and connectivity report (needs the other milestones' evidence):
+Overlap check (needs the other milestones' evidence):
 
   python3 -I reconstructed/battle_mid_3/reproduction/check_bindings.py
 

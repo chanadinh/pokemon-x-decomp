@@ -57,8 +57,8 @@ def run():
         listed = {int(l.split()[0], 16) for l in lines}
         if address not in listed or 4 * len(lines) != row['body_bytes']:
             raise ValueError('Listing of %#x does not match its body' % address)
-    return {'functions': len(mine), 'called_by_other_milestones': len(mine), 'inside_ranges': len(mine),
-            'overlap': 0, 'all_match': True}
+    return {'functions': len(mine), 'every_frontier_function_called_from_another_milestone': True,
+            'inside_ranges': len(mine), 'overlap': 0, 'all_match': True}
 
 
 def main():

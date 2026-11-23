@@ -35,9 +35,7 @@
     "equivalent_mutations_replaced": 0,
     "original_data": {
       "functions": 19,
-      "called_by_other_milestones": 0,
-      "callees_covered_by_other_milestones": 0,
-      "distinct_external_callees": 10,
+      "distinct_callees_outside_the_batch": 10,
       "band": [
         "0x10880000",
         "0x108a6000"
@@ -50,7 +48,7 @@
     "live": "not run"
   },
   "preservation": {
-    "prior_reconstruction_hashes_verified": 4510,
+    "prior_reconstruction_hashes_verified": 4684,
     "native_source_changed": false,
     "prior_manifest_sha256": {
       "reconstructed/archive_index/SHA256SUMS": "503f6df93165c6471c85c3774016a40f40992badd4b7dcc0328b184f6204a2c2",
@@ -75,6 +73,7 @@
       "reconstructed/battle_conditions/SHA256SUMS": "6b1fa71a0212adaa2d50897eed58d6d61113c778e5bcd5369130b12732e8fdd9",
       "reconstructed/battle_core_1/SHA256SUMS": "e714002710c4f99640b3c265d8d80bceb9a5547f832d3c39c2a0153fa5933714",
       "reconstructed/battle_core_2/SHA256SUMS": "9ee33bf3ec0382a30b64d5419b33371af6e9157cc74c91c6cc2386fc90765892",
+      "reconstructed/battle_core_3/SHA256SUMS": "88010972a1636e629c69aed0c2544ab177c6f4d4acd28893e9213d70aa763579",
       "reconstructed/battle_cures/SHA256SUMS": "0f28339e5e117c6e8f2c1b4adc31e27072d80ab3de083ad89844bf0c5476d6ab",
       "reconstructed/battle_damage/SHA256SUMS": "e963c1ed162463732cbd85cc950f12cb4c5681594844a65ad27212b12c13fc14",
       "reconstructed/battle_effects/SHA256SUMS": "46b0f39e9bc8f0e0407d5f18007b0150957b98d585aab7c704c4e71e3d1115fc",
@@ -99,10 +98,12 @@
       "reconstructed/battle_items_9/SHA256SUMS": "9ea0f812ebc8ac4fb5709b3f4dee0172defe7a3bd0fdb44e01cbcf59943e6c5b",
       "reconstructed/battle_kinds/SHA256SUMS": "20621dcae1694986bd5ecc0d1044a2fcb7c1c41681e28ee12d1fea6efb7380a9",
       "reconstructed/battle_low_1/SHA256SUMS": "4125f54dc766f4b1fe3d3c50b02367a3e5b369a1bb36157bb7d1a357520c312f",
+      "reconstructed/battle_low_2/SHA256SUMS": "ba7cca729ab63bae1c24f2d2d159f5c718935dd5a9a4fc88b1f0fb8b1ecab58a",
       "reconstructed/battle_matchup/SHA256SUMS": "e5204e7a06fa1d7a600ff064cf7c84defd50b89913f21b0fa83322d7c7f0c630",
       "reconstructed/battle_message/SHA256SUMS": "99d7b85d74798cd67f50216c8a562fe6055739997ea17d191e10f6620eca46d6",
       "reconstructed/battle_mid_1/SHA256SUMS": "fc8c5762e3cb124a51b351db6974557ef4b8f7e3915c314ae94703406a619782",
       "reconstructed/battle_mid_2/SHA256SUMS": "f385776950c13394c732a746fe329f09aa79358915592657ed91208fde941754",
+      "reconstructed/battle_mid_3/SHA256SUMS": "95c5744d151a9421650dc627536dac00c292d17f2283f6eda131c5b6cfc134e4",
       "reconstructed/battle_modifier/SHA256SUMS": "e1a3db0c0c8234ca6dcee2a2696e4e5d44f28c923f80f18117606688b29f86d8",
       "reconstructed/battle_moves_1/SHA256SUMS": "0d00253f4ba18a1416fa1afa63ac1744d79c82f6cf1d64031507fccd0d122739",
       "reconstructed/battle_moves_10/SHA256SUMS": "25d02415f12590e9ec30dbb928fdf5c01fb3b8f5f469b73c17b48fd0cbf59a0d",
@@ -168,12 +169,12 @@
     "reconstructed/battle_mid_3/test_battle_mid_3.c": "ade5b7e579d006921d79799e58c4317045e1a88b1f063604a386899aec3c14bd",
     "reconstructed/battle_mid_3/Makefile": "96cb278c33516f8c41a319b61f3845e2cb2fd79ad58bc68d28e5c7396e8aff1b",
     "reconstructed/battle_mid_3/reproduction/verify_rea.py": "b31bf91bb0e7a61f28896f596ad43167445267b7b416a43a6e421508d42cdc69",
-    "reconstructed/battle_mid_3/reproduction/check_bindings.py": "707cc0a98458da42b838b2304f2619b62211337ba734d88c85026b4e48db9f61",
+    "reconstructed/battle_mid_3/reproduction/check_bindings.py": "8cc6cd4dc60387dcc76e2b8f00c159a9ea8c31642878ad460ce9745d92b5f38d",
     "reconstructed/pokemon_constructor/pokemon_constructor.h": "0f598822c8298c44bd52e424d2620a14fe18ceadfd4a2771992d168dfffdf6ad"
   },
   "limits": [
     "The callees (import thunks and helpers) and the two fall-through targets remain external.",
-    "The group is self-contained: no other milestone calls it.",
+    "The group was disconnected at the time of this batch.",
     "No running-game comparison of these routines has been made.",
     "No matching original build is claimed."
   ]

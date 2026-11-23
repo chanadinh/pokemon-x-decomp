@@ -5,8 +5,8 @@ This milestone reconstructs 19 `DllBattle.cro` functions in the static band
 families (the same shape as the three in
 [battle_mid_2](../battle_mid_2/README.md), one per page, differing only in the
 handle's offset) and six small accessors beside them. Like batch 2 it is a
-self-contained group: no other milestone calls these functions and none of
-their callees is covered. Each has a live REA/Ghidra listing (session
+self-contained group, disconnected at the time of this batch (no other
+milestone called these functions or covered their callees). Each has a live REA/Ghidra listing (session
 `outputs/rea-battle-10`).
 
 The names are analyst interpretations; the functions are named by address.
@@ -55,7 +55,8 @@ mutations are each detected.
 
 [`reproduction/check_bindings.py`](reproduction/check_bindings.py) confirms
 that none of the 19 functions is covered elsewhere, that each starts in the
-band, and reports that no other milestone calls them
+band, and records the number of callees outside the batch; it records no
+coverage figure, which would change as later milestones are added
 ([record](reproduction/record-comparison.json)).
 
 ## Limits

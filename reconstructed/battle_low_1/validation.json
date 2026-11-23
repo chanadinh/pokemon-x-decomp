@@ -34,25 +34,7 @@
     "original_data": {
       "procedures_in_range": 569,
       "reconstructed_here": 15,
-      "covered_after_this_batch": 46,
-      "uncovered_in_range": 523,
-      "callers_per_function": {
-        "0x10810cc0": 1,
-        "0x10814f9c": 1,
-        "0x1081ca98": 1,
-        "0x1081cc04": 1,
-        "0x1081cf08": 1,
-        "0x1081cf14": 1,
-        "0x1081d2b0": 1,
-        "0x1081d748": 1,
-        "0x1081d770": 1,
-        "0x1081d83c": 1,
-        "0x1081e28c": 1,
-        "0x1081fc20": 1,
-        "0x1082001c": 1,
-        "0x108261e8": 1,
-        "0x1082b064": 1
-      },
+      "every_function_called_from_another_milestone": true,
       "all_match": true
     },
     "asan": true,
@@ -60,7 +42,7 @@
     "live": "not run"
   },
   "preservation": {
-    "prior_reconstruction_hashes_verified": 4344,
+    "prior_reconstruction_hashes_verified": 4218,
     "prior_cache_files_differing": [],
     "native_source_changed": false,
     "prior_manifest_sha256": {
@@ -84,7 +66,6 @@
       "reconstructed/battle_changes/SHA256SUMS": "d8992ca405e8fdbfbde52563afd0ba49e7752cfa470949612fea175f6016a9f4",
       "reconstructed/battle_command/SHA256SUMS": "59a1eeee4fc5097e6cceaeb48e522f21e419b9c76992a27163c6860f15522cbd",
       "reconstructed/battle_conditions/SHA256SUMS": "6b1fa71a0212adaa2d50897eed58d6d61113c778e5bcd5369130b12732e8fdd9",
-      "reconstructed/battle_core_1/SHA256SUMS": "e714002710c4f99640b3c265d8d80bceb9a5547f832d3c39c2a0153fa5933714",
       "reconstructed/battle_cures/SHA256SUMS": "0f28339e5e117c6e8f2c1b4adc31e27072d80ab3de083ad89844bf0c5476d6ab",
       "reconstructed/battle_damage/SHA256SUMS": "e963c1ed162463732cbd85cc950f12cb4c5681594844a65ad27212b12c13fc14",
       "reconstructed/battle_effects/SHA256SUMS": "46b0f39e9bc8f0e0407d5f18007b0150957b98d585aab7c704c4e71e3d1115fc",
@@ -110,7 +91,6 @@
       "reconstructed/battle_kinds/SHA256SUMS": "20621dcae1694986bd5ecc0d1044a2fcb7c1c41681e28ee12d1fea6efb7380a9",
       "reconstructed/battle_matchup/SHA256SUMS": "e5204e7a06fa1d7a600ff064cf7c84defd50b89913f21b0fa83322d7c7f0c630",
       "reconstructed/battle_message/SHA256SUMS": "99d7b85d74798cd67f50216c8a562fe6055739997ea17d191e10f6620eca46d6",
-      "reconstructed/battle_mid_1/SHA256SUMS": "fc8c5762e3cb124a51b351db6974557ef4b8f7e3915c314ae94703406a619782",
       "reconstructed/battle_modifier/SHA256SUMS": "e1a3db0c0c8234ca6dcee2a2696e4e5d44f28c923f80f18117606688b29f86d8",
       "reconstructed/battle_moves_1/SHA256SUMS": "0d00253f4ba18a1416fa1afa63ac1744d79c82f6cf1d64031507fccd0d122739",
       "reconstructed/battle_moves_10/SHA256SUMS": "25d02415f12590e9ec30dbb928fdf5c01fb3b8f5f469b73c17b48fd0cbf59a0d",
@@ -176,7 +156,7 @@
     "reconstructed/battle_low_1/test_battle_low_1.c": "796dd2a89a3fae0e644a1b43b4fd9ffe8b040672a8c288be2cc1d1dfba50add3",
     "reconstructed/battle_low_1/Makefile": "2fec894da67357ba3e418bfd9b9e5db0636b3c55263542a4c9d6e3f7e9711bc0",
     "reconstructed/battle_low_1/reproduction/verify_rea.py": "d0dd379f114f209e28376d1deb5c3be1671b87b1c7264e921cc8f6a8b208bf97",
-    "reconstructed/battle_low_1/reproduction/check_bindings.py": "ee1bb8cf4ed119a8c2ccac30afddf4484dd761f1990d80a489aa1ef9c3931cdc"
+    "reconstructed/battle_low_1/reproduction/check_bindings.py": "842a3c92a8113254b169f1152e245441484034747bf29f59f02b1e7df98a60de"
   },
   "limits": [
     "The slot, owner, entry-iteration, record, random and move-data services remain external.",

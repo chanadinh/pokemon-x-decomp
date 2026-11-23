@@ -6,8 +6,7 @@ This milestone reconstructs 18 `DllBattle.cro` functions in the static band
 caller). Eleven test a value against a halfword list through `1086fe6c`, one
 returns a list, and six do small computations or build records. Each has a
 live REA/Ghidra listing (session `outputs/rea-battle-10`). The band holds
-443 procedures, of which this batch is the first to cover more than a
-handful; 424 were uncovered before it.
+443 procedures.
 
 The names are analyst interpretations. Runtime addresses are static −
 `0x1015b000`.
@@ -56,7 +55,8 @@ a count of 0 and at most three words follow).
 every other milestone's `evidence/functions.json` and confirms that none of
 these 18 functions is covered elsewhere, that each starts in the band and
 that each is a recorded callee of another milestone's function
-([record](reproduction/record-comparison.json)).
+([record](reproduction/record-comparison.json)); the record holds only facts
+that later milestones cannot change (callers only ever increase).
 
 ## Limits
 

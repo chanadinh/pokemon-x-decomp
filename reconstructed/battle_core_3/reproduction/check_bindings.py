@@ -7,9 +7,10 @@ Reads every other milestone's evidence/functions.json and confirms that:
   milestone (committed or on disk), so the batch overlaps nothing;
 - every one of them starts inside this milestone's address ranges
   (10840000-10880000 and 108a6000-108ce000);
-- how many of them are recorded callees of another milestone's function (the
-  frontier); the others belong to the same pokemon-record cluster
-  (10870000-10876000) and have no committed caller yet;
+- the functions chosen as frontier (a fixed list in this script) are each a
+  recorded callee of another milestone's function; the other functions belong to
+  the same pokemon-record cluster (10870000-10876000) and nothing is claimed
+  about their callers;
 - each function's retained listing contains its entry (the two functions with a
   second body range list that range first) and its instruction count matches
   the body size REA reported.
@@ -24,6 +25,9 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve()
 RANGES = ((0x10840000, 0x10880000), (0x108a6000, 0x108ce000))
+# The functions chosen as frontier (committed code called them when the batch was made); the rest of the
+# batch belongs to the same cluster and may or may not be called by later milestones.
+FRONTIER = {0x1084af00, 0x1084bb2c, 0x1084c374, 0x108520e4, 0x10855c68, 0x1085fa8c, 0x10870368, 0x10871408, 0x1087425c, 0x108ace94}
 
 
 def run():
@@ -49,14 +53,18 @@ def run():
     outside = sorted(a for a in mine if not any(lo <= a < hi for lo, hi in RANGES))
     if outside:
         raise ValueError('Functions outside the batch ranges: %s' % [hex(a) for a in outside])
-    called = sorted(a for a, c in callers.items() if c)
+    missing = sorted(a for a in FRONTIER if not callers.get(a))
+    if missing:
+        raise ValueError('Frontier functions no other milestone calls: %s' % [hex(a) for a in missing])
+    if not FRONTIER <= set(mine):
+        raise ValueError('A frontier function is missing from the batch')
     for address, row in mine.items():
         lines = (milestone / 'evidence' / ('%08x.asm' % address)).read_text().splitlines()
         listed = {int(l.split()[0], 16) for l in lines}
         if address not in listed or 4 * len(lines) != row['body_bytes']:
             raise ValueError('Listing of %#x does not match its body' % address)
-    return {'functions': len(mine), 'called_by_other_milestones': len(called), 'not_yet_called': len(mine) - len(called), 'inside_ranges': len(mine),
-            'overlap': 0, 'all_match': True}
+    return {'functions': len(mine), 'frontier_functions': len(FRONTIER), 'every_frontier_function_called_from_another_milestone': True,
+            'inside_ranges': len(mine), 'overlap': 0, 'all_match': True}
 
 
 def main():

@@ -14,10 +14,10 @@ New suite: 96 cases on the real event stack.
 ASan/UBSan pass.
 
 Original data: the 19 functions are checked against the other milestones;
-none of the 19 functions is covered by another milestone; none is called
-by or calls one.
+none of the 19 functions is covered by another milestone (the group was
+disconnected at the time of this batch).
 
-The 4,510 hashes of the 107 committed milestones remain unchanged. Native
+The 4,684 hashes of the 110 committed milestones remain unchanged. Native
 implementation files are unchanged. The services listed in README.md remain
 external. No running-game comparison was made; no matching original build is
 claimed.

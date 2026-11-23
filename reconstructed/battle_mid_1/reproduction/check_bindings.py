@@ -53,8 +53,8 @@ def run():
             raise ValueError('Listing of %#x does not match its body' % address)
         if not BAND[0] <= address < BAND[1]:
             raise ValueError('%#x is outside the band' % address)
-    return {'functions': len(mine), 'called_by_other_milestones': len(mine), 'band': [hex(BAND[0]), hex(BAND[1])],
-            'overlap': 0, 'all_match': True}
+    return {'functions': len(mine), 'every_function_called_from_another_milestone': True,
+            'band': [hex(BAND[0]), hex(BAND[1])], 'overlap': 0, 'all_match': True}
 
 
 def main():

@@ -6,8 +6,9 @@ DllBattle carrier; not committed). Confirms that each of the 15 reconstructed fu
 procedure of the carrier whose start lies in the half-open range 10802000-10840000, that none
 is an import thunk, that each is called (bl or b) from some evidence listing of another
 milestone under reconstructed/ (the "frontier" the batch was chosen from), and that no other
-milestone's evidence/functions.json lists any of them. It reports how many of the range's
-procedures are covered after this batch. No original data is retained; the output is a summary.
+milestone's evidence/functions.json lists any of them. The output holds only facts that
+later milestones cannot change (callers only ever increase, so the call fact is a boolean).
+No original data is retained; the output is a summary.
 """
 import argparse
 import json
@@ -51,10 +52,8 @@ def run(root):
     uncalled = sorted(hex(f) for f in FUNCTIONS if not callers[f])
     if uncalled:
         raise ValueError('Not called from another milestone: %s' % uncalled)
-    covered = (covered_elsewhere | set(FUNCTIONS)) & set(in_range)
     return {'procedures_in_range': len(in_range), 'reconstructed_here': len(FUNCTIONS),
-            'covered_after_this_batch': len(covered), 'uncovered_in_range': len(in_range) - len(covered),
-            'callers_per_function': {hex(f): len(c) for f, c in sorted(callers.items())}, 'all_match': True}
+            'every_function_called_from_another_milestone': True, 'all_match': True}
 
 
 def main():

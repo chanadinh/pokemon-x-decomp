@@ -61,8 +61,9 @@ replaced).
 
 [`reproduction/check_bindings.py`](reproduction/check_bindings.py) confirms
 that each function is a plain procedure of the band in REA's list, that all 24
-load the same state object pointer and that no other milestone lists them; 70
-of the band's 569 procedures are covered after this batch.
+load the same state object pointer and that no other milestone lists them. At the time of this
+batch 70 of the band's 569 procedures were covered (499 uncovered); later batches change these
+figures, so the record does not hold them.
 
 ## Limits
 

@@ -56,8 +56,9 @@ four survivors led to wider tests).
 
 [`reproduction/check_bindings.py`](reproduction/check_bindings.py) confirms
 that each function is a plain procedure of the band in REA's list, is called
-from another milestone and is listed by none; 46 of the band's 569 procedures
-are covered after this batch.
+from another milestone and is listed by none. At the time of this batch 46 of the band's
+569 procedures were covered (523 uncovered); later batches change these figures, so the
+record does not hold them.
 
 ## Limits
 

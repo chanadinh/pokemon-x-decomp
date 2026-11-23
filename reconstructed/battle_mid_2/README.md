@@ -5,10 +5,10 @@ This milestone reconstructs 22 `DllBattle.cro` functions in the static band
 a family of page objects (five clone families at `10892xxx`, `108935xx`,
 `10894xxx`, `10895xxx`/`10896xxx` and `10897xxx`). The committed-caller
 frontier of the band was used up by [battle_mid_1](../battle_mid_1/README.md),
-so this batch works outward: it is a self-contained group, neither called by
-nor calling any other milestone's functions, chosen because the clones make
-it a coherent group of small functions (22 of the band's remaining 406
-uncovered functions). Each has a live REA/Ghidra listing (session
+so this batch works outward: it is a self-contained group, disconnected at the
+time of this batch (no other milestone called its functions or covered their
+callees), chosen because the clones make it a coherent group of small
+functions. Each has a live REA/Ghidra listing (session
 `outputs/rea-battle-10`).
 
 The names are analyst interpretations; the functions are named by address.
@@ -52,8 +52,8 @@ detected.
 
 [`reproduction/check_bindings.py`](reproduction/check_bindings.py) confirms
 that none of the 22 functions is covered elsewhere, that each starts in the
-band, and reports that no other milestone calls them and none of their 21
-external callees is covered
+band, and records the number of callees outside the batch (21); it records no
+coverage figure, which would change as later milestones are added
 ([record](reproduction/record-comparison.json)).
 
 ## Limits

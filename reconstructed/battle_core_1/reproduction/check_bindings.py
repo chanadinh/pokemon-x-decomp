@@ -54,7 +54,7 @@ def run():
             raise ValueError('Listing of %#x does not match its body' % address)
         if address in NOPS and [l.split(None, 2)[2] for l in lines] != ['cpy r0, r0']:
             raise ValueError('%#x is not a no-operation stub' % address)
-    return {'functions': len(mine), 'called_by_other_milestones': len(mine) - len(NOPS),
+    return {'functions': len(mine), 'every_frontier_function_called_from_another_milestone': True,
             'no_operation_stubs': ['%08x' % a for a in sorted(NOPS)], 'overlap': 0, 'all_match': True}
 
 

@@ -66,7 +66,7 @@ that each is a recorded callee of another milestone's function
 
 ## Limits
 
-The remaining frontier functions of these ranges (116 are called by committed
+When this batch was made, the remaining frontier functions of these ranges (116 are called by committed
 code, 844 are uncovered in all) are not part of this batch. No running-game
 comparison has been made. Static evidence and host comparisons do not
 establish a matching original build.
